@@ -1,0 +1,1433 @@
+/* ================================================================
+   WEDDING INVITATION — Luxury Gold Edition
+   ================================================================ */
+
+/* ================================================================
+   1. Design Tokens
+   ================================================================ */
+:root {
+  --paper:        #f5edda;
+  --paper-card:   #fdf8ee;
+  --paper-edge:   #d9c79a;
+  --paper-deep:   #e8d9b5;
+  --ink:          #2a2018;
+  --ink-soft:     #7a6a55;
+  --ink-muted:    #b0a08a;
+  --gold-1:       #c9932a;
+  --gold-2:       #f0c040;
+  --gold-3:       #e8a820;
+  --gold-foil:    linear-gradient(120deg,
+                    #8b6510 0%,
+                    #c9932a 18%,
+                    #f0c040 38%,
+                    #fffbe0 50%,
+                    #f0c040 62%,
+                    #c9932a 78%,
+                    #8b6510 100%);
+  --rose:         #b85c7c;
+  --rose-light:   #f7d6e3;
+  --blush:        #fdeef5;
+  --wax-deep:     #6b1c2b;
+  --wax-mid:      #9e2a3f;
+  --wax-bright:   #c84060;
+  --wax-shine:    rgba(255, 220, 220, 0.45);
+}
+
+/* ================================================================
+   2. Reset & Base
+   ================================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Lora', serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 80% 80% at 50% 40%,
+    rgba(252, 230, 170, 0.28) 0%,
+    rgba(245, 237, 218, 0) 70%);
+}
+
+p { margin: 0; }
+
+.journal {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ================================================================
+   3. Petals Canvas
+   ================================================================ */
+.petals-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+/* ================================================================
+   4. Top Navigation Controls
+   ================================================================ */
+.top-nav {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  z-index: 8000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ctrl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px 7px 10px;
+  border: 1px solid rgba(201, 147, 42, 0.45);
+  border-radius: 30px;
+  background: rgba(253, 248, 238, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--gold-1);
+  font-family: 'Lora', serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: background 0.2s ease, border-color 0.2s ease,
+              color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 12px rgba(180, 130, 40, 0.12);
+  white-space: nowrap;
+}
+
+.ctrl-btn:hover {
+  background: rgba(253, 248, 238, 0.97);
+  border-color: var(--gold-2);
+  box-shadow: 0 4px 18px rgba(180, 130, 40, 0.22);
+  transform: translateY(-1px);
+}
+.ctrl-btn:active { transform: translateY(0); }
+
+.music-disc {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: conic-gradient(#1a1a1a 0deg 30deg, #333 30deg 60deg, #1a1a1a 60deg 90deg, #333 90deg 120deg, #1a1a1a 120deg 150deg, #333 150deg 180deg, #1a1a1a 180deg 210deg, #333 210deg 240deg, #1a1a1a 240deg 270deg, #333 270deg 300deg, #1a1a1a 300deg 330deg, #333 330deg 360deg);
+  flex-shrink: 0;
+}
+
+.music-groove {
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: conic-gradient(#222 0deg 20deg, #444 20deg 40deg, #222 40deg 60deg, #444 60deg 80deg, #222 80deg 100deg, #444 100deg 120deg, #222 120deg 140deg, #444 140deg 160deg, #222 160deg 180deg, #444 180deg 200deg, #222 200deg 220deg, #444 220deg 240deg, #222 240deg 260deg, #444 260deg 280deg, #222 280deg 300deg, #444 300deg 320deg, #222 320deg 340deg, #444 340deg 360deg);
+}
+
+.music-center-dot {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold-2);
+  box-shadow: 0 0 0 1px #c9932a;
+}
+
+.music-btn.is-playing .music-disc {
+  animation: spin-disc 3s linear infinite;
+}
+@keyframes spin-disc { to { transform: rotate(360deg); } }
+
+.music-icon { font-size: 0.9rem; }
+.music-label { font-size: 0.82rem; }
+
+.petals-btn { padding: 7px 11px; }
+.petals-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+  display: block;
+  transition: transform 0.3s ease;
+}
+.petals-btn:hover .petals-icon { transform: rotate(15deg) scale(1.2); }
+.petals-btn.is-off .petals-icon { opacity: 0.45; filter: grayscale(1); }
+
+.replay-btn {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s ease, color 0.2s ease;
+}
+.replay-btn.is-shown { opacity: 1; pointer-events: auto; transform: none; }
+.replay-icon { font-size: 1.1rem; line-height: 1; }
+
+/* ================================================================
+   5. Stage
+   ================================================================ */
+.stage {
+  position: relative;
+  height: 100vh;
+  cursor: pointer;
+  user-select: none;
+  isolation: isolate;
+}
+
+.stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 90% 90% at 50% 50%, transparent 55%, rgba(42, 32, 24, 0.18) 100%);
+}
+
+.scene-host { position: absolute; inset: 0; }
+
+/* ================================================================
+   6. Scene
+   ================================================================ */
+.scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(24px, 4vw, 60px);
+  padding: clamp(32px, 5vw, 64px) clamp(24px, 6vw, 80px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.scene.is-active { opacity: 1; pointer-events: auto; }
+.scene--left  { flex-direction: row; }
+.scene--right { flex-direction: row-reverse; }
+.scene--top   { flex-direction: column; text-align: center; }
+
+.scene-media {
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(200px, 34vw, 400px);
+  opacity: 0;
+  transform: scale(0.94) translateY(28px);
+  transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.scene.is-active .scene-media {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  transition-delay: 0.06s;
+}
+
+.scene.is-exiting .scene-media {
+  opacity: 0;
+  transform: scale(0.97) translateY(-16px);
+  filter: blur(2px);
+  transition: opacity 0.85s cubic-bezier(0.4, 0, 0.6, 1),
+              transform 0.85s cubic-bezier(0.4, 0, 0.6, 1),
+              filter 0.85s cubic-bezier(0.4, 0, 0.6, 1);
+  transition-delay: 0s !important;
+}
+
+.scene-photo-frame {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 3px;
+  box-shadow:
+    0 0 0 1px rgba(201, 147, 42, 0.35),
+    0 0 0 4px var(--paper-card),
+    0 0 0 5px rgba(201, 147, 42, 0.22),
+    0 18px 48px rgba(42, 32, 24, 0.32),
+    0 4px 12px rgba(42, 32, 24, 0.18);
+}
+
+.scene--top .scene-photo-frame { aspect-ratio: 4 / 3; }
+
+.scene-photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 8s ease-out;
+}
+.scene.is-active .scene-photo { transform: scale(1.04); }
+
+.tape {
+  position: absolute;
+  width: 48px;
+  height: 18px;
+  background: rgba(240, 225, 185, 0.7);
+  backdrop-filter: blur(2px);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  border-radius: 1px;
+  z-index: 2;
+}
+.tape--a { top: -9px; left: 12px; transform: rotate(-8deg); }
+.tape--b { bottom: -9px; right: 12px; transform: rotate(7deg); }
+.scene.is-exiting .tape { opacity: 0; transition: opacity 0.5s ease; }
+
+.scene-copy {
+  flex: 1 1 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  max-width: 46ch;
+}
+.scene--top .scene-copy { align-items: center; max-width: 56ch; }
+
+.scene-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.scene.is-active .scene-caption { opacity: 1; transform: translateY(0); transition-delay: 0.38s; }
+.scene.is-exiting .scene-caption {
+  opacity: 0;
+  transform: translateY(-14px);
+  transition: opacity 0.75s cubic-bezier(0.4, 0, 0.6, 1),
+              transform 0.75s cubic-bezier(0.4, 0, 0.6, 1);
+  transition-delay: 0s;
+}
+
+.scene-caption-script {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  color: var(--gold-1);
+  line-height: 1.1;
+  text-shadow: 0 2px 8px rgba(180, 130, 20, 0.22);
+}
+
+.scene-caption-small {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rose);
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+}
+
+.scene-typed {
+  font-style: italic;
+  font-family: 'Lora', serif;
+  font-size: clamp(1.05rem, 2.2vw, 1.22rem);
+  line-height: 1.72;
+  color: var(--ink-soft);
+  min-height: 1.72em;
+}
+
+/* ================================================================
+   7. Click Hint
+   ================================================================ */
+.click-hint {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.05em;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.45s ease;
+  white-space: nowrap;
+}
+.click-hint.is-shown {
+  opacity: 0.78;
+  animation: hint-bob 1.8s ease-in-out infinite;
+}
+.hint-hand-icon { font-size: 1.2rem; }
+@keyframes hint-bob {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(5px); }
+}
+
+/* ================================================================
+   8. Finale Book Wrap
+   ================================================================ */
+.book-wrap {
+  --card-w: min(400px, 43vw);
+  --card-h: min(560px, 76vh);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 24px;
+  perspective: 2000px;
+  perspective-origin: center center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.1s ease;
+}
+.book-wrap.is-shown { opacity: 1; pointer-events: auto; z-index: 10; }
+
+/* Ẩn điều hướng lật bài mobile trên màn hình máy tính / màn rộng */
+.mobile-card-nav,
+.mobile-flip-bar {
+  display: none;
+}
+
+.finale-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.floral-garland { width: min(280px, 60vw); color: var(--gold-1); opacity: 0.7; margin-bottom: 2px; }
+.garland-svg { width: 100%; height: auto; filter: drop-shadow(0 1px 3px rgba(180, 130, 20, 0.2)); }
+
+.finale-heading {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  color: var(--gold-1);
+  text-shadow: 0 2px 10px rgba(180, 130, 20, 0.3);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s;
+}
+.book-wrap.is-shown .finale-heading { opacity: 1; transform: translateY(0); }
+
+.finale-subheading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.88rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rose);
+  opacity: 0;
+  transition: opacity 0.8s ease 0.6s;
+}
+.book-wrap.is-shown .finale-subheading { opacity: 1; }
+
+/* ================================================================
+   9. 3D Book
+   ================================================================ */
+.book {
+  position: relative;
+  width: var(--card-w);
+  height: var(--card-h);
+  transform-style: preserve-3d;
+  transform: translateX(0) rotate(2deg);
+  transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: pointer;
+}
+.book-wrap.is-open .book { transform: translateX(calc(var(--card-w) / 2)) rotate(0deg); }
+
+.book-leaf {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+  transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 5;
+}
+.book-wrap.is-open .book-leaf { transform: rotateY(-180deg); }
+
+.book-leaf-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 3px;
+}
+
+/* ================================================================
+   10. Cover
+   ================================================================ */
+.book-leaf-front {
+  transform: rotateY(0deg);
+  z-index: 2;
+  background: var(--paper-card);
+  box-shadow: 0 20px 60px rgba(42, 32, 24, 0.35), 0 4px 12px rgba(42, 32, 24, 0.15);
+  border-radius: 2px 4px 4px 2px;
+  overflow: hidden;
+}
+.book-wrap.is-open .book-leaf-front { pointer-events: none; }
+
+.cover-card {
+  width: 100%;
+  height: 100%;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, rgba(201, 147, 42, 0.08) 0%, transparent 50%, rgba(201, 147, 42, 0.06) 100%);
+}
+
+.corner-filigree {
+  position: absolute;
+  width: 52px;
+  height: 52px;
+  color: var(--gold-1);
+  opacity: 0.75;
+  filter: drop-shadow(0 1px 2px rgba(180, 130, 20, 0.2));
+}
+.corner-filigree--tl { top: 8px; left: 8px; }
+.corner-filigree--tr { top: 8px; right: 8px; transform: scaleX(-1); }
+.corner-filigree--bl { bottom: 8px; left: 8px; transform: scaleY(-1); }
+.corner-filigree--br { bottom: 8px; right: 8px; transform: scale(-1); }
+
+.cover-inner-border {
+  flex: 1;
+  border: 1px solid rgba(201, 147, 42, 0.45);
+  border-radius: 2px;
+  padding: clamp(16px, 2.8vw, 28px) clamp(14px, 2.4vw, 22px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  position: relative;
+  background: radial-gradient(ellipse 80% 70% at 50% 45%, rgba(255, 251, 240, 0.55) 0%, transparent 80%);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.cover-inner-border::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 0%, transparent 40%, rgba(255, 251, 230, 0.22) 50%, transparent 60%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer-sweep 6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes shimmer-sweep {
+  0%   { background-position: 200% 0; }
+  40%  { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.cover-eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold-1);
+  font-weight: 600;
+}
+
+/* ================================================================
+   11. Wax Seal
+   ================================================================ */
+.wax-seal { position: relative; width: 70px; height: 70px; flex-shrink: 0; }
+
+.wax-seal-body {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  background: radial-gradient(circle at 38% 35%, var(--wax-bright) 0%, var(--wax-mid) 40%, var(--wax-deep) 100%);
+  box-shadow: 0 4px 16px rgba(107, 28, 43, 0.5), 0 2px 6px rgba(107, 28, 43, 0.3), inset 0 1px 2px rgba(255, 160, 160, 0.2);
+}
+
+.wax-seal-rim {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 35%, rgba(200, 64, 96, 0.5) 0%, rgba(158, 42, 63, 0.4) 50%, rgba(107, 28, 43, 0.6) 100%);
+  clip-path: polygon(50% 0%, 61% 10%, 74% 5%, 78% 18%, 90% 20%, 88% 33%, 98% 40%, 93% 52%, 100% 62%, 90% 69%, 92% 80%, 80% 83%, 76% 95%, 63% 93%, 55% 100%, 46% 93%, 33% 97%, 29% 84%, 17% 83%, 19% 70%, 9% 63%, 16% 52%, 11% 40%, 21% 33%, 19% 20%, 32% 19%, 35% 6%, 48% 10%);
+}
+
+.wax-seal-core { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+.wax-monogram {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: rgba(255, 230, 210, 0.95);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.wax-heart { font-size: 0.5rem; color: rgba(255, 200, 200, 0.85); line-height: 1; margin-top: 2px; }
+
+.wax-seal-shine {
+  position: absolute;
+  width: 40%;
+  height: 35%;
+  top: 12%;
+  left: 18%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, var(--wax-shine) 0%, transparent 100%);
+  transform: rotate(-20deg);
+}
+
+.cover-kicker-wrap { display: flex; align-items: center; gap: 10px; width: 100%; justify-content: center; }
+.kicker-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold-1), transparent); max-width: 50px; }
+.book-cover-kicker {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-1);
+  font-weight: 600;
+}
+
+.book-cover-names {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(2rem, 4.8vw, 3rem);
+  line-height: 1.05;
+  background: var(--gold-foil);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+  animation: gold-shimmer 5s ease-in-out infinite;
+  filter: drop-shadow(0 2px 6px rgba(180, 130, 20, 0.25));
+}
+@keyframes gold-shimmer {
+  0%   { background-position: 0% center; }
+  50%  { background-position: 100% center; }
+  100% { background-position: 0% center; }
+}
+.book-cover-names .amp { font-size: 0.8em; margin: 0 4px; opacity: 0.85; }
+
+.cover-invitation-note { font-family: 'Lora', serif; font-size: 0.86rem; font-style: italic; color: var(--ink-soft); letter-spacing: 0.02em; }
+
+.cover-divider-flourish { display: flex; align-items: center; gap: 8px; width: 80%; justify-content: center; }
+.div-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(201, 147, 42, 0.6), transparent); }
+.div-diamond { font-size: 0.6rem; color: var(--gold-1); opacity: 0.8; }
+
+.book-cover-date { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; letter-spacing: 0.2em; color: var(--ink); font-weight: 600; }
+.cover-lunar-date { font-family: 'Cormorant Garamond', serif; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--ink-muted); font-style: italic; }
+
+.cover-hint-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 6px 14px;
+  border: 1px solid rgba(201, 147, 42, 0.4);
+  border-radius: 20px;
+  background: rgba(201, 147, 42, 0.06);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.07em;
+  color: var(--gold-1);
+  animation: hint-breathe 2.2s ease-in-out infinite;
+}
+@keyframes hint-breathe { 0%, 100% { opacity: 0.75; } 50% { opacity: 1; } }
+
+.hint-pulse-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--gold-1);
+  box-shadow: 0 0 0 0 rgba(201, 147, 42, 0.5);
+  animation: pulse-dot 2.2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%   { box-shadow: 0 0 0 0 rgba(201, 147, 42, 0.5); }
+  60%  { box-shadow: 0 0 0 7px rgba(201, 147, 42, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(201, 147, 42, 0); }
+}
+.hint-chevron { font-size: 0.7rem; opacity: 0.6; animation: hint-nudge 2.2s ease-in-out infinite; }
+@keyframes hint-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
+
+/* ================================================================
+   12. Inside Pages
+   ================================================================ */
+.book-page {
+  position: absolute;
+  inset: 0;
+  padding: clamp(16px, 3vw, 28px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background: var(--paper-card);
+}
+
+.page-ornament-corner { position: absolute; width: 32px; height: 32px; border-color: rgba(201, 147, 42, 0.35); border-style: solid; border-width: 0; }
+.page-ornament--tl { top: 10px; left: 10px; border-top-width: 1.5px; border-left-width: 1.5px; }
+.page-ornament--tr { top: 10px; right: 10px; border-top-width: 1.5px; border-right-width: 1.5px; }
+
+.book-leaf-back {
+  transform: rotateY(180deg);
+  z-index: 1;
+  box-shadow: 0 20px 60px rgba(42, 32, 24, 0.28), 0 4px 12px rgba(42, 32, 24, 0.14);
+  border-radius: 4px 0 0 4px;
+  border-right: none;
+  pointer-events: none;
+}
+.book-wrap.is-open .book-leaf-back { pointer-events: auto; }
+
+.book-page--right {
+  box-shadow: 0 20px 60px rgba(42, 32, 24, 0.28), 0 4px 12px rgba(42, 32, 24, 0.14);
+  border-radius: 0 4px 4px 0;
+  border-left: none;
+  z-index: 1;
+}
+
+.page-monogram-badge { display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 2px; }
+.mono-initial {
+  font-family: 'Great Vibes', cursive;
+  font-size: 1.6rem;
+  background: var(--gold-foil);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+  animation: gold-shimmer 5s ease-in-out infinite;
+}
+.mono-ring { font-size: 1rem; line-height: 1; }
+
+.wedding-time-card {
+  background: linear-gradient(135deg, rgba(201, 147, 42, 0.07) 0%, transparent 100%);
+  border: 1px solid rgba(201, 147, 42, 0.3);
+  border-radius: 6px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+}
+
+.time-card-badge { font-family: 'Cormorant Garamond', serif; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-1); font-weight: 600; }
+.time-card-hero { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.time-clock-icon { font-size: 1.1rem; line-height: 1; }
+.time-hero-digits { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 700; color: var(--ink); letter-spacing: 0.05em; }
+.time-full-date { font-family: 'Lora', serif; font-size: 1rem; font-weight: 500; color: var(--ink-soft); }
+.time-lunar-date { font-family: 'Lora', serif; font-size: 0.82rem; color: var(--ink-muted); font-style: italic; }
+
+.rsvp-card {
+  border: 1px solid rgba(184, 92, 124, 0.25);
+  border-radius: 6px;
+  padding: 10px 12px;
+  background: linear-gradient(135deg, rgba(247, 214, 227, 0.25) 0%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.rsvp-card-header { display: flex; align-items: center; gap: 6px; }
+.rsvp-icon { font-size: 1rem; line-height: 1; }
+.detail-label { font-family: 'Cormorant Garamond', serif; font-size: 0.76rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rose); font-weight: 600; }
+.rsvp-contact-line { font-family: 'Lora', serif; font-size: 1rem; font-weight: 500; color: var(--ink-soft); padding-left: 22px; }
+
+.details-note { font-family: 'Lora', serif; font-style: italic; color: var(--ink-soft); font-size: 1rem; line-height: 1.5; text-align: center; }
+.detail-item { display: flex; flex-direction: column; gap: 2px; }
+.detail-value { font-size: 1rem; font-weight: 500; color: var(--ink); font-family: 'Lora', serif; }
+.details-thanks { font-family: 'Lora', serif; font-size: 1rem; line-height: 1.7; color: var(--ink-soft); font-style: italic; }
+
+.album-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border: 1px solid rgba(201, 147, 42, 0.5);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--gold-1);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.album-btn:hover { background: var(--gold-1); color: var(--paper-card); }
+.album-btn-icon { font-size: 1rem; line-height: 1; }
+.album-btn-shine { font-size: 0.75rem; opacity: 0.7; animation: sparkle-spin 3s linear infinite; }
+@keyframes sparkle-spin { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.3); } 100% { transform: rotate(360deg) scale(1); } }
+
+.signature-block { display: flex; flex-direction: column; gap: 6px; margin-top: auto; padding-top: 6px; }
+.sig-line { height: 1px; background: linear-gradient(to right, transparent, rgba(201, 147, 42, 0.4), transparent); }
+.details-signature { font-family: 'Great Vibes', cursive; font-size: 1.05rem; color: var(--gold-1); text-align: center; letter-spacing: 0.03em; }
+
+.book-spine { position: absolute; top: 0; left: 0; width: 10px; height: 100%; transform: translateX(-50%); z-index: 6; pointer-events: none; opacity: 0; transition: opacity 0.7s ease; }
+.book-wrap.is-open .book-spine { opacity: 1; }
+.spine-ribbon { width: 100%; height: 100%; background: linear-gradient(to right, rgba(42, 32, 24, 0.22), rgba(201, 147, 42, 0.1), rgba(42, 32, 24, 0.22)); }
+
+/* ================================================================
+   13. Right Page — Venue
+   ================================================================ */
+.home-toggle { display: flex; gap: 8px; }
+.home-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--paper-edge);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.home-btn.is-active { background: linear-gradient(135deg, var(--gold-1), var(--gold-3)); border-color: var(--gold-1); color: #fff; box-shadow: 0 2px 8px rgba(180, 130, 20, 0.25); }
+.home-avatar { font-size: 1rem; line-height: 1; }
+
+.map-gold-frame {
+  position: relative;
+  flex: 1;
+  min-height: 150px;
+  border: 1px solid rgba(201, 147, 42, 0.4);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 3px var(--paper-card), 0 2px 12px rgba(42, 32, 24, 0.1);
+}
+.map-venue-tag {
+  position: absolute;
+  top: 8px; left: 8px;
+  z-index: 1;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(253, 248, 238, 0.92);
+  backdrop-filter: blur(6px);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  color: var(--gold-1);
+  font-weight: 600;
+  box-shadow: 0 1px 6px rgba(42, 32, 24, 0.14);
+}
+.map-gold-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; filter: sepia(8%) saturate(88%); }
+
+.venue-info-box { display: flex; flex-direction: column; gap: 6px; }
+.venue-address-row { display: flex; align-items: flex-start; gap: 6px; }
+.venue-pin-icon { font-size: 0.9rem; line-height: 1.4; flex-shrink: 0; }
+.footer-map-address { font-family: 'Lora', serif; font-size: 0.95rem; line-height: 1.55; color: var(--ink-soft); }
+
+.map-direct-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border: 1px solid rgba(201, 147, 42, 0.45);
+  border-radius: 4px;
+  background: linear-gradient(135deg, rgba(201, 147, 42, 0.07) 0%, transparent 100%);
+  color: var(--gold-1);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  align-self: flex-start;
+}
+.map-direct-btn:hover { background: rgba(201, 147, 42, 0.14); border-color: var(--gold-2); }
+.map-direct-icon { font-size: 0.9rem; line-height: 1; }
+.map-direct-arrow { font-size: 0.85rem; opacity: 0.7; transition: transform 0.2s ease; }
+.map-direct-btn:hover .map-direct-arrow { transform: translate(2px, -2px); }
+
+/* ================================================================
+   14. Album Modal
+   ================================================================ */
+.album-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 7000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(24, 18, 12, 0.78);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+  cursor: default;
+}
+.album-modal.is-open { opacity: 1; pointer-events: auto; }
+
+.album-sheet {
+  position: relative;
+  width: min(94vw, 780px);
+  max-height: 88vh;
+  background: var(--paper);
+  padding: 52px 28px 28px;
+  border-radius: 4px;
+  overflow-y: auto;
+  box-shadow: 0 32px 80px rgba(24, 18, 12, 0.4);
+  transform: scale(0.95) translateY(10px);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.album-modal.is-open .album-sheet { transform: scale(1) translateY(0); }
+
+.album-close {
+  position: absolute;
+  top: 12px; right: 16px;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 147, 42, 0.4);
+  background: var(--paper-card);
+  color: var(--gold-1);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.album-close:hover { background: var(--gold-1); color: var(--paper-card); }
+
+.album-header { text-align: center; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.album-decor-leaf { font-size: 1.4rem; line-height: 1; animation: leaf-sway 3s ease-in-out infinite; }
+@keyframes leaf-sway { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
+
+.album-title {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  background: var(--gold-foil);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+  animation: gold-shimmer 5s ease-in-out infinite;
+}
+.album-subtitle { font-family: 'Cormorant Garamond', serif; font-size: 0.85rem; color: var(--ink-muted); font-style: italic; letter-spacing: 0.06em; }
+
+.album-pile { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px 18px; padding: 10px; }
+
+.album-card {
+  width: 145px;
+  background: var(--paper-card);
+  padding: 8px 8px 22px;
+  box-shadow: 0 6px 20px rgba(42, 32, 24, 0.22), 0 2px 6px rgba(42, 32, 24, 0.12);
+  transform: rotate(var(--r, 0deg));
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease;
+  cursor: pointer;
+}
+.album-card:hover { transform: rotate(0deg) scale(1.06) translateY(-4px); box-shadow: 0 18px 40px rgba(42, 32, 24, 0.3), 0 4px 12px rgba(42, 32, 24, 0.18); z-index: 10; }
+.album-photo { width: 100%; aspect-ratio: 3 / 4; background-size: cover; background-position: center; }
+
+/* ================================================================
+   15. Responsive (Chế độ màn hình di động & màn hẹp)
+   ================================================================ */
+@media (max-width: 860px) {
+  body { overflow-y: auto; }
+  .stage { height: 100dvh; }
+  .scene { flex-direction: column !important; gap: 20px; padding: 40px 20px 24px; overflow-y: auto; }
+  .scene-copy { align-items: center !important; text-align: center; }
+  .scene-media { width: min(78vw, 320px); flex: 0 0 auto; }
+
+  /* Navigation Bar & Header trên Mobile */
+  .top-nav { top: 8px; right: 8px; gap: 6px; }
+  .ctrl-btn { padding: 5px 8px; font-size: 0.74rem; }
+  .music-disc { width: 16px; height: 16px; }
+
+  .finale-header { gap: 2px; }
+  .floral-garland { width: min(220px, 55vw); margin-bottom: 0; }
+  .finale-heading { font-size: clamp(1.8rem, 5.5vw, 2.3rem); margin: 0; }
+  .finale-subheading { font-size: 0.74rem; letter-spacing: 0.12em; }
+
+  /* Book Wrap trên Mobile: Trung tâm, thẻ bài độc lập, không mở ngang */
+  .book-wrap {
+    --card-w: min(345px, 90vw);
+    --card-h: min(570px, 75dvh);
+    padding: 10px 10px 14px;
+    gap: 8px;
+    perspective: 1200px;
+    perspective-origin: center center;
+    justify-content: center;
+  }
+
+  /* Khung điều hướng 3 trang thẻ bài */
+  .mobile-card-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    z-index: 20;
+    margin-bottom: 2px;
+  }
+
+  .mobile-nav-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(201, 147, 42, 0.4);
+    background: rgba(253, 248, 238, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: var(--ink-soft);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(42, 32, 24, 0.08);
+    transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .mobile-nav-pill.is-active {
+    background: linear-gradient(135deg, var(--gold-1), var(--gold-3));
+    color: #fff;
+    border-color: var(--gold-1);
+    box-shadow: 0 3px 12px rgba(180, 130, 20, 0.35);
+    transform: translateY(-1px) scale(1.04);
+  }
+
+  .mobile-nav-pill:not(.is-active):hover {
+    background: rgba(201, 147, 42, 0.15);
+    border-color: var(--gold-1);
+  }
+
+  .pill-icon { font-size: 0.82rem; line-height: 1; }
+
+  /* Thanh gợi ý lật thẻ bài */
+  .mobile-flip-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 2px;
+    z-index: 20;
+  }
+
+  .flip-hint-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 15px;
+    border-radius: 22px;
+    background: rgba(253, 248, 238, 0.95);
+    border: 1px solid rgba(201, 147, 42, 0.45);
+    box-shadow: 0 4px 14px rgba(42, 32, 24, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    cursor: pointer;
+    animation: hint-pill-pulse 2.2s ease-in-out infinite;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  @keyframes hint-pill-pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 4px 14px rgba(42, 32, 24, 0.1); }
+    50% { transform: scale(1.02); box-shadow: 0 6px 20px rgba(180, 130, 20, 0.28); border-color: var(--gold-1); }
+  }
+
+  .flip-hint-icon {
+    font-size: 0.9rem;
+    animation: hand-bounce 1.4s ease-in-out infinite alternate;
+  }
+
+  @keyframes hand-bounce {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-3px); }
+  }
+
+  .flip-hint-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: var(--gold-1);
+  }
+
+  .flip-hint-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 7px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--gold-1), var(--gold-3));
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.04em;
+  }
+
+  /* Khung thẻ bài 3D trên Mobile */
+  .book {
+    position: relative !important;
+    width: var(--card-w) !important;
+    height: var(--card-h) !important;
+    transform: none !important;
+    transform-style: preserve-3d !important;
+    perspective: 1200px !important;
+    perspective-origin: center center !important;
+    margin: 0 auto;
+    cursor: pointer;
+  }
+
+  /* Khi mở trên desktop thì book-wrap có .is-open, nhưng trên mobile KHÔNG dịch chuyển */
+  .book-wrap.is-open .book {
+    transform: none !important;
+    width: var(--card-w) !important;
+    height: var(--card-h) !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  /* Cánh thiệp và sống gáy */
+  .book-leaf {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    transform: none !important;
+    transform-style: preserve-3d !important;
+    pointer-events: none !important;
+    z-index: 2 !important;
+  }
+
+  .book-wrap.is-open .book-leaf {
+    transform: none !important;
+    position: absolute !important;
+    inset: 0 !important;
+  }
+
+  .book-spine {
+    display: none !important;
+  }
+
+  /* ================================================================
+     HIỆU ỨNG LẬT THẺ BÀI 3D (3-Card Flip Mechanism)
+     Mỗi trang là 1 lá bài độc lập:
+     - Thẻ 0: Bìa thiệp (.book-leaf-front)
+     - Thẻ 1: Thông tin hôn lễ (.book-leaf-back)
+     - Thẻ 2: Bản đồ chỉ đường (.book-page--right)
+     ================================================================ */
+  .book-leaf-front,
+  .book-leaf-back,
+  .book-page--right {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(201, 147, 42, 0.38) !important;
+    box-shadow: 0 16px 44px rgba(42, 32, 24, 0.24), 0 3px 10px rgba(42, 32, 24, 0.12) !important;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+    transform-origin: center center !important;
+    transform-style: preserve-3d !important;
+    transition: transform 0.65s cubic-bezier(0.34, 1.25, 0.64, 1), opacity 0.45s ease, filter 0.45s ease !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Thanh cuộn tinh tế bên trong thẻ bài nếu nội dung dài trên màn hình nhỏ */
+  .book-leaf-front::-webkit-scrollbar,
+  .book-leaf-back::-webkit-scrollbar,
+  .book-page--right::-webkit-scrollbar {
+    width: 4px;
+  }
+  .book-leaf-front::-webkit-scrollbar-thumb,
+  .book-leaf-back::-webkit-scrollbar-thumb,
+  .book-page--right::-webkit-scrollbar-thumb {
+    background: rgba(201, 147, 42, 0.3);
+    border-radius: 4px;
+  }
+
+  /* Trạng thái 0: Hiển thị Bìa thiệp */
+  #book[data-mobile-card="0"] .book-leaf-front,
+  #book:not([data-mobile-card]) .book-leaf-front {
+    transform: rotateY(0deg) scale(1) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 6 !important;
+    filter: brightness(1) !important;
+  }
+  #book[data-mobile-card="0"] .book-leaf-back,
+  #book:not([data-mobile-card]) .book-leaf-back {
+    transform: rotateY(90deg) scale(0.92) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+    filter: brightness(0.85) !important;
+  }
+  #book[data-mobile-card="0"] .book-page--right,
+  #book:not([data-mobile-card]) .book-page--right {
+    transform: rotateY(-90deg) scale(0.92) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+    filter: brightness(0.85) !important;
+  }
+
+  /* Trạng thái 1: Lật sang Thẻ Thông tin hôn lễ */
+  #book[data-mobile-card="1"] .book-leaf-front {
+    transform: rotateY(-90deg) scale(0.92) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+    filter: brightness(0.85) !important;
+  }
+  #book[data-mobile-card="1"] .book-leaf-back {
+    transform: rotateY(0deg) scale(1) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 6 !important;
+    filter: brightness(1) !important;
+  }
+  #book[data-mobile-card="1"] .book-page--right {
+    transform: rotateY(90deg) scale(0.92) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+    filter: brightness(0.85) !important;
+  }
+
+  /* Trạng thái 2: Lật tiếp sang Thẻ Bản đồ định vị */
+  #book[data-mobile-card="2"] .book-leaf-front {
+    transform: rotateY(90deg) scale(0.92) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+    filter: brightness(0.85) !important;
+  }
+  #book[data-mobile-card="2"] .book-leaf-back {
+    transform: rotateY(-90deg) scale(0.92) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+    filter: brightness(0.85) !important;
+  }
+  #book[data-mobile-card="2"] .book-page--right {
+    transform: rotateY(0deg) scale(1) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 6 !important;
+    filter: brightness(1) !important;
+  }
+
+  /* ================================================================
+     CHI TIẾT NỘI DUNG VÀ TYPOGRAPHY TỪNG THẺ BÀI TRÊN MOBILE
+     ================================================================ */
+
+  /* --- THẺ 0: Bìa thiệp --- */
+  .cover-card {
+    padding: 14px 12px;
+    gap: 8px;
+  }
+  .corner-filigree {
+    width: 36px;
+    height: 36px;
+  }
+  .cover-inner-border {
+    padding: 16px 12px 14px;
+    gap: 6px;
+  }
+  .cover-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+  }
+  .wax-seal {
+    width: 52px;
+    height: 52px;
+    margin: 2px 0;
+  }
+  .wax-monogram {
+    font-size: 0.95rem;
+  }
+  .book-cover-kicker {
+    font-size: 0.78rem;
+  }
+  .book-cover-names {
+    font-size: clamp(1.5rem, 5.2vw, 1.95rem);
+    line-height: 1.25;
+  }
+  .cover-invitation-note {
+    font-size: 0.85rem;
+  }
+  .book-cover-date {
+    font-size: 1.15rem;
+    letter-spacing: 0.15em;
+  }
+  .cover-lunar-date {
+    font-size: 0.74rem;
+  }
+  .cover-hint-badge {
+    padding: 5px 12px;
+    font-size: 0.74rem;
+    gap: 6px;
+  }
+
+  /* --- THẺ 1: Thông tin hôn lễ --- */
+  .book-page {
+    padding: 14px 13px;
+    gap: 7px;
+  }
+  .page-ornament-corner {
+    width: 24px;
+    height: 24px;
+  }
+  .page-monogram-badge {
+    margin-bottom: 0;
+    gap: 4px;
+  }
+  .mono-initial {
+    font-size: 1.35rem;
+  }
+  .mono-ring {
+    font-size: 0.85rem;
+  }
+  .details-note {
+    font-size: 0.86rem;
+    line-height: 1.35;
+  }
+  .wedding-time-card {
+    padding: 8px 10px;
+    gap: 2px;
+  }
+  .time-card-badge {
+    font-size: 0.64rem;
+    letter-spacing: 0.16em;
+  }
+  .time-clock-icon {
+    font-size: 0.95rem;
+  }
+  .time-hero-digits {
+    font-size: 1.55rem;
+    font-weight: 700;
+  }
+  .time-full-date {
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+  .time-lunar-date {
+    font-size: 0.75rem;
+  }
+  .rsvp-card {
+    padding: 6px 10px;
+    gap: 2px;
+  }
+  .detail-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+  }
+  .rsvp-contact-line {
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding-left: 20px;
+  }
+  .details-thanks {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+  .album-btn {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    margin: 2px auto;
+  }
+  .signature-block {
+    padding-top: 3px;
+    gap: 4px;
+  }
+  .details-signature {
+    font-size: 0.95rem;
+  }
+
+  /* --- THẺ 2: Bản đồ chỉ đường --- */
+  .book-page--right {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .home-toggle {
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .home-btn {
+    padding: 7px 8px;
+    font-size: 0.78rem;
+    gap: 4px;
+  }
+  .home-avatar {
+    font-size: 0.9rem;
+  }
+  .map-gold-frame {
+    flex: 1;
+    min-height: 175px;
+    max-height: 230px;
+  }
+  .map-venue-tag {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+  }
+  .venue-info-box {
+    gap: 5px;
+    flex-shrink: 0;
+  }
+  .venue-pin-icon {
+    font-size: 0.82rem;
+  }
+  .footer-map-address {
+    font-size: 0.85rem;
+    line-height: 1.35;
+  }
+  .map-direct-btn {
+    padding: 7px 12px;
+    font-size: 0.8rem;
+    align-self: stretch;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .book-wrap {
+    --card-w: min(325px, 92vw);
+    --card-h: min(540px, 74dvh);
+  }
+  .music-label { display: none; }
+  .replay-btn span:last-child { display: none; }
+  .home-btn-label { font-size: 0.72rem; }
+  .mobile-nav-pill { padding: 5px 9px; font-size: 0.76rem; }
+  .flip-hint-pill { padding: 5px 12px; }
+  .flip-hint-text { font-size: 0.78rem; }
+}
+
+/* ================================================================
+   16. Reduced Motion
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .scene-media, .scene-caption, .book-leaf, .book, .book-wrap, .click-hint, .album-card, .album-sheet {
+    transition: none !important;
+    animation: none !important;
+  }
+  .music-btn.is-playing .music-disc { animation: none !important; }
+}

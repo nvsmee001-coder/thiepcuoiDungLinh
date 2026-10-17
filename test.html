@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hiệu Ứng Số Tăng Dần (Counter Animation)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="font-sans bg-slate-50 text-slate-900">
+
+  <div class="h-[80vh] flex justify-center items-center bg-slate-200 text-slate-500 text-lg">
+    👇 Cuộn xuống dưới để thấy hiệu ứng tăng số
+  </div>
+
+  <section class="py-20 px-5 max-w-[1000px] mx-auto text-center">
+    <h2 class="text-[2rem] font-bold mb-10 text-slate-800">Thành Tựu Của Chúng Tôi</h2>
+
+    <!-- Rỗng lúc đầu — JS sẽ render card vào đây sau khi "fetch" xong data -->
+    <div id="statsGrid" class="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-6">
+      <p class="text-slate-400 col-span-full">Đang tải dữ liệu...</p>
+    </div>
+  </section>
+
+  <div class="h-[80vh] flex justify-center items-center bg-slate-200 text-slate-500 text-lg">
+    Đoạn kết trang
+  </div>
+
+  <script type="module">
+    import { animateCountOnVisible } from "./js/counter.js";
+
+    // Giả lập một lệnh gọi API/DB thật (vd: fetch("/api/stats")).
+    // Thay nguyên hàm này bằng fetch() thật khi bạn có backend.
+    function fetchStatsFromDb() {
+      const mockRows = [
+        { label: "Doanh Số (USD)", value: 12000, suffix: "" },
+        { label: "Khách Hàng Hài Lòng", value: 1500, suffix: "+" },
+        { label: "Dự Án Hoàn Thành", value: 350, suffix: "" },
+      ];
+      return new Promise((resolve) => setTimeout(() => resolve(mockRows), 400));
+    }
+
+    function renderStatCard(stat) {
+      const card = document.createElement("div");
+      card.className =
+        "bg-white py-8 px-5 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-slate-200";
+
+      const number = document.createElement("div");
+      number.className = "text-[2.8rem] font-bold text-blue-600 mb-2";
+      number.textContent = "0";
+
+      const label = document.createElement("div");
+      label.className = "text-base text-slate-500 font-medium";
+      label.textContent = stat.label;
+
+      card.appendChild(number);
+      card.appendChild(label);
+
+      // Đây là chỗ nối data từ DB (stat.value) vào animation — không qua
+      // data-attribute nào cả, truyền số thẳng vào hàm.
+      animateCountOnVisible(number, stat.value, {
+        duration: 2000,
+        format: (n) => Math.floor(n).toLocaleString("en-US") + stat.suffix,
+      });
+
+      return card;
+    }
+
+    (async function init() {
+      const stats = await fetchStatsFromDb();
+      const grid = document.getElementById("statsGrid");
+      grid.innerHTML = "";
+      stats.forEach((stat) => grid.appendChild(renderStatCard(stat)));
+    })();
+  </script>
+</body>
+</html>

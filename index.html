@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thiệp Cưới — Dũng &amp; Linh | 07.12.2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=7">
+</head>
+<body>
+
+<!-- Canvas cánh hoa rơi lãng mạn -->
+<canvas id="petalsCanvas" class="petals-canvas" aria-hidden="true"></canvas>
+
+<!-- Thanh công cụ góc trên -->
+<header class="top-nav" aria-label="Điều khiển">
+  <button type="button" class="ctrl-btn music-btn" id="musicBtn" title="Bật/Tắt nhạc cưới">
+    <span class="music-disc" aria-hidden="true">
+      <span class="music-groove"></span>
+      <span class="music-center-dot"></span>
+    </span>
+    <span class="music-icon" aria-hidden="true">🎵</span>
+    <span class="music-label">Nhạc cưới</span>
+  </button>
+
+  <button type="button" class="ctrl-btn petals-btn" id="petalsBtn" title="Bật/Tắt hiệu ứng hoa rơi">
+    <span class="petals-icon">🌸</span>
+  </button>
+
+  <button type="button" class="ctrl-btn replay-btn" id="replayBtn" title="Quay lại từ đầu">
+    <span class="replay-icon">&#8635;</span>
+    <span>Trải nghiệm lại</span>
+  </button>
+</header>
+
+<main class="journal">
+
+  <!-- Sân khấu kể chuyện: ảnh xuất hiện, kể ký sự, chuyển cảnh điện ảnh -->
+  <div class="stage" id="stage">
+    <div class="scene-host" id="sceneHost"></div>
+
+    <!-- Màn kết: Thiệp cưới gập đôi 3D nghệ thuật -->
+    <div class="book-wrap" id="bookWrap">
+      
+      <!-- Tiêu đề trang trọng phía trên thiệp -->
+      <header class="finale-header">
+        <div class="floral-garland" aria-hidden="true">
+          <svg viewBox="0 0 200 40" class="garland-svg">
+            <path d="M10,25 C40,8 70,30 100,20 C130,10 160,32 190,15" fill="none" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M25,20 C35,15 45,22 55,18 M145,18 C155,22 165,15 175,20" fill="none" stroke="currentColor" stroke-width="1"/>
+            <circle cx="100" cy="20" r="3" fill="currentColor"/>
+            <circle cx="92" cy="18" r="1.5" fill="currentColor"/>
+            <circle cx="108" cy="18" r="1.5" fill="currentColor"/>
+          </svg>
+        </div>
+        <h1 class="finale-heading" data-field="ceremony.heading">Lễ Thành Hôn</h1>
+        <p class="finale-subheading">Trân trọng kính mời quý khách</p>
+      </header>
+      
+      <!-- Thanh điều hướng lật thẻ trên điện thoại (chỉ hiển thị trên mobile/màn hình hẹp) -->
+      <nav class="mobile-card-nav" id="mobileCardNav" aria-label="Điều hướng các trang thiệp">
+        <button type="button" class="mobile-nav-pill is-active" data-step="0">
+          <span class="pill-icon" aria-hidden="true">💌</span>
+          <span class="pill-text">Bìa thiệp</span>
+        </button>
+        <button type="button" class="mobile-nav-pill" data-step="1">
+          <span class="pill-icon" aria-hidden="true">💍</span>
+          <span class="pill-text">Thông tin</span>
+        </button>
+        <button type="button" class="mobile-nav-pill" data-step="2">
+          <span class="pill-icon" aria-hidden="true">📍</span>
+          <span class="pill-text">Bản đồ</span>
+        </button>
+      </nav>
+
+      <div class="book" id="book" data-mobile-card="0">
+        
+        <!-- Cánh thiệp 3D: Mặt ngoài là Bìa đứng, lật 180° sang trái mở ra Nửa trái thiệp -->
+        <div class="book-leaf" id="bookLeaf">
+          
+          <!-- MẶT TRƯỚC: Bìa thiệp cưới sang trọng (hình chữ nhật đứng) -->
+          <div class="book-leaf-face book-leaf-front" id="bookCover">
+            <div class="cover-card">
+              
+              <!-- 4 góc hoa văn kim loại dập nổi (Corner Filigree) -->
+              <svg class="corner-filigree corner-filigree--tl" viewBox="0 0 48 48" aria-hidden="true">
+                <path d="M4 44 C4 20 20 4 44 4 M4 44 C8 28 28 8 44 4 M8 22 C16 18 18 10 22 8 M14 36 C18 24 24 18 36 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                <circle cx="10" cy="10" r="2.2" fill="currentColor"/>
+              </svg>
+              <svg class="corner-filigree corner-filigree--tr" viewBox="0 0 48 48" aria-hidden="true">
+                <path d="M4 44 C4 20 20 4 44 4 M4 44 C8 28 28 8 44 4 M8 22 C16 18 18 10 22 8 M14 36 C18 24 24 18 36 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                <circle cx="10" cy="10" r="2.2" fill="currentColor"/>
+              </svg>
+              <svg class="corner-filigree corner-filigree--bl" viewBox="0 0 48 48" aria-hidden="true">
+                <path d="M4 44 C4 20 20 4 44 4 M4 44 C8 28 28 8 44 4 M8 22 C16 18 18 10 22 8 M14 36 C18 24 24 18 36 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                <circle cx="10" cy="10" r="2.2" fill="currentColor"/>
+              </svg>
+              <svg class="corner-filigree corner-filigree--br" viewBox="0 0 48 48" aria-hidden="true">
+                <path d="M4 44 C4 20 20 4 44 4 M4 44 C8 28 28 8 44 4 M8 22 C16 18 18 10 22 8 M14 36 C18 24 24 18 36 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                <circle cx="10" cy="10" r="2.2" fill="currentColor"/>
+              </svg>
+
+              <div class="cover-inner-border">
+                
+                <!-- Dòng chữ đầu thiệp -->
+                <p class="cover-eyebrow">SAVE OUR SPECIAL DAY</p>
+                
+                <!-- Con dấu sáp cưới dập nổi 3D (Wax Seal) -->
+                <div class="wax-seal" aria-hidden="true">
+                  <div class="wax-seal-body">
+                    <div class="wax-seal-rim"></div>
+                    <div class="wax-seal-core">
+                      <span class="wax-monogram">D&amp;L</span>
+                      <span class="wax-heart">♥</span>
+                    </div>
+                    <div class="wax-seal-shine"></div>
+                  </div>
+                </div>
+
+                <div class="cover-kicker-wrap">
+                  <span class="kicker-line"></span>
+                  <p class="book-cover-kicker">Thiệp Cưới</p>
+                  <span class="kicker-line"></span>
+                </div>
+
+                <!-- Tên cô dâu chú rể lấp lánh ánh kim -->
+                <p class="book-cover-names gold-foil">
+                  <span data-field="groom"></span>
+                  <span class="amp">&amp;</span>
+                  <span data-field="bride"></span>
+                </p>
+
+                <p class="cover-invitation-note">Trân trọng kính mời quý khách</p>
+
+                <div class="cover-divider-flourish" aria-hidden="true">
+                  <span class="div-line"></span>
+                  <span class="div-diamond">♦</span>
+                  <span class="div-line"></span>
+                </div>
+
+                <!-- Ngày cưới -->
+                <p class="book-cover-date" data-field="dateDisplay">07 . 12 . 2026</p>
+                <p class="cover-lunar-date">Chủ Nhật · Ngày 29 Tháng 10 Năm Bính Ngọ</p>
+
+                <!-- Dải ruy băng nhịp thở mời mở thiệp -->
+                <div class="cover-hint-badge">
+                  <span class="hint-pulse-dot"></span>
+                  <span class="hint-text">Chạm nhẹ để mở thiệp</span>
+                  <span class="hint-chevron">&#10148;</span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- MẶT SAU: Nửa trái thiệp khi mở ra (Thông tin hôn lễ) -->
+          <div class="book-leaf-face book-leaf-back book-page book-page--left">
+            <div class="page-ornament-corner page-ornament--tl" aria-hidden="true"></div>
+            <div class="page-ornament-corner page-ornament--tr" aria-hidden="true"></div>
+            
+            <div class="page-monogram-badge">
+              <span class="mono-initial">D</span>
+              <span class="mono-ring">💍</span>
+              <span class="mono-initial">L</span>
+            </div>
+
+            <p class="details-note" data-field="ceremony.note"></p>
+
+            <!-- Khối thời gian hôn lễ -->
+            <div class="wedding-time-card">
+              <div class="time-card-badge">TIỆC MỪNG HÔN LỄ</div>
+              <div class="time-card-hero">
+                <span class="time-clock-icon" aria-hidden="true">⏰</span>
+                <span class="time-hero-digits">11:00</span>
+              </div>
+              <p class="detail-value time-full-date" id="detailTime"></p>
+              <p class="time-lunar-date">Tức ngày 29 tháng 10 năm Bính Ngọ</p>
+            </div>
+
+            <!-- Khối xác nhận tham dự (RSVP) -->
+            <div class="rsvp-card">
+              <div class="rsvp-card-header">
+                <span class="rsvp-icon" aria-hidden="true">💌</span>
+                <span class="detail-label" id="rsvpLabel">Xác nhận tham dự</span>
+              </div>
+              <p class="rsvp-contact-line" data-field="thanks.rsvpContact"></p>
+            </div>
+
+            <p class="details-thanks" data-field="thanks.body"></p>
+
+            <!-- Nút xem album kỷ niệm -->
+            <button type="button" class="album-btn" id="albumOpenBtn">
+              <span class="album-btn-icon" aria-hidden="true">📸</span>
+              <span>Xem album kỷ niệm (9 khoảnh khắc)</span>
+              <span class="album-btn-shine" aria-hidden="true">✦</span>
+            </button>
+
+            <!-- Chữ ký trang trọng -->
+            <div class="signature-block">
+              <div class="sig-line" aria-hidden="true"></div>
+              <p class="details-signature" id="detailsSignature"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sống gáy ở giữa (nếp gấp chia đôi 2 nửa + dải ruy băng lụa mạ vàng) -->
+        <div class="book-spine" aria-hidden="true">
+          <div class="spine-ribbon"></div>
+        </div>
+
+        <!-- NỬA PHẢI THIỆP: Bản đồ định vị + Chuyển nhà trai / nhà gái -->
+        <div class="book-page book-page--right">
+          <div class="page-ornament-corner page-ornament--tl" aria-hidden="true"></div>
+          <div class="page-ornament-corner page-ornament--tr" aria-hidden="true"></div>
+
+          <!-- Bộ chuyển đổi tiệc Nhà trai / Nhà gái -->
+          <div class="home-toggle">
+            <button type="button" class="home-btn is-active" data-home="groom">
+              <span class="home-avatar" aria-hidden="true">🤵</span>
+              <span class="home-btn-label">Tiệc Nhà Trai</span>
+            </button>
+            <button type="button" class="home-btn" data-home="bride">
+              <span class="home-avatar" aria-hidden="true">👰</span>
+              <span class="home-btn-label">Tiệc Nhà Gái</span>
+            </button>
+          </div>
+
+          <!-- Khung bản đồ tranh mạ vàng -->
+          <div class="map-gold-frame">
+            <div class="map-venue-tag">📍 Vị trí đón tiếp</div>
+            <iframe id="detailsMap" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Bản đồ địa điểm tổ chức tiệc cưới"></iframe>
+          </div>
+
+          <!-- Địa chỉ & Nút mở Google Maps chỉ đường -->
+          <div class="venue-info-box">
+            <div class="venue-address-row">
+              <span class="venue-pin-icon" aria-hidden="true">🏛️</span>
+              <p class="footer-map-address" id="mapAddress"></p>
+            </div>
+            
+            <a id="mapDirectLink" class="map-direct-btn" target="_blank" rel="noopener noreferrer" href="#">
+              <span class="map-direct-icon" aria-hidden="true">🧭</span>
+              <span>Mở chỉ đường Google Maps</span>
+              <span class="map-direct-arrow" aria-hidden="true">&#8599;</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Thanh gợi ý lật thẻ bài trên điện thoại (chỉ hiển thị trên mobile/màn hình hẹp) -->
+      <div class="mobile-flip-bar" id="mobileFlipBar">
+        <div class="flip-hint-pill" id="mobileFlipBtn">
+          <span class="flip-hint-icon" aria-hidden="true">👆</span>
+          <span class="flip-hint-text" id="mobileFlipHintText">Chạm vào thiệp để xem thông tin</span>
+          <span class="flip-hint-badge" id="mobileFlipBadge">1/3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hướng dẫn chạm ở dưới cùng màn hình -->
+    <p class="click-hint" id="clickHint">
+      <span class="hint-hand-icon" aria-hidden="true">👆</span>
+      <span>Chạm vào màn hình để tiếp tục</span>
+    </p>
+
+  </div>
+
+</main>
+
+<!-- Album: Toàn bộ ảnh kỷ niệm dạng polaroid -->
+<div class="album-modal" id="albumModal" aria-hidden="true">
+  <div class="album-sheet">
+    <button type="button" class="album-close" id="albumClose" aria-label="Đóng album">&times;</button>
+    <div class="album-header">
+      <span class="album-decor-leaf">🌿</span>
+      <h2 class="album-title">Khoảnh Khắc Kỷ Niệm</h2>
+      <p class="album-subtitle">Hành trình tình yêu của Dũng &amp; Linh</p>
+    </div>
+    <div class="album-pile" id="albumPile"></div>
+  </div>
+</div>
+
+<script src="js/content.js?v=7"></script>
+<script src="js/main.js?v=7"></script>
+</body>
+</html>
