@@ -15,6 +15,14 @@
 (function () {
   "use strict";
 
+  // Tự động làm sạch thanh địa chỉ về đúng domain gốc "/" (bỏ /stationery.html hoặc /index.html)
+  try {
+    var p = window.location.pathname || "";
+    if (p.endsWith("/stationery.html") || p.endsWith("/index.html") || p === "/stationery") {
+      window.history.replaceState(null, "", "/" + window.location.search + window.location.hash);
+    }
+  } catch (e) {}
+
   var countdownTargetMs = new Date("2026-12-07T11:00:00+07:00").getTime();
 
   function setText(selector, text) {

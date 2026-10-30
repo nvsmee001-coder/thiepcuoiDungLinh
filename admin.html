@@ -3,7 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="/">
   <title>Quản Lý Thiệp Cưới &amp; Album — Dũng &amp; Linh</title>
+  <script>
+    try {
+      var _ap = window.location.pathname || "";
+      if (_ap.endsWith("/admin.html") || _ap.endsWith("/admin/")) {
+        window.history.replaceState(null, "", "/admin" + window.location.search + window.location.hash);
+      }
+    } catch (e) {}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -637,8 +646,8 @@
       <h1 class="brand-title">Quản Lý Thiệp Cưới Dũng &amp; Linh</h1>
     </div>
     <div class="top-actions">
-      <a href="stationery.html" class="btn" target="_blank">👁️ Xem Thiệp Cưới (Mở Tab Mới)</a>
-      <a href="stationery.html" class="btn">⬅️ Quay Lại Thiệp</a>
+      <a href="/" class="btn" target="_blank">👁️ Xem Thiệp Cưới (Mở Tab Mới)</a>
+      <a href="/" class="btn">⬅️ Quay Lại Thiệp</a>
       <button type="button" class="btn btn-danger" id="btnResetDefault">↺ Khôi Phục Mặc Định</button>
       <button type="button" class="btn btn-primary" id="btnSaveAll">💾 LƯU TẤT CẢ THAY ĐỔI</button>
     </div>
@@ -1214,6 +1223,13 @@
   <script>
     (function () {
       "use strict";
+
+      // Tự động làm sạch thanh địa chỉ về đúng /admin (không có .html hay dấu /)
+      try {
+        if (window.location.pathname.endsWith("/admin.html") || window.location.pathname.endsWith("/admin/")) {
+          window.history.replaceState(null, "", "/admin" + window.location.search + window.location.hash);
+        }
+      } catch (e) {}
 
       var state = JSON.parse(JSON.stringify(window.WEDDING_DB || window.DEFAULT_WEDDING_DB));
 

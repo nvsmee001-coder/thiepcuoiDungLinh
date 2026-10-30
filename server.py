@@ -112,8 +112,10 @@ class WeddingDBHandler(SimpleHTTPRequestHandler):
                         images.append(rel_p)
             return self._send_json(200, {"ok": True, "images": images})
 
-        if parsed.path in ("/", "/index.html"):
+        if parsed.path in ("/", "/index.html", "/stationery", "/stationery/"):
             self.path = "/stationery.html"
+        elif parsed.path in ("/admin", "/admin/", "/admin/index.html"):
+            self.path = "/admin.html"
 
         rel_check = parsed.path.lstrip("/\\")
         segments = re.split(r"[/\\]+", rel_check)

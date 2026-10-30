@@ -1,0 +1,2210 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="/">
+  <title>Quản Lý Thiệp Cưới &amp; Album — Dũng &amp; Linh</title>
+  <script>
+    try {
+      var _ap = window.location.pathname || "";
+      if (_ap.endsWith("/admin.html") || _ap.endsWith("/admin/")) {
+        window.history.replaceState(null, "", "/admin" + window.location.search + window.location.hash);
+      }
+    } catch (e) {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0e0b08;
+      --bg-panel: #17120d;
+      --bg-card: #211a13;
+      --gold: #e2c48e;
+      --gold-bright: #ffe2a4;
+      --gold-dim: rgba(226, 196, 142, 0.28);
+      --text-main: #fffaf0;
+      --text-muted: rgba(255, 245, 225, 0.68);
+      --danger: #ff6b6b;
+      --success: #51cf66;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: radial-gradient(circle at top, #1f1710 0%, #0c0906 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    /* TOP STICKY HEADER */
+    .admin-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(16, 12, 9, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--gold-dim);
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #140f0a;
+      background: linear-gradient(135deg, #ffe2a4, #cfa154);
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+    .brand-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.65rem;
+      font-weight: 700;
+      margin: 0;
+      color: var(--gold-bright);
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--gold-dim);
+      background: var(--bg-card);
+      color: var(--text-main);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn:hover {
+      border-color: var(--gold-bright);
+      transform: translateY(-1px);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #f6dca6 0%, #cf9f4e 100%);
+      color: #16100a;
+      border-color: #ffe5ad;
+      box-shadow: 0 6px 20px rgba(226, 196, 142, 0.35);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #ffe8b8 0%, #dfb160 100%);
+    }
+    .btn-danger {
+      color: #ff8787;
+      border-color: rgba(255, 107, 107, 0.35);
+    }
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.75rem;
+    }
+
+    /* CONTAINER & TABS */
+    .admin-container {
+      max-width: 1320px;
+      margin: 24px auto;
+      padding: 0 24px;
+    }
+    .admin-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--gold-dim);
+      padding-bottom: 14px;
+    }
+    .tab-btn {
+      font-family: inherit;
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 11px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--gold-dim);
+      background: rgba(25, 19, 14, 0.75);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .tab-btn:hover {
+      color: var(--gold-bright);
+      border-color: var(--gold);
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(226, 196, 142, 0.24), rgba(226, 196, 142, 0.08));
+      color: var(--gold-bright);
+      border-color: var(--gold-bright);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+    }
+
+    .tab-pane {
+      display: none;
+    }
+    .tab-pane.active {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* CARDS & FORMS */
+    .panel-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--gold-dim);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 22px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+    }
+    .panel-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold-bright);
+      margin: 0 0 6px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .panel-desc {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      margin: 0 0 20px 0;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 16px;
+    }
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--gold);
+    }
+    .form-control {
+      width: 100%;
+      padding: 10px 13px;
+      border-radius: 9px;
+      border: 1px solid rgba(226, 196, 142, 0.3);
+      background: #100c09;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.88rem;
+      transition: border-color 0.2s;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--gold-bright);
+      box-shadow: 0 0 0 2px rgba(226, 196, 142, 0.18);
+    }
+
+    /* UPLOAD DROPZONE */
+    .upload-dropzone {
+      border: 2px dashed rgba(226, 196, 142, 0.55);
+      border-radius: 16px;
+      padding: 32px 24px;
+      text-align: center;
+      background: rgba(226, 196, 142, 0.05);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      margin-bottom: 22px;
+    }
+    .upload-dropzone:hover,
+    .upload-dropzone.dragover {
+      border-color: var(--gold-bright);
+      background: rgba(226, 196, 142, 0.12);
+    }
+    .upload-icon {
+      font-size: 2.4rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .upload-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--gold-bright);
+      margin-bottom: 4px;
+    }
+    .upload-sub {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* ALBUM PHOTO GRID */
+    .album-admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: 14px;
+    }
+    .album-item-card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--gold-dim);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .album-item-card:hover {
+      border-color: var(--gold-bright);
+      transform: translateY(-2px);
+    }
+    .album-item-thumb {
+      width: 100%;
+      height: 155px;
+      object-fit: cover;
+      object-position: center 25%;
+      background: #090705;
+      display: block;
+    }
+    .album-item-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(14, 10, 7, 0.85);
+      border: 1px solid var(--gold);
+      color: var(--gold-bright);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .album-item-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px;
+      gap: 4px;
+      background: #140f0b;
+      border-top: 1px solid rgba(226, 196, 142, 0.16);
+    }
+    .icon-btn {
+      flex: 1;
+      padding: 5px 0;
+      border-radius: 6px;
+      border: 1px solid rgba(226, 196, 142, 0.25);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .icon-btn:hover {
+      background: rgba(226, 196, 142, 0.2);
+      border-color: var(--gold-bright);
+    }
+    .icon-btn.del:hover {
+      background: rgba(255, 107, 107, 0.25);
+      border-color: var(--danger);
+      color: #ffa8a8;
+    }
+
+    /* IMAGE PICKER PREVIEW CARDS (4 VỊ TRÍ ẢNH NỀN & KHUNG TRANH) */
+    .slot-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+      gap: 18px;
+    }
+    .slot-card {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-dim);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color 0.2s;
+    }
+    .slot-card:hover {
+      border-color: var(--gold-bright);
+    }
+    .slot-card-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--gold-bright);
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .slot-ratio-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(226, 196, 142, 0.16);
+      border: 1px solid rgba(226, 196, 142, 0.4);
+      color: var(--gold);
+    }
+    .slot-preview-wrap {
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1.5px solid rgba(226, 196, 142, 0.45);
+      background: #090705;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slot-preview-wrap.ratio-16-9 {
+      aspect-ratio: 16 / 9;
+    }
+    .slot-preview-wrap.ratio-3-4 {
+      aspect-ratio: 3 / 4;
+      max-height: 230px;
+      width: auto;
+      margin: 0 auto;
+    }
+    .slot-preview-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .slot-btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .slot-btn-group .btn {
+      flex: 1;
+      justify-content: center;
+      padding: 8px 10px;
+      font-size: 0.76rem;
+      white-space: nowrap;
+    }
+
+    /* MODAL CHỌN ẢNH TỪ ALBUM & BÀN CĂN CHỈNH CẮT KHUNG (CROP STUDIO) */
+    .studio-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(6, 4, 3, 0.88);
+      backdrop-filter: blur(12px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .studio-modal-backdrop.active {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+    .studio-modal-box {
+      width: 100%;
+      max-width: 980px;
+      max-height: 92vh;
+      background: #17120d;
+      border: 1.5px solid var(--gold);
+      border-radius: 18px;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .studio-modal-header {
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--gold-dim);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: #120e0a;
+    }
+    .studio-modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--gold-bright);
+      margin: 0;
+    }
+    .studio-modal-body {
+      padding: 20px 22px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .studio-modal-footer {
+      padding: 14px 22px;
+      border-top: 1px solid var(--gold-dim);
+      background: #120e0a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* Lưới chọn ảnh nhanh từ Album trong Modal */
+    .picker-photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+      gap: 12px;
+    }
+    .picker-photo-item {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid rgba(226, 196, 142, 0.28);
+      background: #090705;
+      cursor: pointer;
+      aspect-ratio: 1 / 1;
+      transition: all 0.2s ease;
+    }
+    .picker-photo-item:hover {
+      border-color: var(--gold-bright);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(226, 196, 142, 0.3);
+    }
+    .picker-photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .picker-photo-num {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: rgba(12, 9, 6, 0.85);
+      color: var(--gold-bright);
+      border: 1px solid var(--gold);
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 5px;
+    }
+
+    /* Bàn Căn Chỉnh & Cắt Ảnh (Interactive Crop Canvas) */
+    .crop-workspace {
+      display: grid;
+      grid-template-columns: 1fr 290px;
+      gap: 20px;
+      align-items: start;
+    }
+    @media (max-width: 820px) {
+      .crop-workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+    .crop-canvas-stage {
+      background: repeating-conic-gradient(#14100c 0% 25%, #0c0907 0% 50%) 50% / 20px 20px;
+      border: 1.5px solid var(--gold);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 380px;
+      user-select: none;
+    }
+    .crop-canvas-wrap {
+      position: relative;
+      max-width: 100%;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85);
+      border: 2px solid var(--gold-bright);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: grab;
+    }
+    .crop-canvas-wrap:active {
+      cursor: grabbing;
+    }
+    #cropStudioCanvas {
+      display: block;
+      max-width: 100%;
+      max-height: 54vh;
+      width: auto;
+      height: auto;
+    }
+    .crop-controls-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-dim);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .crop-hint-box {
+      font-size: 0.78rem;
+      line-height: 1.5;
+      color: var(--text-muted);
+      background: rgba(226, 196, 142, 0.07);
+      border-left: 3px solid var(--gold);
+      padding: 10px 12px;
+      border-radius: 6px;
+    }
+    .zoom-slider {
+      width: 100%;
+      accent-color: #e2c48e;
+      cursor: pointer;
+    }
+
+    /* LIST EDITOR (MENU & SCHEDULE) */
+    .list-row-card {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-dim);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      display: grid;
+      gap: 12px;
+      align-items: center;
+    }
+    .list-row-menu {
+      grid-template-columns: 42px 1.2fr 0.7fr 1.8fr auto;
+    }
+    .list-row-schedule {
+      grid-template-columns: 95px 1.2fr 1.8fr auto auto;
+    }
+    @media (max-width: 900px) {
+      .list-row-menu, .list-row-schedule {
+        grid-template-columns: 1fr;
+      }
+    }
+    .row-num-pill {
+      font-weight: 800;
+      color: var(--gold-bright);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    /* TOAST */
+    .admin-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      background: linear-gradient(135deg, #211a12, #140f0a);
+      border: 1.5px solid var(--gold-bright);
+      color: var(--gold-bright);
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.8);
+      transform: translateY(120%);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .admin-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- THANH CÔNG CỤ CỐ ĐỊNH TRÊN CÙNG -->
+  <header class="admin-topbar">
+    <div class="brand-box">
+      <span class="brand-badge">MINI-DB STUDIO</span>
+      <h1 class="brand-title">Quản Lý Thiệp Cưới Dũng &amp; Linh</h1>
+    </div>
+    <div class="top-actions">
+      <a href="/" class="btn" target="_blank">👁️ Xem Thiệp Cưới (Mở Tab Mới)</a>
+      <a href="/" class="btn">⬅️ Quay Lại Thiệp</a>
+      <button type="button" class="btn btn-danger" id="btnResetDefault">↺ Khôi Phục Mặc Định</button>
+      <button type="button" class="btn btn-primary" id="btnSaveAll">💾 LƯU TẤT CẢ THAY ĐỔI</button>
+    </div>
+  </header>
+
+  <main class="admin-container">
+
+    <!-- 6 TAB QUẢN LÝ RÕ RÀNG -->
+    <nav class="admin-tabs">
+      <button type="button" class="tab-btn active" data-tab="pane-album">📸 1. Nạp &amp; Quản Lý Album Ảnh (<span id="albumCountBadge">11</span>)</button>
+      <button type="button" class="tab-btn" data-tab="pane-general">💍 2. Dâu Rể, Ngày Giờ &amp; Ảnh Nền</button>
+      <button type="button" class="tab-btn" data-tab="pane-venues">📍 3. Địa Điểm &amp; Bản Đồ 2 Nhà</button>
+      <button type="button" class="tab-btn" data-tab="pane-menu">🍽️ 4. Thực Đơn Tiệc Cưới</button>
+      <button type="button" class="tab-btn" data-tab="pane-schedule">🕰️ 5. Lịch Biểu Hôn Lễ</button>
+      <button type="button" class="tab-btn" data-tab="pane-music">🎵 6. Đĩa Nhạc Cưới (<span id="musicCountBadge">3</span>/5)</button>
+    </nav>
+
+    <!-- ====================================================================
+         PANE 1: NẠP & QUẢN LÝ ALBUM ẢNH HÀNG LOẠT (30 - 50+ ẢNH)
+         ==================================================================== -->
+    <section class="tab-pane active" id="pane-album">
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>📸 Nạp Ảnh Mới Vào Album (Hỗ trợ chọn 30 – 50+ ảnh cùng lúc)</span>
+          <div style="display:flex; gap:8px;">
+            <button type="button" class="btn btn-sm" id="btnReverseAlbum" title="Đảo ngược thứ tự ảnh">⇅ Đảo Thứ Tự</button>
+          </div>
+        </div>
+        <p class="panel-desc">
+          Bạn không cần đặt tên hay gắn tag cho từng ảnh. Chỉ cần kéo thả hoặc chọn hàng loạt ảnh từ máy tính — hệ thống sẽ tự động nạp vào thư mục <code>img/album/</code>, tự nhận diện ảnh Đứng / Ngang và lấy chính bức ảnh đang chiếu làm nền động cho Tab Album!
+        </p>
+
+        <!-- Kéo thả hoặc bấm chọn nhiều file -->
+        <div class="upload-dropzone" id="albumDropzone">
+          <span class="upload-icon">📤</span>
+          <div class="upload-title" id="uploadStatusText">Bấm vào đây hoặc Kéo &amp; Thả 30 – 50+ ảnh cưới vào đây</div>
+          <div class="upload-sub">Hỗ trợ JPG, PNG, WEBP • Tự động lưu vào thư mục img/album/ và cập nhật ngay vào thiệp</div>
+          <input type="file" id="albumFileInput" multiple accept="image/*" style="display:none;">
+        </div>
+
+        <!-- Thêm nhanh bằng đường dẫn nếu ảnh đã có sẵn trong thư mục img/ -->
+        <div style="display:flex; gap:10px; margin-bottom: 22px; flex-wrap:wrap;">
+          <input type="text" id="manualPhotoInput" class="form-control" placeholder="Hoặc nhập đường dẫn ảnh sẵn có (VD: img/08-trang-an-hero.jpg)..." style="flex:1; min-width:260px;">
+          <button type="button" class="btn" id="btnAddManualPhoto">+ Thêm Đường Dẫn</button>
+        </div>
+
+        <!-- Lưới hiển thị toàn bộ ảnh trong Album -->
+        <div class="album-admin-grid" id="albumAdminGrid"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         PANE 2: THÔNG TIN DÂU RỂ, NGÀY GIỜ & ẢNH NỀN
+         ==================================================================== -->
+    <section class="tab-pane" id="pane-general">
+      <div class="form-grid-2">
+        
+        <!-- Cột Trái: Tên Dâu Rể & Lời Mời -->
+        <div class="panel-card">
+          <h3 class="panel-title">💍 Thông Tin Cô Dâu &amp; Chú Rể</h3>
+          <p class="panel-desc">Chỉnh sửa tên hiển thị trên bìa thiệp, lời mời và câu trích dẫn.</p>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Tên Chú Rể</label>
+              <input type="text" class="form-control" id="f_groomName">
+            </div>
+            <div class="form-group">
+              <label>Tên Cô Dâu</label>
+              <input type="text" class="form-control" id="f_brideName">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Dòng Tiêu Đề Nhỏ Đỉnh Thiệp (Eyebrow)</label>
+            <input type="text" class="form-control" id="f_eyebrow">
+          </div>
+
+          <div class="form-group">
+            <label>Lời Kính Mời Trang Trọng</label>
+            <input type="text" class="form-control" id="f_invitationText">
+          </div>
+
+          <div class="form-group">
+            <label>Câu Trích Dẫn Chữ Ký (Cuối Trang Bìa)</label>
+            <input type="text" class="form-control" id="f_signatureQuote">
+          </div>
+        </div>
+
+        <!-- Cột Phải: Ngày Giờ Cử Hành Hôn Lễ & Đếm Ngược -->
+        <div class="panel-card">
+          <h3 class="panel-title">📅 Ngày Giờ &amp; Đồng Hồ Đếm Ngược</h3>
+          <p class="panel-desc">Thay đổi ngày giờ dương lịch, âm lịch và mốc thời gian đếm ngược.</p>
+
+          <div class="form-group">
+            <label>Mốc Thời Gian Đếm Ngược Chuẩn ISO (YYYY-MM-DDTHH:mm:ss+07:00)</label>
+            <input type="text" class="form-control" id="f_isoTarget" placeholder="2026-12-07T11:00:00+07:00">
+          </div>
+
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label>Thứ Trong Tuần</label>
+              <input type="text" class="form-control" id="f_dayOfWeek" placeholder="CHỦ NHẬT">
+            </div>
+            <div class="form-group">
+              <label>Ngày (Số lớn)</label>
+              <input type="text" class="form-control" id="f_dayNumber" placeholder="07">
+            </div>
+            <div class="form-group">
+              <label>Tháng</label>
+              <input type="text" class="form-control" id="f_monthLabel" placeholder="THÁNG 12">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Năm</label>
+              <input type="text" class="form-control" id="f_yearLabel" placeholder="2026">
+            </div>
+            <div class="form-group">
+              <label>Nhãn Nghi Lễ Bên Phải Ngày</label>
+              <input type="text" class="form-control" id="f_eventLabel" placeholder="THÀNH HÔN">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Dòng Ngày Âm Lịch (Trang Bìa)</label>
+            <input type="text" class="form-control" id="f_lunarDate">
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Ngày Tóm Gọn (Đỉnh Tab Chi Tiết)</label>
+              <input type="text" class="form-control" id="f_shortDatePill">
+            </div>
+            <div class="form-group">
+              <label>Âm Lịch Tóm Gọn (Đỉnh Tab Chi Tiết)</label>
+              <input type="text" class="form-control" id="f_shortLunarPill">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Khối Ảnh Nền & 2 Khung Tranh Baroque -->
+      <div class="panel-card">
+        <h3 class="panel-title">🖼️ Ảnh Nền Thiệp &amp; 2 Khung Tranh Baroque Trang Bìa</h3>
+        <p class="panel-desc">
+          Chọn trực tiếp từ danh sách ảnh đã nạp vào Album (hoặc tải ảnh mới từ máy), sau đó <strong>kéo thả &amp; phóng to/thu nhỏ căn chỉnh khung cắt chuẩn tỉ lệ</strong> để ảnh không bao giờ bị méo hay cắt mất mặt trước khi bấm Xác Nhận!
+        </p>
+
+        <div class="slot-cards-grid">
+          <!-- 1. Ảnh nền Tab 1 (16:9) -->
+          <div class="slot-card">
+            <div class="slot-card-title">
+              <span>1. Ảnh Nền Tab 1 (Mở Đầu)</span>
+              <span class="slot-ratio-badge">Ngang 16:9</span>
+            </div>
+            <div class="slot-preview-wrap ratio-16-9">
+              <img src="" alt="" class="slot-preview-img" id="prev_heroBackdrop">
+            </div>
+            <input type="hidden" id="f_heroBackdrop">
+            <div class="slot-btn-group">
+              <button type="button" class="btn btn-primary" data-pick-slot="heroBackdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Tab 1 (Mở Đầu — Tỉ lệ Ngang 16:9)">
+                🖼️ Chọn Từ Album
+              </button>
+              <button type="button" class="btn" data-recrop-slot="heroBackdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Tab 1 (Mở Đầu — Tỉ lệ Ngang 16:9)">
+                ✂️ Căn Chỉnh
+              </button>
+              <label class="btn" style="cursor:pointer;">
+                📤 Tải Mới
+                <input type="file" accept="image/*" style="display:none;" data-upload-slot="heroBackdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Tab 1 (Mở Đầu — Tỉ lệ Ngang 16:9)">
+              </label>
+            </div>
+          </div>
+
+          <!-- 2. Ảnh nền Tab 2 (16:9) -->
+          <div class="slot-card">
+            <div class="slot-card-title">
+              <span>2. Ảnh Nền Tab 2 (Chi Tiết &amp; Map)</span>
+              <span class="slot-ratio-badge">Ngang 16:9</span>
+            </div>
+            <div class="slot-preview-wrap ratio-16-9">
+              <img src="" alt="" class="slot-preview-img" id="prev_detailsBackdrop">
+            </div>
+            <input type="hidden" id="f_detailsBackdrop">
+            <div class="slot-btn-group">
+              <button type="button" class="btn btn-primary" data-pick-slot="detailsBackdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Tab 2 (Chi Tiết & Map — Tỉ lệ Ngang 16:9)">
+                🖼️ Chọn Từ Album
+              </button>
+              <button type="button" class="btn" data-recrop-slot="detailsBackdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Tab 2 (Chi Tiết & Map — Tỉ lệ Ngang 16:9)">
+                ✂️ Căn Chỉnh
+              </button>
+              <label class="btn" style="cursor:pointer;">
+                📤 Tải Mới
+                <input type="file" accept="image/*" style="display:none;" data-upload-slot="detailsBackdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Tab 2 (Chi Tiết & Map — Tỉ lệ Ngang 16:9)">
+              </label>
+            </div>
+          </div>
+
+          <!-- 3. Khung Baroque Trái (3:4) -->
+          <div class="slot-card">
+            <div class="slot-card-title">
+              <span>3. Khung Giá Vẽ Bên Trái</span>
+              <span class="slot-ratio-badge">Đứng 3:4</span>
+            </div>
+            <div class="slot-preview-wrap ratio-3-4">
+              <img src="" alt="" class="slot-preview-img" id="prev_leftFramePhoto">
+            </div>
+            <input type="hidden" id="f_leftFramePhoto">
+            <div class="slot-btn-group">
+              <button type="button" class="btn btn-primary" data-pick-slot="leftFramePhoto" data-ratio="3:4" data-slot-label="Khung Tranh Giá Vẽ Bên Trái (Tỉ lệ Đứng 3:4)">
+                🖼️ Chọn Từ Album
+              </button>
+              <button type="button" class="btn" data-recrop-slot="leftFramePhoto" data-ratio="3:4" data-slot-label="Khung Tranh Giá Vẽ Bên Trái (Tỉ lệ Đứng 3:4)">
+                ✂️ Căn Chỉnh
+              </button>
+              <label class="btn" style="cursor:pointer;">
+                📤 Tải Mới
+                <input type="file" accept="image/*" style="display:none;" data-upload-slot="leftFramePhoto" data-ratio="3:4" data-slot-label="Khung Tranh Giá Vẽ Bên Trái (Tỉ lệ Đứng 3:4)">
+              </label>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Chữ khắc Bảng Đồng Trái</label>
+              <input type="text" class="form-control" id="f_leftFramePlaque" placeholder="VD: ✦ DŨNG • LINH ✦">
+            </div>
+          </div>
+
+          <!-- 4. Khung Baroque Phải (3:4) -->
+          <div class="slot-card">
+            <div class="slot-card-title">
+              <span>4. Khung Giá Vẽ Bên Phải</span>
+              <span class="slot-ratio-badge">Đứng 3:4</span>
+            </div>
+            <div class="slot-preview-wrap ratio-3-4">
+              <img src="" alt="" class="slot-preview-img" id="prev_rightFramePhoto">
+            </div>
+            <input type="hidden" id="f_rightFramePhoto">
+            <div class="slot-btn-group">
+              <button type="button" class="btn btn-primary" data-pick-slot="rightFramePhoto" data-ratio="3:4" data-slot-label="Khung Tranh Giá Vẽ Bên Phải (Tỉ lệ Đứng 3:4)">
+                🖼️ Chọn Từ Album
+              </button>
+              <button type="button" class="btn" data-recrop-slot="rightFramePhoto" data-ratio="3:4" data-slot-label="Khung Tranh Giá Vẽ Bên Phải (Tỉ lệ Đứng 3:4)">
+                ✂️ Căn Chỉnh
+              </button>
+              <label class="btn" style="cursor:pointer;">
+                📤 Tải Mới
+                <input type="file" accept="image/*" style="display:none;" data-upload-slot="rightFramePhoto" data-ratio="3:4" data-slot-label="Khung Tranh Giá Vẽ Bên Phải (Tỉ lệ Đứng 3:4)">
+              </label>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Chữ khắc Bảng Đồng Phải</label>
+              <input type="text" class="form-control" id="f_rightFramePlaque" placeholder="VD: ✦ 07 . 12 . 2026 ✦">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         PANE 3: ĐỊA ĐIỂM & BẢN ĐỒ 2 NHÀ (NHÀ TRAI & NHÀ GÁI)
+         ==================================================================== -->
+    <section class="tab-pane" id="pane-venues">
+      <div class="form-grid-2">
+        
+        <!-- NHÀ TRAI -->
+        <div class="panel-card">
+          <div class="panel-title">
+            <span>🤵 Địa Điểm &amp; Bản Đồ Nhà Trai</span>
+            <button type="button" class="btn btn-sm" id="btnAutoMapGroom">🪄 Tự Tạo Map Từ Địa Chỉ</button>
+          </div>
+          <p class="panel-desc">Cập nhật đồng thời trên cả Trang Bìa (Tab 1) và Cột Bản Đồ (Tab 2).</p>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Nhãn Trang Bìa (Tab 1)</label>
+              <input type="text" class="form-control" id="f_groom_badgeCover">
+            </div>
+            <div class="form-group">
+              <label>Tên Sảnh Ngắn Gọn (Tab 1)</label>
+              <input type="text" class="form-control" id="f_groom_nameShort">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Quận / Thành Phố Ngắn (Tab 1)</label>
+              <input type="text" class="form-control" id="f_groom_cityShort">
+            </div>
+            <div class="form-group">
+              <label>Giờ Tiệc Trên Trang Bìa (Tab 1)</label>
+              <input type="text" class="form-control" id="f_groom_timeCover">
+            </div>
+          </div>
+
+          <hr style="border:none; border-top:1px solid var(--gold-dim); margin: 14px 0;">
+
+          <div class="form-group">
+            <label>Nhãn Đỉnh Bản Đồ (Tab 2)</label>
+            <input type="text" class="form-control" id="f_groom_badgeMap">
+          </div>
+          <div class="form-group">
+            <label>Tên Đầy Đủ Trung Tâm Hội Nghị (Tab 2)</label>
+            <input type="text" class="form-control" id="f_groom_nameFull">
+          </div>
+          <div class="form-group">
+            <label>Song Thân Nhà Trai</label>
+            <input type="text" class="form-control" id="f_groom_parents">
+          </div>
+          <div class="form-group">
+            <label>Địa Chỉ Chi Tiết (Bấm "Tự Tạo Map" sau khi nhập)</label>
+            <input type="text" class="form-control" id="f_groom_address">
+          </div>
+          <div class="form-group">
+            <label>Link Mở Google Maps (Nút Chỉ Đường)</label>
+            <input type="text" class="form-control" id="f_groom_mapLink">
+          </div>
+          <div class="form-group">
+            <label>Link Nhúng Iframe Bản Đồ (Google Maps Embed URL)</label>
+            <input type="text" class="form-control" id="f_groom_mapEmbed">
+          </div>
+        </div>
+
+        <!-- NHÀ GÁI -->
+        <div class="panel-card">
+          <div class="panel-title">
+            <span>👰 Địa Điểm &amp; Bản Đồ Nhà Gái</span>
+            <button type="button" class="btn btn-sm" id="btnAutoMapBride">🪄 Tự Tạo Map Từ Địa Chỉ</button>
+          </div>
+          <p class="panel-desc">Cập nhật đồng thời trên cả Trang Bìa (Tab 1) và Cột Bản Đồ (Tab 2).</p>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Nhãn Trang Bìa (Tab 1)</label>
+              <input type="text" class="form-control" id="f_bride_badgeCover">
+            </div>
+            <div class="form-group">
+              <label>Tên Sảnh Ngắn Gọn (Tab 1)</label>
+              <input type="text" class="form-control" id="f_bride_nameShort">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Quận / Thành Phố Ngắn (Tab 1)</label>
+              <input type="text" class="form-control" id="f_bride_cityShort">
+            </div>
+            <div class="form-group">
+              <label>Giờ Tiệc Trên Trang Bìa (Tab 1)</label>
+              <input type="text" class="form-control" id="f_bride_timeCover">
+            </div>
+          </div>
+
+          <hr style="border:none; border-top:1px solid var(--gold-dim); margin: 14px 0;">
+
+          <div class="form-group">
+            <label>Nhãn Đỉnh Bản Đồ (Tab 2)</label>
+            <input type="text" class="form-control" id="f_bride_badgeMap">
+          </div>
+          <div class="form-group">
+            <label>Tên Đầy Đủ Trung Tâm Hội Nghị (Tab 2)</label>
+            <input type="text" class="form-control" id="f_bride_nameFull">
+          </div>
+          <div class="form-group">
+            <label>Song Thân Nhà Gái</label>
+            <input type="text" class="form-control" id="f_bride_parents">
+          </div>
+          <div class="form-group">
+            <label>Địa Chỉ Chi Tiết (Bấm "Tự Tạo Map" sau khi nhập)</label>
+            <input type="text" class="form-control" id="f_bride_address">
+          </div>
+          <div class="form-group">
+            <label>Link Mở Google Maps (Nút Chỉ Đường)</label>
+            <input type="text" class="form-control" id="f_bride_mapLink">
+          </div>
+          <div class="form-group">
+            <label>Link Nhúng Iframe Bản Đồ (Google Maps Embed URL)</label>
+            <input type="text" class="form-control" id="f_bride_mapEmbed">
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         PANE 4: THỰC ĐƠN TIỆC CƯỚI (BANQUET MENU)
+         ==================================================================== -->
+    <section class="tab-pane" id="pane-menu">
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>🍽️ Thực Đơn Tiệc Cưới (Cột Trái Tab 2)</span>
+          <button type="button" class="btn btn-sm btn-primary" id="btnAddCourse">+ Thêm Món Mới</button>
+        </div>
+        <p class="panel-desc">Chỉnh sửa tiêu đề thực đơn và danh sách các món đãi tiệc.</p>
+
+        <div class="form-grid-3" style="margin-bottom:18px;">
+          <div class="form-group">
+            <label>Dòng Eyebrow Thực Đơn</label>
+            <input type="text" class="form-control" id="f_menu_eyebrow">
+          </div>
+          <div class="form-group">
+            <label>Tiêu Đề Chính Thực Đơn</label>
+            <input type="text" class="form-control" id="f_menu_heading">
+          </div>
+          <div class="form-group">
+            <label>Dòng Mô Tả Phụ</label>
+            <input type="text" class="form-control" id="f_menu_subNote">
+          </div>
+        </div>
+
+        <div id="menuCoursesContainer"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         PANE 5: LỊCH TRÌNH HÔN LỄ (TIMELINE SCHEDULE)
+         ==================================================================== -->
+    <section class="tab-pane" id="pane-schedule">
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>🕰️ Lịch Trình &amp; Nghi Thức Hôn Lễ (Cột Giữa Tab 2)</span>
+          <button type="button" class="btn btn-sm btn-primary" id="btnAddScheduleEvent">+ Thêm Mốc Giờ</button>
+        </div>
+        <p class="panel-desc">Quản lý các khung giờ cử hành hôn lễ và đón khách.</p>
+
+        <div class="form-grid-2" style="margin-bottom:18px;">
+          <div class="form-group">
+            <label>Dòng Eyebrow Lịch Trình</label>
+            <input type="text" class="form-control" id="f_sch_eyebrow">
+          </div>
+          <div class="form-group">
+            <label>Tiêu Đề Chính Lịch Trình</label>
+            <input type="text" class="form-control" id="f_sch_heading">
+          </div>
+        </div>
+
+        <div id="scheduleEventsContainer"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         PANE 6: QUẢN LÝ ĐĨA NHẠC CƯỚI (UPLOAD MP3 & ĐẶT TÊN — TỐI ĐA 5 BÀI)
+         ==================================================================== -->
+    <section class="tab-pane" id="pane-music">
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>🎵 Quản Lý Đĩa Nhạc Cưới (Tối Đa 5 Bài Hát)</span>
+          <span style="font-size:0.84rem; color:var(--gold);">Đang có: <strong id="musicSlotStatus">3 / 5</strong> bài</span>
+        </div>
+        <p class="panel-desc">
+          Tải file <code>.mp3</code> từ máy tính lên và đặt tên cho từng bài hát (tối đa 5 bài). Trên thiệp cưới, khách có thể bấm vào <strong>Đĩa Than Xoay</strong> ở góc phải để dừng nhạc hoặc chọn bài hát yêu thích trong danh sách này!
+        </p>
+
+        <!-- Form tải file MP3 mới lên kèm đặt tên bài hát -->
+        <div class="panel-card" style="background:rgba(226, 196, 142, 0.05); border-style:dashed; margin-bottom:20px;">
+          <h4 style="margin:0 0 12px 0; color:var(--gold-bright); font-size:0.95rem;">📤 Tải File Nhạc MP3 Mới Lên &amp; Đặt Tên</h4>
+          <div style="display:grid; grid-template-columns: 1.2fr 1fr auto; gap:12px; align-items:end;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label>1. Đặt Tên Bài Nhạc Hiển Thị Trên Đĩa Than</label>
+              <input type="text" class="form-control" id="newMusicTitleInput" placeholder="VD: Beautiful In White - Shane Filan">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>2. Chọn File Nhạc (.mp3, .m4a, .wav)</label>
+              <input type="file" class="form-control" id="newMusicFileInput" accept=".mp3,.m4a,.wav,.ogg,audio/*" style="padding:7px 10px;">
+            </div>
+            <button type="button" class="btn btn-primary" id="btnUploadMusicTrack" style="height:41px;">
+              + Tải Lên &amp; Thêm Vào Đĩa Nhạc
+            </button>
+          </div>
+        </div>
+
+        <!-- Danh sách các bài nhạc hiện có (Tối đa 5 bài) -->
+        <div id="musicTracksContainer"></div>
+
+        <!-- Audio ẩn dùng để nghe thử ngay trong Admin -->
+        <audio id="adminPreviewAudio" preload="none" style="display:none;"></audio>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================================
+       MODAL 1: CHỌN ẢNH TỪ DANH SÁCH ALBUM ĐÃ NẠP
+       ====================================================================== -->
+  <div class="studio-modal-backdrop" id="albumPickerModal" role="dialog" aria-modal="true">
+    <div class="studio-modal-box">
+      <div class="studio-modal-header">
+        <h3 class="studio-modal-title" id="pickerModalTitle">🖼️ Chọn Ảnh Từ Album Đã Nạp</h3>
+        <button type="button" class="btn btn-sm" id="btnClosePickerModal">✕ Đóng</button>
+      </div>
+      <div class="studio-modal-body">
+        <p class="panel-desc" style="margin-bottom:14px;">
+          Bấm vào bức ảnh bạn muốn dùng. Ngay sau khi bấm, <strong>Bàn Căn Chỉnh Khung Cắt &amp; Kích Thước</strong> sẽ mở ra để bạn kéo chỉnh vị trí đẹp nhất trước khi xác nhận!
+        </p>
+        <div class="picker-photo-grid" id="pickerPhotoGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 2: BÀN CĂN CHỈNH KÍCH THƯỚC & KHUNG CẮT CHUẨN TỈ LỆ (CROP STUDIO)
+       ====================================================================== -->
+  <div class="studio-modal-backdrop" id="cropStudioModal" role="dialog" aria-modal="true">
+    <div class="studio-modal-box">
+      <div class="studio-modal-header">
+        <h3 class="studio-modal-title" id="cropModalTitle">✂️ Căn Chỉnh Kích Thước &amp; Khung Cắt</h3>
+        <button type="button" class="btn btn-sm" id="btnCloseCropModal">✕ Hủy</button>
+      </div>
+      <div class="studio-modal-body">
+        <div class="crop-workspace">
+          <!-- Khung Canvas Kéo Thả Trực Quan -->
+          <div class="crop-canvas-stage">
+            <div class="crop-canvas-wrap" id="cropCanvasWrap" title="Giữ chuột kéo để di chuyển vùng cắt, lăn chuột để phóng to/thu nhỏ">
+              <canvas id="cropStudioCanvas" width="960" height="540"></canvas>
+            </div>
+          </div>
+
+          <!-- Bảng Điều Khiển Phóng To / Tỉ Lệ / Chế Độ Lấp Đầy -->
+          <div class="crop-controls-panel">
+            <div class="crop-hint-box">
+              💡 <strong>Mẹo căn chỉnh nhanh:</strong><br>
+              • <strong>Giữ chuột kéo trực tiếp trên ảnh</strong> để dịch chuyển lên/xuống/trái/phải (tránh cắt mất đầu hoặc mặt).<br>
+              • <strong>Lăn con lăn chuột</strong> hoặc kéo thanh trượt bên dưới để Phóng to / Thu nhỏ.
+            </div>
+
+            <div class="form-group" style="margin-bottom:4px;">
+              <label>Tỉ Lệ Khung Chuẩn</label>
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="btn btn-sm" id="btnRatio169" style="flex:1; justify-content:center;">Ngang 16:9</button>
+                <button type="button" class="btn btn-sm" id="btnRatio34" style="flex:1; justify-content:center;">Đứng 3:4</button>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom:4px;">
+              <label>Chế Độ Khớp Khung (Tránh Méo Ảnh)</label>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <button type="button" class="btn btn-sm btn-primary" id="btnFitCover" style="justify-content:center;">
+                  ✦ Lấp Đầy Khung (Cắt Gọn Sắc Nét)
+                </button>
+                <button type="button" class="btn btn-sm" id="btnFitContain" style="justify-content:center;">
+                  ❖ Giữ Trọn Ảnh (+ Nền Mờ Nghệ Thuật)
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom:4px;">
+              <label style="display:flex; justify-content:space-between;">
+                <span>Độ Phóng To (Zoom)</span>
+                <span id="cropZoomLabel" style="color:var(--gold-bright);">100%</span>
+              </label>
+              <input type="range" class="zoom-slider" id="cropZoomSlider" min="40" max="300" value="100">
+            </div>
+
+            <button type="button" class="btn btn-sm" id="btnResetCrop" style="justify-content:center;">
+              ↺ Đặt Lại Chính Giữa
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="studio-modal-footer">
+        <button type="button" class="btn" id="btnBackToPicker">⬅️ Chọn Ảnh Khác Trong Album</button>
+        <div style="display:flex; gap:10px;">
+          <button type="button" class="btn" id="btnCancelCrop">Hủy Bỏ</button>
+          <button type="button" class="btn btn-primary" id="btnConfirmCrop">✅ XÁC NHẬN &amp; ÁP DỤNG ẢNH NÀY</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-toast" id="adminToast">Đã lưu thay đổi!</div>
+
+  <script src="js/content.js?v=20261030_v16"></script>
+  <script>
+    (function () {
+      "use strict";
+
+      // Tự động làm sạch thanh địa chỉ về đúng /admin (không có .html hay dấu /)
+      try {
+        if (window.location.pathname.endsWith("/admin.html") || window.location.pathname.endsWith("/admin/")) {
+          window.history.replaceState(null, "", "/admin" + window.location.search + window.location.hash);
+        }
+      } catch (e) {}
+
+      var state = JSON.parse(JSON.stringify(window.WEDDING_DB || window.DEFAULT_WEDDING_DB));
+
+      function showToast(msg) {
+        var t = document.getElementById("adminToast");
+        if (!t) return;
+        t.textContent = msg;
+        t.classList.add("show");
+        clearTimeout(t._timer);
+        t._timer = setTimeout(function () {
+          t.classList.remove("show");
+        }, 2800);
+      }
+
+      // Chuyển tab trong Admin
+      document.querySelectorAll(".tab-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var target = btn.getAttribute("data-tab");
+          document.querySelectorAll(".tab-btn").forEach(function (b) { b.classList.toggle("active", b === btn); });
+          document.querySelectorAll(".tab-pane").forEach(function (p) { p.classList.toggle("active", p.id === target); });
+        });
+      });
+
+      function val(id, v) {
+        var el = document.getElementById(id);
+        if (!el) return "";
+        if (v !== undefined) {
+          el.value = v || "";
+          return v;
+        }
+        return el.value.trim();
+      }
+
+      // 1. RENDER ALBUM GRID (KÈM NÚT CẮT / CĂN CHỈNH CHO TỪNG ẢNH ALBUM)
+      function renderAlbumGrid() {
+        var grid = document.getElementById("albumAdminGrid");
+        var badge = document.getElementById("albumCountBadge");
+        if (!grid) return;
+
+        var photos = (state.albumPhotos || []).map(function (p) {
+          return typeof p === "string" ? p : (p && p.src ? p.src : "");
+        }).filter(Boolean);
+        state.albumPhotos = photos;
+
+        if (badge) badge.textContent = String(photos.length);
+        grid.innerHTML = "";
+
+        photos.forEach(function (src, idx) {
+          var numStr = idx + 1 < 10 ? "0" + (idx + 1) : String(idx + 1);
+          var card = document.createElement("div");
+          card.className = "album-item-card";
+          card.innerHTML =
+            '<span class="album-item-badge">#' + numStr + "</span>" +
+            '<img src="' + src + '" alt="" class="album-item-thumb" loading="lazy">' +
+            '<div class="album-item-actions">' +
+              '<button type="button" class="icon-btn" data-act="prev" title="Đẩy lên trước">←</button>' +
+              '<button type="button" class="icon-btn" data-act="next" title="Đẩy ra sau">→</button>' +
+              '<button type="button" class="icon-btn" data-act="crop" title="Căn chỉnh / Cắt lại ảnh này">✂️ Sửa</button>' +
+              '<button type="button" class="icon-btn del" data-act="del" title="Xóa ảnh khỏi album">✕</button>' +
+            "</div>";
+
+          card.querySelector('[data-act="prev"]').addEventListener("click", function () {
+            if (idx === 0) return;
+            var tmp = state.albumPhotos[idx - 1];
+            state.albumPhotos[idx - 1] = state.albumPhotos[idx];
+            state.albumPhotos[idx] = tmp;
+            renderAlbumGrid();
+          });
+          card.querySelector('[data-act="next"]').addEventListener("click", function () {
+            if (idx >= state.albumPhotos.length - 1) return;
+            var tmp = state.albumPhotos[idx + 1];
+            state.albumPhotos[idx + 1] = state.albumPhotos[idx];
+            state.albumPhotos[idx] = tmp;
+            renderAlbumGrid();
+          });
+          card.querySelector('[data-act="crop"]').addEventListener("click", function () {
+            openCropStudio({
+              src: src,
+              targetType: "albumIndex",
+              albumIndex: idx,
+              ratio: "3:4",
+              label: "Căn chỉnh Ảnh Album #" + numStr
+            });
+          });
+          card.querySelector('[data-act="del"]').addEventListener("click", function () {
+            state.albumPhotos.splice(idx, 1);
+            renderAlbumGrid();
+          });
+
+          grid.appendChild(card);
+        });
+      }
+
+      // 2. RENDER MENU COURSES
+      function renderMenuCourses() {
+        var box = document.getElementById("menuCoursesContainer");
+        if (!box) return;
+        box.innerHTML = "";
+        var courses = (state.menu && state.menu.courses) || [];
+
+        courses.forEach(function (c, idx) {
+          var numStr = idx + 1 < 10 ? "0" + (idx + 1) : String(idx + 1);
+          var row = document.createElement("div");
+          row.className = "list-row-card list-row-menu";
+          row.innerHTML =
+            '<div class="row-num-pill">#' + numStr + "</div>" +
+            '<input type="text" class="form-control c-name" placeholder="Tên món ăn" value="' + (c.name || "").replace(/"/g, "&quot;") + '">' +
+            '<input type="text" class="form-control c-tag" placeholder="Nhãn (VD: Khai Vị)" value="' + (c.tag || "").replace(/"/g, "&quot;") + '">' +
+            '<input type="text" class="form-control c-desc" placeholder="Mô tả thành phần món" value="' + (c.desc || "").replace(/"/g, "&quot;") + '">' +
+            '<button type="button" class="btn btn-sm btn-danger c-del">✕</button>';
+
+          row.querySelector(".c-name").addEventListener("input", function (e) { c.name = e.target.value; });
+          row.querySelector(".c-tag").addEventListener("input", function (e) { c.tag = e.target.value; });
+          row.querySelector(".c-desc").addEventListener("input", function (e) { c.desc = e.target.value; });
+          row.querySelector(".c-del").addEventListener("click", function () {
+            courses.splice(idx, 1);
+            renderMenuCourses();
+          });
+
+          box.appendChild(row);
+        });
+      }
+
+      // 3. RENDER SCHEDULE EVENTS
+      function renderScheduleEvents() {
+        var box = document.getElementById("scheduleEventsContainer");
+        if (!box) return;
+        box.innerHTML = "";
+        var events = (state.schedule && state.schedule.events) || [];
+
+        events.forEach(function (ev, idx) {
+          var row = document.createElement("div");
+          row.className = "list-row-card list-row-schedule";
+          row.innerHTML =
+            '<input type="text" class="form-control s-time" placeholder="07:30" value="' + (ev.time || "").replace(/"/g, "&quot;") + '">' +
+            '<input type="text" class="form-control s-title" placeholder="Tên nghi lễ" value="' + (ev.title || "").replace(/"/g, "&quot;") + '">' +
+            '<input type="text" class="form-control s-desc" placeholder="Chi tiết nghi lễ / địa điểm" value="' + (ev.desc || "").replace(/"/g, "&quot;") + '">' +
+            '<label style="display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--gold-bright);cursor:pointer;white-space:nowrap;">' +
+              '<input type="checkbox" class="s-hl" ' + (ev.highlight ? "checked" : "") + "> ❖ Nổi bật" +
+            "</label>" +
+            '<button type="button" class="btn btn-sm btn-danger s-del">✕</button>';
+
+          row.querySelector(".s-time").addEventListener("input", function (e) { ev.time = e.target.value; });
+          row.querySelector(".s-title").addEventListener("input", function (e) { ev.title = e.target.value; });
+          row.querySelector(".s-desc").addEventListener("input", function (e) { ev.desc = e.target.value; });
+          row.querySelector(".s-hl").addEventListener("change", function (e) { ev.highlight = e.target.checked; });
+          row.querySelector(".s-del").addEventListener("click", function () {
+            events.splice(idx, 1);
+            renderScheduleEvents();
+          });
+
+          box.appendChild(row);
+        });
+      }
+
+      // 4. RENDER DANH SÁCH ĐĨA NHẠC CƯỚI (TỐI ĐA 5 BÀI MP3)
+      var previewAudio = document.getElementById("adminPreviewAudio");
+      var previewingIdx = -1;
+
+      function renderMusicTracks() {
+        var box = document.getElementById("musicTracksContainer");
+        var badge = document.getElementById("musicCountBadge");
+        var slotStatus = document.getElementById("musicSlotStatus");
+        if (!box) return;
+
+        if (!Array.isArray(state.music)) {
+          state.music = (window.DEFAULT_WEDDING_DB && window.DEFAULT_WEDDING_DB.music)
+            ? JSON.parse(JSON.stringify(window.DEFAULT_WEDDING_DB.music))
+            : [];
+        }
+        state.music = state.music.slice(0, 5);
+
+        if (badge) badge.textContent = String(state.music.length);
+        if (slotStatus) slotStatus.textContent = state.music.length + " / 5";
+
+        box.innerHTML = "";
+
+        state.music.forEach(function (track, idx) {
+          var numStr = "0" + (idx + 1);
+          var isPlayingThis = previewingIdx === idx && previewAudio && !previewAudio.paused;
+          var row = document.createElement("div");
+          row.className = "list-row-card";
+          row.style.gridTemplateColumns = "55px 1.4fr 1fr auto auto auto";
+          row.innerHTML =
+            '<div class="row-num-pill">#' + numStr + (idx === 0 ? '<div style="font-size:0.62rem;color:#7be895;">Mặc định</div>' : "") + "</div>" +
+            '<div>' +
+              '<label style="font-size:0.7rem;color:var(--gold);display:block;margin-bottom:4px;">Tên bài nhạc hiển thị trên đĩa than</label>' +
+              '<input type="text" class="form-control m-title" placeholder="Nhập tên bài hát..." value="' + (track.title || "").replace(/"/g, "&quot;") + '">' +
+            "</div>" +
+            '<div>' +
+              '<label style="font-size:0.7rem;color:var(--text-muted);display:block;margin-bottom:4px;">File MP3 / Nguồn nhạc</label>' +
+              '<input type="text" class="form-control m-src" value="' + (track.src && track.src.indexOf("data:") === 0 ? "[File MP3 đã tải lên trực tiếp]" : (track.src || "")).replace(/"/g, "&quot;") + '" ' + (track.src && track.src.indexOf("data:") === 0 ? "readonly" : "") + ">" +
+            "</div>" +
+            '<button type="button" class="btn btn-sm m-test" style="margin-top:18px;">' + (isPlayingThis ? "⏸ Dừng thử" : "▶ Nghe thử") + "</button>" +
+            '<button type="button" class="btn btn-sm m-up" style="margin-top:18px;" title="Đưa bài này lên phát đầu tiên">↑ Lên đầu</button>' +
+            '<button type="button" class="btn btn-sm btn-danger m-del" style="margin-top:18px;" title="Xóa bài nhạc">✕</button>';
+
+          row.querySelector(".m-title").addEventListener("input", function (e) {
+            track.title = e.target.value;
+          });
+          row.querySelector(".m-src").addEventListener("input", function (e) {
+            if (track.src && track.src.indexOf("data:") === 0) return;
+            track.src = e.target.value.trim();
+          });
+
+          row.querySelector(".m-test").addEventListener("click", function () {
+            if (!previewAudio) return;
+            if (previewingIdx === idx && !previewAudio.paused) {
+              previewAudio.pause();
+              previewingIdx = -1;
+              renderMusicTracks();
+            } else {
+              previewingIdx = idx;
+              previewAudio.src = track.src;
+              previewAudio.play().then(function () {
+                renderMusicTracks();
+              }).catch(function () {
+                showToast("Không thể phát thử nguồn nhạc này!");
+              });
+            }
+          });
+
+          row.querySelector(".m-up").addEventListener("click", function () {
+            if (idx === 0) return;
+            var item = state.music.splice(idx, 1)[0];
+            state.music.unshift(item);
+            renderMusicTracks();
+            showToast("Đã đưa bài nhạc lên vị trí #01 (Phát đầu tiên)");
+          });
+
+          row.querySelector(".m-del").addEventListener("click", function () {
+            if (previewingIdx === idx && previewAudio) {
+              previewAudio.pause();
+              previewingIdx = -1;
+            }
+            state.music.splice(idx, 1);
+            renderMusicTracks();
+          });
+
+          box.appendChild(row);
+        });
+      }
+
+      // Tự động điền gợi ý tên bài hát khi chọn file MP3
+      var newMusicFileInput = document.getElementById("newMusicFileInput");
+      var newMusicTitleInput = document.getElementById("newMusicTitleInput");
+      if (newMusicFileInput && newMusicTitleInput) {
+        newMusicFileInput.addEventListener("change", function () {
+          if (newMusicFileInput.files && newMusicFileInput.files.length && !newMusicTitleInput.value.trim()) {
+            var rawName = newMusicFileInput.files[0].name.replace(/\.[^/.]+$/, "");
+            newMusicTitleInput.value = rawName.replace(/[-_]+/g, " ");
+          }
+        });
+      }
+
+      document.getElementById("btnUploadMusicTrack").addEventListener("click", async function () {
+        if (!Array.isArray(state.music)) state.music = [];
+        if (state.music.length >= 5) {
+          showToast("⚠️ Đĩa nhạc chỉ hỗ trợ tối đa 5 bài! Hãy xóa bớt 1 bài trước khi thêm.");
+          return;
+        }
+        if (!newMusicFileInput || !newMusicFileInput.files || !newMusicFileInput.files.length) {
+          showToast("Vui lòng chọn file nhạc (.mp3) từ máy tính!");
+          return;
+        }
+        var file = newMusicFileInput.files[0];
+        var customTitle = (newMusicTitleInput && newMusicTitleInput.value.trim()) || file.name.replace(/\.[^/.]+$/, "");
+
+        showToast("⏳ Đang tải file nhạc MP3 lên hệ thống...");
+        var paths = await uploadFilesToServer([file]);
+        if (paths && paths.length) {
+          state.music.push({
+            title: customTitle,
+            src: paths[0]
+          });
+          if (newMusicTitleInput) newMusicTitleInput.value = "";
+          newMusicFileInput.value = "";
+          renderMusicTracks();
+          await saveAllChanges("🎵 Đã tải lên & thêm bài nhạc: " + customTitle + "!");
+        }
+      });
+
+      // ĐỔ DỮ LIỆU TỪ STATE VÀO FORM
+      function populateForms() {
+        var c = state.couple || {};
+        val("f_groomName", c.groomName);
+        val("f_brideName", c.brideName);
+        val("f_eyebrow", c.eyebrow);
+        val("f_invitationText", c.invitationText);
+        val("f_signatureQuote", c.signatureQuote);
+        val("f_heroBackdrop", c.heroBackdrop);
+        val("f_detailsBackdrop", c.detailsBackdrop);
+        val("f_leftFramePhoto", c.leftFramePhoto);
+        val("f_leftFramePlaque", c.leftFramePlaque);
+        val("f_rightFramePhoto", c.rightFramePhoto);
+        val("f_rightFramePlaque", c.rightFramePlaque);
+
+        document.getElementById("prev_heroBackdrop").src = c.heroBackdrop || "";
+        document.getElementById("prev_detailsBackdrop").src = c.detailsBackdrop || "";
+        document.getElementById("prev_leftFramePhoto").src = c.leftFramePhoto || "";
+        document.getElementById("prev_rightFramePhoto").src = c.rightFramePhoto || "";
+
+        var d = state.date || {};
+        val("f_isoTarget", d.isoTarget);
+        val("f_dayOfWeek", d.dayOfWeek);
+        val("f_dayNumber", d.dayNumber);
+        val("f_monthLabel", d.monthLabel);
+        val("f_yearLabel", d.yearLabel);
+        val("f_eventLabel", d.eventLabel);
+        val("f_lunarDate", d.lunarDate);
+        val("f_shortDatePill", d.shortDatePill);
+        val("f_shortLunarPill", d.shortLunarPill);
+
+        var vg = (state.venues && state.venues.groom) || {};
+        val("f_groom_badgeCover", vg.badgeCover);
+        val("f_groom_nameShort", vg.nameShort);
+        val("f_groom_cityShort", vg.cityShort);
+        val("f_groom_timeCover", vg.timeCover);
+        val("f_groom_badgeMap", vg.badgeMap);
+        val("f_groom_nameFull", vg.nameFull);
+        val("f_groom_parents", vg.parents);
+        val("f_groom_address", vg.address);
+        val("f_groom_mapLink", vg.mapLink);
+        val("f_groom_mapEmbed", vg.mapEmbed);
+
+        var vb = (state.venues && state.venues.bride) || {};
+        val("f_bride_badgeCover", vb.badgeCover);
+        val("f_bride_nameShort", vb.nameShort);
+        val("f_bride_cityShort", vb.cityShort);
+        val("f_bride_timeCover", vb.timeCover);
+        val("f_bride_badgeMap", vb.badgeMap);
+        val("f_bride_nameFull", vb.nameFull);
+        val("f_bride_parents", vb.parents);
+        val("f_bride_address", vb.address);
+        val("f_bride_mapLink", vb.mapLink);
+        val("f_bride_mapEmbed", vb.mapEmbed);
+
+        var m = state.menu || {};
+        val("f_menu_eyebrow", m.eyebrow);
+        val("f_menu_heading", m.heading);
+        val("f_menu_subNote", m.subNote);
+
+        var s = state.schedule || {};
+        val("f_sch_eyebrow", s.eyebrow);
+        val("f_sch_heading", s.heading);
+
+        renderAlbumGrid();
+        renderMenuCourses();
+        renderScheduleEvents();
+        renderMusicTracks();
+      }
+
+      // GOM DỮ LIỆU TỪ FORM VÀO STATE
+      function collectFormsToState() {
+        state.couple = {
+          groomName: val("f_groomName"),
+          brideName: val("f_brideName"),
+          eyebrow: val("f_eyebrow"),
+          invitationText: val("f_invitationText"),
+          signatureQuote: val("f_signatureQuote"),
+          heroBackdrop: val("f_heroBackdrop"),
+          detailsBackdrop: val("f_detailsBackdrop"),
+          leftFramePhoto: val("f_leftFramePhoto"),
+          leftFramePlaque: val("f_leftFramePlaque"),
+          rightFramePhoto: val("f_rightFramePhoto"),
+          rightFramePlaque: val("f_rightFramePlaque")
+        };
+
+        state.date = {
+          isoTarget: val("f_isoTarget"),
+          dayOfWeek: val("f_dayOfWeek"),
+          dayNumber: val("f_dayNumber"),
+          monthLabel: val("f_monthLabel"),
+          yearLabel: val("f_yearLabel"),
+          eventLabel: val("f_eventLabel"),
+          lunarDate: val("f_lunarDate"),
+          shortDatePill: val("f_shortDatePill"),
+          shortLunarPill: val("f_shortLunarPill")
+        };
+
+        state.venues = {
+          groom: {
+            badgeCover: val("f_groom_badgeCover"),
+            nameShort: val("f_groom_nameShort"),
+            cityShort: val("f_groom_cityShort"),
+            timeCover: val("f_groom_timeCover"),
+            badgeMap: val("f_groom_badgeMap"),
+            nameFull: val("f_groom_nameFull"),
+            parents: val("f_groom_parents"),
+            address: val("f_groom_address"),
+            mapLink: val("f_groom_mapLink"),
+            mapEmbed: val("f_groom_mapEmbed")
+          },
+          bride: {
+            badgeCover: val("f_bride_badgeCover"),
+            nameShort: val("f_bride_nameShort"),
+            cityShort: val("f_bride_cityShort"),
+            timeCover: val("f_bride_timeCover"),
+            badgeMap: val("f_bride_badgeMap"),
+            nameFull: val("f_bride_nameFull"),
+            parents: val("f_bride_parents"),
+            address: val("f_bride_address"),
+            mapLink: val("f_bride_mapLink"),
+            mapEmbed: val("f_bride_mapEmbed")
+          }
+        };
+
+        state.menu.eyebrow = val("f_menu_eyebrow");
+        state.menu.heading = val("f_menu_heading");
+        state.menu.subNote = val("f_menu_subNote");
+
+        state.schedule.eyebrow = val("f_sch_eyebrow");
+        state.schedule.heading = val("f_sch_heading");
+      }
+
+      // HÀM ĐỌC FILE ẢNH SANG DATA URL & UPLOAD LÊN SERVER.PY
+      function readFileAsDataURL(file) {
+        return new Promise(function (resolve, reject) {
+          var reader = new FileReader();
+          reader.onload = function () { resolve({ name: file.name, dataUrl: reader.result }); };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      }
+
+      async function uploadFilesToServer(fileList) {
+        var filesArr = Array.from(fileList || []);
+        if (!filesArr.length) return [];
+
+        var statusEl = document.getElementById("uploadStatusText");
+        var allPaths = [];
+        var batchSize = 2; // Chia từng cụm 2 file/lần để qua Nginx/VPS không bao giờ bị nghẽn mạng
+
+        for (var i = 0; i < filesArr.length; i += batchSize) {
+          var slice = filesArr.slice(i, i + batchSize);
+          if (statusEl) {
+            statusEl.textContent = "Đang tải lên máy chủ (" + Math.min(i + batchSize, filesArr.length) + " / " + filesArr.length + ")...";
+          }
+          var encoded = await Promise.all(slice.map(readFileAsDataURL));
+          var uploadedThisBatch = false;
+          var uploadTargets = ["/api/upload"];
+          if (window.location && window.location.hostname && window.location.port !== "8000") {
+            uploadTargets.push("http://" + window.location.hostname + ":8000/api/upload");
+          }
+          for (var u = 0; u < uploadTargets.length; u++) {
+            try {
+              var res = await fetch(uploadTargets[u], {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ files: encoded })
+              });
+              if (res.ok) {
+                var json = await res.json();
+                if (Array.isArray(json.paths)) {
+                  allPaths = allPaths.concat(json.paths);
+                  uploadedThisBatch = true;
+                  break;
+                }
+              }
+            } catch (e) {}
+          }
+          if (!uploadedThisBatch) {
+            allPaths = allPaths.concat(encoded.map(function (item) { return item.dataUrl; }));
+          }
+        }
+
+        if (statusEl) statusEl.textContent = "Bấm vào đây hoặc Kéo & Thả 30 – 50+ ảnh cưới vào đây";
+        return allPaths;
+      }
+
+      // SỰ KIỆN KÉO THẢ & CHỌN NHIỀU ẢNH ALBUM
+      var dropzone = document.getElementById("albumDropzone");
+      var fileInput = document.getElementById("albumFileInput");
+
+      if (dropzone && fileInput) {
+        dropzone.addEventListener("click", function () { fileInput.click(); });
+        dropzone.addEventListener("dragover", function (e) {
+          e.preventDefault();
+          dropzone.classList.add("dragover");
+        });
+        dropzone.addEventListener("dragleave", function () {
+          dropzone.classList.remove("dragover");
+        });
+        dropzone.addEventListener("drop", async function (e) {
+          e.preventDefault();
+          dropzone.classList.remove("dragover");
+          if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) {
+            var newPaths = await uploadFilesToServer(e.dataTransfer.files);
+            state.albumPhotos = state.albumPhotos.concat(newPaths);
+            renderAlbumGrid();
+            await saveAllChanges("Đã nạp thêm " + newPaths.length + " ảnh mới vào Album!");
+          }
+        });
+
+        fileInput.addEventListener("change", async function (e) {
+          if (e.target.files && e.target.files.length) {
+            var newPaths = await uploadFilesToServer(e.target.files);
+            state.albumPhotos = state.albumPhotos.concat(newPaths);
+            renderAlbumGrid();
+            await saveAllChanges("Đã nạp thêm " + newPaths.length + " ảnh mới vào Album!");
+            fileInput.value = "";
+          }
+        });
+      }
+
+      // THÊM ĐƯỜNG DẪN ẢNH THỦ CÔNG
+      document.getElementById("btnAddManualPhoto").addEventListener("click", function () {
+        var inp = document.getElementById("manualPhotoInput");
+        var v = inp.value.trim();
+        if (!v) return;
+        state.albumPhotos.push(v);
+        inp.value = "";
+        renderAlbumGrid();
+        showToast("Đã thêm ảnh vào cuối Album (Bấm Lưu để áp dụng)");
+      });
+
+      document.getElementById("btnReverseAlbum").addEventListener("click", function () {
+        state.albumPhotos.reverse();
+        renderAlbumGrid();
+      });
+
+      // ====================================================================
+      // HỆ THỐNG CHỌN ẢNH TỪ ALBUM + BÀN CĂN CHỈNH & CẮT KHUNG CHUẨN TỈ LỆ
+      // ====================================================================
+      var pickerModal = document.getElementById("albumPickerModal");
+      var pickerGrid = document.getElementById("pickerPhotoGrid");
+      var pickerTitle = document.getElementById("pickerModalTitle");
+      var cropModal = document.getElementById("cropStudioModal");
+      var cropTitle = document.getElementById("cropModalTitle");
+      var cropCanvas = document.getElementById("cropStudioCanvas");
+      var cropCtx = cropCanvas ? cropCanvas.getContext("2d") : null;
+      var zoomSlider = document.getElementById("cropZoomSlider");
+      var zoomLabel = document.getElementById("cropZoomLabel");
+      var btnRatio169 = document.getElementById("btnRatio169");
+      var btnRatio34 = document.getElementById("btnRatio34");
+      var btnFitCover = document.getElementById("btnFitCover");
+      var btnFitContain = document.getElementById("btnFitContain");
+      var btnBackToPicker = document.getElementById("btnBackToPicker");
+
+      var currentCropSession = {
+        src: "",
+        imgObj: null,
+        targetType: "slot", // "slot" | "albumIndex"
+        slotKey: "heroBackdrop",
+        albumIndex: -1,
+        ratio: "16:9",      // "16:9" | "3:4"
+        fitMode: "cover",   // "cover" | "contain"
+        label: "",
+        zoom: 1,
+        panX: 0,
+        panY: 0,
+        isDragging: false,
+        dragStartX: 0,
+        dragStartY: 0
+      };
+
+      // 1. Mở Modal Chọn Ảnh Từ Danh Sách Album Đã Nạp
+      function openAlbumPicker(slotKey, ratio, label) {
+        currentCropSession.targetType = "slot";
+        currentCropSession.slotKey = slotKey;
+        currentCropSession.ratio = ratio || "16:9";
+        currentCropSession.label = label || "";
+
+        if (pickerTitle) {
+          pickerTitle.textContent = "🖼️ Chọn Ảnh Từ Album Cho: " + (label || slotKey);
+        }
+
+        var photos = (state.albumPhotos || []).map(function (p) {
+          return typeof p === "string" ? p : (p && p.src ? p.src : "");
+        }).filter(Boolean);
+
+        pickerGrid.innerHTML = "";
+        photos.forEach(function (src, idx) {
+          var numStr = idx + 1 < 10 ? "0" + (idx + 1) : String(idx + 1);
+          var item = document.createElement("div");
+          item.className = "picker-photo-item";
+          item.title = "Bấm để chọn ảnh #" + numStr + " và chuyển sang bước căn chỉnh kích thước";
+          item.innerHTML =
+            '<span class="picker-photo-num">#' + numStr + "</span>" +
+            '<img src="' + src + '" alt="" loading="lazy">';
+          item.addEventListener("click", function () {
+            pickerModal.classList.remove("active");
+            openCropStudio({
+              src: src,
+              targetType: "slot",
+              slotKey: slotKey,
+              ratio: ratio,
+              label: label,
+              fromPicker: true
+            });
+          });
+          pickerGrid.appendChild(item);
+        });
+
+        pickerModal.classList.add("active");
+      }
+
+      document.getElementById("btnClosePickerModal").addEventListener("click", function () {
+        pickerModal.classList.remove("active");
+      });
+
+      // 2. Mở Bàn Căn Chỉnh Kích Thước & Khung Cắt (Interactive Crop Studio)
+      function setCropCanvasDimensions(ratio) {
+        if (!cropCanvas) return;
+        if (ratio === "3:4") {
+          cropCanvas.width = 900;
+          cropCanvas.height = 1200;
+        } else {
+          cropCanvas.width = 1600;
+          cropCanvas.height = 900;
+        }
+        if (btnRatio169 && btnRatio34) {
+          btnRatio169.classList.toggle("btn-primary", ratio === "16:9");
+          btnRatio34.classList.toggle("btn-primary", ratio === "3:4");
+        }
+      }
+
+      function renderCropCanvas(showGuides) {
+        if (!cropCtx || !cropCanvas || !currentCropSession.imgObj) return;
+        var cw = cropCanvas.width;
+        var ch = cropCanvas.height;
+        var img = currentCropSession.imgObj;
+        var iw = img.naturalWidth || img.width;
+        var ih = img.naturalHeight || img.height;
+        if (!iw || !ih) return;
+
+        cropCtx.clearRect(0, 0, cw, ch);
+
+        // Nền tối mặc định hoặc nền mờ nghệ thuật khi ở chế độ Contain
+        cropCtx.fillStyle = "#0b0806";
+        cropCtx.fillRect(0, 0, cw, ch);
+
+        var scaleCover = Math.max(cw / iw, ch / ih);
+        var scaleContain = Math.min(cw / iw, ch / ih);
+
+        if (currentCropSession.fitMode === "contain") {
+          // Vẽ lớp nền mờ tràn khung phía sau để không bị viền đen thô
+          cropCtx.save();
+          cropCtx.filter = "blur(26px) brightness(0.48) saturate(1.15)";
+          var bgW = iw * scaleCover * 1.08;
+          var bgH = ih * scaleCover * 1.08;
+          cropCtx.drawImage(img, (cw - bgW) / 2, (ch - bgH) / 2, bgW, bgH);
+          cropCtx.restore();
+        }
+
+        var baseScale = currentCropSession.fitMode === "contain" ? scaleContain : scaleCover;
+        var finalScale = baseScale * currentCropSession.zoom;
+
+        var drawW = iw * finalScale;
+        var drawH = ih * finalScale;
+        var drawX = (cw - drawW) / 2 + currentCropSession.panX;
+        var drawY = (ch - drawH) / 2 + currentCropSession.panY;
+
+        cropCtx.drawImage(img, drawX, drawY, drawW, drawH);
+
+        // Vẽ lưới căn chỉnh vàng 3x3 (Rule of Thirds) khi đang chỉnh trên màn hình
+        if (showGuides !== false) {
+          cropCtx.save();
+          cropCtx.strokeStyle = "rgba(255, 226, 164, 0.42)";
+          cropCtx.lineWidth = 1.5;
+          cropCtx.setLineDash([6, 6]);
+          cropCtx.beginPath();
+          cropCtx.moveTo(cw / 3, 0); cropCtx.lineTo(cw / 3, ch);
+          cropCtx.moveTo((cw * 2) / 3, 0); cropCtx.lineTo((cw * 2) / 3, ch);
+          cropCtx.moveTo(0, ch / 3); cropCtx.lineTo(cw, ch / 3);
+          cropCtx.moveTo(0, (ch * 2) / 3); cropCtx.lineTo(cw, (ch * 2) / 3);
+          cropCtx.stroke();
+          cropCtx.restore();
+        }
+      }
+
+      function openCropStudio(opts) {
+        currentCropSession.src = opts.src || "";
+        currentCropSession.targetType = opts.targetType || "slot";
+        currentCropSession.slotKey = opts.slotKey || "heroBackdrop";
+        currentCropSession.albumIndex = opts.albumIndex !== undefined ? opts.albumIndex : -1;
+        currentCropSession.ratio = opts.ratio || "16:9";
+        currentCropSession.fitMode = "cover";
+        currentCropSession.label = opts.label || "";
+        currentCropSession.zoom = 1;
+        currentCropSession.panX = 0;
+        currentCropSession.panY = 0;
+
+        if (cropTitle) {
+          cropTitle.textContent = "✂️ Căn Chỉnh Khung Cắt: " + (opts.label || "");
+        }
+        if (btnBackToPicker) {
+          btnBackToPicker.style.display = currentCropSession.targetType === "slot" ? "inline-flex" : "none";
+        }
+
+        zoomSlider.value = "100";
+        zoomLabel.textContent = "100%";
+        btnFitCover.classList.add("btn-primary");
+        btnFitContain.classList.remove("btn-primary");
+
+        var img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = function () {
+          currentCropSession.imgObj = img;
+          // Nếu đang sửa ảnh trong Album, tự động gợi ý tỉ lệ theo chiều gốc của ảnh
+          if (currentCropSession.targetType === "albumIndex") {
+            var isLand = img.naturalWidth > img.naturalHeight * 1.08;
+            currentCropSession.ratio = isLand ? "16:9" : "3:4";
+          }
+          setCropCanvasDimensions(currentCropSession.ratio);
+          renderCropCanvas(true);
+          cropModal.classList.add("active");
+        };
+        img.onerror = function () {
+          showToast("Không thể tải bức ảnh này để căn chỉnh!");
+        };
+        img.src = currentCropSession.src;
+      }
+
+      // Sự kiện Kéo Chuột / Cảm Ứng trên Canvas để dịch chuyển vùng cắt
+      var canvasWrap = document.getElementById("cropCanvasWrap");
+      if (canvasWrap && cropCanvas) {
+        function getPointerPos(e) {
+          if (e.touches && e.touches.length) {
+            return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+          }
+          return { x: e.clientX, y: e.clientY };
+        }
+
+        function startDrag(e) {
+          currentCropSession.isDragging = true;
+          var pos = getPointerPos(e);
+          currentCropSession.dragStartX = pos.x;
+          currentCropSession.dragStartY = pos.y;
+        }
+
+        function moveDrag(e) {
+          if (!currentCropSession.isDragging) return;
+          if (e.cancelable) e.preventDefault();
+          var pos = getPointerPos(e);
+          var rect = cropCanvas.getBoundingClientRect();
+          var scaleRatioX = cropCanvas.width / (rect.width || 1);
+          var scaleRatioY = cropCanvas.height / (rect.height || 1);
+
+          var dx = (pos.x - currentCropSession.dragStartX) * scaleRatioX;
+          var dy = (pos.y - currentCropSession.dragStartY) * scaleRatioY;
+          currentCropSession.dragStartX = pos.x;
+          currentCropSession.dragStartY = pos.y;
+
+          currentCropSession.panX += dx;
+          currentCropSession.panY += dy;
+          renderCropCanvas(true);
+        }
+
+        function endDrag() {
+          currentCropSession.isDragging = false;
+        }
+
+        canvasWrap.addEventListener("mousedown", startDrag);
+        window.addEventListener("mousemove", moveDrag);
+        window.addEventListener("mouseup", endDrag);
+
+        canvasWrap.addEventListener("touchstart", startDrag, { passive: true });
+        window.addEventListener("touchmove", moveDrag, { passive: false });
+        window.addEventListener("touchend", endDrag);
+
+        // Lăn chuột để Phóng to / Thu nhỏ trực tiếp trên ảnh
+        canvasWrap.addEventListener("wheel", function (e) {
+          e.preventDefault();
+          var cur = Number(zoomSlider.value) || 100;
+          var delta = e.deltaY < 0 ? 6 : -6;
+          var next = Math.max(40, Math.min(300, cur + delta));
+          zoomSlider.value = String(next);
+          zoomLabel.textContent = next + "%";
+          currentCropSession.zoom = next / 100;
+          renderCropCanvas(true);
+        }, { passive: false });
+      }
+
+      zoomSlider.addEventListener("input", function () {
+        var v = Number(zoomSlider.value) || 100;
+        zoomLabel.textContent = v + "%";
+        currentCropSession.zoom = v / 100;
+        renderCropCanvas(true);
+      });
+
+      btnRatio169.addEventListener("click", function () {
+        currentCropSession.ratio = "16:9";
+        setCropCanvasDimensions("16:9");
+        renderCropCanvas(true);
+      });
+      btnRatio34.addEventListener("click", function () {
+        currentCropSession.ratio = "3:4";
+        setCropCanvasDimensions("3:4");
+        renderCropCanvas(true);
+      });
+
+      btnFitCover.addEventListener("click", function () {
+        currentCropSession.fitMode = "cover";
+        btnFitCover.classList.add("btn-primary");
+        btnFitContain.classList.remove("btn-primary");
+        renderCropCanvas(true);
+      });
+      btnFitContain.addEventListener("click", function () {
+        currentCropSession.fitMode = "contain";
+        btnFitContain.classList.add("btn-primary");
+        btnFitCover.classList.remove("btn-primary");
+        renderCropCanvas(true);
+      });
+
+      document.getElementById("btnResetCrop").addEventListener("click", function () {
+        currentCropSession.zoom = 1;
+        currentCropSession.panX = 0;
+        currentCropSession.panY = 0;
+        zoomSlider.value = "100";
+        zoomLabel.textContent = "100%";
+        renderCropCanvas(true);
+      });
+
+      btnBackToPicker.addEventListener("click", function () {
+        cropModal.classList.remove("active");
+        openAlbumPicker(currentCropSession.slotKey, currentCropSession.ratio, currentCropSession.label);
+      });
+
+      function closeCropStudio() {
+        cropModal.classList.remove("active");
+      }
+      document.getElementById("btnCloseCropModal").addEventListener("click", closeCropStudio);
+      document.getElementById("btnCancelCrop").addEventListener("click", closeCropStudio);
+
+      // XÁC NHẬN CẮT & LƯU ẢNH ĐÃ CĂN CHỈNH
+      document.getElementById("btnConfirmCrop").addEventListener("click", async function () {
+        if (!cropCanvas || !currentCropSession.imgObj) return;
+
+        // Vẽ lại bản sạch không có đường kẻ lưới 3x3 trước khi xuất ảnh
+        renderCropCanvas(false);
+        var croppedDataUrl = cropCanvas.toDataURL("image/jpeg", 0.92);
+        var finalPath = croppedDataUrl;
+
+        try {
+          var res = await fetch("/api/upload", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              files: [{ name: "cropped-" + (currentCropSession.slotKey || "photo") + ".jpg", dataUrl: croppedDataUrl }]
+            })
+          });
+          if (res.ok) {
+            var json = await res.json();
+            if (json.paths && json.paths.length) {
+              finalPath = json.paths[0];
+            }
+          }
+        } catch (e) {}
+
+        if (currentCropSession.targetType === "albumIndex" && currentCropSession.albumIndex >= 0) {
+          state.albumPhotos[currentCropSession.albumIndex] = finalPath;
+          renderAlbumGrid();
+          closeCropStudio();
+          await saveAllChanges("✨ Đã căn chỉnh & cập nhật ảnh trong Album!");
+        } else {
+          var slotKey = currentCropSession.slotKey;
+          val("f_" + slotKey, finalPath);
+          var prevEl = document.getElementById("prev_" + slotKey);
+          if (prevEl) prevEl.src = finalPath;
+          closeCropStudio();
+          await saveAllChanges("✨ Đã căn chỉnh & áp dụng ảnh cho " + (currentCropSession.label || slotKey) + "!");
+        }
+      });
+
+      // Gắn sự kiện cho 4 Khung Ảnh Nền & Khung Tranh Baroque (Chọn từ Album / Căn chỉnh lại / Tải mới)
+      document.querySelectorAll("[data-pick-slot]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          openAlbumPicker(
+            btn.getAttribute("data-pick-slot"),
+            btn.getAttribute("data-ratio"),
+            btn.getAttribute("data-slot-label")
+          );
+        });
+      });
+
+      document.querySelectorAll("[data-recrop-slot]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var slotKey = btn.getAttribute("data-pick-slot") || btn.getAttribute("data-recrop-slot");
+          var curSrc = val("f_" + slotKey);
+          if (!curSrc) {
+            showToast("Chưa có ảnh ở vị trí này, hãy chọn từ Album trước!");
+            return;
+          }
+          openCropStudio({
+            src: curSrc,
+            targetType: "slot",
+            slotKey: slotKey,
+            ratio: btn.getAttribute("data-ratio") || "16:9",
+            label: btn.getAttribute("data-slot-label") || slotKey
+          });
+        });
+      });
+
+      document.querySelectorAll("input[type='file'][data-upload-slot]").forEach(function (inp) {
+        inp.addEventListener("change", async function (e) {
+          if (!e.target.files || !e.target.files.length) return;
+          var paths = await uploadFilesToServer(e.target.files);
+          if (paths.length) {
+            // Cũng tự động thêm ảnh vừa tải lên vào danh sách Album để tái sử dụng dễ dàng
+            state.albumPhotos.push(paths[0]);
+            renderAlbumGrid();
+            openCropStudio({
+              src: paths[0],
+              targetType: "slot",
+              slotKey: inp.getAttribute("data-upload-slot"),
+              ratio: inp.getAttribute("data-ratio") || "16:9",
+              label: inp.getAttribute("data-slot-label") || ""
+            });
+            inp.value = "";
+          }
+        });
+      });
+
+      // TỰ TẠO LINK GOOGLE MAPS & EMBED TỪ ĐỊA CHỈ
+      function autoBuildMapUrls(prefix) {
+        var addr = val("f_" + prefix + "_address");
+        if (!addr) {
+          showToast("Vui lòng nhập Địa chỉ chi tiết trước!");
+          return;
+        }
+        var cleanAddr = addr.replace(/^📍\s*/, "").trim();
+        var q = encodeURIComponent(cleanAddr);
+        val("f_" + prefix + "_mapLink", "https://maps.google.com/?q=" + q);
+        val("f_" + prefix + "_mapEmbed", "https://maps.google.com/maps?q=" + q + "&t=&z=15&ie=UTF8&iwloc=&output=embed");
+        showToast("Đã tự động tạo Link Chỉ Đường & Bản Đồ Nhúng!");
+      }
+
+      document.getElementById("btnAutoMapGroom").addEventListener("click", function () { autoBuildMapUrls("groom"); });
+      document.getElementById("btnAutoMapBride").addEventListener("click", function () { autoBuildMapUrls("bride"); });
+
+      // THÊM MÓN ĂN & THÊM MỐC LỊCH TRÌNH
+      document.getElementById("btnAddCourse").addEventListener("click", function () {
+        state.menu.courses.push({ name: "Món Mới Thượng Hạng", tag: "Món Chính", desc: "Mô tả hương vị món ăn" });
+        renderMenuCourses();
+      });
+
+      document.getElementById("btnAddScheduleEvent").addEventListener("click", function () {
+        state.schedule.events.push({ time: "12:00", title: "Nghi Thức Mới", desc: "Mô tả chi tiết nghi thức", highlight: true });
+        renderScheduleEvents();
+      });
+
+      // LƯU TẤT CẢ THAY ĐỔI
+      async function saveAllChanges(customMsg) {
+        collectFormsToState();
+        var result = await window.saveWeddingDB(state);
+        if (result && result.ok) {
+          showToast(customMsg || "✨ Đã lưu toàn bộ thay đổi vào DB & Thiệp Cưới!");
+        }
+      }
+
+      document.getElementById("btnSaveAll").addEventListener("click", function () {
+        saveAllChanges();
+      });
+
+      // KHÔI PHỤC MẶC ĐỊNH
+      document.getElementById("btnResetDefault").addEventListener("click", async function () {
+        if (!confirm("Bạn có chắc muốn khôi phục toàn bộ thông tin về mặc định ban đầu không?")) return;
+        state = await window.resetWeddingDB();
+        populateForms();
+        showToast("↺ Đã khôi phục dữ liệu mặc định!");
+      });
+
+      // TẢI BẢN DB MỚI NHẤT TỪ SERVER KHI MỞ TRANG ADMIN
+      populateForms();
+      if (typeof window.fetchWeddingDBFromServer === "function") {
+        window.fetchWeddingDBFromServer().then(function (freshDb) {
+          if (freshDb) {
+            state = JSON.parse(JSON.stringify(freshDb));
+            populateForms();
+          }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
+

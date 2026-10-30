@@ -215,8 +215,12 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // 5. STATIC FILES (Chặn truy cập thư mục ẩn .git, .env và file mã nguồn server trên VPS)
-  if (pathname === "/" || pathname === "/index.html") pathname = "/stationery.html";
+  // 5. STATIC FILES (Hỗ trợ Clean URL "/" và "/admin" không cần đuôi .html)
+  if (pathname === "/" || pathname === "/index.html" || pathname === "/stationery" || pathname === "/stationery/") {
+    pathname = "/stationery.html";
+  } else if (pathname === "/admin" || pathname === "/admin/" || pathname === "/admin/index.html") {
+    pathname = "/admin.html";
+  }
   const normalizedRel = pathname.replace(/^[/\\]+/, "");
   const segments = normalizedRel.split(/[/\\]+/);
   const blockedFiles = ["server.js", "server.py", "process_envelope.py", "gemini.md"];
