@@ -62,3 +62,4 @@ fi
 echo "🔄 Đang kiểm tra và tải lại Nginx..."
 nginx -t && systemctl reload nginx
 echo "🎉 Hoàn tất! Giờ trang https://dunglinhthiepcuoi.online/admin đã kết nối thông suốt với API lưu ảnh & DB (Port 8000)!"
+

@@ -32,6 +32,54 @@
     }
   }
 
+  var heroSlideTimer = null;
+  var detailsSlideTimer = null;
+
+  function startDualLayerSlideshow(primaryEl, secondaryEl, photoList, intervalMs, setTimerRef) {
+    if (!primaryEl) return;
+    var list = Array.isArray(photoList) ? photoList.filter(Boolean) : [];
+    if (!list.length) return;
+
+    primaryEl.src = list[0];
+    primaryEl.style.opacity = "1";
+    if (secondaryEl) {
+      secondaryEl.classList.remove("is-visible");
+      secondaryEl.style.opacity = "0";
+      secondaryEl.src = list[0];
+    }
+
+    if (list.length < 2 || !secondaryEl) return;
+
+    var idx = 0;
+    var showingSecondary = false;
+
+    var timer = setInterval(function () {
+      idx = (idx + 1) % list.length;
+      var nextSrc = list[idx];
+      var preload = new Image();
+      preload.onload = function () {
+        if (!showingSecondary) {
+          secondaryEl.src = nextSrc;
+          secondaryEl.style.opacity = "1";
+          secondaryEl.classList.add("is-visible");
+          primaryEl.style.opacity = "0";
+          primaryEl.classList.remove("is-visible");
+          showingSecondary = true;
+        } else {
+          primaryEl.src = nextSrc;
+          primaryEl.style.opacity = "1";
+          primaryEl.classList.add("is-visible");
+          secondaryEl.style.opacity = "0";
+          secondaryEl.classList.remove("is-visible");
+          showingSecondary = false;
+        }
+      };
+      preload.src = nextSrc;
+    }, intervalMs);
+
+    setTimerRef(timer);
+  }
+
   // ==========================================================================
   // 0. ĐỒNG BỘ DỮ LIỆU TỪ WEDDING_DB LÊN TOÀN BỘ 3 TAB (FULL DATA BINDING)
   // ==========================================================================
@@ -39,7 +87,7 @@
     var db = window.WEDDING_DB;
     if (!db) return;
 
-    // --- A. ĐỒNG BỘ TAB 1 (TRANG BÌA MỞ ĐẦU) ---
+    // --- A. ĐỒNG BỘ TAB 1 (TRANG BÌA MỞ ĐẦU) & SLIDESHOW ẢNH NỀN ĐA ẢNH ---
     if (db.couple) {
       var c = db.couple;
       setText("#tab-hero .couple-calligraphy-name.groom", c.groomName);
@@ -49,14 +97,20 @@
       setText("#tab-hero .cover-signature-quote", c.signatureQuote);
 
       var heroBg = document.getElementById("heroPhoto");
-      if (heroBg && c.heroBackdrop) {
-        heroBg.src = c.heroBackdrop;
-      }
+      var heroBgNext = document.getElementById("heroPhotoNext");
+      var heroList = Array.isArray(c.heroBackdrops) && c.heroBackdrops.length
+        ? c.heroBackdrops
+        : (c.heroBackdrop ? [c.heroBackdrop] : []);
+      if (heroSlideTimer) clearInterval(heroSlideTimer);
+      startDualLayerSlideshow(heroBg, heroBgNext, heroList, 6500, function (t) { heroSlideTimer = t; });
 
-      var detailsBg = document.querySelector("#tab-details .details-backdrop-img");
-      if (detailsBg && c.detailsBackdrop) {
-        detailsBg.src = c.detailsBackdrop;
-      }
+      var detailsBg = document.getElementById("detailsPhoto") || document.querySelector("#tab-details .details-backdrop-img");
+      var detailsBgNext = document.getElementById("detailsPhotoNext");
+      var detailsList = Array.isArray(c.detailsBackdrops) && c.detailsBackdrops.length
+        ? c.detailsBackdrops
+        : (c.detailsBackdrop ? [c.detailsBackdrop] : []);
+      if (detailsSlideTimer) clearInterval(detailsSlideTimer);
+      startDualLayerSlideshow(detailsBg, detailsBgNext, detailsList, 7200, function (t) { detailsSlideTimer = t; });
 
       var leftImg = document.querySelector("#leftPhotoFrame .frame-canvas-img");
       if (leftImg && c.leftFramePhoto) {
@@ -670,6 +724,8 @@
   // ==========================================================================
   // 5. KHUNG ẢNH CƯỚI 3D PARALLAX TILT & LIGHTBOX TRANG BÌA
   // ==========================================================================
+  var globalSetLightboxZoom = null;
+
   function init3DPhotoFrame() {
     var leftUnit = document.getElementById("leftPhotoFrame");
     var rightUnit = document.getElementById("rightPhotoFrame");
@@ -732,8 +788,10 @@
           (window.WEDDING_DB && window.WEDDING_DB.couple && window.WEDDING_DB.couple.leftFramePhoto) ||
           "img/wedding-photo-card-left.jpg";
         imgEl.src = leftSrc;
-        if (captionEl) captionEl.textContent = "";
+        if (typeof globalSetLightboxZoom === "function") globalSetLightboxZoom(1);
+        if (captionEl) captionEl.textContent = (window.WEDDING_DB && window.WEDDING_DB.couple && window.WEDDING_DB.couple.leftFramePlaque) || "✦ DŨNG • LINH ✦";
         modal.classList.add("active");
+        document.body.style.overflow = "hidden";
       });
     }
 
@@ -743,8 +801,10 @@
           (window.WEDDING_DB && window.WEDDING_DB.couple && window.WEDDING_DB.couple.rightFramePhoto) ||
           "img/wedding-photo-card-right.jpg";
         imgEl.src = rightSrc;
-        if (captionEl) captionEl.textContent = "";
+        if (typeof globalSetLightboxZoom === "function") globalSetLightboxZoom(1);
+        if (captionEl) captionEl.textContent = (window.WEDDING_DB && window.WEDDING_DB.couple && window.WEDDING_DB.couple.rightFramePlaque) || "✦ 07 . 12 . 2026 ✦";
         modal.classList.add("active");
+        document.body.style.overflow = "hidden";
       });
     }
   }
@@ -1042,11 +1102,52 @@
       });
     });
 
+    // ========================================================================
+    // LIGHTBOX DEEP ZOOM & PAN ENGINE (100% -> 400%, LĂN CHUỘT, KÉO CHUỘT, CHỤM 2 NGÓN)
+    // ========================================================================
+    var lbZoom = 1;
+    var lbPanX = 0;
+    var lbPanY = 0;
+    var lbIsDragging = false;
+    var lbStartX = 0;
+    var lbStartY = 0;
+    var lbPinchDist = 0;
+    var lbZoomResetBtn = document.getElementById("lbZoomReset");
+    var lbZoomInBtn = document.getElementById("lbZoomIn");
+    var lbZoomOutBtn = document.getElementById("lbZoomOut");
+
+    function applyLightboxTransform() {
+      if (!imgEl) return;
+      if (lbZoom <= 1.01) {
+        lbZoom = 1;
+        lbPanX = 0;
+        lbPanY = 0;
+        imgEl.classList.remove("is-zoomed");
+      } else {
+        imgEl.classList.add("is-zoomed");
+      }
+      imgEl.style.transform = "translate3d(" + lbPanX.toFixed(1) + "px, " + lbPanY.toFixed(1) + "px, 0) scale(" + lbZoom.toFixed(2) + ")";
+      if (lbZoomResetBtn) {
+        lbZoomResetBtn.textContent = Math.round(lbZoom * 100) + "%";
+      }
+    }
+
+    function setLightboxZoom(newZoom) {
+      lbZoom = Math.max(1, Math.min(4, newZoom));
+      if (lbZoom <= 1.01) {
+        lbPanX = 0;
+        lbPanY = 0;
+      }
+      applyLightboxTransform();
+    }
+    globalSetLightboxZoom = setLightboxZoom;
+
     function openModal(idx) {
       var item = allPhotos[idx];
       if (!item || !modal || !imgEl) return;
       currentIndex = idx;
       imgEl.src = item.src;
+      setLightboxZoom(1);
       var numStr = idx + 1 < 10 ? "0" + (idx + 1) : String(idx + 1);
       var totalStr = allPhotos.length < 10 ? "0" + allPhotos.length : String(allPhotos.length);
       if (captionEl) {
@@ -1058,8 +1159,28 @@
 
     function closeModal() {
       if (!modal) return;
+      setLightboxZoom(1);
       modal.classList.remove("active");
       document.body.style.overflow = "";
+    }
+
+    if (lbZoomInBtn) {
+      lbZoomInBtn.onclick = function (e) {
+        e.stopPropagation();
+        setLightboxZoom(lbZoom + 0.5);
+      };
+    }
+    if (lbZoomOutBtn) {
+      lbZoomOutBtn.onclick = function (e) {
+        e.stopPropagation();
+        setLightboxZoom(lbZoom - 0.5);
+      };
+    }
+    if (lbZoomResetBtn) {
+      lbZoomResetBtn.onclick = function (e) {
+        e.stopPropagation();
+        setLightboxZoom(1);
+      };
     }
 
     function showNext() {
@@ -1161,6 +1282,83 @@
           if (e.target === modal || e.target.classList.contains("lightbox-stage")) {
             closeModal();
           }
+        });
+
+        // Lăn chuột để Zoom ảnh trong Lightbox (100% -> 400%)
+        modal.addEventListener("wheel", function (e) {
+          if (!modal.classList.contains("active")) return;
+          e.preventDefault();
+          var step = e.deltaY < 0 ? 0.28 : -0.28;
+          setLightboxZoom(lbZoom + step);
+        }, { passive: false });
+      }
+
+      if (imgEl) {
+        // Nhấp đúp vào ảnh để Phóng to 2.5x hoặc Thu về 1x
+        imgEl.addEventListener("dblclick", function (e) {
+          e.stopPropagation();
+          if (lbZoom > 1.05) {
+            setLightboxZoom(1);
+          } else {
+            setLightboxZoom(2.5);
+          }
+        });
+
+        // Giữ chuột kéo di chuyển (Pan) khi ảnh đang phóng to
+        imgEl.addEventListener("mousedown", function (e) {
+          if (lbZoom <= 1.01) return;
+          e.preventDefault();
+          lbIsDragging = true;
+          lbStartX = e.clientX - lbPanX;
+          lbStartY = e.clientY - lbPanY;
+          imgEl.classList.add("is-dragging");
+        });
+        window.addEventListener("mousemove", function (e) {
+          if (!lbIsDragging) return;
+          lbPanX = e.clientX - lbStartX;
+          lbPanY = e.clientY - lbStartY;
+          applyLightboxTransform();
+        });
+        window.addEventListener("mouseup", function () {
+          if (lbIsDragging) {
+            lbIsDragging = false;
+            if (imgEl) imgEl.classList.remove("is-dragging");
+          }
+        });
+
+        // Chụm 2 ngón tay để Zoom (Pinch-to-Zoom) & Kéo 1 ngón trên điện thoại
+        imgEl.addEventListener("touchstart", function (e) {
+          if (e.touches.length === 2) {
+            var dx = e.touches[0].clientX - e.touches[1].clientX;
+            var dy = e.touches[0].clientY - e.touches[1].clientY;
+            lbPinchDist = Math.hypot(dx, dy);
+          } else if (e.touches.length === 1 && lbZoom > 1.01) {
+            lbIsDragging = true;
+            lbStartX = e.touches[0].clientX - lbPanX;
+            lbStartY = e.touches[0].clientY - lbPanY;
+          }
+        }, { passive: true });
+
+        imgEl.addEventListener("touchmove", function (e) {
+          if (e.touches.length === 2 && lbPinchDist > 0) {
+            e.preventDefault();
+            var dx = e.touches[0].clientX - e.touches[1].clientX;
+            var dy = e.touches[0].clientY - e.touches[1].clientY;
+            var dist = Math.hypot(dx, dy);
+            var ratio = dist / lbPinchDist;
+            lbPinchDist = dist;
+            setLightboxZoom(lbZoom * ratio);
+          } else if (e.touches.length === 1 && lbIsDragging && lbZoom > 1.01) {
+            e.preventDefault();
+            lbPanX = e.touches[0].clientX - lbStartX;
+            lbPanY = e.touches[0].clientY - lbStartY;
+            applyLightboxTransform();
+          }
+        }, { passive: false });
+
+        imgEl.addEventListener("touchend", function () {
+          lbIsDragging = false;
+          lbPinchDist = 0;
         });
       }
 

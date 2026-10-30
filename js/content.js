@@ -23,7 +23,17 @@ const DEFAULT_WEDDING_DB = {
     "invitationText": "Trân trọng kính mời quý khách đến chung vui cùng gia đình chúng mình",
     "signatureQuote": "“Một hành trình mới • Trọn vẹn yêu thương”",
     "heroBackdrop": "img/08-trang-an-hero.jpg",
+    "heroBackdrops": [
+      "img/08-trang-an-hero.jpg",
+      "img/07-trang-an-b.jpg",
+      "img/01-trang-an-a.jpg"
+    ],
     "detailsBackdrop": "img/album/cropped-detailsBackdrop-1793335929516-01.jpg",
+    "detailsBackdrops": [
+      "img/album/cropped-detailsBackdrop-1793335929516-01.jpg",
+      "img/07-trang-an-b.jpg",
+      "img/09-wuzhen-moi.jpg"
+    ],
     "leftFramePhoto": "img/wedding-photo-card-left.jpg",
     "leftFramePlaque": "✦ DŨNG • LINH ✦",
     "rightFramePhoto": "img/wedding-photo-card-right.jpg",
@@ -207,7 +217,21 @@ const liveChannel = typeof BroadcastChannel !== "undefined" ? new BroadcastChann
 function deepMergeDB(base, override) {
   if (!override || typeof override !== "object") return JSON.parse(JSON.stringify(base));
   const out = JSON.parse(JSON.stringify(base));
-  if (override.couple) Object.assign(out.couple, override.couple);
+  if (override.couple) {
+    Object.assign(out.couple, override.couple);
+    if (Array.isArray(override.couple.heroBackdrops) && override.couple.heroBackdrops.length > 0) {
+      out.couple.heroBackdrops = override.couple.heroBackdrops.filter(Boolean);
+      out.couple.heroBackdrop = out.couple.heroBackdrops[0];
+    } else if (out.couple.heroBackdrop) {
+      out.couple.heroBackdrops = [out.couple.heroBackdrop];
+    }
+    if (Array.isArray(override.couple.detailsBackdrops) && override.couple.detailsBackdrops.length > 0) {
+      out.couple.detailsBackdrops = override.couple.detailsBackdrops.filter(Boolean);
+      out.couple.detailsBackdrop = out.couple.detailsBackdrops[0];
+    } else if (out.couple.detailsBackdrop) {
+      out.couple.detailsBackdrops = [out.couple.detailsBackdrop];
+    }
+  }
   if (override.date) Object.assign(out.date, override.date);
   if (override.venues) {
     if (override.venues.groom) Object.assign(out.venues.groom, override.venues.groom);

@@ -6,7 +6,17 @@
     "invitationText": "Trân trọng kính mời quý khách đến chung vui cùng gia đình chúng mình",
     "signatureQuote": "“Một hành trình mới • Trọn vẹn yêu thương”",
     "heroBackdrop": "img/08-trang-an-hero.jpg",
+    "heroBackdrops": [
+      "img/08-trang-an-hero.jpg",
+      "img/07-trang-an-b.jpg",
+      "img/01-trang-an-a.jpg"
+    ],
     "detailsBackdrop": "img/album/cropped-detailsBackdrop-1793335929516-01.jpg",
+    "detailsBackdrops": [
+      "img/album/cropped-detailsBackdrop-1793335929516-01.jpg",
+      "img/07-trang-an-b.jpg",
+      "img/09-wuzhen-moi.jpg"
+    ],
     "leftFramePhoto": "img/wedding-photo-card-left.jpg",
     "leftFramePlaque": "✦ DŨNG • LINH ✦",
     "rightFramePhoto": "img/wedding-photo-card-right.jpg",

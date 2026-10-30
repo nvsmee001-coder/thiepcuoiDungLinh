@@ -842,50 +842,52 @@
         </p>
 
         <div class="slot-cards-grid">
-          <!-- 1. Ảnh nền Tab 1 (16:9) -->
+          <!-- 1. Ảnh nền Tab 1 (16:9 — Hỗ trợ nhiều ảnh tự động chuyển mượt) -->
           <div class="slot-card">
             <div class="slot-card-title">
               <span>1. Ảnh Nền Tab 1 (Mở Đầu)</span>
-              <span class="slot-ratio-badge">Ngang 16:9</span>
+              <span class="slot-ratio-badge" id="badge_count_heroBackdrop">Ngang 16:9 • Slideshow</span>
             </div>
             <div class="slot-preview-wrap ratio-16-9">
               <img src="" alt="" class="slot-preview-img" id="prev_heroBackdrop">
             </div>
+            <div id="list_heroBackdrop" style="display:flex; gap:6px; flex-wrap:wrap; min-height:38px;"></div>
             <input type="hidden" id="f_heroBackdrop">
             <div class="slot-btn-group">
-              <button type="button" class="btn btn-primary" data-pick-slot="heroBackdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Tab 1 (Mở Đầu — Tỉ lệ Ngang 16:9)">
-                🖼️ Chọn Từ Album
+              <button type="button" class="btn btn-primary" data-pick-slot="heroBackdrop" data-slot-mode="append" data-ratio="16:9" data-slot-label="Thêm Ảnh Nền Tab 1 (Mở Đầu — Ngang 16:9)">
+                🖼️ + Thêm Từ Album
               </button>
-              <button type="button" class="btn" data-recrop-slot="heroBackdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Tab 1 (Mở Đầu — Tỉ lệ Ngang 16:9)">
+              <button type="button" class="btn" data-recrop-slot="heroBackdrop" data-ratio="16:9" data-slot-label="Căn Chỉnh Ảnh Nền Tab 1 (Ngang 16:9)">
                 ✂️ Căn Chỉnh
               </button>
               <label class="btn" style="cursor:pointer;">
-                📤 Tải Mới
-                <input type="file" accept="image/*" style="display:none;" data-upload-slot="heroBackdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Tab 1 (Mở Đầu — Tỉ lệ Ngang 16:9)">
+                📤 + Tải Ảnh Mới
+                <input type="file" accept="image/*" style="display:none;" data-upload-slot="heroBackdrop" data-slot-mode="append" data-ratio="16:9" data-slot-label="Thêm Ảnh Nền Tab 1 (Mở Đầu — Ngang 16:9)">
               </label>
             </div>
           </div>
 
-          <!-- 2. Ảnh nền Tab 2 (16:9) -->
+          <!-- 2. Ảnh nền Tab 2 (16:9 — Hỗ trợ nhiều ảnh tự động chuyển mượt) -->
           <div class="slot-card">
             <div class="slot-card-title">
               <span>2. Ảnh Nền Tab 2 (Chi Tiết &amp; Map)</span>
-              <span class="slot-ratio-badge">Ngang 16:9</span>
+              <span class="slot-ratio-badge" id="badge_count_detailsBackdrop">Ngang 16:9 • Slideshow</span>
             </div>
             <div class="slot-preview-wrap ratio-16-9">
               <img src="" alt="" class="slot-preview-img" id="prev_detailsBackdrop">
             </div>
+            <div id="list_detailsBackdrop" style="display:flex; gap:6px; flex-wrap:wrap; min-height:38px;"></div>
             <input type="hidden" id="f_detailsBackdrop">
             <div class="slot-btn-group">
-              <button type="button" class="btn btn-primary" data-pick-slot="detailsBackdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Tab 2 (Chi Tiết & Map — Tỉ lệ Ngang 16:9)">
-                🖼️ Chọn Từ Album
+              <button type="button" class="btn btn-primary" data-pick-slot="detailsBackdrop" data-slot-mode="append" data-ratio="16:9" data-slot-label="Thêm Ảnh Nền Tab 2 (Chi Tiết & Map — Ngang 16:9)">
+                🖼️ + Thêm Từ Album
               </button>
-              <button type="button" class="btn" data-recrop-slot="detailsBackdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Tab 2 (Chi Tiết & Map — Tỉ lệ Ngang 16:9)">
+              <button type="button" class="btn" data-recrop-slot="detailsBackdrop" data-ratio="16:9" data-slot-label="Căn Chỉnh Ảnh Nền Tab 2 (Ngang 16:9)">
                 ✂️ Căn Chỉnh
               </button>
               <label class="btn" style="cursor:pointer;">
-                📤 Tải Mới
-                <input type="file" accept="image/*" style="display:none;" data-upload-slot="detailsBackdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Tab 2 (Chi Tiết & Map — Tỉ lệ Ngang 16:9)">
+                📤 + Tải Ảnh Mới
+                <input type="file" accept="image/*" style="display:none;" data-upload-slot="detailsBackdrop" data-slot-mode="append" data-ratio="16:9" data-slot-label="Thêm Ảnh Nền Tab 2 (Chi Tiết & Map — Ngang 16:9)">
               </label>
             </div>
           </div>
@@ -1778,6 +1780,71 @@
         return { date: outDate, time: outTime };
       }
 
+      // RENDER DẢI ẢNH NỀN ĐA ẢNH (SLIDESHOW) CHO TAB 1 & TAB 2
+      var activeBackdropIndex = { heroBackdrop: 0, detailsBackdrop: 0 };
+
+      function getBackdropArray(slotKey) {
+        if (!state.couple) state.couple = {};
+        var arrKey = slotKey + "s"; // heroBackdrops | detailsBackdrops
+        if (!Array.isArray(state.couple[arrKey]) || !state.couple[arrKey].length) {
+          var single = state.couple[slotKey] || "";
+          state.couple[arrKey] = single ? [single] : [];
+        }
+        return state.couple[arrKey];
+      }
+
+      function renderBackdropStrip(slotKey) {
+        var listEl = document.getElementById("list_" + slotKey);
+        var prevEl = document.getElementById("prev_" + slotKey);
+        var badgeEl = document.getElementById("badge_count_" + slotKey);
+        if (!listEl) return;
+
+        var arr = getBackdropArray(slotKey);
+        if (activeBackdropIndex[slotKey] >= arr.length) {
+          activeBackdropIndex[slotKey] = Math.max(0, arr.length - 1);
+        }
+        var curIdx = activeBackdropIndex[slotKey] || 0;
+        var curSrc = arr[curIdx] || arr[0] || "";
+
+        val("f_" + slotKey, arr[0] || "");
+        if (prevEl) prevEl.src = curSrc;
+        if (badgeEl) {
+          badgeEl.textContent = arr.length > 1
+            ? ("Đang chạy " + arr.length + " ảnh (Tự đổi 6.5s)")
+            : "1 ảnh • Ngang 16:9";
+        }
+
+        listEl.innerHTML = "";
+        arr.forEach(function (src, idx) {
+          var isSelected = idx === curIdx;
+          var chip = document.createElement("div");
+          chip.style.cssText =
+            "position:relative; width:56px; height:34px; border-radius:6px; overflow:hidden; cursor:pointer; border:" +
+            (isSelected ? "2px solid var(--gold-bright)" : "1px solid rgba(226,196,142,0.35)") + ";";
+          chip.title = "Ảnh nền #" + (idx + 1) + " (Bấm để xem/căn chỉnh)";
+          chip.innerHTML =
+            '<img src="' + src + '" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">' +
+            '<span style="position:absolute;bottom:1px;left:2px;font-size:0.58rem;font-weight:700;background:rgba(0,0,0,0.75);color:#ffe2a4;padding:0 3px;border-radius:3px;">#' + (idx + 1) + "</span>" +
+            (arr.length > 1
+              ? '<button type="button" data-del-bg="' + idx + '" title="Xóa ảnh nền này" style="position:absolute;top:1px;right:1px;background:rgba(190,30,30,0.9);color:#fff;border:none;border-radius:3px;font-size:0.58rem;line-height:1;padding:2px 3px;cursor:pointer;">✕</button>'
+              : "");
+
+          chip.addEventListener("click", function (e) {
+            if (e.target && e.target.getAttribute("data-del-bg") !== null) {
+              e.stopPropagation();
+              arr.splice(idx, 1);
+              renderBackdropStrip(slotKey);
+              saveAllChanges("Đã xóa 1 ảnh khỏi Slideshow nền!");
+              return;
+            }
+            activeBackdropIndex[slotKey] = idx;
+            renderBackdropStrip(slotKey);
+          });
+
+          listEl.appendChild(chip);
+        });
+      }
+
       // ĐỔ DỮ LIỆU TỪ STATE VÀO FORM
       function populateForms() {
         var c = state.couple || {};
@@ -1793,8 +1860,8 @@
         val("f_rightFramePhoto", c.rightFramePhoto);
         val("f_rightFramePlaque", c.rightFramePlaque);
 
-        document.getElementById("prev_heroBackdrop").src = c.heroBackdrop || "";
-        document.getElementById("prev_detailsBackdrop").src = c.detailsBackdrop || "";
+        renderBackdropStrip("heroBackdrop");
+        renderBackdropStrip("detailsBackdrop");
         document.getElementById("prev_leftFramePhoto").src = c.leftFramePhoto || "";
         document.getElementById("prev_rightFramePhoto").src = c.rightFramePhoto || "";
 
@@ -1868,14 +1935,18 @@
 
       // GOM DỮ LIỆU TỪ FORM VÀO STATE
       function collectFormsToState() {
+        var heroArr = getBackdropArray("heroBackdrop");
+        var detailsArr = getBackdropArray("detailsBackdrop");
         state.couple = {
           groomName: val("f_groomName"),
           brideName: val("f_brideName"),
           eyebrow: val("f_eyebrow"),
           invitationText: val("f_invitationText"),
           signatureQuote: val("f_signatureQuote"),
-          heroBackdrop: val("f_heroBackdrop"),
-          detailsBackdrop: val("f_detailsBackdrop"),
+          heroBackdrop: heroArr[0] || val("f_heroBackdrop"),
+          heroBackdrops: heroArr,
+          detailsBackdrop: detailsArr[0] || val("f_detailsBackdrop"),
+          detailsBackdrops: detailsArr,
           leftFramePhoto: val("f_leftFramePhoto"),
           leftFramePlaque: val("f_leftFramePlaque"),
           rightFramePhoto: val("f_rightFramePhoto"),
@@ -2101,9 +2172,10 @@
       };
 
       // 1. Mở Modal Chọn Ảnh Từ Danh Sách Album Đã Nạp
-      function openAlbumPicker(slotKey, ratio, label) {
+      function openAlbumPicker(slotKey, ratio, label, slotMode) {
         currentCropSession.targetType = "slot";
         currentCropSession.slotKey = slotKey;
+        currentCropSession.slotMode = slotMode || "replace";
         currentCropSession.ratio = ratio || "16:9";
         currentCropSession.label = label || "";
 
@@ -2130,6 +2202,7 @@
               src: src,
               targetType: "slot",
               slotKey: slotKey,
+              slotMode: currentCropSession.slotMode,
               ratio: ratio,
               label: label,
               fromPicker: true
@@ -2219,6 +2292,7 @@
         currentCropSession.src = opts.src || "";
         currentCropSession.targetType = opts.targetType || "slot";
         currentCropSession.slotKey = opts.slotKey || "heroBackdrop";
+        currentCropSession.slotMode = opts.slotMode || "replace";
         currentCropSession.albumIndex = opts.albumIndex !== undefined ? opts.albumIndex : -1;
         currentCropSession.ratio = opts.ratio || "16:9";
         currentCropSession.fitMode = "cover";
@@ -2401,11 +2475,25 @@
           await saveAllChanges("✨ Đã căn chỉnh & cập nhật ảnh trong Album!");
         } else {
           var slotKey = currentCropSession.slotKey;
-          val("f_" + slotKey, finalPath);
-          var prevEl = document.getElementById("prev_" + slotKey);
-          if (prevEl) prevEl.src = finalPath;
-          closeCropStudio();
-          await saveAllChanges("✨ Đã căn chỉnh & áp dụng ảnh cho " + (currentCropSession.label || slotKey) + "!");
+          if (slotKey === "heroBackdrop" || slotKey === "detailsBackdrop") {
+            var arr = getBackdropArray(slotKey);
+            if (currentCropSession.slotMode === "append") {
+              arr.push(finalPath);
+              activeBackdropIndex[slotKey] = arr.length - 1;
+            } else {
+              var editIdx = activeBackdropIndex[slotKey] || 0;
+              arr[editIdx] = finalPath;
+            }
+            renderBackdropStrip(slotKey);
+            closeCropStudio();
+            await saveAllChanges("✨ Đã cập nhật Slideshow Ảnh Nền (" + arr.length + " ảnh)!");
+          } else {
+            val("f_" + slotKey, finalPath);
+            var prevEl = document.getElementById("prev_" + slotKey);
+            if (prevEl) prevEl.src = finalPath;
+            closeCropStudio();
+            await saveAllChanges("✨ Đã căn chỉnh & áp dụng ảnh cho " + (currentCropSession.label || slotKey) + "!");
+          }
         }
       });
 
@@ -2415,7 +2503,8 @@
           openAlbumPicker(
             btn.getAttribute("data-pick-slot"),
             btn.getAttribute("data-ratio"),
-            btn.getAttribute("data-slot-label")
+            btn.getAttribute("data-slot-label"),
+            btn.getAttribute("data-slot-mode") || "replace"
           );
         });
       });
@@ -2424,6 +2513,10 @@
         btn.addEventListener("click", function () {
           var slotKey = btn.getAttribute("data-pick-slot") || btn.getAttribute("data-recrop-slot");
           var curSrc = val("f_" + slotKey);
+          if (slotKey === "heroBackdrop" || slotKey === "detailsBackdrop") {
+            var arr = getBackdropArray(slotKey);
+            curSrc = arr[activeBackdropIndex[slotKey] || 0] || arr[0] || "";
+          }
           if (!curSrc) {
             showToast("Chưa có ảnh ở vị trí này, hãy chọn từ Album trước!");
             return;
@@ -2432,6 +2525,7 @@
             src: curSrc,
             targetType: "slot",
             slotKey: slotKey,
+            slotMode: "replace",
             ratio: btn.getAttribute("data-ratio") || "16:9",
             label: btn.getAttribute("data-slot-label") || slotKey
           });
@@ -2450,6 +2544,7 @@
               src: paths[0],
               targetType: "slot",
               slotKey: inp.getAttribute("data-upload-slot"),
+              slotMode: inp.getAttribute("data-slot-mode") || "replace",
               ratio: inp.getAttribute("data-ratio") || "16:9",
               label: inp.getAttribute("data-slot-label") || ""
             });

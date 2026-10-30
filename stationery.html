@@ -2110,6 +2110,101 @@
       color: #ffe2a4;
       flex-shrink: 0;
     }
+
+    /* ==========================================================================
+       SLIDESHOW NỀN ĐA ẢNH CHUYỂN MƯỢT KEN BURNS CHO TAB 1 & TAB 2
+       ========================================================================== */
+    .hero-media-wrapper .hero-backdrop-img,
+    .details-media-wrapper .details-backdrop-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 2.2s cubic-bezier(0.22, 1, 0.36, 1), transform 8s ease-out;
+      will-change: opacity, transform;
+    }
+    .hero-backdrop-secondary,
+    .details-backdrop-secondary {
+      opacity: 0;
+      transform: scale(1.0);
+      pointer-events: none;
+    }
+    .hero-backdrop-secondary.is-visible,
+    .details-backdrop-secondary.is-visible {
+      opacity: 1;
+      transform: scale(1.06);
+    }
+
+    /* ==========================================================================
+       LIGHTBOX DEEP ZOOM & PAN (LĂN CHUỘT / CHỤM 2 NGÓN / NÚT + - / KÉO DI CHUYỂN)
+       ========================================================================== */
+    .lightbox-stage {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      user-select: none;
+    }
+    .lightbox-hero-img {
+      cursor: zoom-in;
+      transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transform-origin: center center;
+      will-change: transform;
+      touch-action: none;
+    }
+    .lightbox-hero-img.is-zoomed {
+      cursor: grab;
+    }
+    .lightbox-hero-img.is-dragging {
+      cursor: grabbing;
+      transition: none !important;
+    }
+    .lightbox-zoom-toolbar {
+      position: fixed;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10005;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(14, 10, 7, 0.88);
+      border: 1.5px solid rgba(226, 196, 142, 0.65);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(12px);
+    }
+    .lb-zoom-btn {
+      background: rgba(226, 196, 142, 0.12);
+      border: 1px solid rgba(226, 196, 142, 0.4);
+      color: #ffe2a4;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-family: var(--font-sans, sans-serif);
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .lb-zoom-btn:hover {
+      background: linear-gradient(135deg, #ffe2a4, #d4a349);
+      color: #160f08;
+    }
+    .lb-zoom-hint {
+      font-family: var(--font-sans, sans-serif);
+      font-size: 0.72rem;
+      color: rgba(255, 244, 220, 0.75);
+      padding: 0 6px;
+    }
+    @media (max-width: 768px) {
+      .lb-zoom-hint { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -2231,9 +2326,10 @@
          ====================================================================== -->
     <article class="wedding-tab-view active" id="tab-hero">
       
-      <!-- Ảnh cặp đôi tràn viền toàn màn hình -->
+      <!-- Ảnh cặp đôi tràn viền toàn màn hình (Hỗ trợ tự động chuyển nhiều ảnh nền mượt mà) -->
       <div class="hero-media-wrapper">
         <img src="img/08-trang-an-hero.jpg" alt="Dũng &amp; Linh tại Tràng An" class="hero-backdrop-img" id="heroPhoto">
+        <img src="img/08-trang-an-hero.jpg" alt="" class="hero-backdrop-img hero-backdrop-secondary" id="heroPhotoNext" aria-hidden="true">
         <div class="hero-film-vignette" aria-hidden="true"></div>
         <div class="hero-fog-overlay" aria-hidden="true"></div>
       </div>
@@ -2556,9 +2652,10 @@
          - Cột Phải (Xanh Lá & Xanh Lam): Bản đồ Nhà Trai (trên) & Nhà Gái (dưới) khung chỉ vàng
          ====================================================================== -->
     <article class="wedding-tab-view tab-scrollable-content" id="tab-details">
-      <!-- Ảnh nền tràn viền từ Album (Tràng An sông nước) đồng bộ với Tab 1 -->
+      <!-- Ảnh nền tràn viền từ Album (Hỗ trợ tự động chuyển nhiều ảnh nền mượt mà) -->
       <div class="details-media-wrapper" aria-hidden="true">
-        <img src="img/07-trang-an-b.jpg" alt="Dũng &amp; Linh tại Tràng An" class="details-backdrop-img">
+        <img src="img/07-trang-an-b.jpg" alt="Dũng &amp; Linh tại Tràng An" class="details-backdrop-img" id="detailsPhoto">
+        <img src="img/07-trang-an-b.jpg" alt="" class="details-backdrop-img details-backdrop-secondary" id="detailsPhotoNext" aria-hidden="true">
         <div class="details-film-vignette"></div>
         <div class="details-fog-overlay"></div>
       </div>
@@ -2922,14 +3019,20 @@
 
 
   <!-- ==========================================================================
-       LIGHTBOX PHÓNG TO ẢNH FULL-SCREEN
+       LIGHTBOX PHÓNG TO ẢNH FULL-SCREEN (HỖ TRỢ LĂN CHUỘT / CHỤM 2 NGÓN / NÚT ZOOM & KÉO DI CHUYỂN)
        ========================================================================== -->
   <div class="gallery-lightbox-modal" id="galleryLightbox" role="dialog" aria-modal="true" aria-label="Phóng to ảnh">
+    <div class="lightbox-zoom-toolbar" id="lightboxZoomToolbar">
+      <button type="button" class="lb-zoom-btn" id="lbZoomOut" title="Thu nhỏ">➖</button>
+      <button type="button" class="lb-zoom-btn" id="lbZoomReset" title="Đặt lại 100%">100%</button>
+      <button type="button" class="lb-zoom-btn" id="lbZoomIn" title="Phóng to">➕</button>
+      <span class="lb-zoom-hint">• Lăn chuột hoặc nhấp đúp để Zoom</span>
+    </div>
     <button type="button" class="btn-lightbox-close" id="lightboxClose" aria-label="Đóng">&times;</button>
     <button type="button" class="btn-lightbox-nav btn-prev" id="lightboxPrev" aria-label="Ảnh trước">&#10094;</button>
     <button type="button" class="btn-lightbox-nav btn-next" id="lightboxNext" aria-label="Ảnh sau">&#10095;</button>
-    <div class="lightbox-stage">
-      <img src="" alt="Ảnh phóng to" class="lightbox-hero-img" id="lightboxImg">
+    <div class="lightbox-stage" id="lightboxStage">
+      <img src="" alt="Ảnh phóng to" class="lightbox-hero-img" id="lightboxImg" draggable="false">
       <div class="lightbox-caption" id="lightboxCaption"></div>
     </div>
   </div>
@@ -2943,7 +3046,7 @@
   </audio>
 
   <!-- Scripts -->
-  <script src="js/content.js?v=20261030_v17"></script>
-  <script src="js/stationery.js?v=20261030_v17"></script>
+  <script src="js/content.js?v=20261030_v18"></script>
+  <script src="js/stationery.js?v=20261030_v18"></script>
 </body>
 </html>
