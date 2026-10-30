@@ -123,6 +123,16 @@
         rightImg.src = c.rightFramePhoto;
       }
       setText("#rightPhotoFrame .frame-brass-plaque span", c.rightFramePlaque);
+
+      // Cập nhật tên và ký tự Monogram trên phong bì mở màn hoàng gia
+      var groomShort = (c.groomName || "Dũng").trim();
+      var brideShort = (c.brideName || "Linh").trim();
+      var coupleTitle = groomShort + " & " + brideShort;
+      var monogram = (groomShort.charAt(0) || "D") + "&" + (brideShort.charAt(0) || "L");
+      setText("#envIntroNames", coupleTitle);
+      setText("#envCardNames", coupleTitle);
+      setText("#waxSealMonogram", monogram);
+      setText("#envLiningCrest", "⚜ " + (groomShort.charAt(0) || "D") + " & " + (brideShort.charAt(0) || "L") + " ⚜");
     }
 
     // --- B. ĐỒNG BỘ NGÀY GIỜ & ĐẾM NGƯỢC ---
@@ -140,6 +150,15 @@
       setText("#tab-hero .triad-year-bottom", d.yearLabel);
       setText("#tab-hero .triad-event", d.eventLabel);
       setText("#tab-hero .cover-lunar-date", d.lunarDate);
+
+      if (d.dayNumber && d.monthLabel && d.yearLabel) {
+        var cleanMonth = (d.monthLabel || "").replace(/[^0-9]/g, "") || "12";
+        if (cleanMonth.length === 1) cleanMonth = "0" + cleanMonth;
+        var cleanDay = (d.dayNumber || "").replace(/[^0-9]/g, "") || "07";
+        if (cleanDay.length === 1) cleanDay = "0" + cleanDay;
+        var cleanYear = (d.yearLabel || "").replace(/[^0-9]/g, "") || "2026";
+        setText("#envCardDate", cleanDay + " • " + cleanMonth + " • " + cleanYear);
+      }
 
       var bannerDatePill = document.querySelector("#tab-details .banner-date-pill");
       if (bannerDatePill && (d.shortDatePill || d.shortLunarPill)) {
@@ -607,10 +626,25 @@
     }
     document.addEventListener("click", autoPlayOnFirstTouch, { once: true });
     document.addEventListener("touchstart", autoPlayOnFirstTouch, { once: true });
+
+    // Expose player functions cho nghi thức mở phong bì hoàng gia
+    window.weddingPlayerPlay = function () {
+      if (!isPlaying) {
+        audio.play().then(function () {
+          isPlaying = true;
+          updatePlayerUI();
+          var cur = tracks[currentTrackIdx];
+          showToast("♫ Đang phát: " + ((cur && cur.title) || "Nhạc cưới"));
+        }).catch(function () {});
+      }
+    };
+    window.weddingPlayerTogglePlay = togglePlay;
   }
 
   // ==========================================================================
   // 4. BỤI VÀNG ÁNH KIM & CÁNH HOA BAY LÃNG MẠN (GOLD STARDUST & PETALS)
+  // Thiết kế vừa phải, thanh lịch, không che chữ hay làm phân tâm người xem
+  // Có công tắc Bật / Tắt ở góc trên bên trái
   // ==========================================================================
   function initPetals() {
     var canvas = document.getElementById("petalsCanvas");
@@ -625,36 +659,70 @@
     resize();
     window.addEventListener("resize", resize);
 
-    var petalCount = 20;
+    // Mật độ vừa phải, tinh tế theo yêu cầu người dùng
+    var petalCount = 8;
     var petals = [];
     for (var i = 0; i < petalCount; i++) {
       petals.push({
         x: Math.random() * width,
         y: Math.random() * height - height,
-        r: Math.random() * 4.5 + 3,
-        dx: Math.random() * 1.2 - 0.6,
-        dy: Math.random() * 1.3 + 0.7,
-        tilt: Math.random() * 10,
+        r: Math.random() * 3.2 + 2.4,
+        dx: Math.random() * 0.7 - 0.35,
+        dy: Math.random() * 0.8 + 0.5,
+        tilt: Math.random() * 8,
         tiltAngle: Math.random() * Math.PI,
-        tiltAngleInc: (Math.random() * 0.035) + 0.015,
-        opacity: Math.random() * 0.5 + 0.2,
-        color: Math.random() > 0.4 ? "#fce8dc" : "#fae0cc"
+        tiltAngleInc: (Math.random() * 0.02) + 0.01,
+        opacity: Math.random() * 0.2 + 0.16,
+        color: Math.random() > 0.5 ? "#fbe3d5" : "#f7dfcc"
       });
     }
 
-    var dustCount = 45;
+    var dustCount = 24;
     var stardust = [];
     for (var j = 0; j < dustCount; j++) {
       stardust.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        r: Math.random() * 2.2 + 0.8,
-        dy: -(Math.random() * 0.35 + 0.12),
-        dx: (Math.random() - 0.5) * 0.3,
-        alpha: Math.random() * 0.65 + 0.2,
-        pulseSpeed: Math.random() * 0.035 + 0.015,
+        r: Math.random() * 1.5 + 0.7,
+        dy: -(Math.random() * 0.25 + 0.1),
+        dx: (Math.random() - 0.5) * 0.2,
+        alpha: Math.random() * 0.45 + 0.18,
+        pulseSpeed: Math.random() * 0.025 + 0.01,
         pulseVal: Math.random() * Math.PI * 2,
         color: Math.random() > 0.3 ? "226, 196, 142" : "255, 245, 220"
+      });
+    }
+
+    var isRunning = true;
+    var toggleBtn = document.getElementById("sparksToggleBtn");
+    var toggleLabel = document.getElementById("sparksToggleLabel");
+
+    function setSparksActive(active, notify) {
+      isRunning = active;
+      if (active) {
+        canvas.classList.remove("is-hidden");
+        if (toggleBtn) toggleBtn.classList.remove("is-off");
+        if (toggleLabel) toggleLabel.textContent = "Bụi Vàng";
+        localStorage.setItem("THIEP_SPARKS_OFF", "0");
+        if (notify) showToast("✨ Đã bật bụi vàng lấp lánh");
+      } else {
+        canvas.classList.add("is-hidden");
+        if (toggleBtn) toggleBtn.classList.add("is-off");
+        if (toggleLabel) toggleLabel.textContent = "Đã Tắt";
+        localStorage.setItem("THIEP_SPARKS_OFF", "1");
+        if (notify) showToast("Đã tắt hiệu ứng bụi vàng");
+      }
+    }
+
+    // Kiểm tra cài đặt trước đó của khách
+    if (localStorage.getItem("THIEP_SPARKS_OFF") === "1") {
+      setSparksActive(false, false);
+    }
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        setSparksActive(!isRunning, true);
       });
     }
 
@@ -674,12 +742,17 @@
     }
 
     function animate() {
+      if (!isRunning) {
+        requestAnimationFrame(animate);
+        return;
+      }
+
       ctx.clearRect(0, 0, width, height);
 
       for (var s = 0; s < stardust.length; s++) {
         var d = stardust[s];
         d.pulseVal += d.pulseSpeed;
-        var currentAlpha = d.alpha * (0.6 + 0.4 * Math.sin(d.pulseVal));
+        var currentAlpha = d.alpha * (0.65 + 0.35 * Math.sin(d.pulseVal));
         d.y += d.dy;
         d.x += d.dx;
 
@@ -694,8 +767,8 @@
         ctx.beginPath();
         ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
         ctx.fillStyle = "rgba(" + d.color + ", " + currentAlpha.toFixed(2) + ")";
-        ctx.shadowColor = "rgba(226, 196, 142, 0.75)";
-        ctx.shadowBlur = d.r * 3.5;
+        ctx.shadowColor = "rgba(226, 196, 142, 0.6)";
+        ctx.shadowBlur = d.r * 2.5;
         ctx.fill();
         ctx.restore();
       }
@@ -704,12 +777,12 @@
         var p = petals[i];
         p.tiltAngle += p.tiltAngleInc;
         p.y += p.dy;
-        p.x += Math.sin(p.tiltAngle) * 0.7 + p.dx;
+        p.x += Math.sin(p.tiltAngle) * 0.6 + p.dx;
 
         if (p.y > height + 20) {
           p.x = Math.random() * width;
           p.y = -20;
-          p.tilt = Math.random() * 10;
+          p.tilt = Math.random() * 8;
         }
 
         drawPetal(p);
@@ -719,6 +792,85 @@
     }
 
     animate();
+  }
+
+  // ==========================================================================
+  // HIỆU ỨNG MỞ MÀN: PHONG BÌ HOÀNG GIA & DẤU SÁP 3D (THE GRAND REVEAL)
+  // ==========================================================================
+  function initEnvelopeIntro() {
+    var curtain = document.getElementById("royalEnvelopeIntro");
+    var envBox = document.getElementById("royalEnvelopeBox");
+    var waxSeal = document.getElementById("royalWaxSealBtn");
+    var promptEl = document.getElementById("envActionPrompt");
+    var skipBtn = document.getElementById("btnSkipEnvelope");
+    var replayBtn = document.getElementById("replayEnvelopeBtn");
+
+    if (!curtain || !envBox) return;
+
+    var isOpened = false;
+
+    function openEnvelope() {
+      if (isOpened) return;
+      isOpened = true;
+
+      // Kích hoạt hiệu ứng bóc con dấu và bung nắp phong bì 3D
+      envBox.classList.add("is-opening");
+
+      // Tự động phát nhạc cưới ngay khi chạm con dấu
+      if (typeof window.weddingPlayerPlay === "function") {
+        window.weddingPlayerPlay();
+      } else {
+        var audio = document.getElementById("weddingBgm");
+        if (audio && audio.paused) {
+          audio.play().catch(function () {});
+        }
+      }
+
+      // Xoay đĩa than nhạc cưới ở góc trên
+      var vinylWidget = document.getElementById("vinylPlayerWidget");
+      if (vinylWidget) vinylWidget.classList.add("is-playing");
+
+      // Sau 850ms, hạ màn che phong bì để bước vào thiệp cưới
+      setTimeout(function () {
+        curtain.classList.add("is-dismissed");
+      }, 850);
+    }
+
+    if (waxSeal) {
+      waxSeal.addEventListener("click", function (e) {
+        e.stopPropagation();
+        openEnvelope();
+      });
+    }
+
+    envBox.addEventListener("click", function () {
+      openEnvelope();
+    });
+
+    if (promptEl) {
+      promptEl.addEventListener("click", function (e) {
+        e.stopPropagation();
+        openEnvelope();
+      });
+    }
+
+    if (skipBtn) {
+      skipBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        isOpened = true;
+        curtain.classList.add("is-dismissed");
+      });
+    }
+
+    if (replayBtn) {
+      replayBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        isOpened = false;
+        envBox.classList.remove("is-opening");
+        curtain.classList.remove("is-dismissed");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
   }
 
   // ==========================================================================
@@ -1400,6 +1552,7 @@
     initTabNavigation();
     initCountdown();
     initAudioPlayer();
+    initEnvelopeIntro();
     initPetals();
     init3DPhotoFrame();
     initGalleryLightbox();

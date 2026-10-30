@@ -2205,6 +2205,432 @@
     @media (max-width: 768px) {
       .lb-zoom-hint { display: none; }
     }
+
+    /* ==========================================================================
+       NÚT TIỆN ÍCH GÓC TRÊN TRÁI: XEM LẠI BÌ THƯ + BẬT/TẮT BỤI VÀNG
+       ========================================================================== */
+    .site-top-controls-left {
+      position: fixed;
+      top: 18px;
+      left: 22px;
+      z-index: 260;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      user-select: none;
+    }
+    .royal-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(16, 12, 9, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(226, 196, 142, 0.48);
+      color: #ffe2a4;
+      font-family: var(--font-sans, sans-serif);
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.65);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .royal-pill-btn:hover {
+      background: rgba(28, 20, 14, 0.95);
+      border-color: #ffe4ab;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.8), 0 0 16px rgba(226, 196, 142, 0.25);
+    }
+    .royal-pill-btn.is-off {
+      opacity: 0.6;
+      border-color: rgba(255, 255, 255, 0.2);
+      color: rgba(255, 245, 225, 0.6);
+    }
+    @media (max-width: 640px) {
+      .site-top-controls-left {
+        top: 14px;
+        left: 14px;
+        gap: 6px;
+      }
+      .royal-pill-btn {
+        padding: 5px 10px;
+        font-size: 0.7rem;
+      }
+      .royal-pill-btn .pill-label {
+        display: none;
+      }
+    }
+
+    /* ==========================================================================
+       HIỆU ỨNG MỞ MÀN: PHONG BÌ HOÀNG GIA & DẤU SÁP 3D (THE GRAND REVEAL)
+       ========================================================================== */
+    .royal-envelope-curtain {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 40%, #24150e 0%, #0d0906 80%, #050302 100%);
+      padding: 20px;
+      overflow: hidden;
+      transition: opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.95s ease;
+    }
+    .royal-envelope-curtain.is-dismissed {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .env-skip-btn {
+      position: absolute;
+      top: 24px;
+      right: 26px;
+      z-index: 100;
+      background: rgba(226, 196, 142, 0.12);
+      border: 1px solid rgba(226, 196, 142, 0.45);
+      color: #ffe2a4;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-family: var(--font-sans, sans-serif);
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
+    }
+    .env-skip-btn:hover {
+      background: rgba(226, 196, 142, 0.28);
+      border-color: #ffe2a4;
+      transform: translateY(-1px);
+    }
+
+    .env-stage-viewport {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 520px;
+      width: 100%;
+      position: relative;
+    }
+
+    .env-intro-eyebrow {
+      font-family: var(--font-sans, sans-serif);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--color-gold);
+      margin-bottom: 6px;
+      opacity: 0.9;
+    }
+
+    .env-intro-couple-names {
+      font-family: var(--font-script, cursive);
+      font-size: clamp(2.6rem, 7vw, 4rem);
+      line-height: 1.1;
+      color: #fffaf0;
+      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.8), 0 0 25px rgba(226, 196, 142, 0.35);
+      margin-bottom: 22px;
+    }
+
+    /* 3D Envelope Container */
+    .royal-envelope-3d-box {
+      perspective: 1200px;
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      aspect-ratio: 4 / 2.75;
+      cursor: pointer;
+      user-select: none;
+      filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.92));
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .royal-envelope-3d-box:hover {
+      transform: translateY(-4px) scale(1.015);
+    }
+
+    /* Thân phong bì (Pocket) */
+    .env-inner-lining {
+      position: absolute;
+      inset: 0;
+      border-radius: 8px;
+      background: radial-gradient(circle at 50% 30%, #2d1c14 0%, #170e0a 100%);
+      border: 1.5px solid rgba(226, 196, 142, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .env-lining-crest {
+      font-family: var(--font-serif-royal, serif);
+      font-size: 1.2rem;
+      letter-spacing: 4px;
+      color: rgba(226, 196, 142, 0.22);
+      font-weight: 700;
+      transform: rotate(-15deg);
+    }
+
+    /* Lá thiệp bên trong */
+    .env-card-slip {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      right: 14px;
+      bottom: 12px;
+      background: linear-gradient(145deg, #fff9f0 0%, #f4ead7 100%);
+      border-radius: 6px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 2;
+      transition: transform 1.05s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .env-card-slip-border {
+      width: 100%;
+      height: 100%;
+      border: 1px solid rgba(193, 154, 88, 0.4);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      text-align: center;
+    }
+    .env-card-slip-tag {
+      font-family: var(--font-sans, sans-serif);
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #946927;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .env-card-slip-names {
+      font-family: var(--font-script, cursive);
+      font-size: 2.2rem;
+      line-height: 1.1;
+      color: #2b1d12;
+      margin: 2px 0 4px 0;
+    }
+    .env-card-slip-date {
+      font-family: var(--font-serif-royal, serif);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #8c231a;
+      margin-bottom: 4px;
+    }
+    .env-card-slip-quote {
+      font-family: var(--font-serif-royal, serif);
+      font-style: italic;
+      font-size: 0.74rem;
+      color: #635041;
+      line-height: 1.3;
+    }
+
+    /* Các nếp gấp phong bì (Pocket left / right / bottom) */
+    .env-pocket-body {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .env-pocket-left {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 50%;
+      background: linear-gradient(135deg, #1f140e 0%, #150d09 100%);
+      clip-path: polygon(0 0, 0 100%, 100% 100%);
+      border-radius: 0 0 0 8px;
+    }
+    .env-pocket-right {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 50%;
+      background: linear-gradient(-135deg, #1f140e 0%, #150d09 100%);
+      clip-path: polygon(100% 0, 100% 100%, 0 100%);
+      border-radius: 0 0 8px 0;
+    }
+    .env-pocket-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64%;
+      background: linear-gradient(to top, #19100a, #23160f);
+      clip-path: polygon(0 100%, 50% 22%, 100% 100%);
+      border-radius: 0 0 8px 8px;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Nắp phong bì mở 3D (Flap) */
+    .env-top-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64%;
+      background: linear-gradient(180deg, #2b1b12 0%, #1e130c 100%);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      z-index: 5;
+      transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+    }
+    .env-flap-gold-rim {
+      position: absolute;
+      inset: 0;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      border-top: 2px solid rgba(226, 196, 142, 0.8);
+      pointer-events: none;
+    }
+
+    /* Con Dấu Sáp Đỏ Hoàng Gia 3D (Wax Seal) */
+    .royal-wax-seal-btn {
+      position: absolute;
+      top: 55%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #d94336 0%, #a82318 60%, #691108 100%);
+      box-shadow:
+        0 6px 20px rgba(0, 0, 0, 0.75),
+        0 0 22px rgba(226, 196, 142, 0.45),
+        inset 0 3px 5px rgba(255, 255, 255, 0.35),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 7;
+      cursor: pointer;
+      border: 1.5px solid rgba(226, 196, 142, 0.5);
+      animation: sealAuraPulse 2.4s infinite ease-in-out;
+      transition: transform 0.35s ease, opacity 0.35s ease;
+    }
+    .royal-wax-seal-btn:hover {
+      transform: translate(-50%, -50%) scale(1.08);
+      box-shadow:
+        0 8px 26px rgba(0, 0, 0, 0.85),
+        0 0 32px rgba(226, 196, 142, 0.75),
+        inset 0 3px 6px rgba(255, 255, 255, 0.5);
+    }
+    @keyframes sealAuraPulse {
+      0%, 100% { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.75), 0 0 20px rgba(226, 196, 142, 0.4); }
+      50% { box-shadow: 0 8px 26px rgba(0, 0, 0, 0.85), 0 0 34px rgba(226, 196, 142, 0.7); }
+    }
+    .wax-seal-core {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1.5px dashed rgba(255, 226, 164, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .wax-seal-monogram {
+      font-family: var(--font-serif-royal, serif);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffe6c7;
+      letter-spacing: 0.8px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Hiệu ứng khi bấm Mở Phong Bì */
+    .royal-envelope-3d-box.is-opening .royal-wax-seal-btn {
+      transform: translate(-50%, -50%) scale(1.4);
+      opacity: 0;
+    }
+    .royal-envelope-3d-box.is-opening .env-top-flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+    .royal-envelope-3d-box.is-opening .env-card-slip {
+      transform: translateY(-90px) scale(1.06);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.75);
+      z-index: 10;
+    }
+
+    /* Lời mời chạm mở */
+    .env-action-prompt {
+      margin-top: 26px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 22px;
+      border-radius: 999px;
+      background: rgba(226, 196, 142, 0.1);
+      border: 1px solid rgba(226, 196, 142, 0.45);
+      color: #ffe2a4;
+      font-family: var(--font-sans, sans-serif);
+      font-size: 0.85rem;
+      font-weight: 600;
+      animation: promptFloat 2.2s infinite ease-in-out;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.25s ease;
+    }
+    .env-action-prompt:hover {
+      background: rgba(226, 196, 142, 0.2);
+      border-color: #ffe2a4;
+      transform: translateY(-2px);
+    }
+    @keyframes promptFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    #petalsCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    #petalsCanvas.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    @media (max-width: 480px) {
+      .royal-envelope-3d-box {
+        max-width: 320px;
+      }
+      .env-card-slip-names {
+        font-size: 1.8rem;
+      }
+      .env-card-slip-quote {
+        font-size: 0.68rem;
+      }
+      .royal-wax-seal-btn {
+        width: 54px;
+        height: 54px;
+      }
+      .wax-seal-core {
+        width: 38px;
+        height: 38px;
+      }
+      .wax-seal-monogram {
+        font-size: 0.95rem;
+      }
+      .royal-envelope-3d-box.is-opening .env-card-slip {
+        transform: translateY(-60px) scale(1.04);
+      }
+    }
   </style>
 </head>
 <body>
@@ -2267,8 +2693,58 @@
     </div>
   </div>
 
-  <!-- Hiệu ứng mở màn tự động nhẹ nhàng (Gentle Automatic Fade-In Intro - Không bắt user bấm) -->
-  <div class="site-intro-shroud" aria-hidden="true"></div>
+  <!-- NÚT TIỆN ÍCH GÓC TRÊN TRÁI: XEM LẠI BÌ THƯ + BẬT/TẮT BỤI VÀNG LẤP LÁNH -->
+  <div class="site-top-controls-left">
+    <button type="button" class="royal-pill-btn" id="replayEnvelopeBtn" title="Xem lại nghi thức mở phong bì hoàng gia">
+      <span class="pill-icon">✉️</span>
+      <span class="pill-label">Bì Thư</span>
+    </button>
+    <button type="button" class="royal-pill-btn" id="sparksToggleBtn" title="Bật/Tắt hiệu ứng bụi vàng lấp lánh">
+      <span class="pill-icon">✨</span>
+      <span class="pill-label" id="sparksToggleLabel">Bụi Vàng</span>
+    </button>
+  </div>
+
+  <!-- HIỆU ỨNG MỞ MÀN: PHONG BÌ HOÀNG GIA & DẤU SÁP 3D (THE GRAND REVEAL) -->
+  <aside class="royal-envelope-curtain" id="royalEnvelopeIntro" aria-label="Mở phong bì thiệp cưới">
+    <button type="button" class="env-skip-btn" id="btnSkipEnvelope" title="Vào thẳng thiệp cưới">
+      <span>Vào thẳng thiệp ➔</span>
+    </button>
+    <div class="env-stage-viewport">
+      <div class="env-intro-eyebrow">✦ TRÂN TRỌNG KÍNH MỜI • LỄ THÀNH HÔN ✦</div>
+      <div class="env-intro-couple-names" id="envIntroNames">Dũng &amp; Linh</div>
+      <div class="royal-envelope-3d-box" id="royalEnvelopeBox" role="button" tabindex="0" title="Chạm vào con dấu sáp để bóc phong bì">
+        <div class="env-inner-lining">
+          <div class="env-lining-crest" id="envLiningCrest">⚜ D &amp; L ⚜</div>
+        </div>
+        <div class="env-card-slip">
+          <div class="env-card-slip-border">
+            <span class="env-card-slip-tag">WEDDING INVITATION</span>
+            <div class="env-card-slip-names" id="envCardNames">Dũng &amp; Linh</div>
+            <div class="env-card-slip-date" id="envCardDate">07 • 12 • 2026</div>
+            <div class="env-card-slip-quote">“Một hành trình mới • Trọn vẹn yêu thương”</div>
+          </div>
+        </div>
+        <div class="env-pocket-body">
+          <div class="env-pocket-left"></div>
+          <div class="env-pocket-right"></div>
+          <div class="env-pocket-bottom"></div>
+        </div>
+        <div class="env-top-flap">
+          <div class="env-flap-gold-rim"></div>
+        </div>
+        <div class="royal-wax-seal-btn" id="royalWaxSealBtn" title="Bấm mở phong bì">
+          <div class="wax-seal-core">
+            <span class="wax-seal-monogram" id="waxSealMonogram">D&amp;L</span>
+          </div>
+        </div>
+      </div>
+      <div class="env-action-prompt" id="envActionPrompt">
+        <span class="env-prompt-hand">✉️</span>
+        <span class="env-prompt-text">Chạm vào con dấu sáp để mở thiệp &amp; phát nhạc</span>
+      </div>
+    </div>
+  </aside>
 
   <!-- ĐĨA THAN NHẠC CƯỚI XOAY 3D & HỘP CHỌN BÀI HÁT (TỐI ĐA 5 BÀI TỪ ADMIN) -->
   <div class="royal-vinyl-widget" id="vinylPlayerWidget">
@@ -3046,7 +3522,7 @@
   </audio>
 
   <!-- Scripts -->
-  <script src="js/content.js?v=20261030_v18"></script>
-  <script src="js/stationery.js?v=20261030_v18"></script>
+  <script src="js/content.js?v=20261030_v20"></script>
+  <script src="js/stationery.js?v=20261030_v20"></script>
 </body>
 </html>
