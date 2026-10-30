@@ -1,0 +1,889 @@
+/* ==========================================================================
+   EDITORIAL WEDDING MAGAZINE THEME — DŨNG & LINH
+   Style: Minimal Luxury / Fashion Magazine / Kinfolk & Vogue Editorial
+   Typography: Cormorant Garamond (Italic Serif) + Plus Jakarta Sans (Clean Minimal Sans)
+   Palette: Warm Ecru, Fine Paper, Charcoal Black, Warm Gold Hairlines
+   ========================================================================== */
+
+:root {
+  --ed-bg: #fcfbf9;
+  --ed-paper: #f7f3ee;
+  --ed-paper-light: #fdfcfb;
+  --ed-card: #ffffff;
+  --ed-text: #1a1816;
+  --ed-text-secondary: #5a544c;
+  --ed-text-muted: #8c8479;
+  --ed-border: #e8e2d8;
+  --ed-border-dark: #262320;
+  --ed-gold: #b28a52;
+  --ed-gold-soft: #f4ece1;
+
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+
+  --max-width: 1040px;
+  --transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--ed-bg);
+  color: var(--ed-text);
+  line-height: 1.6;
+  padding-bottom: 80px;
+  overflow-x: hidden;
+}
+
+/* Fine grain texture effect */
+.editorial-canvas {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ==========================================================================
+   TOP EDITORIAL MASTHEAD (Tạp chí thời trang)
+   ========================================================================== */
+.mag-top-bar {
+  border-bottom: 1px solid var(--ed-border);
+  padding: 16px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ed-text-muted);
+  font-weight: 600;
+}
+
+.mag-vol-info {
+  display: flex;
+  gap: 12px;
+}
+
+.mag-vol-info span:not(:last-child)::after {
+  content: "•";
+  margin-left: 12px;
+  color: var(--ed-gold);
+}
+
+.mag-music-btn {
+  background: transparent;
+  border: 1px solid var(--ed-border);
+  color: var(--ed-text);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+}
+
+.mag-music-btn:hover {
+  border-color: var(--ed-text);
+  background: var(--ed-paper);
+}
+
+.mag-music-btn.playing {
+  border-color: var(--ed-gold);
+  color: var(--ed-gold);
+  background: var(--ed-gold-soft);
+}
+
+/* ==========================================================================
+   COVER / HERO SPREAD (Bìa tạp chí độc bản)
+   ========================================================================== */
+.mag-cover {
+  padding: 50px 0 40px 0;
+  text-align: center;
+  border-bottom: 1px solid var(--ed-border);
+}
+
+.mag-subtitle-eyebrow {
+  font-size: 0.8rem;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--ed-gold);
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.mag-title {
+  font-family: var(--font-serif);
+  font-size: clamp(3.2rem, 7.5vw, 6rem);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -1px;
+  color: var(--ed-text);
+  margin-bottom: 24px;
+}
+
+.mag-title em {
+  font-style: italic;
+  font-family: var(--font-serif);
+  font-weight: 300;
+  color: var(--ed-gold);
+  margin: 0 8px;
+}
+
+.mag-cover-meta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  font-size: 0.82rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--ed-text-secondary);
+  font-weight: 500;
+  margin-bottom: 36px;
+}
+
+.mag-cover-meta-dot {
+  width: 4px;
+  height: 4px;
+  background: var(--ed-gold);
+  border-radius: 50%;
+}
+
+/* Hero Portrait with Editorial Frame */
+.mag-hero-visual {
+  position: relative;
+  margin: 0 auto;
+  max-width: 860px;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 2px;
+  background: #201c18;
+}
+
+.mag-hero-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  transition: transform 1.2s ease;
+}
+
+.mag-hero-visual:hover img {
+  transform: scale(1.03);
+}
+
+.mag-hero-caption {
+  margin-top: 14px;
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ed-text-muted);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ==========================================================================
+   COUNTDOWN BANNER (Đếm ngược tối giản)
+   ========================================================================== */
+.mag-countdown-banner {
+  margin: 36px 0;
+  padding: 24px 30px;
+  background: var(--ed-paper);
+  border: 1px solid var(--ed-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.countdown-callout {
+  display: flex;
+  flex-direction: column;
+}
+
+.countdown-callout-tag {
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ed-gold);
+  font-weight: 700;
+}
+
+.countdown-callout-title {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--ed-text);
+}
+
+.countdown-digits-strip {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.digit-unit {
+  text-align: center;
+}
+
+.digit-num {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--ed-text);
+  display: block;
+}
+
+.digit-label {
+  font-size: 0.68rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ed-text-muted);
+  font-weight: 600;
+  margin-top: 4px;
+  display: block;
+}
+
+.digit-sep {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  color: var(--ed-border);
+}
+
+.btn-add-cal {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ed-text);
+  color: #ffffff;
+  padding: 10px 18px;
+  font-size: 0.78rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.btn-add-cal:hover {
+  background: var(--ed-gold);
+}
+
+/* ==========================================================================
+   CHAPTER SECTION HEADING (Tiêu đề từng chương)
+   ========================================================================== */
+.chapter-section {
+  padding: 60px 0;
+  border-bottom: 1px solid var(--ed-border);
+}
+
+.chapter-header {
+  margin-bottom: 36px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 1px solid var(--ed-border);
+  padding-bottom: 14px;
+}
+
+.chapter-num {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--ed-gold);
+  letter-spacing: 1px;
+}
+
+.chapter-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 400;
+  color: var(--ed-text);
+  line-height: 1.15;
+}
+
+.chapter-tag {
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ed-text-muted);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   CHAPTER I: CEREMONY DUAL SPREAD (Nhà Trai & Nhà Gái)
+   ========================================================================== */
+.ceremony-spread {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+}
+
+.ceremony-column {
+  background: var(--ed-paper-light);
+  border: 1px solid var(--ed-border);
+  padding: 34px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ceremony-role-badge {
+  font-size: 0.72rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--ed-gold);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.ceremony-time {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--ed-text);
+  margin-bottom: 6px;
+}
+
+.ceremony-date-str {
+  font-size: 0.88rem;
+  color: var(--ed-text-secondary);
+  margin-bottom: 20px;
+}
+
+.ceremony-divider {
+  width: 40px;
+  height: 1px;
+  background: var(--ed-gold);
+  margin-bottom: 20px;
+}
+
+.ceremony-location-name {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--ed-text);
+  margin-bottom: 6px;
+}
+
+.ceremony-address-text {
+  font-size: 0.9rem;
+  color: var(--ed-text-secondary);
+  line-height: 1.5;
+  margin-bottom: 28px;
+}
+
+.ceremony-action-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-ed-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ed-text);
+  color: #ffffff;
+  padding: 10px 20px;
+  font-size: 0.78rem;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.btn-ed-primary:hover {
+  background: var(--ed-gold);
+}
+
+.btn-ed-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--ed-border);
+  background: transparent;
+  color: var(--ed-text);
+  padding: 10px 18px;
+  font-size: 0.78rem;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.btn-ed-secondary:hover {
+  background: var(--ed-paper);
+}
+
+/* ==========================================================================
+   CHAPTER II: THE LOOKBOOK / VISUAL GALLERY
+   ========================================================================== */
+.lookbook-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+}
+
+.lookbook-item {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.lookbook-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+  display: block;
+}
+
+.lookbook-item:hover img {
+  transform: scale(1.04);
+}
+
+.lookbook-large {
+  grid-column: span 7;
+  aspect-ratio: 4 / 3;
+}
+
+.lookbook-tall {
+  grid-column: span 5;
+  aspect-ratio: 3 / 4;
+}
+
+.lookbook-tri {
+  grid-column: span 4;
+  aspect-ratio: 1 / 1;
+}
+
+.lookbook-caption {
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ed-text-muted);
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   CHAPTER III: THE LOVE CHRONICLE (Dòng thời gian ký sự)
+   ========================================================================== */
+.chronicle-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.chronicle-entry {
+  display: grid;
+  grid-template-columns: 200px 1fr 240px;
+  gap: 32px;
+  align-items: center;
+  padding-bottom: 30px;
+  border-bottom: 1px dashed var(--ed-border);
+}
+
+.chronicle-entry:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.chronicle-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.chronicle-year {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  font-weight: 400;
+  color: var(--ed-gold);
+  line-height: 1;
+}
+
+.chronicle-place {
+  font-size: 0.75rem;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--ed-text-secondary);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.chronicle-story h4 {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--ed-text);
+  margin-bottom: 8px;
+}
+
+.chronicle-story p {
+  font-size: 0.92rem;
+  color: var(--ed-text-secondary);
+  line-height: 1.65;
+}
+
+.chronicle-photo-wrap {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--ed-border);
+}
+
+.chronicle-photo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.chronicle-photo-wrap:hover img {
+  transform: scale(1.05);
+}
+
+/* ==========================================================================
+   CHAPTER IV: REGISTRY & WISHES (Hộp Mừng Cưới & RSVP)
+   ========================================================================== */
+.registry-spread {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+}
+
+.registry-card {
+  background: var(--ed-paper);
+  border: 1px solid var(--ed-border);
+  padding: 34px;
+  display: flex;
+  flex-direction: column;
+}
+
+.registry-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.registry-card-desc {
+  font-size: 0.88rem;
+  color: var(--ed-text-secondary);
+  margin-bottom: 24px;
+}
+
+/* Bank switch pill */
+.bank-switch-wrap {
+  display: flex;
+  border-bottom: 1px solid var(--ed-border);
+  margin-bottom: 20px;
+}
+
+.bank-tab-btn {
+  background: transparent;
+  border: none;
+  padding: 10px 18px;
+  font-size: 0.78rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ed-text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: var(--transition);
+}
+
+.bank-tab-btn.active {
+  color: var(--ed-text);
+  border-bottom-color: var(--ed-gold);
+}
+
+.bank-qr-row {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid var(--ed-border);
+  padding: 18px;
+  margin-bottom: 18px;
+}
+
+.bank-qr-img {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border: 1px solid var(--ed-border);
+  padding: 4px;
+}
+
+.bank-info-box {
+  flex: 1;
+}
+
+.bank-org {
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ed-gold);
+  font-weight: 700;
+}
+
+.bank-num {
+  font-family: monospace;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 4px 0;
+}
+
+.bank-owner {
+  font-size: 0.82rem;
+  color: var(--ed-text-secondary);
+  margin-bottom: 12px;
+}
+
+.btn-copy-acc {
+  background: var(--ed-paper);
+  border: 1px solid var(--ed-border);
+  color: var(--ed-text);
+  padding: 6px 14px;
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-copy-acc:hover {
+  background: var(--ed-text);
+  color: #ffffff;
+}
+
+/* RSVP Form */
+.editorial-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ed-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ed-label {
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ed-text-secondary);
+  font-weight: 600;
+}
+
+.ed-input,
+.ed-select,
+.ed-textarea {
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 12px 14px;
+  border: 1px solid var(--ed-border);
+  background: #ffffff;
+  color: var(--ed-text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.ed-input:focus,
+.ed-select:focus,
+.ed-textarea:focus {
+  border-color: var(--ed-gold);
+}
+
+.btn-ed-submit {
+  background: var(--ed-text);
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  font-size: 0.78rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 8px;
+}
+
+.btn-ed-submit:hover {
+  background: var(--ed-gold);
+}
+
+/* ==========================================================================
+   MAGAZINE COLOPHON / FOOTER
+   ========================================================================== */
+.mag-footer {
+  margin-top: 80px;
+  padding-top: 40px;
+  border-top: 2px solid var(--ed-border-dark);
+  text-align: center;
+}
+
+.mag-footer-colophon {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.mag-footer-colophon em {
+  font-style: italic;
+  color: var(--ed-gold);
+}
+
+.mag-footer-credits {
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ed-text-muted);
+}
+
+/* Toast */
+.ed-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--ed-text);
+  color: #ffffff;
+  padding: 12px 24px;
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.35s ease;
+}
+
+.ed-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* Lightbox */
+.ed-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(22, 20, 18, 0.94);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  padding: 24px;
+}
+
+.ed-lightbox.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ed-lightbox-img {
+  max-width: 90vw;
+  max-height: 80vh;
+  object-fit: contain;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+
+.ed-lightbox-close {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  color: #ffffff;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+@media (max-width: 860px) {
+  .ceremony-spread,
+  .registry-spread {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .chronicle-entry {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .chronicle-photo-wrap {
+    max-width: 100%;
+    aspect-ratio: 16 / 10;
+  }
+  .lookbook-large,
+  .lookbook-tall,
+  .lookbook-tri {
+    grid-column: span 12;
+  }
+  .mag-countdown-banner {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+  .countdown-digits-strip {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .mag-top-bar {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  .mag-cover {
+    padding: 30px 0;
+  }
+  .mag-title {
+    font-size: 2.8rem;
+  }
+  .bank-qr-row {
+    flex-direction: column;
+    text-align: center;
+  }
+  .bank-qr-img {
+    width: 140px;
+    height: 140px;
+  }
+}

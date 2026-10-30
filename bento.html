@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thiệp Cưới — Dũng &amp; Linh | 07.12.2026</title>
+  <meta name="description" content="Thiệp mời Lễ Thành Hôn của Dũng & Linh - Ngày 07 tháng 12 năm 2026">
+
+  <!-- Google Fonts: Playfair Display + Plus Jakarta Sans + Caveat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bento Grid CSS riêng biệt, không đụng vào style cũ -->
+  <link rel="stylesheet" href="css/bento.css">
+</head>
+<body>
+
+  <!-- Hiệu ứng vầng sáng trang trí nền -->
+  <div class="bg-decor" aria-hidden="true">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+  </div>
+
+  <!-- Thanh nổi đầu trang (Sticky Header) -->
+  <header class="floating-header">
+    <div class="brand-pill">
+      <span class="brand-heart">♥</span>
+      <span class="brand-names">Dũng <span class="brand-dot">&amp;</span> Linh</span>
+      <span class="brand-date">07.12.2026</span>
+    </div>
+
+    <div class="header-actions">
+      <button type="button" class="action-btn" id="musicToggleBtn" title="Bật/Tắt nhạc cưới">
+        <div class="sound-wave" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <span>Nhạc cưới</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Container Bento Grid chính -->
+  <main class="bento-wrapper">
+    <div class="bento-grid">
+
+      <!-- ==========================================
+           WIDGET 1: HERO CARD (Ảnh lớn + Tên Dâu Rể)
+           ========================================== -->
+      <section class="bento-card widget-hero" aria-label="Cô dâu và chú rể">
+        <img src="img/08-trang-an-hero.jpg" alt="Dũng và Linh" class="hero-img-bg">
+        <div class="hero-gradient-overlay"></div>
+        
+        <div class="hero-content">
+          <div class="hero-badge">Lễ Thành Hôn • Save The Date</div>
+          <h1 class="hero-title">Dũng <span>&amp;</span> Linh</h1>
+          <p class="hero-quote">
+            “Tình yêu là khi hai người xa lạ chọn cùng nhau viết tiếp những trang còn lại của cuộc đời mình.”
+          </p>
+
+          <div class="hero-meta">
+            <div class="meta-chip">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              <span>Chủ nhật, 07.12.2026</span>
+            </div>
+            <div class="meta-chip">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span>11:00 Trưa</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           WIDGET 2: COUNTDOWN TIMER (Đếm ngược)
+           ========================================== -->
+      <section class="bento-card widget-countdown" aria-label="Đếm ngược ngày cưới">
+        <div class="countdown-header">
+          <span class="card-tag">Đếm ngược</span>
+          <h3>Ngày Chung Đôi</h3>
+          <p>Cùng đếm ngược khoảnh khắc hạnh phúc</p>
+        </div>
+
+        <div class="countdown-boxes">
+          <div class="c-box">
+            <span class="c-val" id="cDays">00</span>
+            <span class="c-lbl">Ngày</span>
+          </div>
+          <div class="c-box">
+            <span class="c-val" id="cHours">00</span>
+            <span class="c-lbl">Giờ</span>
+          </div>
+          <div class="c-box">
+            <span class="c-val" id="cMins">00</span>
+            <span class="c-lbl">Phút</span>
+          </div>
+          <div class="c-box">
+            <span class="c-val" id="cSecs">00</span>
+            <span class="c-lbl">Giây</span>
+          </div>
+        </div>
+
+        <div class="countdown-footer">
+          <div class="countdown-date-badge">
+            <span>🗓 07 Tháng 12, 2026</span>
+          </div>
+          <a class="btn-cal" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=%C4%90%C3%A1m+c%C6%B0%E1%BB%9Bi+D%C5%A9ng+%26+Linh&dates=20261207T040000Z/20261207T080000Z&details=L%E1%BB%85+th%C3%A0nh+h%C3%B4n+D%C5%A9ng+%26+Linh.+R%E1%BA%A5t+h%C3%A2n+h%E1%BA%A1nh+%C4%91%C6%B0%E1%BB%A3c+%C4%91%C3%B3n+ti%E1%BA%BFp+b%E1%BA%A1n!&location=H%C3%A0+N%E1%BB%99i">
+            + Lưu vào Lịch
+          </a>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           WIDGET 3: CEREMONY & LOCATION (Địa điểm tiệc)
+           ========================================== -->
+      <section class="bento-card widget-ceremony" aria-label="Thông tin tiệc cưới">
+        <div class="ceremony-top">
+          <div class="ceremony-title-wrap">
+            <span class="card-tag rose">Thời gian &amp; Địa điểm</span>
+            <h3>Lễ Thành Hôn</h3>
+            <p>Trân trọng kính mời quý khách đến chung vui</p>
+          </div>
+
+          <!-- Switch chọn Nhà Trai / Nhà Gái -->
+          <div class="loc-switch" role="tablist">
+            <button type="button" class="loc-btn active" id="locBtnGroom" role="tab">Nhà Trai (Hà Nội)</button>
+            <button type="button" class="loc-btn" id="locBtnBride" role="tab">Nhà Gái (TP.HCM)</button>
+          </div>
+        </div>
+
+        <div class="loc-card-body">
+          <div class="loc-time-badge">
+            <span>⏰ 11:00 — Chủ Nhật, 07/12/2026</span>
+          </div>
+          <h4 class="loc-venue-name" id="locVenueName">Nhà trai — Tiệc Mừng</h4>
+          <p class="loc-venue-address" id="locVenueAddress">Số 00, đường ABC, phường/xã XYZ, Hà Nội</p>
+
+          <div class="loc-actions">
+            <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer" class="btn-map-primary" id="btnOpenMap">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
+              <span>Chỉ đường (Google Maps)</span>
+            </a>
+            <a href="tel:0900000000" class="btn-map-secondary">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              <span>Gọi liên hệ</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           WIDGET 4: PHOTO GALLERY (Album ảnh nhanh)
+           ========================================== -->
+      <section class="bento-card widget-gallery" aria-label="Album ảnh cưới">
+        <div class="gallery-header">
+          <div>
+            <span class="card-tag green">Kỷ niệm</span>
+            <h3>Khoảnh Khắc</h3>
+          </div>
+          <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-gold-dark);">Chạm để xem ảnh lớn</span>
+        </div>
+
+        <div class="gallery-preview-grid">
+          <div class="gallery-thumb"><img src="img/08-trang-an-hero.jpg" alt="Tràng An"></div>
+          <div class="gallery-thumb"><img src="img/04-shanghai-mua.jpg" alt="Thượng Hải"></div>
+          <div class="gallery-thumb"><img src="img/06-shanghai-dem.jpg" alt="Đêm Thượng Hải"></div>
+          <div class="gallery-thumb"><img src="img/03-disney-cau-hon.jpg" alt="Cầu hôn Disney"></div>
+          <div class="gallery-thumb"><img src="img/02-disney-phao-hoa.jpg" alt="Pháo hoa Disney"></div>
+          <div class="gallery-thumb">
+            <img src="img/07-trang-an-b.jpg" alt="Tràng An mùa thu">
+            <div class="gallery-more-overlay">+4 ảnh</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           WIDGET 5: MINI LOVE STORY (Chuyện tình yêu)
+           ========================================== -->
+      <section class="bento-card widget-story" aria-label="Chặng đường tình yêu">
+        <div class="story-header">
+          <span class="card-tag">Hành trình</span>
+          <h3>Những Chặng Đường Đã Qua</h3>
+        </div>
+
+        <div class="story-timeline">
+          <!-- Mốc 1 -->
+          <div class="story-item">
+            <img src="img/04-shanghai-mua.jpg" alt="Gặp gỡ" class="story-thumb">
+            <div class="story-info">
+              <div class="story-meta">
+                <span>Mùa thu, 2023</span>
+                <span>•</span>
+                <span>Thượng Hải</span>
+              </div>
+              <h5 class="story-label">Gặp gỡ tình cờ</h5>
+              <p class="story-text">Một ngày rất bình thường lại trở thành khởi đầu của một điều không hề bình thường chút nào.</p>
+            </div>
+          </div>
+
+          <!-- Mốc 2 -->
+          <div class="story-item">
+            <img src="img/06-shanghai-dem.jpg" alt="Thương nhau" class="story-thumb">
+            <div class="story-info">
+              <div class="story-meta">
+                <span>Đông, 2023</span>
+                <span>•</span>
+                <span>Thượng Hải</span>
+              </div>
+              <h5 class="story-label">Thương nhau qua năm tháng</h5>
+              <p class="story-text">Từng cuộc trò chuyện, từng chuyến đi, nhận ra đã trở thành thói quen không thể thiếu.</p>
+            </div>
+          </div>
+
+          <!-- Mốc 3 -->
+          <div class="story-item">
+            <img src="img/03-disney-cau-hon.jpg" alt="Hẹn ước" class="story-thumb">
+            <div class="story-info">
+              <div class="story-meta">
+                <span>Hè, 2025</span>
+                <span>•</span>
+                <span>Disneyland</span>
+              </div>
+              <h5 class="story-label">Hẹn ước trọn đời</h5>
+              <p class="story-text">Giữa muôn ngã rẽ, cả hai chọn một con đường để cùng đi tiếp — con đường gia đình.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           WIDGET 6: GIFT & QR CODE (Hộp mừng cưới)
+           ========================================== -->
+      <section class="bento-card widget-gift" aria-label="Hộp mừng cưới">
+        <div class="gift-header">
+          <div>
+            <span class="card-tag rose">Mừng Cưới</span>
+            <h3>Hộp Chúc Phúc</h3>
+          </div>
+          
+          <div class="gift-tabs" role="tablist">
+            <button type="button" class="gift-tab active" id="giftTabGroom" role="tab">Chú Rể (Dũng)</button>
+            <button type="button" class="gift-tab" id="giftTabBride" role="tab">Cô Dâu (Linh)</button>
+          </div>
+        </div>
+
+        <div class="gift-body">
+          <div class="qr-box">
+            <img id="giftQrImg" src="https://img.vietqr.io/image/MB-0900000000-compact2.png?amount=0&addInfo=Mung%20cuoi%20Dung%20Linh" alt="Mã QR mừng cưới">
+          </div>
+          <div class="bank-details">
+            <div class="bank-badge">Tài khoản ngân hàng</div>
+            <div class="bank-name" id="giftBankName">MB Bank (Quân Đội)</div>
+            <div class="bank-acc" id="giftAccNo">0900000000</div>
+            <div class="bank-holder" id="giftAccHolder">Chủ TK: NGUYEN VAN DUNG</div>
+            
+            <button type="button" class="btn-copy" id="btnCopyAcc">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Sao chép số tài khoản</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           WIDGET 7: RSVP & GUESTBOOK (Gửi lời chúc)
+           ========================================== -->
+      <section class="bento-card widget-rsvp" aria-label="Xác nhận tham dự và gửi lời chúc">
+        <div class="rsvp-container">
+          <div class="rsvp-left">
+            <span class="card-tag green">Xác nhận tham dự</span>
+            <h3>Bạn Sẽ Đến Chung Vui Chứ?</h3>
+            <p>
+              Sự hiện diện của bạn là món quà ý nghĩa nhất đối với gia đình chúng tôi. Hãy cho chúng mình biết trước để chuẩn bị đón tiếp chu đáo nhất nhé!
+            </p>
+
+            <div class="rsvp-contact-cards">
+              <a href="https://zalo.me" target="_blank" rel="noopener noreferrer" class="contact-pill">
+                <span>💬 Nhắn Zalo: 090 000 0000</span>
+              </a>
+              <a href="tel:0900000000" class="contact-pill">
+                <span>📞 Hotline: 090 000 0000</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="rsvp-right">
+            <form class="rsvp-form" id="rsvpForm">
+              <div class="form-group">
+                <input type="text" id="rsvpGuestName" placeholder="Tên của bạn là gì?" required>
+              </div>
+
+              <div class="form-group">
+                <select id="rsvpAttending" required>
+                  <option value="yes">Chắc chắn tham dự (1 người)</option>
+                  <option value="yes-plus">Tham dự cùng người thương / gia đình</option>
+                  <option value="no">Rất tiếc không thể đến, gửi lời chúc phúc</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <textarea id="rsvpWishes" rows="2" placeholder="Gửi lời chúc ngọt ngào đến Dũng & Linh..."></textarea>
+              </div>
+
+              <button type="submit" class="btn-submit-rsvp">
+                <span>Gửi lời chúc &amp; Xác nhận</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /.bento-grid -->
+
+    <!-- Footer -->
+    <footer class="bento-footer">
+      <div class="footer-hand">Dũng &amp; Linh</div>
+      <p class="footer-tagline">Rất hân hạnh được đón tiếp bạn trong ngày trọng đại • 07.12.2026</p>
+    </footer>
+  </main>
+
+  <!-- Toast Notification Box -->
+  <div class="toast-msg" id="toastMsg" role="status" aria-live="polite">
+    <span class="toast-icon">✨</span>
+    <span class="toast-text">Thông báo</span>
+  </div>
+
+  <!-- Lightbox Gallery Modal -->
+  <div class="lightbox-modal" id="lightboxModal" role="dialog" aria-modal="true" aria-label="Xem ảnh lớn">
+    <div class="lightbox-content">
+      <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Đóng">&times;</button>
+      <img src="img/08-trang-an-hero.jpg" alt="Ảnh kỷ niệm" class="lightbox-img" id="lightboxImg">
+      <div class="lightbox-nav">
+        <button type="button" class="lightbox-btn" id="lightboxPrev">‹ Ảnh trước</button>
+        <button type="button" class="lightbox-btn" id="lightboxNext">Ảnh sau ›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logic scripts -->
+  <script src="js/content.js"></script>
+  <script src="js/bento.js"></script>
+</body>
+</html>

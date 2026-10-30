@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dũng &amp; Linh — The Wedding Issue | 07.12.2026</title>
+  <meta name="description" content="Thiệp cưới điện tử phong cách Tạp chí tối giản của Dũng & Linh - 07.12.2026">
+
+  <!-- Typography: Cormorant Garamond (Italic Editorial Serif) + Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Editorial Style riêng biệt, độc lập 100% -->
+  <link rel="stylesheet" href="css/editorial.css">
+</head>
+<body>
+
+  <div class="editorial-canvas">
+
+    <!-- ==========================================
+         TOP MASTHEAD (Tựa đầu trang tạp chí)
+         ========================================== -->
+    <header class="mag-top-bar">
+      <div class="mag-vol-info">
+        <span>The Wedding Issue</span>
+        <span>Vol. XII</span>
+        <span>No. 07</span>
+        <span>Dec 2026</span>
+      </div>
+
+      <button type="button" class="mag-music-btn" id="edMusicBtn" title="Bật/Tắt nhạc nền">
+        <span class="btn-icon">♫</span>
+        <span class="btn-label">Play Music</span>
+      </button>
+    </header>
+
+    <!-- ==========================================
+         COVER SPREAD (Trang bìa chính)
+         ========================================== -->
+    <section class="mag-cover" aria-label="Bìa thiệp cưới">
+      <div class="mag-subtitle-eyebrow">A Union of Two Souls • Save The Date</div>
+      <h1 class="mag-title">Dũng <em>&amp;</em> Linh</h1>
+      
+      <div class="mag-cover-meta">
+        <span>Chủ Nhật, 07 Tháng 12 Năm 2026</span>
+        <span class="mag-cover-meta-dot"></span>
+        <span>Hà Nội &amp; TP. Hồ Chí Minh</span>
+      </div>
+
+      <div class="mag-hero-visual">
+        <img src="img/08-trang-an-hero.jpg" alt="Dũng & Linh tại Tràng An">
+      </div>
+      <div class="mag-hero-caption">
+        <span>FIG. 01 — Tràng An, Ninh Bình</span>
+        <span>Chuyện Tình Yêu &amp; Lễ Thành Hôn</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         COUNTDOWN BANNER (Đếm ngược tối giản)
+         ========================================== -->
+    <section class="mag-countdown-banner" aria-label="Đếm ngược ngày cưới">
+      <div class="countdown-callout">
+        <span class="countdown-callout-tag">Khoảnh khắc trọng đại</span>
+        <span class="countdown-callout-title">Đếm ngược ngày chung đôi</span>
+      </div>
+
+      <div class="countdown-digits-strip">
+        <div class="digit-unit">
+          <span class="digit-num" id="edDays">00</span>
+          <span class="digit-label">Ngày</span>
+        </div>
+        <span class="digit-sep">:</span>
+        <div class="digit-unit">
+          <span class="digit-num" id="edHours">00</span>
+          <span class="digit-label">Giờ</span>
+        </div>
+        <span class="digit-sep">:</span>
+        <div class="digit-unit">
+          <span class="digit-num" id="edMins">00</span>
+          <span class="digit-label">Phút</span>
+        </div>
+        <span class="digit-sep">:</span>
+        <div class="digit-unit">
+          <span class="digit-num" id="edSecs">00</span>
+          <span class="digit-label">Giây</span>
+        </div>
+      </div>
+
+      <a class="btn-add-cal" 
+         target="_blank" 
+         rel="noopener noreferrer"
+         href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=%C4%90%C3%A1m+c%C6%B0%E1%BB%9Bi+D%C5%A9ng+%26+Linh&dates=20261207T040000Z/20261207T080000Z&details=L%E1%BB%85+th%C3%A0nh+h%C3%B4n+D%C5%A9ng+%26+Linh&location=H%C3%A0+N%E1%BB%99i">
+        + Lưu Vào Google Calendar
+      </a>
+    </section>
+
+    <!-- ==========================================
+         CHAPTER I: THE CEREMONY (Nghi lễ tiệc cưới)
+         ========================================== -->
+    <section class="chapter-section" aria-label="Thời gian và địa điểm">
+      <div class="chapter-header">
+        <div>
+          <span class="chapter-num">Chapter I</span>
+          <h2 class="chapter-title">Lễ Thành Hôn &amp; Tiệc Mừng</h2>
+        </div>
+        <span class="chapter-tag">Thời Gian &amp; Địa Điểm</span>
+      </div>
+
+      <div class="ceremony-spread">
+        <!-- Cột Nhà Trai -->
+        <article class="ceremony-column">
+          <div>
+            <div class="ceremony-role-badge">Nhà Trai • Tiệc Thành Hôn</div>
+            <div class="ceremony-time">11:00 Sáng</div>
+            <div class="ceremony-date-str">Chủ Nhật, ngày 07 tháng 12 năm 2026</div>
+            <div class="ceremony-divider"></div>
+            <h3 class="ceremony-location-name">Tư Gia Nhà Trai</h3>
+            <p class="ceremony-address-text">Số 00, đường ABC, phường/xã XYZ, Hà Nội</p>
+          </div>
+
+          <div class="ceremony-action-group">
+            <a href="https://www.google.com/maps/search/?api=1&query=21.0278,105.8342" target="_blank" rel="noopener noreferrer" class="btn-ed-primary">
+              <span>Chỉ Đường Maps</span>
+            </a>
+            <a href="tel:0900000000" class="btn-ed-secondary">
+              <span>Gọi Liên Hệ</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Cột Nhà Gái -->
+        <article class="ceremony-column">
+          <div>
+            <div class="ceremony-role-badge">Nhà Gái • Tiệc Vu Quy</div>
+            <div class="ceremony-time">11:00 Sáng</div>
+            <div class="ceremony-date-str">Chủ Nhật, ngày 07 tháng 12 năm 2026</div>
+            <div class="ceremony-divider"></div>
+            <h3 class="ceremony-location-name">Tư Gia Nhà Gái</h3>
+            <p class="ceremony-address-text">Số 00, đường DEF, phường/xã UVW, TP. Hồ Chí Minh</p>
+          </div>
+
+          <div class="ceremony-action-group">
+            <a href="https://www.google.com/maps/search/?api=1&query=10.7769,106.7009" target="_blank" rel="noopener noreferrer" class="btn-ed-primary">
+              <span>Chỉ Đường Maps</span>
+            </a>
+            <a href="tel:0900000000" class="btn-ed-secondary">
+              <span>Gọi Liên Hệ</span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         CHAPTER II: THE VISUAL CHRONICLE (Album ảnh nghệ thuật)
+         ========================================== -->
+    <section class="chapter-section" aria-label="Bộ sưu tập ảnh cưới">
+      <div class="chapter-header">
+        <div>
+          <span class="chapter-num">Chapter II</span>
+          <h2 class="chapter-title">The Visual Chronicle</h2>
+        </div>
+        <span class="chapter-tag">Bộ Sưu Tập Kỷ Niệm</span>
+      </div>
+
+      <div class="lookbook-grid">
+        <div class="lookbook-item lookbook-large">
+          <img src="img/08-trang-an-hero.jpg" alt="Tràng An">
+          <div class="lookbook-caption">01 — Tràng An Khúc Tình Ca</div>
+        </div>
+        <div class="lookbook-item lookbook-tall">
+          <img src="img/04-shanghai-mua.jpg" alt="Thượng Hải Mưa">
+          <div class="lookbook-caption">02 — Chiều Mưa Thượng Hải</div>
+        </div>
+        <div class="lookbook-item lookbook-tri">
+          <img src="img/06-shanghai-dem.jpg" alt="Đêm Thượng Hải">
+          <div class="lookbook-caption">03 — Đêm Đô Thị</div>
+        </div>
+        <div class="lookbook-item lookbook-tri">
+          <img src="img/03-disney-cau-hon.jpg" alt="Disneyland">
+          <div class="lookbook-caption">04 — Khoảnh Khắc Cầu Hôn</div>
+        </div>
+        <div class="lookbook-item lookbook-tri">
+          <img src="img/02-disney-phao-hoa.jpg" alt="Pháo Hoa Disneyland">
+          <div class="lookbook-caption">05 — Pháo Hoa &amp; Hẹn Ước</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         CHAPTER III: THE LOVE CHRONICLE (Ký sự tình yêu)
+         ========================================== -->
+    <section class="chapter-section" aria-label="Hành trình tình yêu">
+      <div class="chapter-header">
+        <div>
+          <span class="chapter-num">Chapter III</span>
+          <h2 class="chapter-title">Hành Trình Tình Yêu</h2>
+        </div>
+        <span class="chapter-tag">Ký Sự Tình Yêu</span>
+      </div>
+
+      <div class="chronicle-container">
+        <!-- Entry 1 -->
+        <article class="chronicle-entry">
+          <div class="chronicle-meta">
+            <span class="chronicle-year">2023</span>
+            <span class="chronicle-place">Mùa Thu • Thượng Hải</span>
+          </div>
+          <div class="chronicle-story">
+            <h4>Gặp Gỡ Tình Cờ</h4>
+            <p>Một ngày rất bình thường, ở một nơi rất bình thường — vậy mà lại trở thành khởi đầu của một điều không hề bình thường chút nào giữa hai người xa lạ.</p>
+          </div>
+          <div class="chronicle-photo-wrap">
+            <img src="img/04-shanghai-mua.jpg" alt="Gặp gỡ">
+          </div>
+        </article>
+
+        <!-- Entry 2 -->
+        <article class="chronicle-entry">
+          <div class="chronicle-meta">
+            <span class="chronicle-year">2023</span>
+            <span class="chronicle-place">Mùa Đông • Thượng Hải</span>
+          </div>
+          <div class="chronicle-story">
+            <h4>Thương Nhau Qua Năm Tháng</h4>
+            <p>Qua từng cuộc trò chuyện, từng chuyến đi cùng nhau, từng bữa cơm giản dị, hai người nhận ra mình đã trở thành thói quen không thể thiếu của nhau.</p>
+          </div>
+          <div class="chronicle-photo-wrap">
+            <img src="img/06-shanghai-dem.jpg" alt="Thương nhau">
+          </div>
+        </article>
+
+        <!-- Entry 3 -->
+        <article class="chronicle-entry">
+          <div class="chronicle-meta">
+            <span class="chronicle-year">2025</span>
+            <span class="chronicle-place">Mùa Hè • Disneyland</span>
+          </div>
+          <div class="chronicle-story">
+            <h4>Hẹn Ước Trọn Đời</h4>
+            <p>Và rồi, giữa muôn vàn ngã rẽ của cuộc đời, cả hai cùng chọn một con đường duy nhất để đi tiếp — con đường có tên là gia đình.</p>
+          </div>
+          <div class="chronicle-photo-wrap">
+            <img src="img/03-disney-cau-hon.jpg" alt="Hẹn ước">
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         CHAPTER IV: CELEBRATION & REGISTRY (Hộp Mừng Cưới & RSVP)
+         ========================================== -->
+    <section class="chapter-section" aria-label="Hộp chúc phúc và gửi lời chúc">
+      <div class="chapter-header">
+        <div>
+          <span class="chapter-num">Chapter IV</span>
+          <h2 class="chapter-title">Hộp Chúc Phúc &amp; Xác Nhận</h2>
+        </div>
+        <span class="chapter-tag">Gửi Trao Yêu Thương</span>
+      </div>
+
+      <div class="registry-spread">
+        <!-- Hộp Mừng Cưới -->
+        <article class="registry-card">
+          <h3 class="registry-card-title">Hộp Chúc Phúc</h3>
+          <p class="registry-card-desc">Tấm lòng và sự chung vui của bạn là món quà quý giá nhất dành cho đôi bạn trẻ.</p>
+
+          <div class="bank-switch-wrap">
+            <button type="button" class="bank-tab-btn active" id="edTabGroom">Chú Rể (Dũng)</button>
+            <button type="button" class="bank-tab-btn" id="edTabBride">Cô Dâu (Linh)</button>
+          </div>
+
+          <div class="bank-qr-row">
+            <img id="edQrImg" src="https://img.vietqr.io/image/MB-0900000000-compact2.png?amount=0&addInfo=Mung%20cuoi%20Dung%20Linh" alt="Mã QR mừng cưới" class="bank-qr-img">
+            <div class="bank-info-box">
+              <div class="bank-org" id="edBankOrg">MB Bank (Quân Đội)</div>
+              <div class="bank-num" id="edBankNum">0900000000</div>
+              <div class="bank-owner" id="edBankOwner">Chủ tài khoản: NGUYEN VAN DUNG</div>
+              <button type="button" class="btn-copy-acc" id="edBtnCopy">Sao Chép Số Tài Khoản</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Form RSVP -->
+        <article class="registry-card">
+          <h3 class="registry-card-title">Xác Nhận Tham Dự</h3>
+          <p class="registry-card-desc">Vui lòng để lại thông tin để gia đình tiện sắp xếp chỗ ngồi chu đáo nhất.</p>
+
+          <form class="editorial-form" id="edRsvpForm">
+            <div class="ed-field-group">
+              <label class="ed-label" for="edName">Họ &amp; Tên Của Bạn</label>
+              <input type="text" id="edName" class="ed-input" placeholder="Ví dụ: Nguyễn Văn A" required>
+            </div>
+
+            <div class="ed-field-group">
+              <label class="ed-label" for="edOption">Bạn Sẽ Đến Chung Vui Chứ?</label>
+              <select id="edOption" class="ed-select">
+                <option value="yes">Chắc chắn tham dự</option>
+                <option value="yes-couple">Tham dự cùng người thương</option>
+                <option value="no">Gửi lời chúc phúc từ xa</option>
+              </select>
+            </div>
+
+            <div class="ed-field-group">
+              <label class="ed-label" for="edWishes">Lời Chúc Gửi Dâu Rể</label>
+              <textarea id="edWishes" class="ed-textarea" rows="2" placeholder="Gửi những lời chúc tốt đẹp nhất..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-ed-submit">Gửi Lời Chúc &amp; Xác Nhận</button>
+          </form>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         MAGAZINE FOOTER (Colophon)
+         ========================================== -->
+    <footer class="mag-footer">
+      <div class="mag-footer-colophon">Dũng <em>&amp;</em> Linh</div>
+      <p class="mag-footer-credits">
+        A Story of Love, Travel and Forever • Hanoi &amp; Ho Chi Minh City • 07.12.2026
+      </p>
+    </footer>
+
+  </div><!-- /.editorial-canvas -->
+
+  <!-- Toast Notification -->
+  <div class="ed-toast" id="edToast" role="status" aria-live="polite">THÔNG BÁO</div>
+
+  <!-- Lightbox -->
+  <div class="ed-lightbox" id="edLightbox">
+    <button type="button" class="ed-lightbox-close" id="edLightboxClose">&times;</button>
+    <img src="" alt="Xem ảnh phóng to" class="ed-lightbox-img" id="edLightboxImg">
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/content.js"></script>
+  <script src="js/editorial.js"></script>
+</body>
+</html>

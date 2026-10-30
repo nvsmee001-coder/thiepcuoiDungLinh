@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Thiệp Cưới — Dũng &amp; Linh | 07.12.2026</title>
+  <meta name="description" content="Thiệp cưới điện tử nghệ thuật Dũng & Linh - 07.12.2026">
+
+  <!-- Google Fonts: Cormorant Garamond + Alex Brush + Playfair Display + Lora + Be Vietnam Pro + Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/stationery.css">
+</head>
+<body>
+
+  <!-- ==========================================
+       ROMANTIC BACKDROP: ẢNH CẶP ĐÔI RÕ NÉT + HOA RƠI
+       ========================================== -->
+  <div class="backdrop-scenery" aria-hidden="true"></div>
+  <div class="backdrop-vignette" aria-hidden="true"></div>
+  <canvas id="petalsCanvas" class="petals-canvas" aria-hidden="true"></canvas>
+
+  <!-- ==========================================
+       RIGHT EDGE BOOKMARK TABS (NHÃN DÁN MÉP PHẢI)
+       Không sidebar công nghiệp - Tinh tế như sổ tay cưới
+       ========================================== -->
+  <nav class="edge-bookmark-nav" aria-label="Nhãn dán điều hướng">
+    <div class="bookmark-tag active" data-tab="panel-invitation" title="Xem thiệp cưới chính">
+      <span class="bookmark-icon">💌</span>
+      <span class="bookmark-label">Thiệp Mời</span>
+    </div>
+    <div class="bookmark-tag" data-tab="panel-story" title="Xem câu chuyện tình yêu">
+      <span class="bookmark-icon">📖</span>
+      <span class="bookmark-label">Ký Sự</span>
+    </div>
+    <div class="bookmark-tag" data-tab="panel-gallery" title="Xem album ảnh cưới">
+      <span class="bookmark-icon">📸</span>
+      <span class="bookmark-label">Album Ảnh</span>
+    </div>
+    <div class="bookmark-tag" data-tab="panel-gift" title="Hộp mừng cưới chuyển khoản">
+      <span class="bookmark-icon">🎁</span>
+      <span class="bookmark-label">Mừng Cưới</span>
+    </div>
+    <div class="bookmark-tag" data-tab="panel-rsvp" title="Gửi lời chúc mừng">
+      <span class="bookmark-icon">✍️</span>
+      <span class="bookmark-label">Lời Chúc</span>
+    </div>
+  </nav>
+
+  <!-- Nút đĩa nhạc cổ điển góc trái (Sample 3) -->
+  <button type="button" class="corner-music-btn" id="cornerMusicBtn" title="Bật/Tắt nhạc cưới">
+    <span aria-hidden="true">♫</span>
+  </button>
+
+  <!-- ==========================================
+       CENTER STAGE: KHUNG THIỆP CHÍNH DÀY DẶN & CỨNG CÁP
+       ========================================== -->
+  <div class="wedding-stage-wrapper">
+    <div class="wedding-stationery-card">
+      <div class="card-inner-frame" aria-hidden="true"></div>
+
+      <!-- VÙNG NỘI DUNG CUỘN MƯỢT BÊN TRONG THIỆP -->
+      <main class="wedding-tab-content-area">
+
+        <!-- ------------------------------------
+             TAB 1: THIỆP CƯỚI CHÍNH
+             - Đếm ngược thời gian cổ điển
+             - Phong bì chất liệu linen thật mở sẵn kẹp 2 ảnh đứng vào lòng túi
+             - Cặp nhẫn vàng đè lên trên với 2 lớp bóng đổ thực tế
+             - Thông tin Lễ thành hôn & Bản đồ Google Maps
+             ------------------------------------ -->
+        <article class="tab-stationery-panel active" id="panel-invitation">
+          
+          <!-- ==========================================
+               1. HEADER: SAVE THE DATE & BỘ ĐẾM NGƯỢC (TINH TẾ & GỌN GÀNG)
+               ========================================== -->
+          <header class="invitation-top-header">
+            <!-- Vòng hoa màu nước tao nhã rủ xuống nhẹ nhàng -->
+            <div class="top-floral-accent" aria-hidden="true">
+              <img src="img/floral-arch.png" alt="Floral Garland" class="header-garland-img">
+            </div>
+
+            <div class="save-the-date-badge">S A V E &nbsp; T H E &nbsp; D A T E</div>
+            <div class="countdown-eyebrow">We will become husband &amp; wife in</div>
+            
+            <div class="countdown-serif-digits">
+              <div class="count-unit">
+                <span class="count-num" id="envDays">00</span>
+                <span class="count-lbl">Ngày</span>
+              </div>
+              <span class="count-sep">:</span>
+              <div class="count-unit">
+                <span class="count-num" id="envHours">00</span>
+                <span class="count-lbl">Giờ</span>
+              </div>
+              <span class="count-sep">:</span>
+              <div class="count-unit">
+                <span class="count-num" id="envMins">00</span>
+                <span class="count-lbl">Phút</span>
+              </div>
+              <span class="count-sep">:</span>
+              <div class="count-unit">
+                <span class="count-num" id="envSecs">00</span>
+                <span class="count-lbl">Giây</span>
+              </div>
+            </div>
+          </header>
+
+          <!-- ==========================================
+               2. TIÊU ĐỀ THIỆP CƯỚI: TRÂN TRỌNG BÁO TIN & LỄ THÀNH HÔN
+               ========================================== -->
+          <div class="ceremony-headline-box">
+            <div class="ceremony-eyebrow">TRÂN TRỌNG BÁO TIN &amp; KÍNH MỜI ĐẾN DỰ</div>
+            <h1 class="ceremony-main-title">Lễ Thành Hôn</h1>
+          </div>
+
+          <!-- ==========================================
+               3. BỐ CỤC ĐỐI XỨNG CÂN BẰNG (HERO):
+               CỘT TRÁI: CHÚ RỂ — CỘT GIỮA: ẢNH CHUNG & NHẪN CƯỚI — CỘT PHẢI: CÔ DÂU
+               ========================================== -->
+          <div class="symmetric-couple-stage">
+            
+            <!-- CỘT TRÁI: CHÚ RỂ (Dóng thẳng hàng xuống Tiệc Nhà Trai) -->
+            <div class="couple-side-column side-groom">
+              <span class="role-badge">CHÚ RỂ</span>
+              <div class="couple-script-name">Dũng</div>
+              <div class="couple-formal-name">NGUYỄN VĂN DŨNG</div>
+              <div class="family-relation-tag">Trưởng Nam</div>
+            </div>
+
+            <!-- CỘT GIỮA: ẢNH CHUNG 2 NGƯỜI & CẶP NHẪN VÀNG GẮN KẾT -->
+            <div class="couple-center-column">
+              <div class="center-photo-frame" title="Dũng &amp; Linh">
+                <img src="img/08-trang-an-hero.jpg" alt="Dũng &amp; Linh tại Tràng An" class="center-couple-photo">
+                <div class="photo-matte-bevel" aria-hidden="true"></div>
+              </div>
+              
+              <!-- Cặp nhẫn vàng thật đè nổi lên giao điểm 2 người -->
+              <div class="center-wedding-rings" title="Cặp nhẫn cưới vàng">
+                <img src="img/wedding-rings.png" alt="Cặp nhẫn cưới vàng" class="gold-rings-png">
+                <span class="ring-glint glint-1" aria-hidden="true"></span>
+                <span class="ring-glint glint-2" aria-hidden="true"></span>
+              </div>
+            </div>
+
+            <!-- CỘT PHẢI: CÔ DÂU (Dóng thẳng hàng xuống Tiệc Nhà Gái) -->
+            <div class="couple-side-column side-bride">
+              <span class="role-badge">CÔ DÂU</span>
+              <div class="couple-script-name">Linh</div>
+              <div class="couple-formal-name">TRẦN THỊ LINH</div>
+              <div class="family-relation-tag">Ái Nữ</div>
+            </div>
+
+          </div><!-- /.symmetric-couple-stage -->
+
+          <!-- ==========================================
+               4. NGÀY TỔ CHỨC ĐÁM CƯỚI (TRỌNG TÂM TRUNG TÂM NỔI BẬT)
+               ========================================== -->
+          <div class="wedding-date-hero-strip">
+            <div class="date-hairline-side" aria-hidden="true"></div>
+            <div class="date-content-center">
+              <div class="date-day-of-week">CHỦ NHẬT</div>
+              <div class="date-numeric-display">07 . 12 . 2026</div>
+              <div class="date-time-info">VÀO LÚC 11:00 TRƯA</div>
+              <div class="date-lunar-sub">(Nhằm ngày 29 tháng 10 năm Bính Ngọ)</div>
+            </div>
+            <div class="date-hairline-side" aria-hidden="true"></div>
+          </div>
+
+          <!-- ==========================================
+               5. ĐỊA ĐIỂM TỔ CHỨC ĐỐI XỨNG: NHÀ TRAI (TRÁI) & NHÀ GÁI (PHẢI)
+               Dóng thẳng hàng tuyệt đối với Chú rể và Cô dâu bên trên!
+               ========================================== -->
+          <div class="symmetric-venues-section">
+            <div class="venues-two-columns">
+              
+              <!-- CỘT TRÁI: TIỆC CƯỚI NHÀ TRAI (THẲNG HÀNG VỚI CHÚ RỂ) -->
+              <div class="venue-column-card venue-groom">
+                <div class="venue-party-tag">TIỆC CƯỚI NHÀ TRAI</div>
+                
+                <div class="venue-parents-info">
+                  <span class="parents-label">Song Thân Phụ Mẫu:</span>
+                  <div class="parent-name-line">Ông: <strong>NGUYỄN VĂN A</strong></div>
+                  <div class="parent-name-line">Bà: <strong>TRẦN THỊ B</strong></div>
+                </div>
+
+                <div class="venue-location-info">
+                  <span class="location-city-tag">HÀ NỘI</span>
+                  <div class="venue-hall-name">Trung Tâm Hội Nghị Trống Đồng</div>
+                  <div class="venue-address-detail">Số 65 Quán Sứ, P. Trần Hưng Đạo, Q. Hoàn Kiếm, Hà Nội</div>
+                </div>
+
+                <a href="https://www.google.com/maps/search/?api=1&query=21.0278,105.8342" target="_blank" rel="noopener noreferrer" class="btn-luxury-map">
+                  <span>Chỉ Đường Bản Đồ</span>
+                  <svg class="map-arrow-icon" viewBox="0 0 20 20" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+                </a>
+              </div>
+
+              <!-- ĐƯỜNG TRỤC CHỈ KẺ ĐỐI XỨNG DỌC (HAIRLINE DIVIDER) -->
+              <div class="venue-vertical-divider" aria-hidden="true">
+                <span class="divider-emboss-diamond">❖</span>
+              </div>
+
+              <!-- CỘT PHẢI: TIỆC CƯỚI NHÀ GÁI (THẲNG HÀNG VỚI CÔ DÂU) -->
+              <div class="venue-column-card venue-bride">
+                <div class="venue-party-tag">TIỆC CƯỚI NHÀ GÁI</div>
+                
+                <div class="venue-parents-info">
+                  <span class="parents-label">Song Thân Phụ Mẫu:</span>
+                  <div class="parent-name-line">Ông: <strong>TRẦN VĂN C</strong></div>
+                  <div class="parent-name-line">Bà: <strong>LÊ THỊ D</strong></div>
+                </div>
+
+                <div class="venue-location-info">
+                  <span class="location-city-tag">TP. HỒ CHÍ MINH</span>
+                  <div class="venue-hall-name">Trung Tâm Hội Nghị White Palace</div>
+                  <div class="venue-address-detail">194 Hoàng Văn Thụ, Phường 9, Q. Phú Nhuận, TP. Hồ Chí Minh</div>
+                </div>
+
+                <a href="https://www.google.com/maps/search/?api=1&query=10.7769,106.7009" target="_blank" rel="noopener noreferrer" class="btn-luxury-map">
+                  <span>Chỉ Đường Bản Đồ</span>
+                  <svg class="map-arrow-icon" viewBox="0 0 20 20" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+                </a>
+              </div>
+
+            </div><!-- /.venues-two-columns -->
+          </div><!-- /.symmetric-venues-section -->
+
+          <!-- ==========================================
+               6. LỜI CẢM ƠN NHẸ NHÀNG TRANG TRỌNG
+               ========================================== -->
+          <footer class="invitation-footer-quote">
+            <p class="quote-text">“Yêu nhau là chuyện cả đời — Cưới người vừa ý, yêu người mình thương”</p>
+            <p class="thanks-text">Sự hiện diện của quý khách là niềm vinh hạnh lớn nhất cho gia đình chúng tôi!</p>
+          </footer>
+
+        </article>
+
+        <!-- ------------------------------------
+             TAB 2: KÝ SỰ CHUYỆN TÌNH
+             ------------------------------------ -->
+        <article class="tab-stationery-panel tab-inner-padded" id="panel-story">
+          <div class="tab-heading-center">
+            <h3>Ký Sự Tình Yêu</h3>
+            <p>Những cột mốc trên hành trình của hai đứa mình</p>
+          </div>
+
+          <div class="story-polaroid-list">
+            <div class="story-polaroid-card">
+              <img src="img/04-shanghai-mua.jpg" alt="Thượng Hải Mùa Thu">
+              <div class="story-card-date">Mùa Thu, 2023 • Thượng Hải</div>
+              <h4 class="story-card-title">Gặp Gỡ Tình Cờ</h4>
+              <p class="story-card-body">
+                Một ngày rất bình thường, ở một nơi rất bình thường — vậy mà lại trở thành khởi đầu của một điều không hề bình thường chút nào giữa hai người xa lạ.
+              </p>
+            </div>
+
+            <div class="story-polaroid-card">
+              <img src="img/06-shanghai-dem.jpg" alt="Đêm Thượng Hải">
+              <div class="story-card-date">Mùa Đông, 2023 • Thượng Hải</div>
+              <h4 class="story-card-title">Thương Nhau Qua Năm Tháng</h4>
+              <p class="story-card-body">
+                Từng cuộc trò chuyện, từng chuyến đi cùng nhau, từng bữa cơm giản dị, hai người nhận ra mình đã trở thành thói quen không thể thiếu của nhau.
+              </p>
+            </div>
+
+            <div class="story-polaroid-card">
+              <img src="img/03-disney-cau-hon.jpg" alt="Disneyland Hẹn Ước">
+              <div class="story-card-date">Mùa Hè, 2025 • Disneyland</div>
+              <h4 class="story-card-title">Hẹn Ước Trọn Đời</h4>
+              <p class="story-card-body">
+                Dưới pháo hoa rực rỡ, cả hai cùng chọn một con đường duy nhất để đi tiếp — con đường có tên là gia đình.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- ------------------------------------
+             TAB 3: ALBUM ẢNH CƯỚI
+             ------------------------------------ -->
+        <article class="tab-stationery-panel tab-inner-padded" id="panel-gallery">
+          <div class="tab-heading-center">
+            <h3>Album Kỷ Niệm</h3>
+            <p>Chạm vào ảnh để phóng to toàn màn hình</p>
+          </div>
+
+          <div class="album-masonry-grid">
+            <div class="album-photo-frame"><img src="img/08-trang-an-hero.jpg" alt="Tràng An"></div>
+            <div class="album-photo-frame"><img src="img/01-trang-an-a.jpg" alt="Nụ cười Tràng An"></div>
+            <div class="album-photo-frame"><img src="img/04-shanghai-mua.jpg" alt="Thượng Hải Mưa"></div>
+            <div class="album-photo-frame"><img src="img/06-shanghai-dem.jpg" alt="Đêm Thượng Hải"></div>
+            <div class="album-photo-frame"><img src="img/03-disney-cau-hon.jpg" alt="Disneyland Cầu Hôn"></div>
+            <div class="album-photo-frame"><img src="img/02-disney-phao-hoa.jpg" alt="Pháo Hoa"></div>
+            <div class="album-photo-frame"><img src="img/07-trang-an-b.jpg" alt="Tràng An Mùa Thu"></div>
+            <div class="album-photo-frame"><img src="img/05-wuzhen-ma.jpg" alt="Ô Trấn"></div>
+          </div>
+        </article>
+
+        <!-- ------------------------------------
+             TAB 4: HỘP MỪNG CƯỚI (QR CODE)
+             ------------------------------------ -->
+        <article class="tab-stationery-panel tab-inner-padded" id="panel-gift">
+          <div class="tab-heading-center">
+            <h3>Hộp Chúc Phúc</h3>
+            <p>Tấm lòng của bạn là món quà quý giá nhất dành cho đôi bạn trẻ</p>
+          </div>
+
+          <div class="gift-cards-stack">
+            <!-- Chú Rể Dũng -->
+            <div class="gift-account-item">
+              <img src="https://img.vietqr.io/image/MB-0900000000-compact2.png?amount=0&addInfo=Mung%20cuoi%20Dung%20Linh" alt="Mã QR Chú Rể">
+              <div class="gift-info-texts">
+                <div class="gift-role-badge">Mừng Chú Rể (Dũng)</div>
+                <div class="gift-bank-name">MB Bank (Quân Đội)</div>
+                <div class="gift-acc-num">0900000000</div>
+                <div class="gift-holder-name">Chủ TK: NGUYEN VAN DUNG</div>
+                <button type="button" class="btn-copy-stk-mini" data-stk="0900000000">📋 Sao Chép STK</button>
+              </div>
+            </div>
+
+            <!-- Cô Dâu Linh -->
+            <div class="gift-account-item">
+              <img src="https://img.vietqr.io/image/TCB-19000000000000-compact2.png?amount=0&addInfo=Mung%20cuoi%20Dung%20Linh" alt="Mã QR Cô Dâu">
+              <div class="gift-info-texts">
+                <div class="gift-role-badge">Mừng Cô Dâu (Linh)</div>
+                <div class="gift-bank-name">Techcombank</div>
+                <div class="gift-acc-num">19000000000000</div>
+                <div class="gift-holder-name">Chủ TK: TRAN THI LINH</div>
+                <button type="button" class="btn-copy-stk-mini" data-stk="19000000000000">📋 Sao Chép STK</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ------------------------------------
+             TAB 5: SỔ LƯU BÚT & LỜI CHÚC
+             ------------------------------------ -->
+        <article class="tab-stationery-panel tab-inner-padded" id="panel-rsvp">
+          <div class="tab-heading-center">
+            <h3>Sổ Lưu Bút &amp; Xác Nhận</h3>
+            <p>Gửi những lời chúc phúc ngọt ngào đến cô dâu &amp; chú rể</p>
+          </div>
+
+          <form class="rsvp-form-elegant" id="stRsvpForm">
+            <input type="text" id="stRsvpName" placeholder="Họ và tên của bạn..." required>
+            <select id="stRsvpOption">
+              <option value="yes">Chắc chắn tham dự (1 người)</option>
+              <option value="yes-couple">Tham dự cùng người thương / gia đình</option>
+              <option value="no">Gửi lời chúc phúc từ xa</option>
+            </select>
+            <textarea id="stRsvpText" rows="2" placeholder="Viết vài dòng gửi gắm đến Dũng &amp; Linh..."></textarea>
+            <button type="submit" class="btn-send-wish">Gửi Lời Chúc Mừng ❤️</button>
+          </form>
+
+          <div style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--st-gold-dark); margin-bottom: 8px;">
+            Lời chúc từ người thương
+          </div>
+          <div class="wishes-stream-box" id="wishesStreamBox">
+            <div class="wish-item-card">
+              <div class="wish-item-header">
+                <span>Minh Anh &amp; Hoàng</span>
+                <span class="wish-item-time">1 giờ trước</span>
+              </div>
+              <p class="wish-item-text">Chúc hai bạn trăm năm hạnh phúc, mãi ngọt ngào và cùng nhau đi khắp thế gian nhé!</p>
+            </div>
+
+            <div class="wish-item-card">
+              <div class="wish-item-header">
+                <span>Tuấn Vũ</span>
+                <span class="wish-item-time">Hôm qua</span>
+              </div>
+              <p class="wish-item-text">Chúc mừng hạnh phúc Dũng &amp; Linh! Hẹn gặp hai bạn ở tiệc cưới ngày 07.12!</p>
+            </div>
+          </div>
+        </article>
+
+      </main>
+
+    </div><!-- /.wedding-stationery-card -->
+  </div><!-- /.wedding-stage-wrapper -->
+
+  <!-- Toast Message -->
+  <div class="st-toast" id="stToast" role="status" aria-live="polite">Thông báo</div>
+
+  <!-- Lightbox Gallery Modal -->
+  <div class="st-lightbox" id="stLightbox" role="dialog" aria-modal="true">
+    <button type="button" class="st-lightbox-close" id="stLightboxClose" aria-label="Đóng">&times;</button>
+    <img src="" alt="Ảnh lớn" class="st-lightbox-img" id="stLightboxImg">
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/content.js"></script>
+  <script src="js/stationery.js"></script>
+</body>
+</html>

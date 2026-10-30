@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Thiệp Cưới — Dũng &amp; Linh | 07.12.2026</title>
+  <meta name="description" content="Thiệp cưới điện tử hiện đại Dũng & Linh - Tối ưu hoàn hảo cho cả PC và Điện thoại">
+
+  <!-- Fonts: Playfair Display + Plus Jakarta Sans + Caveat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/tabs.css">
+</head>
+<body>
+
+  <!-- Nền mờ nghệ thuật phía sau trên màn hình máy tính -->
+  <div class="desktop-ambient-bg" aria-hidden="true"></div>
+
+  <!-- Khung ứng dụng chính -->
+  <div class="app-container">
+
+    <!-- ==========================================
+         CỘT TRÁI DÀNH RIÊNG CHO PC: CINEMATIC HERO (FLEX CỰC ĐẸP)
+         ========================================== -->
+    <aside class="pc-hero-showcase" aria-label="Hình ảnh cặp đôi">
+      <img src="img/08-trang-an-hero.jpg" alt="Dũng & Linh" class="pc-hero-bg">
+      <div class="pc-hero-overlay"></div>
+
+      <!-- Top info -->
+      <div class="pc-hero-top">
+        <div class="pc-monogram-pill">
+          <span>♥ Save The Date</span>
+        </div>
+        <button type="button" class="btn-music-ctrl" title="Bật/Tắt nhạc cưới">
+          <div class="music-wave" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="btn-txt">Nhạc</span>
+        </button>
+      </div>
+
+      <!-- Bottom info -->
+      <div class="pc-hero-bottom">
+        <div class="pc-hero-badge">Lễ Thành Hôn</div>
+        <h1 class="pc-hero-title">Dũng <span>&amp;</span> Linh</h1>
+        <p class="pc-hero-quote">
+          “Tình yêu là khi hai người xa lạ chọn cùng nhau viết tiếp những trang còn lại của cuộc đời mình.”
+        </p>
+
+        <!-- 4 ô đếm ngược trực tiếp trên PC -->
+        <div class="pc-countdown-strip">
+          <div class="pc-c-box">
+            <span class="pc-c-val" id="pcCDays">00</span>
+            <span class="pc-c-lbl">Ngày</span>
+          </div>
+          <div class="pc-c-box">
+            <span class="pc-c-val" id="pcCHours">00</span>
+            <span class="pc-c-lbl">Giờ</span>
+          </div>
+          <div class="pc-c-box">
+            <span class="pc-c-val" id="pcCMins">00</span>
+            <span class="pc-c-lbl">Phút</span>
+          </div>
+          <div class="pc-c-box">
+            <span class="pc-c-val" id="pcCSecs">00</span>
+            <span class="pc-c-lbl">Giây</span>
+          </div>
+        </div>
+
+        <div style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.8);">
+          🗓 Chủ Nhật, Ngày 07 Tháng 12 Năm 2026
+        </div>
+      </div>
+    </aside>
+
+    <!-- ==========================================
+         CỘT PHẢI TRÊN PC / TOÀN BỘ MÀN HÌNH TRÊN MOBILE
+         ========================================== -->
+    <div class="pc-content-stage">
+
+      <!-- HEADER CHO MOBILE -->
+      <header class="mobile-only-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="width: 28px; height: 28px; background: var(--tab-gold); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-serif); font-size: 0.75rem; font-weight: 700;">DL</div>
+          <div style="font-family: var(--font-serif); font-size: 1rem; font-weight: 600;">Dũng <span style="color: var(--tab-gold);">&amp;</span> Linh</div>
+        </div>
+        <button type="button" class="btn-music-ctrl" title="Bật/Tắt nhạc cưới">
+          <div class="music-wave" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="btn-txt">Nhạc</span>
+        </button>
+      </header>
+
+      <!-- THANH ĐIỀU HƯỚNG TAB TRÊN PC (DESKTOP TOP TAB BAR) -->
+      <nav class="desktop-nav-bar" aria-label="Điều hướng các mục">
+        <div class="desktop-tab-group">
+          <button type="button" class="desktop-tab-btn active" data-tab="tab-invitation">
+            <span>💌</span><span>Thiệp Mời</span>
+          </button>
+          <button type="button" class="desktop-tab-btn" data-tab="tab-story">
+            <span>📖</span><span>Chuyện Tình</span>
+          </button>
+          <button type="button" class="desktop-tab-btn" data-tab="tab-gallery">
+            <span>📸</span><span>Album Kỷ Niệm</span>
+          </button>
+          <button type="button" class="desktop-tab-btn" data-tab="tab-gift">
+            <span>🎁</span><span>Hộp Mừng Cưới</span>
+          </button>
+          <button type="button" class="desktop-tab-btn" data-tab="tab-rsvp">
+            <span>✍️</span><span>Sổ Lưu Bút</span>
+          </button>
+        </div>
+
+        <a class="btn-open-maps" 
+           style="background: var(--tab-gold); padding: 8px 16px; font-size: 0.78rem;" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=%C4%90%C3%A1m+c%C6%B0%E1%BB%9Bi+D%C5%A9ng+%26+Linh&dates=20261207T040000Z/20261207T080000Z&details=L%E1%BB%85+th%C3%A0nh+h%C3%B4n+D%C5%A9ng+%26+Linh&location=H%C3%A0+N%E1%BB%99i">
+          + Lưu Vào Lịch
+        </a>
+      </nav>
+
+      <!-- KHUNG HIỂN THỊ NỘI DUNG 5 TAB -->
+      <main class="desktop-stage-inner">
+
+        <!-- ----------------------------------------
+             TAB 1: THIỆP MỜI (VỪA VÀO LÀ THẤY NGAY)
+             ---------------------------------------- -->
+        <section class="tab-panel active" id="tab-invitation" aria-label="Thiệp cưới chính">
+          
+          <!-- Hero Card chỉ hiện trên Mobile (vì PC đã có cột trái) -->
+          <div class="mobile-hero-card">
+            <div class="hero-img-wrap">
+              <img src="img/08-trang-an-hero.jpg" alt="Dũng & Linh">
+              <div class="hero-img-overlay"></div>
+            </div>
+            <div class="hero-info-box">
+              <span style="font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; color: #ffd89b; font-weight: 700;">Lễ Thành Hôn</span>
+              <h1 class="hero-couple-title">Dũng <span>&amp;</span> Linh</h1>
+              <div class="hero-countdown-pill" id="heroCountdownPill">⏳ Đang đếm ngược...</div>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <h2 style="font-family: var(--font-serif); font-size: 1.6rem; color: var(--tab-text);">Lễ Thành Hôn &amp; Tiệc Mừng</h2>
+            <p style="font-size: 0.88rem; color: var(--tab-text-sub);">Trân trọng kính mời quý khách đến chung vui cùng gia đình chúng tôi</p>
+          </div>
+
+          <!-- Thông tin 2 nhà song song trên PC, xếp chồng trên Mobile -->
+          <div class="pc-two-cols" style="margin-bottom: 16px;">
+            <!-- Nhà Trai -->
+            <div class="ceremony-box">
+              <div>
+                <span class="ceremony-badge">Nhà Trai • Tiệc Thành Hôn</span>
+                <div class="ceremony-time">11:00 Trưa</div>
+                <div class="ceremony-date">Chủ Nhật, ngày 07.12.2026</div>
+                <div class="ceremony-addr">
+                  <strong>Tư gia Nhà Trai:</strong><br>
+                  Số 00, đường ABC, phường/xã XYZ, Hà Nội
+                </div>
+              </div>
+              <a href="https://www.google.com/maps/search/?api=1&query=21.0278,105.8342" target="_blank" rel="noopener noreferrer" class="btn-open-maps">
+                <span>📍 Chỉ Đường Google Maps</span>
+              </a>
+            </div>
+
+            <!-- Nhà Gái -->
+            <div class="ceremony-box">
+              <div>
+                <span class="ceremony-badge rose">Nhà Gái • Tiệc Vu Quy</span>
+                <div class="ceremony-time">11:00 Trưa</div>
+                <div class="ceremony-date">Chủ Nhật, ngày 07.12.2026</div>
+                <div class="ceremony-addr">
+                  <strong>Tư gia Nhà Gái:</strong><br>
+                  Số 00, đường DEF, phường/xã UVW, TP. Hồ Chí Minh
+                </div>
+              </div>
+              <a href="https://www.google.com/maps/search/?api=1&query=10.7769,106.7009" target="_blank" rel="noopener noreferrer" class="btn-open-maps">
+                <span>📍 Chỉ Đường Google Maps</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Card ghi chú trang trọng -->
+          <div class="tab-card" style="text-align: center; padding: 18px 24px; background: linear-gradient(145deg, #ffffff 0%, #faf6ef 100%);">
+            <p style="font-family: var(--font-serif); font-size: 1.05rem; font-style: italic; color: var(--tab-text-sub); line-height: 1.6;">
+              “Tình yêu là khi hai người xa lạ chọn cùng nhau viết tiếp những trang còn lại của cuộc đời mình.”
+            </p>
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--tab-gold-dark); margin-top: 8px; letter-spacing: 1px;">
+              SỰ HIỆN DIỆN CỦA BẠN LÀ NIỀM VINH HẠNH LỚN LAO CỦA HAI GIA ĐÌNH
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ----------------------------------------
+             TAB 2: CHUYỆN TÌNH (LOVE STORY)
+             ---------------------------------------- -->
+        <section class="tab-panel" id="tab-story" aria-label="Hành trình tình yêu">
+          <div style="margin-bottom: 20px;">
+            <h2 style="font-family: var(--font-serif); font-size: 1.6rem; color: var(--tab-text);">Những Chặng Đường Đã Qua</h2>
+            <p style="font-size: 0.88rem; color: var(--tab-text-sub);">Hành trình từ Thượng Hải đến ngày về chung một nhà</p>
+          </div>
+
+          <div class="story-timeline-grid">
+            <!-- Mốc 1 -->
+            <div class="tab-card story-card-item">
+              <img src="img/04-shanghai-mua.jpg" alt="Gặp gỡ" class="story-card-img">
+              <div class="story-card-meta">
+                <span>Mùa Thu, 2023</span>
+                <span>Thượng Hải</span>
+              </div>
+              <h3 class="story-card-title">Gặp Gỡ Tình Cờ</h3>
+              <p class="story-card-text">
+                Một ngày rất bình thường, ở một nơi rất bình thường — vậy mà lại trở thành khởi đầu của một điều không hề bình thường chút nào giữa hai người xa lạ.
+              </p>
+            </div>
+
+            <!-- Mốc 2 -->
+            <div class="tab-card story-card-item">
+              <img src="img/06-shanghai-dem.jpg" alt="Thương nhau" class="story-card-img">
+              <div class="story-card-meta">
+                <span>Mùa Đông, 2023</span>
+                <span>Thượng Hải</span>
+              </div>
+              <h3 class="story-card-title">Thương Nhau Qua Năm Tháng</h3>
+              <p class="story-card-text">
+                Qua từng cuộc trò chuyện, từng chuyến đi cùng nhau, từng bữa cơm giản dị, hai người nhận ra mình đã trở thành thói quen không thể thiếu của nhau.
+              </p>
+            </div>
+
+            <!-- Mốc 3 -->
+            <div class="tab-card story-card-item">
+              <img src="img/03-disney-cau-hon.jpg" alt="Hẹn ước" class="story-card-img">
+              <div class="story-card-meta">
+                <span>Mùa Hè, 2025</span>
+                <span>Disneyland</span>
+              </div>
+              <h3 class="story-card-title">Hẹn Ước Trọn Đời</h3>
+              <p class="story-card-text">
+                Dưới pháo hoa Disneyland rực rỡ, cả hai chọn một con đường duy nhất để cùng đi tiếp — con đường có tên là gia đình.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ----------------------------------------
+             TAB 3: ALBUM ẢNH (GALLERY)
+             ---------------------------------------- -->
+        <section class="tab-panel" id="tab-gallery" aria-label="Album ảnh cưới">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+              <h2 style="font-family: var(--font-serif); font-size: 1.6rem; color: var(--tab-text);">Khoảnh Khắc Ngọt Ngào</h2>
+              <p style="font-size: 0.88rem; color: var(--tab-text-sub);">Chạm vào ảnh để xem toàn màn hình</p>
+            </div>
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--tab-gold-dark); background: var(--tab-gold-light); padding: 5px 14px; border-radius: 9999px;">8 Bức Ảnh</span>
+          </div>
+
+          <div class="album-grid-layout">
+            <div class="album-photo-item"><img src="img/08-trang-an-hero.jpg" alt="Tràng An"></div>
+            <div class="album-photo-item"><img src="img/01-trang-an-a.jpg" alt="Nụ cười Tràng An"></div>
+            <div class="album-photo-item"><img src="img/04-shanghai-mua.jpg" alt="Thượng Hải Mưa"></div>
+            <div class="album-photo-item"><img src="img/06-shanghai-dem.jpg" alt="Đêm Thượng Hải"></div>
+            <div class="album-photo-item"><img src="img/03-disney-cau-hon.jpg" alt="Disneyland"></div>
+            <div class="album-photo-item"><img src="img/02-disney-phao-hoa.jpg" alt="Pháo hoa"></div>
+            <div class="album-photo-item"><img src="img/07-trang-an-b.jpg" alt="Tràng An mùa thu"></div>
+            <div class="album-photo-item"><img src="img/05-wuzhen-ma.jpg" alt="Ô Trấn"></div>
+          </div>
+        </section>
+
+        <!-- ----------------------------------------
+             TAB 4: MỪNG CƯỚI (GIFT / BANK QR)
+             ---------------------------------------- -->
+        <section class="tab-panel" id="tab-gift" aria-label="Hộp mừng cưới">
+          <div style="margin-bottom: 20px;">
+            <h2 style="font-family: var(--font-serif); font-size: 1.6rem; color: var(--tab-text);">Hộp Chúc Phúc</h2>
+            <p style="font-size: 0.88rem; color: var(--tab-text-sub);">Tấm lòng và lời chúc của bạn là món quà quý giá nhất đối với chúng mình</p>
+          </div>
+
+          <div class="gift-dual-grid">
+            <!-- Chú Rể Dũng -->
+            <div class="tab-card gift-card-box">
+              <span class="ceremony-badge">Mừng Chú Rể (Dũng)</span>
+              <img class="qr-code-img" src="https://img.vietqr.io/image/MB-0900000000-compact2.png?amount=0&addInfo=Mung%20cuoi%20Dung%20Linh" alt="Mã QR Chú Rể">
+              <div class="bank-info-label">Ngân Hàng MB Bank (Quân Đội)</div>
+              <div class="bank-acc-val">0900000000</div>
+              <div class="bank-holder-val">Chủ TK: NGUYEN VAN DUNG</div>
+              <button type="button" class="btn-copy-card" data-stk="0900000000">
+                <span>📋 Sao Chép STK Chú Rể</span>
+              </button>
+            </div>
+
+            <!-- Cô Dâu Linh -->
+            <div class="tab-card gift-card-box">
+              <span class="ceremony-badge rose">Mừng Cô Dâu (Linh)</span>
+              <img class="qr-code-img" src="https://img.vietqr.io/image/TCB-19000000000000-compact2.png?amount=0&addInfo=Mung%20cuoi%20Dung%20Linh" alt="Mã QR Cô Dâu">
+              <div class="bank-info-label">Ngân Hàng Techcombank</div>
+              <div class="bank-acc-val">19000000000000</div>
+              <div class="bank-holder-val">Chủ TK: TRAN THI LINH</div>
+              <button type="button" class="btn-copy-card" data-stk="19000000000000">
+                <span>📋 Sao Chép STK Cô Dâu</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ----------------------------------------
+             TAB 5: GỬI LỜI CHÚC & RSVP
+             ---------------------------------------- -->
+        <section class="tab-panel" id="tab-rsvp" aria-label="Gửi lời chúc">
+          <div style="margin-bottom: 20px;">
+            <h2 style="font-family: var(--font-serif); font-size: 1.6rem; color: var(--tab-text);">Sổ Lưu Bút &amp; Xác Nhận Tham Dự</h2>
+            <p style="font-size: 0.88rem; color: var(--tab-text-sub);">Hãy để lại lời chúc ngọt ngào để chúng mình lưu giữ kỷ niệm nhé!</p>
+          </div>
+
+          <div class="rsvp-two-cols">
+            <!-- Cột Form -->
+            <div class="tab-card">
+              <form class="rsvp-form-card" id="appRsvpForm">
+                <div>
+                  <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--tab-gold-dark); margin-bottom: 4px; display: block;">Họ &amp; Tên Bạn</label>
+                  <input type="text" id="rsvpName" class="rsvp-input" style="width: 100%;" placeholder="Ví dụ: Hoàng Minh" required>
+                </div>
+                
+                <div>
+                  <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--tab-gold-dark); margin-bottom: 4px; display: block;">Bạn Sẽ Tham Dự Chứ?</label>
+                  <select id="rsvpOption" class="rsvp-select" style="width: 100%;">
+                    <option value="yes">Chắc chắn tham dự (1 người)</option>
+                    <option value="yes-plus">Tham dự cùng người thương / gia đình</option>
+                    <option value="no">Gửi lời chúc phúc từ xa</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--tab-gold-dark); margin-bottom: 4px; display: block;">Lời Chúc Gửi Dâu Rể</label>
+                  <textarea id="rsvpText" class="rsvp-textarea" style="width: 100%;" rows="3" placeholder="Gửi những lời chúc tốt lành nhất..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit-tab-rsvp">
+                  <span>Gửi Lời Chúc &amp; Xác Nhận ❤️</span>
+                </button>
+              </form>
+            </div>
+
+            <!-- Cột Danh sách lời chúc -->
+            <div>
+              <div style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--tab-gold-dark); margin-bottom: 10px;">
+                Lời chúc gần đây
+              </div>
+              <div id="wishesPreviewList">
+                <div class="wish-bubble">
+                  <div class="wish-bubble-author">
+                    <span>Minh Anh &amp; Hoàng</span>
+                    <span class="wish-bubble-time">1 giờ trước</span>
+                  </div>
+                  <p class="wish-bubble-text">Chúc hai bạn trăm năm hạnh phúc, mãi ngọt ngào và cùng nhau đi khắp thế gian nhé!</p>
+                </div>
+
+                <div class="wish-bubble">
+                  <div class="wish-bubble-author">
+                    <span>Tuấn Vũ</span>
+                    <span class="wish-bubble-time">Hôm qua</span>
+                  </div>
+                  <p class="wish-bubble-text">Chúc mừng hạnh phúc Dũng &amp; Linh! Hẹn gặp hai bạn ở tiệc cưới ngày 07.12!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- BOTTOM NAVIGATION BAR (DÀNH CHO MOBILE) -->
+      <nav class="mobile-only-nav" aria-label="Thanh điều hướng di động">
+        <button type="button" class="nav-tab-item active" data-tab="tab-invitation">
+          <span class="nav-icon">💌</span>
+          <span class="nav-label">Thiệp</span>
+        </button>
+        <button type="button" class="nav-tab-item" data-tab="tab-story">
+          <span class="nav-icon">📖</span>
+          <span class="nav-label">Chuyện Tình</span>
+        </button>
+        <button type="button" class="nav-tab-item" data-tab="tab-gallery">
+          <span class="nav-icon">📸</span>
+          <span class="nav-label">Album</span>
+        </button>
+        <button type="button" class="nav-tab-item" data-tab="tab-gift">
+          <span class="nav-icon">🎁</span>
+          <span class="nav-label">Mừng Cưới</span>
+        </button>
+        <button type="button" class="nav-tab-item" data-tab="tab-rsvp">
+          <span class="nav-icon">✍️</span>
+          <span class="nav-label">Lời Chúc</span>
+        </button>
+      </nav>
+
+    </div><!-- /.pc-content-stage -->
+
+  </div><!-- /.app-container -->
+
+  <!-- Toast Message -->
+  <div class="app-toast" id="appToast" role="status" aria-live="polite">Thông báo</div>
+
+  <!-- Lightbox Gallery Modal -->
+  <div class="app-lightbox" id="appLightbox" role="dialog" aria-modal="true">
+    <button type="button" class="app-lightbox-close" id="appLightboxClose" aria-label="Đóng">&times;</button>
+    <img src="" alt="Ảnh lớn" class="app-lightbox-img" id="appLightboxImg">
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/content.js"></script>
+  <script src="js/tabs.js"></script>
+</body>
+</html>

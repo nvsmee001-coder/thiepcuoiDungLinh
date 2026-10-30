@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thiệp Cưới — Dũng &amp; Linh | 07.12.2026</title>
+  <meta name="description" content="Chạm mở phong bì thiệp cưới điện tử Dũng & Linh - 07.12.2026">
+
+  <!-- Google Fonts: Playfair Display + Great Vibes + Plus Jakarta Sans + Lora -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Style 1: Envelope CSS riêng biệt -->
+  <link rel="stylesheet" href="css/envelope.css">
+</head>
+<body>
+
+  <!-- ==========================================
+       SCREEN 1: CHẠM MỞ PHONG BÌ 3D
+       ========================================== -->
+  <section class="envelope-screen" id="envelopeScreen" aria-label="Mở phong bì">
+    <div class="env-prompt-header">
+      <div class="env-prompt-eyebrow">Trân Trọng Kính Mời</div>
+      <h1 class="env-prompt-title">Dũng &amp; Linh</h1>
+      <div class="env-tap-hint">
+        <span>✉️ Chạm vào phong bì để mở thiệp</span>
+      </div>
+    </div>
+
+    <!-- 3D Envelope Wrapper -->
+    <div class="envelope-wrapper" id="envelopeWrapper" role="button" tabindex="0" title="Chạm để mở thiệp">
+      <div class="envelope-box">
+        <!-- Lót hoa văn bên trong phong bì -->
+        <div class="envelope-lining"></div>
+
+        <!-- Lá thiệp bên trong chuẩn bị trượt ra -->
+        <div class="envelope-card-preview">
+          <span class="card-prev-tag">Lễ Thành Hôn</span>
+          <div class="card-prev-names">Dũng &amp; Linh</div>
+          <div class="card-prev-date">07 . 12 . 2026</div>
+        </div>
+
+        <!-- Các nếp gập phong bì -->
+        <div class="envelope-pocket">
+          <div class="pocket-left"></div>
+          <div class="pocket-right"></div>
+          <div class="pocket-bottom"></div>
+        </div>
+
+        <!-- Nắp phong bì mở ngược lên -->
+        <div class="envelope-flap"></div>
+
+        <!-- Con dấu sáp niêm phong đỏ -->
+        <div class="wax-seal">
+          <span class="seal-monogram">D&amp;L</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SCREEN 2: CHI TIẾT THIỆP CƯỚI (Sau khi mở)
+       ========================================== -->
+  <main class="main-invitation">
+
+    <!-- Thanh nút tiện ích góc trên -->
+    <div class="invitation-top-ctrl">
+      <button type="button" class="reopen-btn" id="btnReopen" title="Đóng và mở lại phong bì">
+        <span>✉️ Xem lại phong bì</span>
+      </button>
+
+      <button type="button" class="music-btn" id="envMusicBtn" title="Bật/Tắt nhạc cưới">
+        <span>🎵</span>
+        <span class="btn-label">Nhạc cưới</span>
+      </button>
+    </div>
+
+    <!-- Tấm thiệp chính viền chỉ vàng sang trọng -->
+    <article class="ceremony-card">
+      <div class="card-gold-border"></div>
+      <div class="card-gold-corner corner-tl"></div>
+      <div class="card-gold-corner corner-tr"></div>
+      <div class="card-gold-corner corner-bl"></div>
+      <div class="card-gold-corner corner-br"></div>
+
+      <header class="card-header-ornament">
+        <span class="card-ceremony-tag">Save The Date • 07.12.2026</span>
+        <h2 class="card-main-title">Lễ Thành Hôn</h2>
+        <div class="card-couple-calligraphy">Dũng &amp; Linh</div>
+        <p class="card-couple-quote">
+          “Tình yêu là khi hai người xa lạ chọn cùng nhau viết tiếp những trang còn lại của cuộc đời mình.”
+        </p>
+      </header>
+
+      <!-- Khung ảnh kỷ niệm cặp đôi -->
+      <div class="card-photo-frame">
+        <img src="img/08-trang-an-hero.jpg" alt="Dũng & Linh">
+      </div>
+
+      <!-- Hai nhà trai & gái -->
+      <div class="event-spread-grid">
+        <div class="event-box">
+          <div>
+            <span class="event-family-tag">Nhà Trai • Tiệc Thành Hôn</span>
+            <div class="event-time-highlight">11:00 Trưa</div>
+            <div class="event-date-sub">Chủ Nhật, ngày 07.12.2026</div>
+            <p class="event-address-info">Số 00, đường ABC, phường/xã XYZ, Hà Nội</p>
+          </div>
+          <a href="https://www.google.com/maps/search/?api=1&query=21.0278,105.8342" target="_blank" rel="noopener noreferrer" class="btn-open-maps">
+            <span>📍 Mở Google Maps</span>
+          </a>
+        </div>
+
+        <div class="event-box">
+          <div>
+            <span class="event-family-tag">Nhà Gái • Tiệc Vu Quy</span>
+            <div class="event-time-highlight">11:00 Trưa</div>
+            <div class="event-date-sub">Chủ Nhật, ngày 07.12.2026</div>
+            <p class="event-address-info">Số 00, đường DEF, phường/xã UVW, TP. Hồ Chí Minh</p>
+          </div>
+          <a href="https://www.google.com/maps/search/?api=1&query=10.7769,106.7009" target="_blank" rel="noopener noreferrer" class="btn-open-maps">
+            <span>📍 Mở Google Maps</span>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Đồng hồ đếm ngược -->
+    <section class="envelope-countdown-card" aria-label="Đếm ngược ngày cưới">
+      <div class="count-info">
+        <h4>Đếm Ngược Ngày Cưới</h4>
+        <p>Cùng đếm ngược khoảnh khắc hạnh phúc</p>
+      </div>
+
+      <div class="count-numbers-row">
+        <div class="count-digit-box">
+          <span class="val" id="envDays">00</span>
+          <span class="lbl">Ngày</span>
+        </div>
+        <div class="count-digit-box">
+          <span class="val" id="envHours">00</span>
+          <span class="lbl">Giờ</span>
+        </div>
+        <div class="count-digit-box">
+          <span class="val" id="envMins">00</span>
+          <span class="lbl">Phút</span>
+        </div>
+        <div class="count-digit-box">
+          <span class="val" id="envSecs">00</span>
+          <span class="lbl">Giây</span>
+        </div>
+      </div>
+
+      <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=%C4%90%C3%A1m+c%C6%B0%E1%BB%9Bi+D%C5%A9ng+%26+Linh&dates=20261207T040000Z/20261207T080000Z&details=L%E1%BB%85+th%C3%A0nh+h%C3%B4n+D%C5%A9ng+%26+Linh&location=H%C3%A0+N%E1%BB%99i" 
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="btn-open-maps">
+        + Lưu Vào Lịch
+      </a>
+    </section>
+
+    <!-- Album ảnh cưới -->
+    <section aria-label="Album ảnh kỷ niệm">
+      <div class="envelope-section-title">
+        <span class="section-tag">Khoảnh Khắc Đẹp</span>
+        <h3 class="section-h3">Album Kỷ Niệm</h3>
+      </div>
+
+      <div class="envelope-gallery-grid">
+        <div class="gallery-card-item"><img src="img/08-trang-an-hero.jpg" alt="Tràng An"></div>
+        <div class="gallery-card-item"><img src="img/04-shanghai-mua.jpg" alt="Thượng Hải Mưa"></div>
+        <div class="gallery-card-item"><img src="img/06-shanghai-dem.jpg" alt="Đêm Thượng Hải"></div>
+        <div class="gallery-card-item"><img src="img/03-disney-cau-hon.jpg" alt="Cầu Hôn Disney"></div>
+        <div class="gallery-card-item"><img src="img/02-disney-phao-hoa.jpg" alt="Pháo Hoa"></div>
+        <div class="gallery-card-item"><img src="img/07-trang-an-b.jpg" alt="Tràng An"></div>
+      </div>
+    </section>
+
+    <!-- Hộp mừng cưới & RSVP song song -->
+    <section class="dual-interaction-grid" aria-label="Mừng cưới và xác nhận">
+      <!-- Cột Mừng Cưới -->
+      <div class="interaction-box">
+        <span class="section-tag">Hộp Chúc Phúc</span>
+        <h4 style="font-family: var(--font-serif); font-size: 1.35rem; margin-top: 4px;">Mừng Cưới</h4>
+        
+        <div class="gift-tab-row">
+          <button type="button" class="tab-btn active" id="envTabGroom">Chú Rể (Dũng)</button>
+          <button type="button" class="tab-btn" id="envTabBride">Cô Dâu (Linh)</button>
+        </div>
+
+        <div class="qr-detail-flex">
+          <img id="envQrImg" src="https://img.vietqr.io/image/MB-0900000000-compact2.png?amount=0&addInfo=Mung%20cuoi%20Dung%20Linh" alt="Mã QR mừng cưới">
+          <div class="qr-text-side">
+            <div id="envBankTitle" style="font-size: 0.85rem; font-weight: 700; color: var(--env-text);">MB Bank (Quân Đội)</div>
+            <div id="envBankNum" style="font-family: monospace; font-size: 1.05rem; font-weight: 700; color: var(--env-gold); margin: 3px 0;">0900000000</div>
+            <div id="envBankOwner" style="font-size: 0.78rem; color: var(--env-text-sub);">Chủ TK: NGUYEN VAN DUNG</div>
+            <button type="button" class="btn-copy-stk" id="envBtnCopy">Sao chép STK</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cột RSVP -->
+      <div class="interaction-box">
+        <span class="section-tag">Gửi Lời Chúc</span>
+        <h4 style="font-family: var(--font-serif); font-size: 1.35rem; margin-top: 4px;">Xác Nhận Tham Dự</h4>
+        
+        <form class="rsvp-env-form" id="envRsvpForm">
+          <input type="text" id="envName" placeholder="Tên của bạn..." required>
+          <select id="envSelect">
+            <option value="yes">Chắc chắn tham dự</option>
+            <option value="yes-2">Tham dự cùng người thân</option>
+            <option value="no">Gửi lời chúc mừng từ xa</option>
+          </select>
+          <textarea id="envWishes" rows="2" placeholder="Gửi lời chúc yêu thương đến dâu rể..."></textarea>
+          <button type="submit" class="btn-submit-env-rsvp">Gửi Lời Chúc</button>
+        </form>
+      </div>
+    </section>
+
+    <footer style="text-align: center; margin-top: 40px; color: var(--env-text-sub); font-size: 0.88rem;">
+      <div style="font-family: var(--font-script); font-size: 2.2rem; color: var(--env-gold); margin-bottom: 4px;">Dũng &amp; Linh</div>
+      <p>Trân trọng cảm ơn sự hiện diện và lời chúc phúc của bạn! • 07.12.2026</p>
+    </footer>
+
+  </main>
+
+  <!-- Toast -->
+  <div class="env-toast" id="envToast" role="status" aria-live="polite">Thông báo</div>
+
+  <!-- Scripts -->
+  <script src="js/content.js"></script>
+  <script src="js/envelope.js"></script>
+</body>
+</html>

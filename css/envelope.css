@@ -1,0 +1,778 @@
+/* ==========================================================================
+   STYLE 1: INTERACTIVE ENVELOPE THEME — DŨNG & LINH
+   Concept: Chạm mở phong bì ảo (Virtual Envelope Opening) -> Khám phá thiệp cưới
+   Palette: Warm Pearl, Textured Parchment, Gold Foil, Terracotta Wax Seal
+   ========================================================================== */
+
+:root {
+  --env-bg: #f5f1eb;
+  --env-bg-grad: radial-gradient(circle at 50% 30%, #fbf9f5 0%, #ebe4d8 100%);
+  --env-paper: #f8f5ee;
+  --env-paper-shadow: 0 20px 50px rgba(50, 40, 30, 0.14);
+  --env-flap-color: #ede6d8;
+  --env-pocket-color: #f2ebdE;
+  --env-liner: #e5dac7;
+  --env-seal: #a84238;
+  --env-seal-gold: #c69c57;
+  --env-gold: #c19a58;
+  --env-gold-light: #f7f1e5;
+  --env-text: #2c2521;
+  --env-text-sub: #6c6258;
+  --env-border: #ded4c3;
+
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-script: "Great Vibes", cursive;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-body: "Lora", Georgia, serif;
+
+  --trans-bounce: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --trans-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Base reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--env-bg);
+  background-image: var(--env-bg-grad);
+  background-attachment: fixed;
+  color: var(--env-text);
+  line-height: 1.6;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   SCREEN 1: THE VIRTUAL ENVELOPE MODAL / HERO
+   ========================================================================== */
+.envelope-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--env-bg);
+  background-image: var(--env-bg-grad);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.envelope-screen.opened-complete {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.env-prompt-header {
+  text-align: center;
+  margin-bottom: 28px;
+  transition: opacity 0.4s;
+}
+
+.env-prompt-eyebrow {
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--env-gold);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.env-prompt-title {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--env-text);
+}
+
+.env-tap-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 0.82rem;
+  color: var(--env-text-sub);
+  background: rgba(255, 255, 255, 0.7);
+  padding: 6px 16px;
+  border-radius: 9999px;
+  border: 1px solid var(--env-border);
+  animation: pulseHint 2s infinite ease-in-out;
+}
+
+@keyframes pulseHint {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* 3D Envelope Wrapper */
+.envelope-wrapper {
+  perspective: 1200px;
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  aspect-ratio: 4 / 2.8;
+  cursor: pointer;
+  user-select: none;
+}
+
+.envelope-box {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--env-paper);
+  border-radius: 6px;
+  box-shadow: var(--env-paper-shadow);
+  border: 1px solid var(--env-border);
+  transform-style: preserve-3d;
+}
+
+/* Envelope Interior Foil Lining */
+.envelope-lining {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #e8dcc7 25%, #dfd1b8 25%, #dfd1b8 50%, #e8dcc7 50%, #e8dcc7 75%, #dfd1b8 75%);
+  background-size: 24px 24px;
+  border-radius: 6px;
+  opacity: 0.6;
+}
+
+/* Card peaking inside envelope */
+.envelope-card-preview {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  right: 20px;
+  bottom: 15px;
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5dcce;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  z-index: 2;
+  transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.envelope-wrapper.opening .envelope-card-preview {
+  transform: translateY(-80px) scale(1.05);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+  z-index: 10;
+}
+
+.card-prev-tag {
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--env-gold);
+  font-weight: 700;
+}
+
+.card-prev-names {
+  font-family: var(--font-script);
+  font-size: 2.5rem;
+  color: var(--env-text);
+  line-height: 1.1;
+  margin: 4px 0;
+}
+
+.card-prev-date {
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  letter-spacing: 1.5px;
+  color: var(--env-text-sub);
+}
+
+/* Envelope Bottom and Side Pockets (SVG / Clip Path style) */
+.envelope-pocket {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.pocket-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 50%;
+  background: var(--env-pocket-color);
+  clip-path: polygon(0 0, 0 100%, 100% 100%);
+  border-radius: 0 0 0 6px;
+  box-shadow: 2px -2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.pocket-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 50%;
+  background: var(--env-pocket-color);
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  border-radius: 0 0 6px 0;
+  box-shadow: -2px -2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.pocket-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: #f4eee2;
+  clip-path: polygon(0 100%, 50% 20%, 100% 100%);
+  border-radius: 0 0 6px 6px;
+  border-top: 1px solid rgba(220, 210, 195, 0.4);
+}
+
+/* Envelope Flap (Nắp phong bì gập mở 3D) */
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 62%;
+  background: var(--env-flap-color);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center;
+  z-index: 5;
+  transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+}
+
+.envelope-wrapper.opening .envelope-flap {
+  transform: rotateX(180deg);
+  z-index: 1;
+}
+
+/* Wax Seal (Con dấu sáp đỏ) */
+.wax-seal {
+  position: absolute;
+  top: 54%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 54px;
+  height: 54px;
+  background: radial-gradient(circle at 35% 35%, #c85348 0%, var(--env-seal) 70%, #7d261e 100%);
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(80, 20, 15, 0.35), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 6;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.seal-monogram {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffeedb;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.envelope-wrapper.opening .wax-seal {
+  transform: translate(-50%, -50%) scale(1.15);
+  opacity: 0;
+}
+
+/* ==========================================================================
+   SCREEN 2: MAIN WEDDING INVITATION PAGE (Sau khi mở phong bì)
+   ========================================================================== */
+.main-invitation {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 30px 20px 80px 20px;
+  position: relative;
+  z-index: 10;
+}
+
+/* Floating Controls (Top right) */
+.invitation-top-ctrl {
+  position: sticky;
+  top: 16px;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.reopen-btn,
+.music-btn {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--env-border);
+  color: var(--env-text);
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  transition: var(--trans-smooth);
+}
+
+.reopen-btn:hover,
+.music-btn:hover {
+  background: #ffffff;
+  border-color: var(--env-gold);
+  transform: translateY(-2px);
+}
+
+.music-btn.playing {
+  border-color: var(--env-gold);
+  color: var(--env-gold);
+}
+
+/* Main Golden Foil Wedding Card */
+.ceremony-card {
+  background: #ffffff;
+  border: 1px solid var(--env-border);
+  border-radius: 12px;
+  box-shadow: 0 16px 50px rgba(50, 40, 30, 0.08);
+  padding: 44px 36px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 36px;
+}
+
+.card-gold-border {
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(193, 154, 88, 0.4);
+  pointer-events: none;
+  border-radius: 6px;
+}
+
+.card-gold-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--env-gold);
+}
+.corner-tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+.corner-tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+.corner-bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+.corner-br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+.card-header-ornament {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.card-ceremony-tag {
+  font-size: 0.78rem;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--env-gold);
+  font-weight: 700;
+}
+
+.card-main-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-weight: 500;
+  color: var(--env-text);
+  margin: 6px 0;
+}
+
+.card-couple-calligraphy {
+  font-family: var(--font-script);
+  font-size: clamp(3.2rem, 7vw, 4.8rem);
+  color: var(--env-gold);
+  line-height: 1;
+  margin: 12px 0 16px 0;
+  text-align: center;
+}
+
+.card-couple-quote {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--env-text-sub);
+  max-width: 580px;
+  margin: 0 auto 30px auto;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* Couple Hero Photo Frame */
+.card-photo-frame {
+  max-width: 620px;
+  margin: 0 auto 34px auto;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--env-border);
+  aspect-ratio: 16 / 10;
+}
+
+.card-photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+
+/* Event Locations Grid (Nhà Trai & Nhà Gái) */
+.event-spread-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 30px;
+}
+
+.event-box {
+  background: var(--env-paper);
+  border: 1px solid var(--env-border);
+  border-radius: 8px;
+  padding: 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.event-family-tag {
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--env-gold);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.event-time-highlight {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--env-text);
+}
+
+.event-date-sub {
+  font-size: 0.85rem;
+  color: var(--env-text-sub);
+  margin-bottom: 14px;
+}
+
+.event-address-info {
+  font-size: 0.88rem;
+  color: var(--env-text);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.btn-open-maps {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--env-text);
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--trans-smooth);
+}
+
+.btn-open-maps:hover {
+  background: var(--env-gold);
+  transform: translateY(-2px);
+}
+
+/* Countdown Card */
+.envelope-countdown-card {
+  background: #ffffff;
+  border: 1px solid var(--env-border);
+  border-radius: 12px;
+  padding: 24px 30px;
+  margin-bottom: 36px;
+  box-shadow: 0 10px 30px rgba(50, 40, 30, 0.04);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.count-info h4 {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  color: var(--env-text);
+}
+
+.count-info p {
+  font-size: 0.85rem;
+  color: var(--env-text-sub);
+}
+
+.count-numbers-row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.count-digit-box {
+  background: var(--env-paper);
+  border: 1px solid var(--env-border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  text-align: center;
+  min-width: 60px;
+}
+
+.count-digit-box .val {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--env-gold);
+  line-height: 1;
+  display: block;
+}
+
+.count-digit-box .lbl {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: var(--env-text-sub);
+  letter-spacing: 1px;
+}
+
+/* Gallery & Story Section */
+.envelope-section-title {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.section-tag {
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--env-gold);
+  font-weight: 700;
+}
+
+.section-h3 {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  color: var(--env-text);
+}
+
+.envelope-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.gallery-card-item {
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--env-border);
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.gallery-card-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.gallery-card-item:hover img {
+  transform: scale(1.08);
+}
+
+/* Gift & RSVP Dual Card */
+.dual-interaction-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.interaction-box {
+  background: #ffffff;
+  border: 1px solid var(--env-border);
+  border-radius: 12px;
+  padding: 26px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.gift-tab-row {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid var(--env-border);
+  background: var(--env-paper);
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--env-text-sub);
+  cursor: pointer;
+  transition: var(--trans-smooth);
+}
+
+.tab-btn.active {
+  background: var(--env-text);
+  color: #ffffff;
+  border-color: var(--env-text);
+}
+
+.qr-detail-flex {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  background: var(--env-paper);
+  padding: 14px;
+  border-radius: 8px;
+}
+
+.qr-detail-flex img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  background: #ffffff;
+  border: 1px solid var(--env-border);
+  padding: 4px;
+}
+
+.qr-text-side {
+  flex: 1;
+}
+
+.btn-copy-stk {
+  margin-top: 8px;
+  background: var(--env-gold);
+  color: #ffffff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--trans-smooth);
+}
+
+.btn-copy-stk:hover {
+  background: #9f7d43;
+}
+
+/* Form */
+.rsvp-env-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.rsvp-env-form input,
+.rsvp-env-form select,
+.rsvp-env-form textarea {
+  font-family: inherit;
+  font-size: 0.88rem;
+  padding: 10px 14px;
+  border: 1px solid var(--env-border);
+  border-radius: 6px;
+  outline: none;
+  background: var(--env-paper);
+}
+
+.rsvp-env-form input:focus,
+.rsvp-env-form select:focus,
+.rsvp-env-form textarea:focus {
+  border-color: var(--env-gold);
+  background: #ffffff;
+}
+
+.btn-submit-env-rsvp {
+  background: var(--env-gold);
+  color: #ffffff;
+  border: none;
+  padding: 11px;
+  border-radius: 9999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--trans-smooth);
+}
+
+.btn-submit-env-rsvp:hover {
+  background: #9f7d43;
+}
+
+/* Toast */
+.env-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--env-text);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  z-index: 2000;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.35s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.env-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .event-spread-grid,
+  .dual-interaction-grid {
+    grid-template-columns: 1fr;
+  }
+  .envelope-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .envelope-countdown-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  .ceremony-card {
+    padding: 30px 18px;
+  }
+}

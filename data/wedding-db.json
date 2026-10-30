@@ -1,0 +1,181 @@
+{
+  "couple": {
+    "groomName": "Dũng",
+    "brideName": "Linh",
+    "eyebrow": "✦ CÙNG VỚI GIA ĐÌNH HAI BÊN • LỄ THÀNH HÔN ✦",
+    "invitationText": "Trân trọng kính mời quý khách đến chung vui cùng gia đình chúng mình",
+    "signatureQuote": "“Một hành trình mới • Trọn vẹn yêu thương”",
+    "heroBackdrop": "img/08-trang-an-hero.jpg",
+    "detailsBackdrop": "img/album/cropped-detailsBackdrop-1793335929516-01.jpg",
+    "leftFramePhoto": "img/wedding-photo-card-left.jpg",
+    "leftFramePlaque": "✦ DŨNG • LINH ✦",
+    "rightFramePhoto": "img/wedding-photo-card-right.jpg",
+    "rightFramePlaque": "✦ 07 . 12 . 2026 ✦"
+  },
+  "date": {
+    "isoTarget": "2026-12-07T11:00:00+07:00",
+    "dayOfWeek": "CHỦ NHẬT",
+    "dayNumber": "07",
+    "monthLabel": "THÁNG 12",
+    "yearLabel": "2026",
+    "eventLabel": "THÀNH HÔN",
+    "lunarDate": "(Nhằm ngày 29 tháng 10 năm Bính Ngọ)",
+    "shortDatePill": "Chủ Nhật • 07.12.2026",
+    "shortLunarPill": "(29.10 Bính Ngọ)"
+  },
+  "venues": {
+    "groom": {
+      "badgeCover": "❖ HÔN LỄ NHÀ TRAI",
+      "badgeMap": "❖ HÔN LỄ NHÀ TRAI • 11:00 TRƯA (07.12.2026)",
+      "nameShort": "Trống Đồng Palace",
+      "nameFull": "Trống Đồng Palace — Hà Nội",
+      "cityShort": "Cầu Giấy • Hà Nội",
+      "timeCover": "11:00 Trưa • 07.12.2026",
+      "parents": "Ông Nguyễn Văn A & Bà Trần Thị B",
+      "address": "Số 65 Quán Sứ / Cầu Giấy, TP. Hà Nội",
+      "mapLink": "https://maps.google.com/?q=65+Quán+Sứ,+Hoàn+Kiếm,+Hà+Nội",
+      "mapEmbed": "https://maps.google.com/maps?q=65+Qu%C3%A1n+S%E1%BB%A9,+Ho%C3%A0n+Ki%E1%BA%BFm,+H%C3%A0+N%E1%BB%99i&t=&z=15&ie=UTF8&iwloc=&output=embed"
+    },
+    "bride": {
+      "badgeCover": "❖ VU QUY NHÀ GÁI",
+      "badgeMap": "❖ VU QUY NHÀ GÁI • 18:00 TỐI (07.12.2026)",
+      "nameShort": "White Palace",
+      "nameFull": "White Palace — TP. Hồ Chí Minh",
+      "cityShort": "Hoàng Văn Thụ • TP. HCM",
+      "timeCover": "18:00 Tối • 07.12.2026",
+      "parents": "Ông Trần Văn C & Bà Lê Thị D",
+      "address": "194 Hoàng Văn Thụ, Phường 9, Q. Phú Nhuận, TP. HCM",
+      "mapLink": "https://maps.google.com/?q=194+Hoàng+Văn+Thụ,+Phú+Nhuận,+Hồ+Chí+Minh",
+      "mapEmbed": "https://maps.google.com/maps?q=194+Ho%C3%A0ng+V%C4%83n+Th%E1%BB%A5,+Ph%C3%BA+Nhu%E1%BA%ADn,+H%E1%BB%93+Ch%C3%AD+Minh&t=&z=15&ie=UTF8&iwloc=&output=embed"
+    }
+  },
+  "checklist": [
+    {
+      "text": "Chọn ngày 07.12",
+      "done": true
+    },
+    {
+      "text": "09:00 Lễ Ăn Hỏi",
+      "done": true
+    },
+    {
+      "text": "11:00 Tiệc Cưới",
+      "done": true
+    },
+    {
+      "text": "Đón dâu & Bản đồ",
+      "done": false
+    }
+  ],
+  "menu": {
+    "eyebrow": "ROYAL BANQUET • ẨM THỰC ĐÃI TIỆC",
+    "heading": "Thực Đơn Tiệc Cưới",
+    "subNote": "Hương vị tinh tuyển chiêu đãi quan viên hai họ & quý khách",
+    "courses": [
+      {
+        "name": "Khai Vị Tam Hợp Hoàng Kim",
+        "tag": "Khai Vị",
+        "desc": "Súp Bào Ngư Vi Cá • Gỏi Ngó Sen Tôm Thịt • Chả Giò Hải Sản"
+      },
+      {
+        "name": "Tôm Hùm Bỏ Lò Phô Mai Pháp",
+        "tag": "Hải Sản",
+        "desc": "Tôm hùm tươi đút lò béo ngậy dùng kèm bánh mì bơ tỏi"
+      },
+      {
+        "name": "Bò Mỹ Áp Chảo Sốt Nấm Truffle",
+        "tag": "Món Chính",
+        "desc": "Thăn ngoại bò Mỹ mềm mọng dùng kèm măng tây & khoai nghiền"
+      },
+      {
+        "name": "Cá Song Hấp Xì Dầu Hồng Kông",
+        "tag": "Món Chính",
+        "desc": "Cá song biển tươi hấp gừng hành & nước tương thượng hạng"
+      },
+      {
+        "name": "Gà Đông Tảo Hầm Hạt Sen & Táo Đỏ",
+        "tag": "Món Tần",
+        "desc": "Món tần bổ dưỡng thanh ngọt hầm cùng nấm hương rừng"
+      },
+      {
+        "name": "Lẩu Thái Hải Sản & Cơm Chiên",
+        "tag": "Món Nóng",
+        "desc": "Cơm chiên Dương Châu dùng kèm lẩu hải sản & rau nấm theo mùa"
+      },
+      {
+        "name": "Chè Hạt Sen Long Nhãn & Đồ Uống",
+        "tag": "Tráng Miệng",
+        "desc": "Trái cây nhiệt đới • Rượu Vang Đỏ, Bia tươi & Nước ngọt suốt tiệc"
+      }
+    ]
+  },
+  "schedule": {
+    "eyebrow": "WEDDING PROGRAM • NGÀY CHUNG ĐÔI",
+    "heading": "Lịch Trình & Chi Tiết",
+    "events": [
+      {
+        "time": "07:30",
+        "title": "Lễ Ăn Hỏi & Nghi Thức Rước Dâu",
+        "desc": "Họ nhà trai trao tráp sính lễ và đón dâu trang trọng tại tư gia nhà gái.",
+        "highlight": false
+      },
+      {
+        "time": "09:30",
+        "title": "Lễ Thành Hôn Gia Tiên (Nhà Trai)",
+        "desc": "Nghi lễ dâng hương tổ tiên, trao nhẫn cưới và nhận lời chúc phúc hai họ.",
+        "highlight": false
+      },
+      {
+        "time": "11:00",
+        "title": "Đón Khách & Chụp Hình (Tiệc Nhà Trai)",
+        "desc": "Chào đón quý khách tại sảnh Trống Đồng Palace — Cầu Giấy, Hà Nội.",
+        "highlight": true
+      },
+      {
+        "time": "11:30",
+        "title": "Khai Tiệc Mừng Hôn Lễ Nhà Trai",
+        "desc": "Nghi thức cắt bánh, rót rượu Champagne mừng hạnh phúc và dùng tiệc trưa.",
+        "highlight": true
+      },
+      {
+        "time": "17:30",
+        "title": "Đón Khách & Chụp Hình (Tiệc Nhà Gái)",
+        "desc": "Chào đón quý khách tại sảnh White Palace — Phú Nhuận, TP. HCM.",
+        "highlight": true
+      },
+      {
+        "time": "18:30",
+        "title": "Khai Tiệc Mừng Vu Quy Nhà Gái",
+        "desc": "Cùng nâng ly chúc phúc trăm năm và thưởng thức bữa tiệc tối ấm cúng.",
+        "highlight": true
+      }
+    ]
+  },
+  "albumPhotos": [
+    "img/wedding-photo-card-left.jpg",
+    "img/wedding-photo-card-right.jpg",
+    "img/02-disney-phao-hoa.jpg",
+    "img/03-disney-cau-hon.jpg",
+    "img/08-trang-an-hero.jpg",
+    "img/07-trang-an-b.jpg",
+    "img/01-trang-an-a.jpg",
+    "img/06-shanghai-dem.jpg",
+    "img/04-shanghai-mua.jpg",
+    "img/09-wuzhen-moi.jpg",
+    "img/05-wuzhen-ma.jpg"
+  ],
+  "music": [
+    {
+      "title": "Giai Điệu Tình Yêu (Bản Giao Hưởng)",
+      "src": "https://assets.mixkit.co/music/preview/mixkit-romantic-wedding-love-643.mp3"
+    },
+    {
+      "title": "Giấc Mơ Hạnh Phúc (Piano Lãng Mạn)",
+      "src": "https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-493.mp3"
+    },
+    {
+      "title": "Bình Yên Bên Nhau (Acoustic)",
+      "src": "https://assets.mixkit.co/music/preview/mixkit-serene-view-443.mp3"
+    }
+  ]
+}
