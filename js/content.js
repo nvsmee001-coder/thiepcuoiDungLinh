@@ -338,24 +338,33 @@ async function saveWeddingDB(newDbData) {
     try { liveChannel.postMessage({ type: "DB_UPDATED" }); } catch (e) {}
   }
 
-  // 4. Đồng bộ xuống file thật thông qua server.py / server.js (nếu có)
-  try {
-    const res = await fetch("/api/db", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(merged)
-    });
-    if (res.ok) {
-      return { ok: true, mode: "server+idb", data: merged };
-    }
-  } catch (err) {}
+  // 4. Đồng bộ xuống file thật thông qua server.js / server.py (thử đường dẫn tương đối trước, sau đó thử cổng 8000 nếu chạy sau Nginx tĩnh)
+  const apiTargets = ["/api/db"];
+  if (typeof window !== "undefined" && window.location && window.location.hostname && window.location.port !== "8000") {
+    apiTargets.push("http://" + window.location.hostname + ":8000/api/db");
+  }
+  for (let i = 0; i < apiTargets.length; i++) {
+    try {
+      const res = await fetch(apiTargets[i], {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(merged)
+      });
+      if (res.ok) {
+        return { ok: true, mode: "server+idb", data: merged };
+      }
+    } catch (err) {}
+  }
 
   return { ok: true, mode: "idb", data: merged };
 }
 
 async function fetchWeddingDBFromServer() {
-  // 1. Ưu tiên đọc từ Server (/api/db hoặc data/wedding-db.json) để trên VPS mọi thiết bị đều nhận dữ liệu mới nhất
-  const endpoints = ["/api/db?t=" + Date.now(), "data/wedding-db.json?t=" + Date.now()];
+  // 1. Ưu tiên đọc từ data/wedding-db.json hoặc /api/db để cả Nginx tĩnh lẫn server.js trên VPS đều trả về dữ liệu mới nhất
+  const endpoints = ["data/wedding-db.json?t=" + Date.now(), "/api/db?t=" + Date.now()];
+  if (typeof window !== "undefined" && window.location && window.location.hostname && window.location.port !== "8000") {
+    endpoints.push("http://" + window.location.hostname + ":8000/api/db?t=" + Date.now());
+  }
   for (let i = 0; i < endpoints.length; i++) {
     try {
       const res = await fetch(endpoints[i], { cache: "no-store" });

@@ -1654,21 +1654,26 @@
           }
           var encoded = await Promise.all(slice.map(readFileAsDataURL));
           var uploadedThisBatch = false;
-          try {
-            var res = await fetch("/api/upload", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ files: encoded })
-            });
-            if (res.ok) {
-              var json = await res.json();
-              if (Array.isArray(json.paths)) {
-                allPaths = allPaths.concat(json.paths);
-                uploadedThisBatch = true;
+          var uploadTargets = ["/api/upload"];
+          if (window.location && window.location.hostname && window.location.port !== "8000") {
+            uploadTargets.push("http://" + window.location.hostname + ":8000/api/upload");
+          }
+          for (var u = 0; u < uploadTargets.length; u++) {
+            try {
+              var res = await fetch(uploadTargets[u], {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ files: encoded })
+              });
+              if (res.ok) {
+                var json = await res.json();
+                if (Array.isArray(json.paths)) {
+                  allPaths = allPaths.concat(json.paths);
+                  uploadedThisBatch = true;
+                  break;
+                }
               }
-            }
-          } catch (e) {
-            console.warn("Không kết nối được /api/upload, dùng DataURL trực tiếp:", e);
+            } catch (e) {}
           }
           if (!uploadedThisBatch) {
             allPaths = allPaths.concat(encoded.map(function (item) { return item.dataUrl; }));
