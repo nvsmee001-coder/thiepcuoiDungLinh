@@ -1929,12 +1929,49 @@
         state.schedule.heading = val("f_sch_heading");
       }
 
-      // HÀM ĐỌC FILE ẢNH SANG DATA URL & UPLOAD LÊN SERVER.PY
+      // HÀM ĐỌC FILE & TỰ ĐỘNG NÉN ẢNH GỐC MÁY CƠ (10MB -> ~300KB FULL HD 2048PX) TRƯỚC KHI LÊN VPS
       function readFileAsDataURL(file) {
         return new Promise(function (resolve, reject) {
+          var isImage = file && file.type && file.type.indexOf("image/") === 0;
           var reader = new FileReader();
-          reader.onload = function () { resolve({ name: file.name, dataUrl: reader.result }); };
           reader.onerror = reject;
+          reader.onload = function () {
+            var rawDataUrl = reader.result;
+            // Nếu là file âm thanh (.mp3) hoặc ảnh nhỏ (< 650KB) thì giữ nguyên
+            if (!isImage || file.size < 650 * 1024) {
+              return resolve({ name: file.name, dataUrl: rawDataUrl });
+            }
+            // Nếu là ảnh gốc nặng (7MB - 15MB), tự động thu chuẩn Full HD 2048px sắc nét để qua Nginx VPS mượt mà
+            var img = new Image();
+            img.onload = function () {
+              var maxDim = 2048;
+              var w = img.naturalWidth || img.width;
+              var h = img.naturalHeight || img.height;
+              if (w > maxDim || h > maxDim) {
+                if (w >= h) {
+                  h = Math.round((h * maxDim) / w);
+                  w = maxDim;
+                } else {
+                  w = Math.round((w * maxDim) / h);
+                  h = maxDim;
+                }
+              }
+              var cvs = document.createElement("canvas");
+              cvs.width = w;
+              cvs.height = h;
+              var ctx = cvs.getContext("2d");
+              ctx.imageSmoothingEnabled = true;
+              ctx.imageSmoothingQuality = "high";
+              ctx.drawImage(img, 0, 0, w, h);
+              var compressedUrl = cvs.toDataURL("image/jpeg", 0.86);
+              var safeName = (file.name || "photo.jpg").replace(/\.[^/.]+$/, "") + ".jpg";
+              resolve({ name: safeName, dataUrl: compressedUrl });
+            };
+            img.onerror = function () {
+              resolve({ name: file.name, dataUrl: rawDataUrl });
+            };
+            img.src = rawDataUrl;
+          };
           reader.readAsDataURL(file);
         });
       }
@@ -1945,7 +1982,7 @@
 
         var statusEl = document.getElementById("uploadStatusText");
         var allPaths = [];
-        var batchSize = 2; // Chia từng cụm 2 file/lần để qua Nginx/VPS không bao giờ bị nghẽn mạng
+        var batchSize = 1; // Gửi từng file đã tối ưu Full HD để qua mọi giới hạn 1MB mặc định của Nginx VPS
 
         for (var i = 0; i < filesArr.length; i += batchSize) {
           var slice = filesArr.slice(i, i + batchSize);
@@ -1954,27 +1991,20 @@
           }
           var encoded = await Promise.all(slice.map(readFileAsDataURL));
           var uploadedThisBatch = false;
-          var uploadTargets = ["/api/upload"];
-          if (window.location && window.location.hostname && window.location.port !== "8000") {
-            uploadTargets.push("http://" + window.location.hostname + ":8000/api/upload");
-          }
-          for (var u = 0; u < uploadTargets.length; u++) {
-            try {
-              var res = await fetch(uploadTargets[u], {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ files: encoded })
-              });
-              if (res.ok) {
-                var json = await res.json();
-                if (Array.isArray(json.paths)) {
-                  allPaths = allPaths.concat(json.paths);
-                  uploadedThisBatch = true;
-                  break;
-                }
+          try {
+            var res = await fetch("/api/upload", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ files: encoded })
+            });
+            if (res.ok) {
+              var json = await res.json();
+              if (Array.isArray(json.paths)) {
+                allPaths = allPaths.concat(json.paths);
+                uploadedThisBatch = true;
               }
-            } catch (e) {}
-          }
+            }
+          } catch (e) {}
           if (!uploadedThisBatch) {
             allPaths = allPaths.concat(encoded.map(function (item) { return item.dataUrl; }));
           }

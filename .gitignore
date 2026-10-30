@@ -1,0 +1,3 @@
+# Bỏ qua file nén nặng & thư mục ảnh gốc máy cơ chưa nén để tránh lỗi Git 100MB
+*.zip
+img-new/

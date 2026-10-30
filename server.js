@@ -223,7 +223,7 @@ const server = http.createServer(async (req, res) => {
   }
   const normalizedRel = pathname.replace(/^[/\\]+/, "");
   const segments = normalizedRel.split(/[/\\]+/);
-  const blockedFiles = ["server.js", "server.py", "process_envelope.py", "gemini.md"];
+  const blockedFiles = ["server.js", "server.py", "process_envelope.py", "gemini.md", "setup-vps.sh"];
   if (
     segments.some((seg) => seg.startsWith(".") || seg === "..") ||
     blockedFiles.includes(normalizedRel.toLowerCase())
