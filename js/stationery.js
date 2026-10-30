@@ -123,16 +123,6 @@
         rightImg.src = c.rightFramePhoto;
       }
       setText("#rightPhotoFrame .frame-brass-plaque span", c.rightFramePlaque);
-
-      // Cập nhật tên và ký tự Monogram trên phong bì mở màn hoàng gia
-      var groomShort = (c.groomName || "Dũng").trim();
-      var brideShort = (c.brideName || "Linh").trim();
-      var coupleTitle = groomShort + " & " + brideShort;
-      var monogram = (groomShort.charAt(0) || "D") + "&" + (brideShort.charAt(0) || "L");
-      setText("#envIntroNames", coupleTitle);
-      setText("#envCardNames", coupleTitle);
-      setText("#waxSealMonogram", monogram);
-      setText("#envLiningCrest", "⚜ " + (groomShort.charAt(0) || "D") + " & " + (brideShort.charAt(0) || "L") + " ⚜");
     }
 
     // --- B. ĐỒNG BỘ NGÀY GIỜ & ĐẾM NGƯỢC ---
@@ -150,15 +140,6 @@
       setText("#tab-hero .triad-year-bottom", d.yearLabel);
       setText("#tab-hero .triad-event", d.eventLabel);
       setText("#tab-hero .cover-lunar-date", d.lunarDate);
-
-      if (d.dayNumber && d.monthLabel && d.yearLabel) {
-        var cleanMonth = (d.monthLabel || "").replace(/[^0-9]/g, "") || "12";
-        if (cleanMonth.length === 1) cleanMonth = "0" + cleanMonth;
-        var cleanDay = (d.dayNumber || "").replace(/[^0-9]/g, "") || "07";
-        if (cleanDay.length === 1) cleanDay = "0" + cleanDay;
-        var cleanYear = (d.yearLabel || "").replace(/[^0-9]/g, "") || "2026";
-        setText("#envCardDate", cleanDay + " • " + cleanMonth + " • " + cleanYear);
-      }
 
       var bannerDatePill = document.querySelector("#tab-details .banner-date-pill");
       if (bannerDatePill && (d.shortDatePill || d.shortLunarPill)) {
@@ -643,7 +624,8 @@
 
   // ==========================================================================
   // 4. BỤI VÀNG ÁNH KIM & CÁNH HOA BAY LÃNG MẠN (GOLD STARDUST & PETALS)
-  // Thiết kế vừa phải, thanh lịch, không che chữ hay làm phân tâm người xem
+  // Hiệu ứng hạt bụi vàng lấp lánh & cánh hoa đào rơi tự nhiên
+  // Nổi trên nền ảnh với z-index: 95, pointer-events: none không cản trở thao tác
   // Có công tắc Bật / Tắt ở góc trên bên trái
   // ==========================================================================
   function initPetals() {
@@ -651,45 +633,63 @@
     if (!canvas) return;
     var ctx = canvas.getContext("2d");
 
-    var width, height;
+    var width = 0, height = 0;
+    var dpr = window.devicePixelRatio || 1;
+
     function resize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      dpr = window.devicePixelRatio || 1;
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
     }
     resize();
     window.addEventListener("resize", resize);
 
-    // Mật độ vừa phải, tinh tế theo yêu cầu người dùng
-    var petalCount = 8;
+    // Cánh hoa mềm mại rơi nhẹ nhàng
+    var petalColors = ["#ffe2eb", "#ffd4dc", "#faebd7", "#fbe4d8", "#fcd5c2"];
+    var petalCount = 16;
     var petals = [];
     for (var i = 0; i < petalCount; i++) {
       petals.push({
         x: Math.random() * width,
-        y: Math.random() * height - height,
-        r: Math.random() * 3.2 + 2.4,
-        dx: Math.random() * 0.7 - 0.35,
-        dy: Math.random() * 0.8 + 0.5,
+        y: Math.random() * height,
+        r: Math.random() * 4 + 4.5,
+        dx: Math.random() * 0.8 - 0.4,
+        dy: Math.random() * 0.9 + 0.6,
         tilt: Math.random() * 8,
-        tiltAngle: Math.random() * Math.PI,
-        tiltAngleInc: (Math.random() * 0.02) + 0.01,
-        opacity: Math.random() * 0.2 + 0.16,
-        color: Math.random() > 0.5 ? "#fbe3d5" : "#f7dfcc"
+        tiltAngle: Math.random() * Math.PI * 2,
+        tiltAngleInc: (Math.random() * 0.02) + 0.012,
+        opacity: Math.random() * 0.35 + 0.4,
+        color: petalColors[Math.floor(Math.random() * petalColors.length)]
       });
     }
 
-    var dustCount = 24;
+    // Hạt bụi vàng sao đêm lấp lánh
+    var dustColors = [
+      "255, 222, 140",
+      "255, 242, 195",
+      "248, 205, 110",
+      "255, 255, 230"
+    ];
+    var dustCount = 42;
     var stardust = [];
     for (var j = 0; j < dustCount; j++) {
       stardust.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        r: Math.random() * 1.5 + 0.7,
-        dy: -(Math.random() * 0.25 + 0.1),
-        dx: (Math.random() - 0.5) * 0.2,
-        alpha: Math.random() * 0.45 + 0.18,
-        pulseSpeed: Math.random() * 0.025 + 0.01,
+        r: Math.random() * 1.8 + 1.2,
+        dy: -(Math.random() * 0.35 + 0.12),
+        dx: (Math.random() - 0.5) * 0.25,
+        alpha: Math.random() * 0.45 + 0.45,
+        pulseSpeed: Math.random() * 0.03 + 0.015,
         pulseVal: Math.random() * Math.PI * 2,
-        color: Math.random() > 0.3 ? "226, 196, 142" : "255, 245, 220"
+        color: dustColors[Math.floor(Math.random() * dustColors.length)],
+        sparkle: Math.random() > 0.45
       });
     }
 
@@ -714,9 +714,11 @@
       }
     }
 
-    // Kiểm tra cài đặt trước đó của khách
+    // Kiểm tra cài đặt trước đó của khách (mặc định luôn BẬT nếu chưa tắt)
     if (localStorage.getItem("THIEP_SPARKS_OFF") === "1") {
       setSparksActive(false, false);
+    } else {
+      setSparksActive(true, false);
     }
 
     if (toggleBtn) {
@@ -726,18 +728,22 @@
       });
     }
 
+    // Vẽ hình cánh hoa mềm tự nhiên
     function drawPetal(p) {
       ctx.save();
-      ctx.beginPath();
       ctx.fillStyle = p.color;
       ctx.globalAlpha = p.opacity;
 
       ctx.translate(p.x, p.y);
       ctx.rotate(p.tiltAngle);
-      ctx.scale(1, Math.sin(p.tilt));
+      ctx.scale(Math.cos(p.tilt), 1);
 
-      ctx.arc(0, 0, p.r, 0, Math.PI * 2, false);
+      ctx.beginPath();
+      ctx.moveTo(0, -p.r);
+      ctx.bezierCurveTo(p.r * 1.1, -p.r * 0.4, p.r * 0.9, p.r * 0.85, 0, p.r);
+      ctx.bezierCurveTo(-p.r * 0.9, p.r * 0.85, -p.r * 1.1, -p.r * 0.4, 0, -p.r);
       ctx.fill();
+
       ctx.restore();
     }
 
@@ -749,10 +755,11 @@
 
       ctx.clearRect(0, 0, width, height);
 
+      // 1. Vẽ các hạt bụi vàng lung linh
       for (var s = 0; s < stardust.length; s++) {
         var d = stardust[s];
         d.pulseVal += d.pulseSpeed;
-        var currentAlpha = d.alpha * (0.65 + 0.35 * Math.sin(d.pulseVal));
+        var currentAlpha = d.alpha * (0.6 + 0.4 * Math.sin(d.pulseVal));
         d.y += d.dy;
         d.x += d.dx;
 
@@ -767,23 +774,40 @@
         ctx.beginPath();
         ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
         ctx.fillStyle = "rgba(" + d.color + ", " + currentAlpha.toFixed(2) + ")";
-        ctx.shadowColor = "rgba(226, 196, 142, 0.6)";
-        ctx.shadowBlur = d.r * 2.5;
+        ctx.shadowColor = "rgba(255, 215, 120, 0.9)";
+        ctx.shadowBlur = d.r * 4.5;
         ctx.fill();
+
+        // Tia sáng chữ thập lung linh khi hạt phát sáng mạnh
+        if (d.sparkle && currentAlpha > 0.65) {
+          var beamLen = d.r * 2.8;
+          ctx.strokeStyle = "rgba(255, 248, 220, " + (currentAlpha * 0.75).toFixed(2) + ")";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(d.x - beamLen, d.y);
+          ctx.lineTo(d.x + beamLen, d.y);
+          ctx.moveTo(d.x, d.y - beamLen);
+          ctx.lineTo(d.x, d.y + beamLen);
+          ctx.stroke();
+        }
         ctx.restore();
       }
 
+      // 2. Vẽ cánh hoa bay chao lượn
       for (var i = 0; i < petals.length; i++) {
         var p = petals[i];
         p.tiltAngle += p.tiltAngleInc;
+        p.tilt += 0.015;
         p.y += p.dy;
-        p.x += Math.sin(p.tiltAngle) * 0.6 + p.dx;
+        p.x += Math.sin(p.tiltAngle) * 0.9 + p.dx;
 
-        if (p.y > height + 20) {
+        if (p.y > height + 25) {
           p.x = Math.random() * width;
-          p.y = -20;
+          p.y = -25;
           p.tilt = Math.random() * 8;
         }
+        if (p.x < -25) p.x = width + 25;
+        if (p.x > width + 25) p.x = -25;
 
         drawPetal(p);
       }
@@ -792,85 +816,6 @@
     }
 
     animate();
-  }
-
-  // ==========================================================================
-  // HIỆU ỨNG MỞ MÀN: PHONG BÌ HOÀNG GIA & DẤU SÁP 3D (THE GRAND REVEAL)
-  // ==========================================================================
-  function initEnvelopeIntro() {
-    var curtain = document.getElementById("royalEnvelopeIntro");
-    var envBox = document.getElementById("royalEnvelopeBox");
-    var waxSeal = document.getElementById("royalWaxSealBtn");
-    var promptEl = document.getElementById("envActionPrompt");
-    var skipBtn = document.getElementById("btnSkipEnvelope");
-    var replayBtn = document.getElementById("replayEnvelopeBtn");
-
-    if (!curtain || !envBox) return;
-
-    var isOpened = false;
-
-    function openEnvelope() {
-      if (isOpened) return;
-      isOpened = true;
-
-      // Kích hoạt hiệu ứng bóc con dấu và bung nắp phong bì 3D
-      envBox.classList.add("is-opening");
-
-      // Tự động phát nhạc cưới ngay khi chạm con dấu
-      if (typeof window.weddingPlayerPlay === "function") {
-        window.weddingPlayerPlay();
-      } else {
-        var audio = document.getElementById("weddingBgm");
-        if (audio && audio.paused) {
-          audio.play().catch(function () {});
-        }
-      }
-
-      // Xoay đĩa than nhạc cưới ở góc trên
-      var vinylWidget = document.getElementById("vinylPlayerWidget");
-      if (vinylWidget) vinylWidget.classList.add("is-playing");
-
-      // Sau 850ms, hạ màn che phong bì để bước vào thiệp cưới
-      setTimeout(function () {
-        curtain.classList.add("is-dismissed");
-      }, 850);
-    }
-
-    if (waxSeal) {
-      waxSeal.addEventListener("click", function (e) {
-        e.stopPropagation();
-        openEnvelope();
-      });
-    }
-
-    envBox.addEventListener("click", function () {
-      openEnvelope();
-    });
-
-    if (promptEl) {
-      promptEl.addEventListener("click", function (e) {
-        e.stopPropagation();
-        openEnvelope();
-      });
-    }
-
-    if (skipBtn) {
-      skipBtn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        isOpened = true;
-        curtain.classList.add("is-dismissed");
-      });
-    }
-
-    if (replayBtn) {
-      replayBtn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        isOpened = false;
-        envBox.classList.remove("is-opening");
-        curtain.classList.remove("is-dismissed");
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-    }
   }
 
   // ==========================================================================
@@ -1552,7 +1497,6 @@
     initTabNavigation();
     initCountdown();
     initAudioPlayer();
-    initEnvelopeIntro();
     initPetals();
     init3DPhotoFrame();
     initGalleryLightbox();

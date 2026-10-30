@@ -67,8 +67,15 @@ html, body {
 .hero-petals-canvas {
   position: fixed;
   inset: 0;
-  z-index: 5;
-  pointer-events: none;
+  width: 100vw;
+  height: 100vh;
+  z-index: 95;
+  pointer-events: none !important;
+  transition: opacity 0.5s ease;
+}
+.hero-petals-canvas.is-hidden {
+  opacity: 0;
+  visibility: hidden;
 }
 
 /* ==========================================================================
