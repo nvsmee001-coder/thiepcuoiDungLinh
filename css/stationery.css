@@ -1589,14 +1589,14 @@ html, body {
     padding: 10px 0;
   }
 
-  .easel-left {
-    order: -1;
-  }
-
   .hero-centerpiece-stage {
     order: 1;
     width: 100%;
-    padding: 20px 12px;
+    padding: 10px 4px;
+  }
+
+  .easel-left {
+    order: 2;
   }
 
   .easel-right {

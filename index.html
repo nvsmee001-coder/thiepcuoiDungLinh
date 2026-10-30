@@ -494,18 +494,236 @@
       box-shadow: 2px 2.5px 0 #dfd2bd, 3.5px 4px 0 #8a7252, 0 18px 32px rgba(0,0,0,0.96), 0 0 20px rgba(223,183,108,0.48);
     }
 
+    /* ==========================================================================
+       TỐI ƯU HÓA HOÀN TOÀN CHO GIAO DIỆN ĐIỆN THOẠI & TABLET (<= 991PX)
+       - PC giữ nguyên 100% bố cục 3 cột Triptych hoàng gia đã chốt
+       - Mobile: Cuộn dọc mượt mà, căn chỉnh vừa vặn từng phân vùng, không tràn viền
+       - 2 Khung tranh Baroque đặt đối xứng song song 2 bên (Diptych) cực đẹp
+       ========================================================================== */
     @media (max-width: 991px) {
-      .hero-editorial-spread { transform: none !important; }
-      .hero-outer-portals-bar {
-        grid-template-columns: 1fr 1fr !important;
-        max-width: 540px !important;
-        margin-top: 12px !important;
-        order: 3 !important;
+      /* Cho phép cuộn dọc mượt mà trên điện thoại */
+      #tab-hero {
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        height: 100dvh !important;
       }
+
+      .hero-content-viewport.hero-editorial-cover {
+        height: auto !important;
+        min-height: 100% !important;
+        padding: 56px 14px 115px 14px !important;
+        justify-content: flex-start !important;
+        overflow-y: visible !important;
+      }
+
+      /* Bố cục Grid 2 cột thông minh trên mobile */
+      .hero-editorial-spread {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        column-gap: 12px !important;
+        row-gap: 16px !important;
+        width: 100% !important;
+        max-width: 440px !important;
+        margin: 0 auto !important;
+        transform: none !important;
+      }
+
+      /* 1. Trục giữa: Dâu rể, Ngày giờ, Đếm ngược, 2 Nhà trải full-width ở trên cùng */
+      .hero-centerpiece-stage {
+        grid-column: 1 / -1 !important;
+        order: 1 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 auto !important;
+      }
+
+      .hero-family-eyebrow {
+        font-size: clamp(0.62rem, 2.7vw, 0.72rem) !important;
+        letter-spacing: 2px !important;
+        margin-bottom: 2px !important;
+      }
+
+      .hero-couple-calligraphy-stage {
+        gap: 6px !important;
+        margin: 2px 0 4px 0 !important;
+      }
+
+      .couple-calligraphy-name {
+        font-size: clamp(2.4rem, 11vw, 3.4rem) !important;
+        line-height: 1.1 !important;
+      }
+
+      .couple-calligraphy-ampersand {
+        font-size: 1.25rem !important;
+        margin: 0 4px !important;
+      }
+
+      .hero-invitation-subtext {
+        font-size: 0.82rem !important;
+        line-height: 1.4 !important;
+        padding: 0 6px !important;
+        margin-bottom: 6px !important;
+      }
+
+      .hero-rings-crest {
+        margin: 2px 0 8px 0 !important;
+      }
+      .hero-rings-img {
+        width: 38px !important;
+      }
+
+      .royal-date-triad {
+        gap: 10px !important;
+      }
+      .triad-item {
+        font-size: 0.7rem !important;
+        letter-spacing: 1.2px !important;
+      }
+      .triad-month-top, .triad-year-bottom {
+        font-size: 0.6rem !important;
+        letter-spacing: 1.8px !important;
+      }
+      .triad-hero-num {
+        font-size: 2.1rem !important;
+        line-height: 1 !important;
+      }
+      .cover-lunar-date {
+        font-size: 0.72rem !important;
+        margin-top: 4px !important;
+      }
+
+      .hero-typographic-countdown {
+        gap: 8px !important;
+        padding: 6px 12px !important;
+        max-width: 320px !important;
+        margin: 10px auto !important;
+      }
+      .cd-num {
+        font-size: 1.2rem !important;
+      }
+      .cd-label {
+        font-size: 0.56rem !important;
+        letter-spacing: 1px !important;
+      }
+
+      .hero-venues-pavilion {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+        max-width: 320px !important;
+        margin: 10px auto !important;
+        padding: 8px 12px !important;
+      }
+      .pavilion-col {
+        padding: 4px 0 !important;
+      }
+      .pavilion-role-badge {
+        font-size: 0.62rem !important;
+        letter-spacing: 1.5px !important;
+        margin-bottom: 2px !important;
+      }
+      .pavilion-palace-title {
+        font-size: 1.02rem !important;
+        letter-spacing: 1.2px !important;
+        margin-bottom: 2px !important;
+      }
+      .pavilion-address, .pavilion-time {
+        font-size: 0.74rem !important;
+      }
+      .pavilion-divider-line {
+        width: 60% !important;
+        height: 1px !important;
+        margin: 3px auto !important;
+        background: linear-gradient(90deg, transparent, rgba(226, 196, 142, 0.6), transparent) !important;
+      }
+
+      /* 2. Hai khung tranh Baroque đối xứng song song 2 bên */
+      .easel-left {
+        grid-column: 1 / 2 !important;
+        order: 2 !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .easel-right {
+        grid-column: 2 / 3 !important;
+        order: 2 !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .baroque-royal-frame {
+        max-width: 100% !important;
+        transform: none !important;
+      }
+      .baroque-royal-frame:hover {
+        transform: translateY(-2px) !important;
+      }
+
+      .easel-top-mast, .easel-stand-legs, .easel-shelf {
+        display: none !important;
+      }
+      .frame-sculpted-rim {
+        padding: 5px !important;
+        border-width: 3px !important;
+      }
+      .frame-velvet-mat {
+        padding: 3px !important;
+      }
+      .frame-brass-plaque {
+        font-size: 0.58rem !important;
+        padding: 2px 6px !important;
+        bottom: -8px !important;
+        letter-spacing: 0.8px !important;
+      }
+      .baroque-top-crest {
+        transform: scale(0.75) !important;
+        margin-bottom: -6px !important;
+      }
+
+      /* 3. Khối 2 thẻ cổng tắt dẫn sang Tab 2 và Tab 3 */
+      .hero-outer-portals-bar {
+        grid-column: 1 / -1 !important;
+        order: 3 !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+        width: 100% !important;
+        max-width: 440px !important;
+        margin: 8px auto 0 auto !important;
+      }
+
+      .interactive-portal-card {
+        padding: 8px 6px !important;
+        min-width: 0 !important;
+        width: 100% !important;
+        transform: none !important;
+      }
+      .mini-details-cluster {
+        transform: scale(0.78) !important;
+        transform-origin: center center !important;
+        margin: -8px 0 !important;
+      }
+      .mini-album-pile-cluster {
+        transform: scale(0.78) !important;
+        transform-origin: center center !important;
+        margin: -8px 0 !important;
+      }
+      .portal-tag-badge {
+        font-size: 0.65rem !important;
+      }
+      .portal-action-hint {
+        font-size: 0.6rem !important;
+      }
+
       .hero-outer-portals-bar .cover-signature-quote {
         grid-column: 1 / -1 !important;
         order: 3 !important;
         margin-top: 8px !important;
+        font-size: 0.82rem !important;
+        line-height: 1.4 !important;
       }
     }
 
@@ -1127,17 +1345,27 @@
     @media (max-width: 1150px) {
       #tab-details.tab-scrollable-content {
         align-items: flex-start !important;
-        padding: 32px 18px 100px 18px !important;
+        padding: 56px 14px 140px 14px !important;
+      }
+      .details-wide-container {
+        padding: 0 !important;
+        margin: 0 auto !important;
+      }
+      .details-salon-banner {
+        margin-bottom: 18px !important;
+      }
+      .details-salon-title {
+        font-size: 1.6rem !important;
       }
       .details-triptych-layout {
-        grid-template-columns: 1fr;
-        gap: 24px;
-        max-width: 680px;
-        margin: 0 auto;
+        grid-template-columns: 1fr !important;
+        gap: 22px !important;
+        max-width: 500px !important;
+        margin: 0 auto !important;
       }
       .details-v-divider {
-        width: 100%;
-        height: 20px;
+        width: 100% !important;
+        height: 20px !important;
       }
       .details-v-divider::before {
         top: 50%;
@@ -1160,10 +1388,13 @@
         background: linear-gradient(90deg, rgba(226, 196, 142, 0.75), transparent);
       }
       .details-col-schedule {
-        order: -1;
+        order: -1 !important;
       }
       .course-name {
-        white-space: normal;
+        white-space: normal !important;
+      }
+      .map-clean-viewport {
+        height: 200px !important;
       }
     }
 
@@ -1785,41 +2016,57 @@
     @media (max-width: 1100px) {
       #tab-gallery.tab-scrollable-content {
         overflow-y: auto !important;
-        padding: 20px 16px 100px 16px !important;
+        padding: 56px 14px 120px 14px !important;
       }
       .album-salon-topbar {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 10px !important;
+        margin-bottom: 14px !important;
+      }
+      .album-eyebrow-tag {
+        font-size: 0.68rem !important;
+      }
+      .album-salon-title {
+        font-size: 1.5rem !important;
+      }
+      .album-view-switchers {
+        gap: 8px !important;
+      }
+      .album-pill-toggle {
+        padding: 5px 12px !important;
+        font-size: 0.72rem !important;
       }
       .album-living-stage-view {
-        grid-template-columns: 1fr;
-        gap: 20px;
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
       }
       .album-3d-deck-stage {
-        height: 360px;
+        height: 320px !important;
+        max-width: 100% !important;
       }
       .album-story-panel {
-        border-left: none;
-        border-top: 1px solid rgba(226, 196, 142, 0.28);
-        padding: 16px 12px;
+        border-left: none !important;
+        border-top: 1px solid rgba(226, 196, 142, 0.28) !important;
+        padding: 14px 10px !important;
       }
       .album-filmstrip-dock {
-        overflow-x: auto;
-        justify-content: flex-start;
+        overflow-x: auto !important;
+        justify-content: flex-start !important;
       }
     }
 
     /* ==========================================================================
        ĐĨA THAN NHẠC CƯỚI XOAY 3D & HỘP CHỌN BÀI HÁT HOÀNG GIA (ROYAL VINYL PLAYER)
-       - Khi phát nhạc: Đĩa than xoay tròn mượt mà, cần gạt vàng đặt lên đĩa, nốt nhạc bay
-       - Khi dừng nhạc: Đĩa than đứng yên ngay tại góc hiện tại, cần gạt nhấc nhẹ ra
-       - Bấm vào đĩa: Mở bảng điều khiển Dừng/Phát & Chọn bài hát (tối đa 5 bài từ Admin)
+       - PC: Nút thanh mảnh, nhỏ gọn, tinh tế, không che khuất bất kỳ nội dung nào
+       - Mobile (<= 768px): Tối giản thành 1 nút tròn đĩa than 38px xoay ở góc, 0% che chữ
+       - Bấm vào đĩa: Mở popover điều khiển Dừng/Phát & Chọn bài hát
        ========================================================================== */
     .royal-vinyl-widget {
       position: fixed;
-      top: 18px;
-      right: 22px;
+      top: 16px;
+      right: 20px;
       z-index: 260;
       display: flex;
       flex-direction: column;
@@ -1831,34 +2078,34 @@
       position: relative;
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      padding: 5px 14px 5px 6px;
+      gap: 8px;
+      padding: 4px 10px 4px 4px;
       border-radius: 999px;
-      background: rgba(16, 12, 9, 0.78);
+      background: rgba(16, 12, 9, 0.82);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border: 1px solid rgba(226, 196, 142, 0.48);
       box-shadow:
-        0 10px 28px rgba(0, 0, 0, 0.7),
-        0 0 18px rgba(226, 196, 142, 0.16);
+        0 8px 24px rgba(0, 0, 0, 0.65),
+        0 0 16px rgba(226, 196, 142, 0.14);
       cursor: pointer;
-      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       color: #ffe2a4;
     }
     .vinyl-turntable-trigger:hover {
       border-color: #ffe4ab;
-      background: rgba(24, 18, 13, 0.92);
+      background: rgba(24, 18, 13, 0.95);
       transform: translateY(-1px);
       box-shadow:
-        0 12px 32px rgba(0, 0, 0, 0.85),
-        0 0 22px rgba(226, 196, 142, 0.3);
+        0 10px 28px rgba(0, 0, 0, 0.82),
+        0 0 20px rgba(226, 196, 142, 0.25);
     }
 
     /* Đĩa than 3D có rãnh ánh kim xoay tròn */
     .vinyl-disc-stage {
       position: relative;
-      width: 44px;
-      height: 44px;
+      width: 34px;
+      height: 34px;
       flex-shrink: 0;
     }
     .vinyl-record-disc {
@@ -1902,8 +2149,8 @@
 
     /* Nhãn vàng hồng tâm ở giữa đĩa than */
     .vinyl-center-label {
-      width: 16px;
-      height: 16px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
       background: radial-gradient(circle, #ffe4ab 0%, #c9963e 68%, #6e4b16 100%);
       border: 1px solid rgba(255, 255, 255, 0.65);
@@ -1913,8 +2160,8 @@
       box-shadow: 0 0 6px rgba(0, 0, 0, 0.7);
     }
     .vinyl-spindle-hole {
-      width: 4px;
-      height: 4px;
+      width: 3px;
+      height: 3px;
       border-radius: 50%;
       background: #0e0a07;
     }
@@ -1922,12 +2169,12 @@
     /* Cần gạt kim đĩa than mạ vàng (Tonearm) */
     .vinyl-tonearm {
       position: absolute;
-      top: -2px;
-      right: -3px;
-      width: 16px;
-      height: 24px;
+      top: -1px;
+      right: -2px;
+      width: 14px;
+      height: 21px;
       pointer-events: none;
-      transform-origin: 12px 4px;
+      transform-origin: 11px 3px;
       transform: rotate(-22deg);
       transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 3;
@@ -1941,8 +2188,8 @@
     .vinyl-floating-note {
       position: absolute;
       top: -6px;
-      left: 2px;
-      font-size: 0.72rem;
+      left: 1px;
+      font-size: 0.68rem;
       color: #ffe2a4;
       opacity: 0;
       pointer-events: none;
@@ -1962,20 +2209,20 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      max-width: 138px;
+      max-width: 96px;
       overflow: hidden;
     }
     .vinyl-state-tag {
       font-family: var(--font-sans, sans-serif);
-      font-size: 0.56rem;
+      font-size: 0.5rem;
       font-weight: 800;
-      letter-spacing: 1.4px;
+      letter-spacing: 1px;
       text-transform: uppercase;
-      color: rgba(255, 226, 164, 0.72);
+      color: rgba(255, 226, 164, 0.7);
     }
     .vinyl-track-Marquee {
       font-family: var(--font-serif-royal, serif);
-      font-size: 0.9rem;
+      font-size: 0.78rem;
       font-weight: 600;
       color: #fffaf0;
       white-space: nowrap;
@@ -1987,17 +2234,17 @@
 
     /* HỘP ĐIỀU KHIỂN DỪNG/PHÁT & CHỌN BÀI HÁT KHI BẤM VÀO ĐĨA THAN */
     .vinyl-playlist-popover {
-      margin-top: 10px;
-      width: 295px;
-      background: rgba(18, 13, 9, 0.95);
+      margin-top: 8px;
+      width: 260px;
+      background: rgba(18, 13, 9, 0.96);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
       border: 1px solid rgba(226, 196, 142, 0.55);
-      border-radius: 16px;
-      padding: 14px;
+      border-radius: 14px;
+      padding: 12px;
       box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.88),
-        0 0 24px rgba(226, 196, 142, 0.18);
+        0 16px 45px rgba(0, 0, 0, 0.9),
+        0 0 20px rgba(226, 196, 142, 0.16);
       opacity: 0;
       visibility: hidden;
       transform: translateY(-8px) scale(0.96);
@@ -2010,6 +2257,41 @@
       visibility: visible;
       transform: translateY(0) scale(1);
       pointer-events: auto;
+    }
+
+    @media (max-width: 768px) {
+      .royal-vinyl-widget {
+        top: 12px !important;
+        right: 14px !important;
+      }
+      .vinyl-turntable-trigger {
+        width: 38px !important;
+        height: 38px !important;
+        padding: 0 !important;
+        border-radius: 50% !important;
+        justify-content: center !important;
+        gap: 0 !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.75), 0 0 10px rgba(226, 196, 142, 0.2) !important;
+      }
+      .vinyl-disc-stage {
+        width: 30px !important;
+        height: 30px !important;
+      }
+      .vinyl-tonearm {
+        width: 13px !important;
+        height: 19px !important;
+        top: -1px !important;
+        right: -2px !important;
+      }
+      .vinyl-meta-col {
+        display: none !important;
+      }
+      .vinyl-playlist-popover {
+        top: 44px !important;
+        right: 0 !important;
+        width: 260px !important;
+        max-width: calc(100vw - 28px) !important;
+      }
     }
 
     .vinyl-popover-controls {
@@ -2248,18 +2530,25 @@
       border-color: rgba(255, 255, 255, 0.2);
       color: rgba(255, 245, 225, 0.6);
     }
-    @media (max-width: 640px) {
+    @media (max-width: 768px) {
       .site-top-controls-left {
-        top: 14px;
-        left: 14px;
-        gap: 6px;
+        top: 12px !important;
+        left: 14px !important;
+        gap: 6px !important;
       }
       .royal-pill-btn {
-        padding: 5px 10px;
-        font-size: 0.7rem;
+        width: 38px !important;
+        height: 38px !important;
+        padding: 0 !important;
+        border-radius: 50% !important;
+        justify-content: center !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.75), 0 0 10px rgba(226, 196, 142, 0.2) !important;
       }
       .royal-pill-btn .pill-label {
-        display: none;
+        display: none !important;
+      }
+      .royal-pill-btn .pill-icon {
+        font-size: 0.95rem !important;
       }
     }
 
