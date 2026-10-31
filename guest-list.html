@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danh Sách Khách Mời & Xác Nhận Tham Dự — Khánh Linh & Lê Dũng</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #fbf8f3;
+      --bg-surface: #ffffff;
+      --bg-card: #fdfbf7;
+      --border-subtle: #e8e2d5;
+      --border-strong: #d2c6b2;
+      --text-main: #232220;
+      --text-muted: #726e67;
+      --gold: #9e782f;
+      --gold-dark: #7a5c1e;
+      --gold-light: #f5eedf;
+      --bride-accent: #c44760;
+      --bride-bg: #fff0f3;
+      --groom-accent: #2c659e;
+      --groom-bg: #eef5fc;
+      --success: #287a41;
+      --success-bg: #eaf6ed;
+      --declined: #a13232;
+      --declined-bg: #fdf0f0;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+      --shadow-md: 0 6px 20px rgba(0,0,0,0.06);
+      --font-serif: "Playfair Display", Georgia, serif;
+      --font-display: "Cinzel", Georgia, serif;
+      --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding: 24px 16px 60px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* HEADER */
+    header.guest-header {
+      text-align: center;
+      padding: 30px 16px 36px;
+      margin-bottom: 24px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+
+    .header-eyebrow {
+      font-family: var(--font-display);
+      font-size: 0.76rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .header-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 600;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .header-title span {
+      color: var(--gold-dark);
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .header-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      border-radius: 999px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: #fff;
+    }
+    .btn-gold:hover {
+      background: var(--gold-dark);
+      box-shadow: 0 4px 12px rgba(158, 120, 47, 0.25);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border-color: var(--border-strong);
+      color: var(--text-main);
+    }
+    .btn-outline:hover {
+      background: var(--bg-page);
+      border-color: var(--gold);
+      color: var(--gold-dark);
+    }
+
+    /* STATS CARDS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-family: var(--font-serif);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .stat-hint {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .stat-card.highlight {
+      border-color: var(--gold);
+      background: linear-gradient(135deg, #ffffff 0%, var(--gold-light) 100%);
+    }
+    .stat-card.highlight .stat-value {
+      color: var(--gold-dark);
+    }
+
+    /* TOOLBAR */
+    .toolbar {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .toolbar-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 260px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 11px 16px 11px 40px;
+      font-size: 0.92rem;
+      font-family: var(--font-sans);
+      border: 1px solid var(--border-strong);
+      border-radius: 999px;
+      background: var(--bg-card);
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-box input:focus {
+      border-color: var(--gold);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(158, 120, 47, 0.12);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .sort-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sort-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .sort-select {
+      padding: 9px 14px;
+      font-size: 0.88rem;
+      font-family: var(--font-sans);
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      background: var(--bg-card);
+      color: var(--text-main);
+      cursor: pointer;
+      outline: none;
+    }
+    .sort-select:focus {
+      border-color: var(--gold);
+    }
+
+    .filters-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .filter-tag {
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 999px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-tag:hover {
+      border-color: var(--gold);
+      color: var(--gold-dark);
+    }
+
+    .filter-tag.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #fff;
+    }
+
+    /* TABLE SECTION */
+    .table-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table.guest-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      min-width: 900px;
+    }
+
+    th {
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 14px 14px;
+      background: #faf6ee;
+      color: var(--gold-dark);
+      border-bottom: 1px solid var(--border-strong);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 14px 14px;
+      font-size: 0.88rem;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: #faf8f4;
+    }
+
+    /* BADGES */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .badge-bride {
+      background: var(--bride-bg);
+      color: var(--bride-accent);
+      border: 1px solid rgba(196, 71, 96, 0.25);
+    }
+
+    .badge-groom {
+      background: var(--groom-bg);
+      color: var(--groom-accent);
+      border: 1px solid rgba(44, 101, 158, 0.25);
+    }
+
+    .badge-attending {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid rgba(40, 122, 65, 0.25);
+    }
+
+    .badge-declined {
+      background: var(--declined-bg);
+      color: var(--declined);
+      border: 1px solid rgba(161, 50, 50, 0.25);
+    }
+
+    .guest-name {
+      font-weight: 700;
+      color: var(--text-main);
+      font-size: 0.94rem;
+    }
+
+    .phone-link {
+      color: var(--gold-dark);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .phone-link:hover {
+      text-decoration: underline;
+    }
+
+    .guest-message {
+      max-width: 320px;
+      font-size: 0.85rem;
+      color: #444;
+      line-height: 1.5;
+      font-style: italic;
+      background: #faf6ee;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border-left: 3px solid var(--gold);
+      word-break: break-word;
+    }
+
+    .time-cell {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      opacity: 0.6;
+    }
+
+    /* FOOTER */
+    footer.guest-footer {
+      text-align: center;
+      padding: 30px 16px;
+      margin-top: 30px;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #232220;
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 9999;
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 16px 10px 40px; }
+      .header-title { font-size: 1.6rem; }
+      .stat-value { font-size: 1.8rem; }
+      .toolbar { padding: 14px; }
+      .toolbar-row { flex-direction: column; align-items: stretch; }
+      .sort-control { justify-content: space-between; }
+      .sort-select { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- HEADER -->
+    <header class="guest-header">
+      <p class="header-eyebrow">WEDDING RSVP GUEST LIST</p>
+      <h1 class="header-title">Khánh Linh <span>&amp;</span> Lê Dũng</h1>
+      <p class="header-subtitle">
+        Danh sách khách mời đã xác nhận tham dự lễ cưới và gửi gắm những lời chúc yêu thương.
+      </p>
+      <div class="header-actions">
+        <button type="button" class="btn btn-gold" id="btnExportCsv">
+          <span>📊</span> Xuất File Excel / CSV
+        </button>
+        <button type="button" class="btn btn-outline" id="btnReload">
+          <span id="reloadIcon">↻</span> Tải Lại Dữ Liệu
+        </button>
+        <a href="/thiep-cuoi-khanh-linh-le-dung/" target="_blank" class="btn btn-outline">
+          <span>💌</span> Xem Thiệp Cưới ↗
+        </a>
+      </div>
+    </header>
+
+    <!-- STATS SUMMARY -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Tổng Phản Hồi</div>
+        <div class="stat-value" id="statTotal">0</div>
+        <div class="stat-hint">Lượt khách đã phản hồi</div>
+      </div>
+      <div class="stat-card highlight">
+        <div class="stat-label">Khách Sẽ Đến</div>
+        <div class="stat-value" id="statAttending">0</div>
+        <div class="stat-hint" id="statAttendingHint">0 người lớn tham dự</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Khách Lỡ Hẹn</div>
+        <div class="stat-value" id="statDeclined">0</div>
+        <div class="stat-hint">Đã gửi lời chúc từ xa</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Nhà Gái / Nhà Trai</div>
+        <div class="stat-value" id="statRatio">0 / 0</div>
+        <div class="stat-hint">Tỉ lệ phản hồi theo họ</div>
+      </div>
+    </div>
+
+    <!-- TOOLBAR: SEARCH & FILTER -->
+    <div class="toolbar">
+      <div class="toolbar-row">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Tìm theo tên khách, số điện thoại, nội dung lời chúc...">
+        </div>
+        <div class="sort-control">
+          <span class="sort-label">Sắp xếp:</span>
+          <select id="sortSelect" class="sort-select">
+            <option value="time_desc">🕒 Mới nhất trước</option>
+            <option value="time_asc">🕒 Cũ nhất trước</option>
+            <option value="name_asc">🔤 Tên khách (A → Z)</option>
+            <option value="name_desc">🔤 Tên khách (Z → A)</option>
+            <option value="phone">📱 Số điện thoại</option>
+            <option value="guests_desc">👥 Số khách (Nhiều nhất)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="filters-row">
+        <span style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">Bộ lọc:</span>
+        <button type="button" class="filter-tag active" data-filter="all">Tất Cả (<span id="countAll">0</span>)</button>
+        <button type="button" class="filter-tag" data-filter="bride">🌸 Nhà Gái (<span id="countBride">0</span>)</button>
+        <button type="button" class="filter-tag" data-filter="groom">🤵 Nhà Trai (<span id="countGroom">0</span>)</button>
+        <button type="button" class="filter-tag" data-filter="yes">✓ Sẽ Đến (<span id="countYes">0</span>)</button>
+        <button type="button" class="filter-tag" data-filter="no">✕ Lỡ Hẹn (<span id="countNo">0</span>)</button>
+      </div>
+    </div>
+
+    <!-- TABLE SECTION -->
+    <div class="table-card">
+      <div class="table-wrapper">
+        <table class="guest-table">
+          <thead>
+            <tr>
+              <th style="width:50px; text-align:center;">#</th>
+              <th>Khách Mời</th>
+              <th>Số Điện Thoại</th>
+              <th>Bên Gia Đình</th>
+              <th>Trạng Thái</th>
+              <th style="text-align:center;">Số Khách</th>
+              <th>Lời Chúc Phúc &amp; Nhắn Gửi</th>
+              <th>Thời Gian Gửi</th>
+            </tr>
+          </thead>
+          <tbody id="guestTableBody">
+            <tr>
+              <td colspan="8">
+                <div class="empty-state">
+                  <div class="empty-state-icon">⏳</div>
+                  <p>Đang tải danh sách xác nhận tham dự...</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="guest-footer">
+      <p>Hệ thống danh sách khách mời tự động · Cập nhật theo thời gian thực</p>
+      <p style="margin-top:4px; opacity:0.7;">© Khánh Linh &amp; Lê Dũng — Happy Wedding</p>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    (function () {
+      let rsvps = [];
+      let activeFilter = "all";
+      let activeSort = "time_desc";
+      let activeSearch = "";
+
+      const tableBody = document.getElementById("guestTableBody");
+      const searchInput = document.getElementById("searchInput");
+      const sortSelect = document.getElementById("sortSelect");
+      const btnExportCsv = document.getElementById("btnExportCsv");
+      const btnReload = document.getElementById("btnReload");
+      const reloadIcon = document.getElementById("reloadIcon");
+      const toastEl = document.getElementById("toast");
+
+      function showToast(msg) {
+        toastEl.textContent = msg;
+        toastEl.classList.add("show");
+        setTimeout(() => toastEl.classList.remove("show"), 3200);
+      }
+
+      function escapeHtml(str) {
+        if (!str) return "";
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      async function fetchRsvps() {
+        if (reloadIcon) reloadIcon.style.animation = "spin 0.8s linear infinite";
+        try {
+          const res = await fetch("/api/rsvp?t=" + Date.now());
+          const data = await res.json();
+          if (data && Array.isArray(data.rsvps)) {
+            rsvps = data.rsvps;
+            render();
+          } else {
+            tableBody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="empty-state-icon">📭</div><p>Chưa có dữ liệu phản hồi.</p></div></td></tr>';
+          }
+        } catch (e) {
+          tableBody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="empty-state-icon">⚠️</div><p>Không thể kết nối đến máy chủ: ' + escapeHtml(e.message) + '</p></div></td></tr>';
+        } finally {
+          if (reloadIcon) reloadIcon.style.animation = "";
+        }
+      }
+
+      function updateStats() {
+        let attending = 0;
+        let declined = 0;
+        let guests = 0;
+        let bride = 0;
+        let groom = 0;
+
+        rsvps.forEach(item => {
+          if (item.attending === "yes") {
+            attending++;
+            guests += (Number(item.guests) || 1);
+          } else {
+            declined++;
+          }
+          if (item.family === "bride") bride++;
+          else if (item.family === "groom") groom++;
+        });
+
+        document.getElementById("statTotal").textContent = rsvps.length;
+        document.getElementById("statAttending").textContent = attending;
+        document.getElementById("statAttendingHint").textContent = guests + " khách (tính cả người đi cùng)";
+        document.getElementById("statDeclined").textContent = declined;
+        document.getElementById("statRatio").textContent = bride + " / " + groom;
+
+        document.getElementById("countAll").textContent = rsvps.length;
+        document.getElementById("countBride").textContent = bride;
+        document.getElementById("countGroom").textContent = groom;
+        document.getElementById("countYes").textContent = attending;
+        document.getElementById("countNo").textContent = declined;
+      }
+
+      function render() {
+        updateStats();
+
+        // 1. Filter
+        let list = rsvps.filter(item => {
+          if (activeFilter === "bride") return item.family === "bride";
+          if (activeFilter === "groom") return item.family === "groom";
+          if (activeFilter === "yes") return item.attending === "yes";
+          if (activeFilter === "no") return item.attending === "no";
+          return true;
+        });
+
+        // 2. Search
+        if (activeSearch) {
+          const q = activeSearch.toLowerCase().trim();
+          list = list.filter(item => {
+            const name = (item.name || "").toLowerCase();
+            const phone = (item.phone || "").toLowerCase();
+            const msg = (item.message || "").toLowerCase();
+            return name.includes(q) || phone.includes(q) || msg.includes(q);
+          });
+        }
+
+        // 3. Sort
+        list.sort((a, b) => {
+          if (activeSort === "time_asc") {
+            return new Date(a.createdAt || 0) - new Date(b.createdAt || 0);
+          }
+          if (activeSort === "name_asc") {
+            return (a.name || "").localeCompare(b.name || "", "vi");
+          }
+          if (activeSort === "name_desc") {
+            return (b.name || "").localeCompare(a.name || "", "vi");
+          }
+          if (activeSort === "phone") {
+            return (a.phone || "").localeCompare(b.phone || "");
+          }
+          if (activeSort === "guests_desc") {
+            const gA = a.attending === "yes" ? (Number(a.guests) || 1) : 0;
+            const gB = b.attending === "yes" ? (Number(b.guests) || 1) : 0;
+            return gB - gA;
+          }
+          // Default time_desc
+          return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+        });
+
+        if (list.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="empty-state-icon">🔎</div><p>Không tìm thấy khách mời nào phù hợp với bộ lọc hiện tại.</p></div></td></tr>';
+          return;
+        }
+
+        let html = "";
+        list.forEach((item, idx) => {
+          const isYes = item.attending === "yes";
+          const familyBadge = item.family === "bride"
+            ? '<span class="badge badge-bride">🌸 Nhà Gái</span>'
+            : '<span class="badge badge-groom">🤵 Nhà Trai</span>';
+          const attendBadge = isYes
+            ? '<span class="badge badge-attending">✓ Sẽ Đến</span>'
+            : '<span class="badge badge-declined">✕ Lỡ Hẹn</span>';
+
+          const timeStr = item.createdAt
+            ? new Date(item.createdAt).toLocaleString("vi-VN", { dateStyle: "short", timeStyle: "short" })
+            : "—";
+
+          const phoneStr = item.phone
+            ? `<a href="tel:${escapeHtml(item.phone)}" class="phone-link" title="Bấm để gọi điện">📞 ${escapeHtml(item.phone)}</a>`
+            : '<span style="color:var(--text-muted); font-style:italic;">Chưa có</span>';
+
+          const messageBox = item.message
+            ? `<div class="guest-message">${escapeHtml(item.message)}</div>`
+            : '<span style="color:var(--text-muted);">—</span>';
+
+          const guestCountDisplay = isYes
+            ? `<strong style="font-size:1rem; color:var(--gold-dark);">${item.guests || 1}</strong>`
+            : '<span style="color:var(--text-muted);">0</span>';
+
+          html += `<tr>
+            <td style="text-align:center; color:var(--text-muted); font-weight:700;">${idx + 1}</td>
+            <td><div class="guest-name">${escapeHtml(item.name || "Khách mời")}</div></td>
+            <td>${phoneStr}</td>
+            <td>${familyBadge}</td>
+            <td>${attendBadge}</td>
+            <td style="text-align:center;">${guestCountDisplay}</td>
+            <td>${messageBox}</td>
+            <td class="time-cell">${timeStr}</td>
+          </tr>`;
+        });
+
+        tableBody.innerHTML = html;
+      }
+
+      // Search & Sort Event Listeners
+      searchInput.addEventListener("input", (e) => {
+        activeSearch = e.target.value;
+        render();
+      });
+
+      sortSelect.addEventListener("change", (e) => {
+        activeSort = e.target.value;
+        render();
+      });
+
+      // Filter Buttons
+      document.querySelectorAll(".filter-tag").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".filter-tag").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          activeFilter = btn.dataset.filter;
+          render();
+        });
+      });
+
+      // Reload Button
+      btnReload.addEventListener("click", () => {
+        fetchRsvps().then(() => showToast("Đã cập nhật danh sách mới nhất!"));
+      });
+
+      // Export CSV (Excel Friendly with UTF-8 BOM)
+      btnExportCsv.addEventListener("click", () => {
+        if (rsvps.length === 0) {
+          alert("Chưa có dữ liệu phản hồi để xuất!");
+          return;
+        }
+
+        const headers = ["STT", "Họ và Tên", "Số Điện Thoại", "Bên Gia Đình", "Tham Dự", "Số Khách", "Lời Chúc & Nhắn Gửi", "Thời Gian Xác Nhận"];
+        const rows = rsvps.map((r, i) => [
+          i + 1,
+          `"${(r.name || "").replace(/"/g, '""')}"`,
+          `"${(r.phone || "").replace(/"/g, '""')}"`,
+          r.family === "bride" ? "Nhà Gái" : "Nhà Trai",
+          r.attending === "yes" ? "Sẽ Đến" : "Lỡ Hẹn",
+          r.attending === "yes" ? (r.guests || 1) : 0,
+          `"${(r.message || "").replace(/"/g, '""')}"`,
+          r.createdAt ? new Date(r.createdAt).toLocaleString("vi-VN") : ""
+        ]);
+
+        const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(e => e.join(","))].join("\r\n");
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        const dateStr = new Date().toISOString().slice(0, 10);
+        a.href = url;
+        a.download = `Danh_Sach_Khach_Moi_KhanhLinh_LeDung_${dateStr}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast("Đã tải xuống file CSV (mở trực tiếp bằng Excel)!");
+      });
+
+      // Auto poll every 30s
+      setInterval(fetchRsvps, 30000);
+
+      // Initial Fetch
+      fetchRsvps();
+    })();
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="470" viewBox="0 0 600 470"><defs><pattern id="paper" width="47" height="43" patternUnits="userSpaceOnUse"><path d="M0 17H47" stroke="#849ead" opacity=".12" stroke-width="1"/><path d="M7 3l3 1m21 24 4-1M17 37h2" stroke="#806e54" opacity=".14"/></pattern></defs><g stroke="#656050" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M32 338Q126 44 337 87q170-20 235 251" fill="#dce4dc"/><path d="M54 331Q136 95 337 129q139-16 212 202" fill="#9bc9d0"/>
+<path d="M75 323Q168 156 331 167q131 9 190 156" fill="#536c79"/>
+<g fill="none" stroke="#72d8dc" stroke-width="5"><path d="M44 308Q125 89 328 111t229 197M91 320q83-122 242-125t172 125M139 320q72-91 183-91t135 91"/></g>
+<g fill="none" stroke="#8daeb8" stroke-width="2.4"><path d="M72 302l30-85m-5 59 37-105m-6 70 44-104m9 67 31-91m23 76 22-89m19 87 18-83m21 87 6-84m37 92-9-79m48 102-27-83m64 128-30-85"/></g>
+<path d="M21 340h555v28H21z" fill="#d2d4bb"/>
+<g fill="#405c71" stroke="#5a6057"><circle cx="190" cy="306" r="24"/><circle cx="294" cy="306" r="24"/><path d="M184 301l47-38 55 14 19 21h-83l-16 15z"/></g>
+<g fill="none" stroke="#8ee4e7" stroke-width="5"><circle cx="190" cy="306" r="16"/><circle cx="294" cy="306" r="16"/><path d="M210 294h68l-31-17h-18"/></g>
+<text x="303" y="420" text-anchor="middle" stroke="none" fill="#526c79" font-size="45" font-weight="bold" font-family="monospace">TRON</text>
+<path d="M195 436q100 13 212-3" fill="none" stroke="#9bb3b6" stroke-width="3"/></g></svg>

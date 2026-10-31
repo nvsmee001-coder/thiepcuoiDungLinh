@@ -7,14 +7,14 @@
   const zoomButton = document.getElementById('gallery-zoom-toggle');
   const hint = document.getElementById('gallery-hint');
   if (!dialog || !image || !surface || !zoomButton) return;
-  const photos = [
+  let photos = [
     {src:'assets/memory-01-garden.jpg',alt:'Khánh Linh và Lê Dũng trong khu vườn hoa',caption:'01 / The two of us'},
     {src:'assets/memory-02-castle.jpg',alt:'Khánh Linh và Lê Dũng trước lâu đài',caption:'02 / Always you'},
     {src:'assets/memory-03-piano.jpg',alt:'Khánh Linh và Lê Dũng bên đàn piano',caption:'03 / Forever starts here'}
   ];
   const media = window.matchMedia('(prefers-reduced-motion: reduce)');
   const ease = 'cubic-bezier(.22,1,.36,1)';
-  const thumbs = [...document.querySelectorAll('[data-photo-index]')];
+  let thumbs = [...document.querySelectorAll('[data-photo-index]')];
   const cache = new Map();
   const running = new Set();
   let index = 0, serial = 0, closing = false, zoomed = false, busy = false;
@@ -140,7 +140,25 @@
     if (dialog.open) dialog.close();
     if (targetButton?.isConnected) targetButton.focus({preventScroll:true});
   }
-  document.querySelectorAll('[data-gallery]').forEach(button => button.addEventListener('click',()=>openGallery(button)));
+
+  function rebindGalleryElements() {
+    thumbs = [...document.querySelectorAll('[data-photo-index]')];
+    thumbs.forEach(button => {
+      button.onclick = () => selectPhoto(button.dataset.photoIndex).catch(() => setBusy(false));
+    });
+    document.querySelectorAll('[data-gallery]').forEach(button => {
+      button.onclick = () => openGallery(button);
+    });
+  }
+
+  window.syncGalleryPhotos = function(newPhotos) {
+    if (Array.isArray(newPhotos) && newPhotos.length > 0) {
+      photos = newPhotos;
+    }
+    rebindGalleryElements();
+  };
+
+  rebindGalleryElements();
   dialog.querySelector('[data-close="gallery-dialog"]').addEventListener('click',closeGallery);
   dialog.addEventListener('cancel',event=>{event.preventDefault();closeGallery();});
   dialog.addEventListener('click',event=>{if(event.target===dialog)closeGallery();});

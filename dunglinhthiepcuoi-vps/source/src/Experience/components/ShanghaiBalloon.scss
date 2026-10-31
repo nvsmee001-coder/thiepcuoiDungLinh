@@ -1,0 +1,39 @@
+.shanghai-memory {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 4vh 5vw;
+  box-sizing: border-box;
+  pointer-events: none;
+
+  &--right { justify-content: flex-end; }
+
+  &__photo {
+    margin: 0;
+    padding: 10px 10px 22px;
+    background: #fff9ec;
+    border: 1px solid #e2d6c3;
+    box-shadow: 0 12px 40px #32262640;
+    transform: rotate(-2deg);
+    animation: memory-open 180ms ease-out both;
+  }
+
+  img {
+    display: block;
+    width: auto;
+    height: min(70vh, 620px);
+    max-width: 43vw;
+    object-fit: contain;
+  }
+}
+
+@keyframes memory-open {
+  from { opacity: 0; transform: translateY(12px) rotate(-2deg) scale(.96); }
+  to { opacity: 1; transform: translateY(0) rotate(-2deg) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shanghai-memory__photo { animation: none; }
+}

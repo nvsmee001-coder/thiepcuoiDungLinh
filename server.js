@@ -245,6 +245,7 @@ const server = http.createServer(async (req, res) => {
       const newRecord = {
         id: "rsvp_" + Date.now() + "_" + Math.floor(Math.random() * 1000),
         name: String(entry.name || "").trim().slice(0, 100),
+        phone: String(entry.phone || "").trim().slice(0, 30),
         attending: entry.attending === "no" ? "no" : "yes",
         family: entry.family === "bride" ? "bride" : "groom",
         guests: entry.attending === "no" ? 0 : Math.max(1, Number(entry.guests) || 1),
@@ -291,6 +292,8 @@ const server = http.createServer(async (req, res) => {
     pathname = "/stationery.html";
   } else if (pathname === "/admin" || pathname === "/admin/" || pathname === "/admin/index.html") {
     pathname = "/admin.html";
+  } else if (pathname === "/guest-list" || pathname === "/guest-list/" || pathname === "/guest-list/index.html") {
+    pathname = "/guest-list.html";
   } else if (pathname === "/minimal" || pathname === "/minimal/") {
     pathname = "/minimal.html";
   }

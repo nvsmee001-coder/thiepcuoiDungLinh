@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 320 320">
+  <defs><pattern id="wax" width="17" height="19" patternUnits="userSpaceOnUse"><path d="M2 3l3 1m8 7h2M4 16l2-1" stroke="#fff9cf" stroke-width="1.5" opacity=".5"/></pattern></defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke="#e5ad4f" stroke-width="8">
+      <path d="M155 62l-3-33m39 39 14-27m16 47 26-24m-13 55 36-10m-27 42 41 5m-47 28 29 18m-47 11 24 29m-54-13 10 37m-39-35-5 41m-28-49-19 35m-8-55-26 24m7-51-39 9m33-37-38-5m45-25-31-17m51-6-20-31m47 19-7-34"/>
+    </g>
+    <path d="M158 82c41-5 77 32 76 76 4 47-29 78-76 78-43 1-78-35-76-77-3-43 32-77 76-77Z" fill="#f3cf5d" stroke="#d79e46" stroke-width="5"/>
+    <path d="M158 82c41-5 77 32 76 76 4 47-29 78-76 78-43 1-78-35-76-77-3-43 32-77 76-77Z" fill="url(#wax)" stroke="none"/>
+    <path d="M102 120q15-27 45-26m59 107q-20 24-51 22" stroke="#efbc51" stroke-width="4"/>
+    <path d="M123 144q6-10 12 0m40-1q6-10 12 1" stroke="#77634a" stroke-width="5"/>
+    <path d="M128 175q29 34 58-2" stroke="#a2734f" stroke-width="4.5"/>
+    <path d="M109 167l10 3m75-3 10-2" stroke="#df9277" stroke-width="10" opacity=".7"/>
+    <path d="M66 102l-15-8m206 68 17 3M118 252l-8 13" stroke="#f4c566" stroke-width="3"/>
+  </g>
+</svg>

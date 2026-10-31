@@ -1,0 +1,10 @@
+Thiệp cưới Dũng & Linh — VPS package
+Source commit: d2e2f521cf2edb59536719364d601a7dc489a042
+Build command: npm run build
+Node.js: v22.22.1
+Package date: 2026-10-31 (Asia/Ho_Chi_Minh)
+Production files: 120
+Source files: 171
+No Node.js server process is needed to serve dist/.
+Runtime assets, fonts, Draco and KTX2 decoders are served locally.
+Hosting credentials, .git, .openai, node_modules and Blender authoring files are excluded.

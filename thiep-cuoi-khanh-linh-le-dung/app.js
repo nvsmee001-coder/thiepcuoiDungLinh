@@ -66,11 +66,12 @@ const rsvpDialog = document.getElementById('rsvp-dialog');
 const rsvpForm = document.getElementById('rsvp-form');
 let savedResponse = null;
 try { savedResponse = JSON.parse(localStorage.getItem('minh-anh-rsvp-demo')); } catch (_) { /* Browser-local storage is optional. */ }
-if (savedResponse && typeof savedResponse === 'object' && typeof savedResponse.name === 'string') {
-  rsvpForm.elements.name.value = savedResponse.name;
-  rsvpForm.elements.attending.value = savedResponse.attending === 'no' ? 'no':'yes';
-  rsvpForm.elements.guests.value = String(savedResponse.guests || 1);
-  rsvpForm.elements.message.value = savedResponse.message || '';
+if (savedResponse && typeof savedResponse === 'object') {
+  if (rsvpForm.elements.name) rsvpForm.elements.name.value = savedResponse.name || '';
+  if (rsvpForm.elements.phone) rsvpForm.elements.phone.value = savedResponse.phone || '';
+  if (rsvpForm.elements.attending) rsvpForm.elements.attending.value = savedResponse.attending === 'no' ? 'no':'yes';
+  if (rsvpForm.elements.guests) rsvpForm.elements.guests.value = String(savedResponse.guests || 1);
+  if (rsvpForm.elements.message) rsvpForm.elements.message.value = savedResponse.message || '';
 }
 function updateAttendance() { document.getElementById('guest-count').disabled = rsvpForm.elements.attending.value === 'no'; }
 rsvpForm.elements.attending.forEach(radio => radio.addEventListener('change',updateAttendance)); updateAttendance();
@@ -87,10 +88,13 @@ rsvpForm.addEventListener('submit', event => {
   event.preventDefault();
   const name = rsvpForm.elements.name.value.trim();
   if (!name) { rsvpForm.elements.name.setCustomValidity('Bạn hãy nhập tên nhé.'); rsvpForm.elements.name.reportValidity(); return; }
+  const phone = (rsvpForm.elements.phone ? rsvpForm.elements.phone.value : '').trim();
+  if (!phone) { rsvpForm.elements.phone.setCustomValidity('Bạn hãy nhập số điện thoại nhé.'); rsvpForm.elements.phone.reportValidity(); return; }
   const attending = rsvpForm.elements.attending.value;
   const family = ['groom','bride'].includes(rsvpForm.elements.family.value) ? rsvpForm.elements.family.value : (document.body.dataset.weddingFamily || 'bride');
   const response = {
     name,
+    phone,
     attending,
     family,
     eventDate: invitationDetails().date,
@@ -129,6 +133,7 @@ rsvpForm.addEventListener('submit', event => {
   if (closeBtn) closeBtn.focus();
 });
 rsvpForm.elements.name.addEventListener('input', () => rsvpForm.elements.name.setCustomValidity(''));
+if (rsvpForm.elements.phone) rsvpForm.elements.phone.addEventListener('input', () => rsvpForm.elements.phone.setCustomValidity(''));
 document.getElementById('edit-response').addEventListener('click', () => {
   document.getElementById('rsvp-form-view').hidden = false; document.getElementById('rsvp-success').hidden = true;
   rsvpDialog.setAttribute('aria-labelledby','rsvp-dialog-title'); rsvpForm.elements.name.focus();

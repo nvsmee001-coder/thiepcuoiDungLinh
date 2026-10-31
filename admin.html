@@ -696,7 +696,7 @@
     <!-- 7 TAB QUẢN LÝ RÕ RÀNG -->
     <nav class="admin-tabs">
       <button type="button" class="tab-btn active" data-tab="pane-album">📸 1. Nạp &amp; Quản Lý Album Ảnh (<span id="albumCountBadge">11</span>)</button>
-      <button type="button" class="tab-btn" data-tab="pane-general">💍 2. Dâu Rể, Ngày Giờ &amp; Ảnh Nền</button>
+      <button type="button" class="tab-btn" data-tab="pane-general">💍 2. Dâu Rể, Ngày Giờ, Ảnh Bìa &amp; Intro</button>
       <button type="button" class="tab-btn" data-tab="pane-venues">📍 3. Địa Điểm &amp; Bản Đồ 2 Nhà</button>
       <button type="button" class="tab-btn" data-tab="pane-menu">🍽️ 4. Thực Đơn Tiệc Cưới</button>
       <button type="button" class="tab-btn" data-tab="pane-schedule">🕰️ 5. Lịch Biểu Hôn Lễ</button>
@@ -836,117 +836,159 @@
 
       </div>
 
-      <!-- Khối Ảnh Nền & 2 Khung Tranh Baroque -->
+      <!-- Khối Ảnh Bìa & Ảnh Kỷ Niệm Thiệp Cưới -->
       <div class="panel-card">
-        <h3 class="panel-title">🖼️ Ảnh Nền Thiệp &amp; 2 Khung Tranh Baroque Trang Bìa</h3>
+        <h3 class="panel-title">🖼️ Ảnh Bìa Thiệp Cưới &amp; Ảnh Đoạn Giữa Trang</h3>
         <p class="panel-desc">
-          Chọn trực tiếp từ danh sách ảnh đã nạp vào Album (hoặc tải ảnh mới từ máy), sau đó <strong>kéo thả &amp; phóng to/thu nhỏ căn chỉnh khung cắt chuẩn tỉ lệ</strong> để ảnh không bao giờ bị méo hay cắt mất mặt trước khi bấm Xác Nhận!
+          Chọn trực tiếp từ danh sách ảnh đã nạp vào Album (hoặc tải ảnh mới từ máy), sau đó sử dụng <strong>Bàn Căn Chỉnh Khung Cắt</strong> để điều chỉnh góc ảnh đẹp nhất.
         </p>
 
         <div class="slot-cards-grid">
-          <!-- 1. Ảnh nền Tab 1 (16:9 — Hỗ trợ nhiều ảnh tự động chuyển mượt) -->
+          <!-- 1. Ảnh Bìa Đôi Uyên Ương (Choice Stage & Hero Bìa Thiệp — Đứng 3:4) -->
           <div class="slot-card">
             <div class="slot-card-title">
-              <span>1. Ảnh Nền Tab 1 (Mở Đầu)</span>
-              <span class="slot-ratio-badge" id="badge_count_heroBackdrop">Ngang 16:9 • Slideshow</span>
-            </div>
-            <div class="slot-preview-wrap ratio-16-9">
-              <img src="" alt="" class="slot-preview-img" id="prev_heroBackdrop">
-            </div>
-            <div id="list_heroBackdrop" style="display:flex; gap:6px; flex-wrap:wrap; min-height:38px;"></div>
-            <input type="hidden" id="f_heroBackdrop">
-            <div class="slot-btn-group">
-              <button type="button" class="btn btn-primary" data-pick-slot="heroBackdrop" data-slot-mode="append" data-ratio="16:9" data-slot-label="Thêm Ảnh Nền Tab 1 (Mở Đầu — Ngang 16:9)">
-                🖼️ + Thêm Từ Album
-              </button>
-              <button type="button" class="btn" data-recrop-slot="heroBackdrop" data-ratio="16:9" data-slot-label="Căn Chỉnh Ảnh Nền Tab 1 (Ngang 16:9)">
-                ✂️ Căn Chỉnh
-              </button>
-              <label class="btn" style="cursor:pointer;">
-                📤 + Tải Ảnh Mới
-                <input type="file" accept="image/*" style="display:none;" data-upload-slot="heroBackdrop" data-slot-mode="append" data-ratio="16:9" data-slot-label="Thêm Ảnh Nền Tab 1 (Mở Đầu — Ngang 16:9)">
-              </label>
-            </div>
-          </div>
-
-          <!-- 2. Ảnh nền Tab 2 (16:9 — Hỗ trợ nhiều ảnh tự động chuyển mượt) -->
-          <div class="slot-card">
-            <div class="slot-card-title">
-              <span>2. Ảnh Nền Tab 2 (Chi Tiết &amp; Map)</span>
-              <span class="slot-ratio-badge" id="badge_count_detailsBackdrop">Ngang 16:9 • Slideshow</span>
-            </div>
-            <div class="slot-preview-wrap ratio-16-9">
-              <img src="" alt="" class="slot-preview-img" id="prev_detailsBackdrop">
-            </div>
-            <div id="list_detailsBackdrop" style="display:flex; gap:6px; flex-wrap:wrap; min-height:38px;"></div>
-            <input type="hidden" id="f_detailsBackdrop">
-            <div class="slot-btn-group">
-              <button type="button" class="btn btn-primary" data-pick-slot="detailsBackdrop" data-slot-mode="append" data-ratio="16:9" data-slot-label="Thêm Ảnh Nền Tab 2 (Chi Tiết & Map — Ngang 16:9)">
-                🖼️ + Thêm Từ Album
-              </button>
-              <button type="button" class="btn" data-recrop-slot="detailsBackdrop" data-ratio="16:9" data-slot-label="Căn Chỉnh Ảnh Nền Tab 2 (Ngang 16:9)">
-                ✂️ Căn Chỉnh
-              </button>
-              <label class="btn" style="cursor:pointer;">
-                📤 + Tải Ảnh Mới
-                <input type="file" accept="image/*" style="display:none;" data-upload-slot="detailsBackdrop" data-slot-mode="append" data-ratio="16:9" data-slot-label="Thêm Ảnh Nền Tab 2 (Chi Tiết & Map — Ngang 16:9)">
-              </label>
-            </div>
-          </div>
-
-          <!-- 3. Khung Baroque Trái (3:4) -->
-          <div class="slot-card">
-            <div class="slot-card-title">
-              <span>3. Khung Giá Vẽ Bên Trái</span>
-              <span class="slot-ratio-badge">Đứng 3:4</span>
+              <span>1. Ảnh Bìa Đôi Uyên Ương (Cover &amp; Hero)</span>
+              <span class="slot-ratio-badge">Đứng 3:4 • Card Bìa</span>
             </div>
             <div class="slot-preview-wrap ratio-3-4">
-              <img src="" alt="" class="slot-preview-img" id="prev_leftFramePhoto">
+              <img src="" alt="" class="slot-preview-img" id="prev_coverPhoto">
             </div>
-            <input type="hidden" id="f_leftFramePhoto">
+            <input type="hidden" id="f_coverPhoto">
+            <p style="font-size:0.75rem; color:var(--text-muted); margin:0;">
+              Hiển thị tại màn hình Chọn Nhà Trai/Nhà Gái, Bìa đỉnh trang thiệp &amp; Con dấu mờ.
+            </p>
             <div class="slot-btn-group">
-              <button type="button" class="btn btn-primary" data-pick-slot="leftFramePhoto" data-ratio="3:4" data-slot-label="Khung Tranh Giá Vẽ Bên Trái (Tỉ lệ Đứng 3:4)">
+              <button type="button" class="btn btn-primary" data-pick-slot="coverPhoto" data-ratio="3:4" data-slot-label="Ảnh Bìa Đôi Uyên Ương (Đứng 3:4)">
                 🖼️ Chọn Từ Album
               </button>
-              <button type="button" class="btn" data-recrop-slot="leftFramePhoto" data-ratio="3:4" data-slot-label="Khung Tranh Giá Vẽ Bên Trái (Tỉ lệ Đứng 3:4)">
+              <button type="button" class="btn" data-recrop-slot="coverPhoto" data-ratio="3:4" data-slot-label="Căn Chỉnh Ảnh Bìa Đôi Uyên Ương (Đứng 3:4)">
                 ✂️ Căn Chỉnh
               </button>
               <label class="btn" style="cursor:pointer;">
                 📤 Tải Mới
-                <input type="file" accept="image/*" style="display:none;" data-upload-slot="leftFramePhoto" data-ratio="3:4" data-slot-label="Khung Tranh Giá Vẽ Bên Trái (Tỉ lệ Đứng 3:4)">
+                <input type="file" accept="image/*" style="display:none;" data-upload-slot="coverPhoto" data-ratio="3:4" data-slot-label="Ảnh Bìa Đôi Uyên Ương (Đứng 3:4)">
               </label>
-            </div>
-            <div class="form-group" style="margin-bottom:0;">
-              <label>Chữ khắc Bảng Đồng Trái</label>
-              <input type="text" class="form-control" id="f_leftFramePlaque" placeholder="VD: ✦ DŨNG • LINH ✦">
             </div>
           </div>
 
-          <!-- 4. Khung Baroque Phải (3:4) -->
+          <!-- 2. Ảnh Kỷ Niệm Chuyển Đoạn (Interlude Photo — Ngang 16:9) -->
           <div class="slot-card">
             <div class="slot-card-title">
-              <span>4. Khung Giá Vẽ Bên Phải</span>
-              <span class="slot-ratio-badge">Đứng 3:4</span>
+              <span>2. Ảnh Chuyển Tiếp Nghệ Thuật (Interlude)</span>
+              <span class="slot-ratio-badge">Ngang 16:9</span>
             </div>
-            <div class="slot-preview-wrap ratio-3-4">
-              <img src="" alt="" class="slot-preview-img" id="prev_rightFramePhoto">
+            <div class="slot-preview-wrap ratio-16-9">
+              <img src="" alt="" class="slot-preview-img" id="prev_interludePhoto">
             </div>
-            <input type="hidden" id="f_rightFramePhoto">
+            <input type="hidden" id="f_interludePhoto">
+            <p style="font-size:0.75rem; color:var(--text-muted); margin:0;">
+              Hiển thị tại đoạn thơ chuyển tiếp "And so, our forever begins" giữa trang thiệp.
+            </p>
             <div class="slot-btn-group">
-              <button type="button" class="btn btn-primary" data-pick-slot="rightFramePhoto" data-ratio="3:4" data-slot-label="Khung Tranh Giá Vẽ Bên Phải (Tỉ lệ Đứng 3:4)">
+              <button type="button" class="btn btn-primary" data-pick-slot="interludePhoto" data-ratio="16:9" data-slot-label="Ảnh Chuyển Tiếp Nghệ Thuật (Ngang 16:9)">
                 🖼️ Chọn Từ Album
               </button>
-              <button type="button" class="btn" data-recrop-slot="rightFramePhoto" data-ratio="3:4" data-slot-label="Khung Tranh Giá Vẽ Bên Phải (Tỉ lệ Đứng 3:4)">
+              <button type="button" class="btn" data-recrop-slot="interludePhoto" data-ratio="16:9" data-slot-label="Căn Chỉnh Ảnh Chuyển Tiếp (Ngang 16:9)">
                 ✂️ Căn Chỉnh
               </button>
               <label class="btn" style="cursor:pointer;">
                 📤 Tải Mới
-                <input type="file" accept="image/*" style="display:none;" data-upload-slot="rightFramePhoto" data-ratio="3:4" data-slot-label="Khung Tranh Giá Vẽ Bên Phải (Tỉ lệ Đứng 3:4)">
+                <input type="file" accept="image/*" style="display:none;" data-upload-slot="interludePhoto" data-ratio="16:9" data-slot-label="Ảnh Chuyển Tiếp Nghệ Thuật (Ngang 16:9)">
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Khối 3 Cảnh Kỷ Niệm Mở Màn Intro (Visual Novel Typewriter) -->
+      <div class="panel-card">
+        <h3 class="panel-title">🎬 3 Cảnh Kỷ Niệm Mở Màn Intro (Hiệu Ứng Gõ Chữ Visual Novel)</h3>
+        <p class="panel-desc">
+          Khi khách mở thiệp, 3 bức ảnh nền cùng câu thơ ý nghĩa sẽ xuất hiện với hiệu ứng gõ chữ nghệ thuật trước khi bước vào chọn Nhà Trai / Nhà Gái. Bạn có thể thay đổi cả ảnh nền và câu thơ cho từng cảnh!
+        </p>
+
+        <div class="slot-cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+          <!-- Cảnh 1 -->
+          <div class="slot-card">
+            <div class="slot-card-title">
+              <span>Cảnh 1 • Thanh Âm Đầu Tiên</span>
+              <span class="slot-ratio-badge">Ngang 16:9</span>
+            </div>
+            <div class="slot-preview-wrap ratio-16-9">
+              <img src="" alt="" class="slot-preview-img" id="prev_introScene0_backdrop">
+            </div>
+            <input type="hidden" id="f_introScene0_backdrop">
+            <div class="slot-btn-group">
+              <button type="button" class="btn btn-primary" data-pick-slot="introScene0_backdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Cảnh 1 Intro (Ngang 16:9)">
+                🖼️ Chọn Từ Album
+              </button>
+              <button type="button" class="btn" data-recrop-slot="introScene0_backdrop" data-ratio="16:9" data-slot-label="Căn Chỉnh Ảnh Nền Cảnh 1 (Ngang 16:9)">
+                ✂️ Căn Chỉnh
+              </button>
+              <label class="btn" style="cursor:pointer;">
+                📤 Tải Mới
+                <input type="file" accept="image/*" style="display:none;" data-upload-slot="introScene0_backdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Cảnh 1 Intro (Ngang 16:9)">
               </label>
             </div>
             <div class="form-group" style="margin-bottom:0;">
-              <label>Chữ khắc Bảng Đồng Phải</label>
-              <input type="text" class="form-control" id="f_rightFramePlaque" placeholder="VD: ✦ 07 . 12 . 2026 ✦">
+              <label>Câu Thơ Gõ Chữ Cảnh 1</label>
+              <textarea class="form-control" id="f_introScene0_verse" rows="3" placeholder="Nhập câu thơ cảnh 1..."></textarea>
+            </div>
+          </div>
+
+          <!-- Cảnh 2 -->
+          <div class="slot-card">
+            <div class="slot-card-title">
+              <span>Cảnh 2 • Hành Trình Chung Đôi</span>
+              <span class="slot-ratio-badge">Ngang 16:9</span>
+            </div>
+            <div class="slot-preview-wrap ratio-16-9">
+              <img src="" alt="" class="slot-preview-img" id="prev_introScene1_backdrop">
+            </div>
+            <input type="hidden" id="f_introScene1_backdrop">
+            <div class="slot-btn-group">
+              <button type="button" class="btn btn-primary" data-pick-slot="introScene1_backdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Cảnh 2 Intro (Ngang 16:9)">
+                🖼️ Chọn Từ Album
+              </button>
+              <button type="button" class="btn" data-recrop-slot="introScene1_backdrop" data-ratio="16:9" data-slot-label="Căn Chỉnh Ảnh Nền Cảnh 2 (Ngang 16:9)">
+                ✂️ Căn Chỉnh
+              </button>
+              <label class="btn" style="cursor:pointer;">
+                📤 Tải Mới
+                <input type="file" accept="image/*" style="display:none;" data-upload-slot="introScene1_backdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Cảnh 2 Intro (Ngang 16:9)">
+              </label>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Câu Thơ Gõ Chữ Cảnh 2</label>
+              <textarea class="form-control" id="f_introScene1_verse" rows="3" placeholder="Nhập câu thơ cảnh 2..."></textarea>
+            </div>
+          </div>
+
+          <!-- Cảnh 3 -->
+          <div class="slot-card">
+            <div class="slot-card-title">
+              <span>Cảnh 3 • Lời Hứa Trăm Năm</span>
+              <span class="slot-ratio-badge">Ngang 16:9</span>
+            </div>
+            <div class="slot-preview-wrap ratio-16-9">
+              <img src="" alt="" class="slot-preview-img" id="prev_introScene2_backdrop">
+            </div>
+            <input type="hidden" id="f_introScene2_backdrop">
+            <div class="slot-btn-group">
+              <button type="button" class="btn btn-primary" data-pick-slot="introScene2_backdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Cảnh 3 Intro (Ngang 16:9)">
+                🖼️ Chọn Từ Album
+              </button>
+              <button type="button" class="btn" data-recrop-slot="introScene2_backdrop" data-ratio="16:9" data-slot-label="Căn Chỉnh Ảnh Nền Cảnh 3 (Ngang 16:9)">
+                ✂️ Căn Chỉnh
+              </button>
+              <label class="btn" style="cursor:pointer;">
+                📤 Tải Mới
+                <input type="file" accept="image/*" style="display:none;" data-upload-slot="introScene2_backdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Cảnh 3 Intro (Ngang 16:9)">
+              </label>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Câu Thơ Gõ Chữ Cảnh 3</label>
+              <textarea class="form-control" id="f_introScene2_verse" rows="3" placeholder="Nhập câu thơ cảnh 3..."></textarea>
             </div>
           </div>
         </div>
@@ -1108,7 +1150,7 @@
     <section class="tab-pane" id="pane-menu">
       <div class="panel-card">
         <div class="panel-title">
-          <span>🍽️ Thực Đơn Tiệc Cưới (Cột Trái Tab 2)</span>
+          <span>🍽️ Thực Đơn Tiệc Cưới (Banquet Menu)</span>
           <button type="button" class="btn btn-sm btn-primary" id="btnAddCourse">+ Thêm Món Mới</button>
         </div>
         <p class="panel-desc">Chỉnh sửa tiêu đề thực đơn và danh sách các món đãi tiệc.</p>
@@ -1138,7 +1180,7 @@
     <section class="tab-pane" id="pane-schedule">
       <div class="panel-card">
         <div class="panel-title">
-          <span>🕰️ Lịch Trình &amp; Nghi Thức Hôn Lễ (Cột Giữa Tab 2)</span>
+          <span>🕰️ Lịch Trình &amp; Nghi Thức Hôn Lễ (Wedding Timeline)</span>
           <button type="button" class="btn btn-sm btn-primary" id="btnAddScheduleEvent">+ Thêm Mốc Giờ</button>
         </div>
         <p class="panel-desc">Quản lý các khung giờ cử hành hôn lễ và đón khách.</p>
@@ -1204,13 +1246,16 @@
       <div class="panel-card">
         <div class="panel-title">
           <span>💌 Danh Sách Khách Mời Xác Nhận Tham Dự (RSVP)</span>
-          <div style="display:flex; gap:8px;">
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <a href="/guest-list.html" target="_blank" class="btn btn-sm" style="background:rgba(226,196,142,0.18); border-color:var(--gold-bright); color:var(--gold-bright); text-decoration:none;">
+              🔗 Mở Trang Xem Cho Bạn Bè (guest-list.html)
+            </a>
             <button type="button" class="btn btn-sm" id="btnRefreshRsvp" title="Tải lại danh sách mới">🔄 Làm Mới</button>
-            <button type="button" class="btn btn-sm btn-primary" id="btnExportRsvp" title="Tải file Excel / CSV">📥 Tải Danh Sách</button>
+            <button type="button" class="btn btn-sm btn-primary" id="btnExportRsvp" title="Tải file Excel / CSV">📥 Tải Danh Sách (Excel/CSV)</button>
           </div>
         </div>
         <p class="panel-desc">
-          Theo dõi trực tiếp những vị khách đã xác nhận tham dự tiệc cưới, phân chia rõ ràng theo Nhà Trai / Nhà Gái, số lượng người đi cùng và những lời chúc phúc ấm áp gửi đến cô dâu &amp; chú rể.
+          Theo dõi trực tiếp những vị khách đã xác nhận tham dự tiệc cưới, phân chia rõ ràng theo Nhà Trai / Nhà Gái, số lượng người đi cùng, số điện thoại và những lời chúc phúc ấm áp gửi đến cô dâu &amp; chú rể.
         </p>
 
         <!-- Thống kê tổng quan -->
@@ -1233,12 +1278,33 @@
           </div>
         </div>
 
-        <!-- Bộ lọc Nhà Trai / Nhà Gái -->
-        <div style="display:flex; gap:10px; margin-bottom: 16px; flex-wrap:wrap; align-items:center;">
+        <!-- Thanh Tìm Kiếm & Sắp Xếp Nâng Cao -->
+        <div style="display:flex; gap:12px; margin-bottom:18px; flex-wrap:wrap; align-items:center; justify-content:space-between; background:rgba(226,196,142,0.06); padding:14px; border-radius:12px; border:1px solid var(--gold-dim);">
+          <div style="display:flex; gap:10px; flex:1; min-width:280px; align-items:center;">
+            <span style="font-size:1.2rem;">🔍</span>
+            <input type="text" id="rsvpSearchInput" class="form-control" placeholder="Tìm theo tên khách, số điện thoại, lời chúc..." style="margin-bottom:0;">
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <span style="font-size:0.82rem; color:var(--gold); font-weight:700;">Sắp xếp:</span>
+            <select id="rsvpSortSelect" class="form-control" style="width:auto; min-width:190px; margin-bottom:0; padding:8px 12px; cursor:pointer;">
+              <option value="time_desc">🕒 Mới nhất trước</option>
+              <option value="time_asc">🕒 Cũ nhất trước</option>
+              <option value="name_asc">🔤 Tên khách (A → Z)</option>
+              <option value="name_desc">🔤 Tên khách (Z → A)</option>
+              <option value="phone">📱 Số điện thoại</option>
+              <option value="guests_desc">👥 Số khách đi cùng (Nhiều nhất)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Bộ lọc Phân Loại -->
+        <div style="display:flex; gap:8px; margin-bottom: 16px; flex-wrap:wrap; align-items:center;">
           <span style="font-size:0.85rem; color:var(--text-muted);">Lọc theo:</span>
-          <button type="button" class="btn btn-sm btn-primary rsvp-filter-btn active" data-filter="all">Tất Cả</button>
-          <button type="button" class="btn btn-sm rsvp-filter-btn" data-filter="bride">Nhà Gái</button>
-          <button type="button" class="btn btn-sm rsvp-filter-btn" data-filter="groom">Nhà Trai</button>
+          <button type="button" class="btn btn-sm btn-primary rsvp-filter-btn active" data-filter="all">Tất Cả (<span id="filterCountAll">0</span>)</button>
+          <button type="button" class="btn btn-sm rsvp-filter-btn" data-filter="bride">Nhà Gái (<span id="filterCountBride">0</span>)</button>
+          <button type="button" class="btn btn-sm rsvp-filter-btn" data-filter="groom">Nhà Trai (<span id="filterCountGroom">0</span>)</button>
+          <button type="button" class="btn btn-sm rsvp-filter-btn" data-filter="attending_yes" style="border-color:rgba(81,207,102,0.4); color:#51cf66;">✓ Sẽ Đến (<span id="filterCountAttending">0</span>)</button>
+          <button type="button" class="btn btn-sm rsvp-filter-btn" data-filter="attending_no" style="border-color:rgba(255,107,107,0.4); color:#ff8787;">✕ Lỡ Hẹn (<span id="filterCountDeclined">0</span>)</button>
         </div>
 
         <!-- Bảng danh sách phản hồi -->
@@ -1906,17 +1972,37 @@
         val("f_eyebrow", c.eyebrow);
         val("f_invitationText", c.invitationText);
         val("f_signatureQuote", c.signatureQuote);
-        val("f_heroBackdrop", c.heroBackdrop);
-        val("f_detailsBackdrop", c.detailsBackdrop);
-        val("f_leftFramePhoto", c.leftFramePhoto);
-        val("f_leftFramePlaque", c.leftFramePlaque);
-        val("f_rightFramePhoto", c.rightFramePhoto);
-        val("f_rightFramePlaque", c.rightFramePlaque);
 
-        renderBackdropStrip("heroBackdrop");
-        renderBackdropStrip("detailsBackdrop");
-        document.getElementById("prev_leftFramePhoto").src = c.leftFramePhoto || "";
-        document.getElementById("prev_rightFramePhoto").src = c.rightFramePhoto || "";
+        var coverSrc = c.coverPhoto || c.heroBackdrop || "assets/cover-khanh-linh-le-dung.jpg";
+        val("f_coverPhoto", coverSrc);
+        var prevCover = document.getElementById("prev_coverPhoto");
+        if (prevCover) prevCover.src = coverSrc;
+
+        var interludeSrc = c.interludePhoto || c.detailsBackdrop || "assets/hero.jpg";
+        val("f_interludePhoto", interludeSrc);
+        var prevInterlude = document.getElementById("prev_interludePhoto");
+        if (prevInterlude) prevInterlude.src = interludeSrc;
+
+        var scs = Array.isArray(state.introScenes) ? state.introScenes : [];
+        var defaultVerses = [
+          "“Có những cuộc gặp gỡ ngỡ như tình cờ,\nnhưng lại là sự an bài đẹp nhất của duyên số.”",
+          "“Cùng nhau đi qua năm tháng, cùng sẻ chia từng nụ cười,\nmỗi khoảnh khắc có nhau đều trở thành kỷ niệm vô giá.”",
+          "“Từ hai người xa lạ, ta tìm thấy bình yên nơi ánh mắt,\nvà nhận ra rằng: đối phương chính là bến đỗ trọn đời.”"
+        ];
+        var defaultBackdrops = [
+          "assets/memory-01-garden.jpg",
+          "assets/memory-02-castle.jpg",
+          "assets/memory-03-piano.jpg"
+        ];
+        for (var i = 0; i < 3; i++) {
+          var sc = scs[i] || {};
+          var bdSrc = sc.backdrop || defaultBackdrops[i];
+          var verseTxt = sc.verse || defaultVerses[i];
+          val("f_introScene" + i + "_backdrop", bdSrc);
+          val("f_introScene" + i + "_verse", verseTxt);
+          var prevEl = document.getElementById("prev_introScene" + i + "_backdrop");
+          if (prevEl) prevEl.src = bdSrc;
+        }
 
         var d = state.date || {};
         val("f_isoTarget", d.isoTarget);
@@ -1988,23 +2074,35 @@
 
       // GOM DỮ LIỆU TỪ FORM VÀO STATE
       function collectFormsToState() {
-        var heroArr = getBackdropArray("heroBackdrop");
-        var detailsArr = getBackdropArray("detailsBackdrop");
+        var coverVal = val("f_coverPhoto") || "assets/cover-khanh-linh-le-dung.jpg";
+        var interludeVal = val("f_interludePhoto") || "assets/hero.jpg";
+
         state.couple = {
           groomName: val("f_groomName"),
           brideName: val("f_brideName"),
           eyebrow: val("f_eyebrow"),
           invitationText: val("f_invitationText"),
           signatureQuote: val("f_signatureQuote"),
-          heroBackdrop: heroArr[0] || val("f_heroBackdrop"),
-          heroBackdrops: heroArr,
-          detailsBackdrop: detailsArr[0] || val("f_detailsBackdrop"),
-          detailsBackdrops: detailsArr,
-          leftFramePhoto: val("f_leftFramePhoto"),
-          leftFramePlaque: val("f_leftFramePlaque"),
-          rightFramePhoto: val("f_rightFramePhoto"),
-          rightFramePlaque: val("f_rightFramePlaque")
+          coverPhoto: coverVal,
+          heroBackdrop: coverVal,
+          interludePhoto: interludeVal,
+          detailsBackdrop: interludeVal
         };
+
+        state.introScenes = [
+          {
+            backdrop: val("f_introScene0_backdrop") || "assets/memory-01-garden.jpg",
+            verse: val("f_introScene0_verse") || ""
+          },
+          {
+            backdrop: val("f_introScene1_backdrop") || "assets/memory-02-castle.jpg",
+            verse: val("f_introScene1_verse") || ""
+          },
+          {
+            backdrop: val("f_introScene2_backdrop") || "assets/memory-03-piano.jpg",
+            verse: val("f_introScene2_verse") || ""
+          }
+        ];
 
         state.date = {
           isoTarget: val("f_isoTarget"),
@@ -2686,10 +2784,12 @@
       });
 
       // ======================================================================
-      // RSVP MANAGEMENT (TAB 7)
+      // RSVP MANAGEMENT (TAB 7) - SEARCH, SORT, FILTER & PHONE SUPPORT
       // ======================================================================
       var rsvpList = [];
       var currentRsvpFilter = "all";
+      var currentRsvpSort = "time_desc";
+      var currentRsvpSearch = "";
 
       function escapeHtml(str) {
         if (!str) return "";
@@ -2725,6 +2825,7 @@
         var statFamilyRatio = document.getElementById("statFamilyRatio");
 
         var attendingCount = 0;
+        var declinedCount = 0;
         var totalGuests = 0;
         var brideCount = 0;
         var groomCount = 0;
@@ -2733,6 +2834,8 @@
           if (item.attending === "yes") {
             attendingCount++;
             totalGuests += (Number(item.guests) || 1);
+          } else {
+            declinedCount++;
           }
           if (item.family === "bride") brideCount++;
           else if (item.family === "groom") groomCount++;
@@ -2743,44 +2846,100 @@
         if (statTotalGuests) statTotalGuests.textContent = totalGuests;
         if (statFamilyRatio) statFamilyRatio.textContent = brideCount + " / " + groomCount;
 
+        // Cập nhật số đếm trên các nút bộ lọc
+        var fcAll = document.getElementById("filterCountAll");
+        var fcBride = document.getElementById("filterCountBride");
+        var fcGroom = document.getElementById("filterCountGroom");
+        var fcAttending = document.getElementById("filterCountAttending");
+        var fcDeclined = document.getElementById("filterCountDeclined");
+        if (fcAll) fcAll.textContent = rsvpList.length;
+        if (fcBride) fcBride.textContent = brideCount;
+        if (fcGroom) fcGroom.textContent = groomCount;
+        if (fcAttending) fcAttending.textContent = attendingCount;
+        if (fcDeclined) fcDeclined.textContent = declinedCount;
+
         var container = document.getElementById("rsvpListContainer");
         if (!container) return;
 
+        // 1. Lọc theo Phân loại
         var filtered = rsvpList.filter(function (item) {
-          if (currentRsvpFilter === "all") return true;
-          return item.family === currentRsvpFilter;
+          if (currentRsvpFilter === "bride") return item.family === "bride";
+          if (currentRsvpFilter === "groom") return item.family === "groom";
+          if (currentRsvpFilter === "attending_yes") return item.attending === "yes";
+          if (currentRsvpFilter === "attending_no") return item.attending === "no";
+          return true; // all
+        });
+
+        // 2. Lọc theo Ô Tìm kiếm (Tên, Số điện thoại, Lời chúc)
+        if (currentRsvpSearch) {
+          var query = currentRsvpSearch.toLowerCase().trim();
+          filtered = filtered.filter(function (item) {
+            var n = (item.name || "").toLowerCase();
+            var p = (item.phone || "").toLowerCase();
+            var m = (item.message || "").toLowerCase();
+            return n.includes(query) || p.includes(query) || m.includes(query);
+          });
+        }
+
+        // 3. Sắp xếp theo lựa chọn
+        filtered.sort(function (a, b) {
+          if (currentRsvpSort === "time_asc") {
+            return new Date(a.createdAt || 0) - new Date(b.createdAt || 0);
+          }
+          if (currentRsvpSort === "name_asc") {
+            return (a.name || "").localeCompare(b.name || "", "vi");
+          }
+          if (currentRsvpSort === "name_desc") {
+            return (b.name || "").localeCompare(a.name || "", "vi");
+          }
+          if (currentRsvpSort === "phone") {
+            return (a.phone || "").localeCompare(b.phone || "");
+          }
+          if (currentRsvpSort === "guests_desc") {
+            var gA = a.attending === "yes" ? (Number(a.guests) || 1) : 0;
+            var gB = b.attending === "yes" ? (Number(b.guests) || 1) : 0;
+            return gB - gA;
+          }
+          // Default: time_desc (mới nhất trước)
+          return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
         });
 
         if (filtered.length === 0) {
-          container.innerHTML = '<div style="text-align:center; padding:36px 16px; color:var(--text-muted); font-size:0.9rem;">Chưa có phản hồi nào trong mục này.</div>';
+          container.innerHTML = '<div style="text-align:center; padding:40px 16px; color:var(--text-muted); font-size:0.9rem;">Không tìm thấy phản hồi nào phù hợp với bộ lọc hiện tại.</div>';
           return;
         }
 
-        var html = '<table style="width:100%; border-collapse:collapse; font-size:0.85rem; text-align:left;">';
-        html += '<thead><tr style="border-bottom:1px solid var(--gold-dim); color:var(--gold-bright);">';
-        html += '<th style="padding:10px 8px;">Khách Mời</th>';
-        html += '<th style="padding:10px 8px;">Bên Gia Đình</th>';
-        html += '<th style="padding:10px 8px;">Tham Dự</th>';
-        html += '<th style="padding:10px 8px;">Số Khách</th>';
-        html += '<th style="padding:10px 8px;">Lời Chúc / Yêu Cầu</th>';
-        html += '<th style="padding:10px 8px;">Thời Gian</th>';
-        html += '<th style="padding:10px 8px; text-align:center;">Thao Tác</th>';
+        var html = '<table style="width:100%; border-collapse:collapse; font-size:0.85rem; text-align:left; min-width:850px;">';
+        html += '<thead><tr style="border-bottom:1.5px solid var(--gold-dim); color:var(--gold-bright); text-transform:uppercase; font-size:0.74rem; letter-spacing:0.8px;">';
+        html += '<th style="padding:12px 8px; width:45px; text-align:center;">#</th>';
+        html += '<th style="padding:12px 10px;">Khách Mời</th>';
+        html += '<th style="padding:12px 10px;">Số Điện Thoại</th>';
+        html += '<th style="padding:12px 10px;">Bên Gia Đình</th>';
+        html += '<th style="padding:12px 10px;">Trạng Thái</th>';
+        html += '<th style="padding:12px 10px; text-align:center;">Số Khách</th>';
+        html += '<th style="padding:12px 10px;">Lời Chúc Phúc &amp; Nhắn Gửi</th>';
+        html += '<th style="padding:12px 10px;">Thời Gian Xác Nhận</th>';
+        html += '<th style="padding:12px 8px; text-align:center;">Thao Tác</th>';
         html += '</tr></thead><tbody>';
 
-        filtered.forEach(function (item) {
+        filtered.forEach(function (item, idx) {
           var isYes = item.attending === "yes";
-          var familyBadge = item.family === "bride" ? '<span style="color:#f3a6b2; background:rgba(243,166,178,0.15); padding:3px 8px; border-radius:6px;">Nhà Gái</span>' : '<span style="color:#8bb6e8; background:rgba(139,182,232,0.15); padding:3px 8px; border-radius:6px;">Nhà Trai</span>';
-          var attendBadge = isYes ? '<span style="color:#51cf66; font-weight:700;">✓ Sẽ Đến</span>' : '<span style="color:#ff6b6b;">✕ Lỡ Hẹn</span>';
+          var familyBadge = item.family === "bride" ? '<span style="color:#f8b4be; background:rgba(243,166,178,0.18); border:1px solid rgba(243,166,178,0.35); padding:3px 9px; border-radius:6px; font-weight:600; font-size:0.75rem;">🌸 Nhà Gái</span>' : '<span style="color:#9bc3f3; background:rgba(139,182,232,0.18); border:1px solid rgba(139,182,232,0.35); padding:3px 9px; border-radius:6px; font-weight:600; font-size:0.75rem;">🤵 Nhà Trai</span>';
+          var attendBadge = isYes ? '<span style="color:#51cf66; background:rgba(81,207,102,0.14); border:1px solid rgba(81,207,102,0.35); padding:3px 9px; border-radius:6px; font-weight:700; font-size:0.75rem;">✓ Sẽ Đến</span>' : '<span style="color:#ff8787; background:rgba(255,107,107,0.14); border:1px solid rgba(255,107,107,0.35); padding:3px 9px; border-radius:6px; font-weight:700; font-size:0.75rem;">✕ Lỡ Hẹn</span>';
           var timeStr = item.createdAt ? new Date(item.createdAt).toLocaleString("vi-VN", { dateStyle: "short", timeStyle: "short" }) : "—";
+          var phoneStr = item.phone ? '<a href="tel:' + escapeHtml(item.phone) + '" style="color:var(--gold-bright); text-decoration:none; font-weight:600; letter-spacing:0.4px;" title="Bấm để gọi điện">' + escapeHtml(item.phone) + '</a>' : '<span style="color:var(--text-muted); font-style:italic;">Chưa có</span>';
+          var messageBox = item.message ? '<div style="max-width:280px; word-break:break-word; color:#f5ebd8; line-height:1.5; font-style:italic; background:rgba(255,255,255,0.03); padding:6px 10px; border-radius:6px; border-left:2px solid var(--gold);">' + escapeHtml(item.message) + '</div>' : '<span style="color:var(--text-muted);">—</span>';
 
-          html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.06);">';
-          html += '<td style="padding:12px 8px; font-weight:600; color:#fff;">' + escapeHtml(item.name || "") + '</td>';
-          html += '<td style="padding:12px 8px;">' + familyBadge + '</td>';
-          html += '<td style="padding:12px 8px;">' + attendBadge + '</td>';
-          html += '<td style="padding:12px 8px; font-weight:700;">' + (isYes ? (item.guests || 1) : 0) + '</td>';
-          html += '<td style="padding:12px 8px; color:var(--text-muted); max-width:240px; word-break:break-word;">' + escapeHtml(item.message || "—") + '</td>';
-          html += '<td style="padding:12px 8px; font-size:0.75rem; color:var(--text-muted);">' + timeStr + '</td>';
-          html += '<td style="padding:12px 8px; text-align:center;"><button type="button" class="btn btn-sm btn-danger btn-delete-rsvp" data-id="' + item.id + '" style="padding:4px 8px; font-size:0.72rem;">Xóa</button></td>';
+          html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.06); transition:background 0.2s;" onmouseover="this.style.background=\'rgba(255,255,255,0.03)\'" onmouseout="this.style.background=\'transparent\'">';
+          html += '<td style="padding:12px 8px; text-align:center; color:var(--text-muted); font-weight:700;">' + (idx + 1) + '</td>';
+          html += '<td style="padding:12px 10px; font-weight:700; color:#fff; font-size:0.92rem;">' + escapeHtml(item.name || "Khách mời") + '</td>';
+          html += '<td style="padding:12px 10px;">' + phoneStr + '</td>';
+          html += '<td style="padding:12px 10px;">' + familyBadge + '</td>';
+          html += '<td style="padding:12px 10px;">' + attendBadge + '</td>';
+          html += '<td style="padding:12px 10px; text-align:center; font-weight:800; font-size:0.95rem; color:' + (isYes ? "var(--gold-bright)" : "var(--text-muted)") + ';">' + (isYes ? (item.guests || 1) : 0) + '</td>';
+          html += '<td style="padding:12px 10px;">' + messageBox + '</td>';
+          html += '<td style="padding:12px 10px; font-size:0.78rem; color:var(--text-muted); white-space:nowrap;">' + timeStr + '</td>';
+          html += '<td style="padding:12px 8px; text-align:center;"><button type="button" class="btn btn-sm btn-danger btn-delete-rsvp" data-id="' + item.id + '" style="padding:4px 9px; font-size:0.72rem;">Xóa</button></td>';
           html += '</tr>';
         });
 
@@ -2815,10 +2974,12 @@
           alert("Chưa có phản hồi nào để xuất!");
           return;
         }
-        var csv = "\uFEFFHọ và tên,Bên gia đình,Tham dự,Số người đi cùng,Lời nhắn chúc phúc,Thời gian gửi\r\n";
-        rsvpList.forEach(function (item) {
+        var csv = "\uFEFFSTT,Họ và tên,Số điện thoại,Bên gia đình,Tham dự,Số người đi cùng,Lời chúc phúc & nhắn gửi,Thời gian xác nhận\r\n";
+        rsvpList.forEach(function (item, idx) {
           var row = [
+            idx + 1,
             '"' + (item.name || "").replace(/"/g, '""') + '"',
+            '"' + (item.phone || "").replace(/"/g, '""') + '"',
             item.family === "bride" ? "Nhà Gái" : "Nhà Trai",
             item.attending === "yes" ? "Sẽ đến" : "Lỡ hẹn",
             item.attending === "yes" ? (item.guests || 1) : 0,
@@ -2832,7 +2993,7 @@
         var url = URL.createObjectURL(blob);
         var a = document.createElement("a");
         a.href = url;
-        a.download = "danh-sach-khach-moi-rsvp-" + new Date().toISOString().slice(0, 10) + ".csv";
+        a.download = "danh-sach-khach-moi-cuoi-dung-linh-" + new Date().toISOString().slice(0, 10) + ".csv";
         a.click();
         setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
       }
@@ -2843,6 +3004,25 @@
       var btnExportRsvp = document.getElementById("btnExportRsvp");
       if (btnExportRsvp) btnExportRsvp.addEventListener("click", exportRsvps);
 
+      // Gắn sự kiện cho ô Tìm kiếm RSVP
+      var rsvpSearchInput = document.getElementById("rsvpSearchInput");
+      if (rsvpSearchInput) {
+        rsvpSearchInput.addEventListener("input", function (e) {
+          currentRsvpSearch = e.target.value;
+          renderRsvps();
+        });
+      }
+
+      // Gắn sự kiện cho lựa chọn Sắp xếp RSVP
+      var rsvpSortSelect = document.getElementById("rsvpSortSelect");
+      if (rsvpSortSelect) {
+        rsvpSortSelect.addEventListener("change", function (e) {
+          currentRsvpSort = e.target.value;
+          renderRsvps();
+        });
+      }
+
+      // Gắn sự kiện cho các nút Bộ Lọc RSVP
       document.querySelectorAll(".rsvp-filter-btn").forEach(function (btn) {
         btn.addEventListener("click", function () {
           document.querySelectorAll(".rsvp-filter-btn").forEach(function (b) { b.classList.remove("btn-primary", "active"); });
