@@ -119,10 +119,50 @@
 
   function resolveAssetUrl(u) {
     if (!u) return '';
-    if (/^(https?:|data:|blob:|\/)/.test(u)) return u;
-    if (u.startsWith('assets/')) return u;
+    if (/^(https?:|data:|blob:)/.test(u)) return u;
+    if (u.startsWith('/')) return u;
     return '/' + u;
   }
+
+  function updateResponsiveCover() {
+    const db = window.WEDDING_DB || window.DEFAULT_WEDDING_DB || {};
+    const couple = db.couple || {};
+    const isMobile = window.innerWidth <= 600;
+
+    const coverPc = resolveAssetUrl(couple.coverPhoto || couple.heroBackdrop || '/assets/cover-khanh-linh-le-dung.jpg');
+    const coverMob = couple.coverPhotoMobile ? resolveAssetUrl(couple.coverPhotoMobile) : coverPc;
+
+    const finalImg = document.getElementById('finalCoverImg');
+    const finalSourceMob = document.getElementById('finalCoverSourceMobile');
+
+    if (finalSourceMob) {
+      finalSourceMob.srcset = coverMob;
+    }
+    if (finalImg) {
+      finalImg.src = isMobile && coverMob ? coverMob : coverPc;
+    }
+  }
+
+  function updateResponsiveIntroScenes() {
+    const db = window.WEDDING_DB || window.DEFAULT_WEDDING_DB || {};
+    const scs = Array.isArray(db.introScenes) ? db.introScenes : [];
+    const isMobile = window.innerWidth <= 600;
+
+    scs.forEach((sc, i) => {
+      const targetBg = (isMobile && sc.backdropMobile) ? sc.backdropMobile : sc.backdrop;
+      if (targetBg) {
+        const backdropEl = scenes[i]?.querySelector('.scene-backdrop');
+        if (backdropEl) {
+          backdropEl.style.backgroundImage = `url('${resolveAssetUrl(targetBg)}')`;
+        }
+      }
+    });
+  }
+
+  window.addEventListener('resize', () => {
+    updateResponsiveCover();
+    updateResponsiveIntroScenes();
+  });
 
   function morphToChoice() {
     if (introFinished) return;
@@ -130,12 +170,7 @@
     if (typingTimer) { clearTimeout(typingTimer); typingTimer = null; }
     if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
 
-    const db = window.WEDDING_DB || window.DEFAULT_WEDDING_DB || {};
-    const cover = resolveAssetUrl((db.couple && (db.couple.coverPhoto || db.couple.heroBackdrop)) || 'assets/cover-khanh-linh-le-dung.jpg');
-    const finalImg = document.getElementById('finalCoverImg');
-    if (finalImg && cover) {
-      finalImg.src = cover;
-    }
+    updateResponsiveCover();
 
     // Transition dialog: Intro dark scene fades away, Choice Stage unveils smoothly
     dialog.classList.remove('is-intro-mode');
@@ -235,9 +270,14 @@
       text = db.introScenes[idx].verse;
     }
 
-    if (db.introScenes && db.introScenes[idx] && db.introScenes[idx].backdrop) {
-      const backdropEl = scenes[idx]?.querySelector('.scene-backdrop');
-      if (backdropEl) backdropEl.style.backgroundImage = `url('${resolveAssetUrl(db.introScenes[idx].backdrop)}')`;
+    const isMobile = window.innerWidth <= 600;
+    if (db.introScenes && db.introScenes[idx]) {
+      const sc = db.introScenes[idx];
+      const targetBg = (isMobile && sc.backdropMobile) ? sc.backdropMobile : sc.backdrop;
+      if (targetBg) {
+        const backdropEl = scenes[idx]?.querySelector('.scene-backdrop');
+        if (backdropEl) backdropEl.style.backgroundImage = `url('${resolveAssetUrl(targetBg)}')`;
+      }
     }
 
     const readingTime = (idx === scenes.length - 1) ? 2600 : 2200;
@@ -290,19 +330,27 @@
       }
     }
 
-    // Preload all intro images from DB into memory
+    // Preload all intro images (PC & Mobile) from DB into memory
     if (db.introScenes && Array.isArray(db.introScenes)) {
       db.introScenes.forEach(sc => {
         if (sc && sc.backdrop) {
           const img = new Image();
           img.src = resolveAssetUrl(sc.backdrop);
         }
+        if (sc && sc.backdropMobile) {
+          const imgMob = new Image();
+          imgMob.src = resolveAssetUrl(sc.backdropMobile);
+        }
       });
     }
-    const coverSrc = resolveAssetUrl((db.couple && (db.couple.coverPhoto || db.couple.heroBackdrop)) || 'assets/cover-khanh-linh-le-dung.jpg');
-    if (coverSrc) {
+    const coverPc = resolveAssetUrl((db.couple && (db.couple.coverPhoto || db.couple.heroBackdrop)) || '/assets/cover-khanh-linh-le-dung.jpg');
+    if (coverPc) {
       const img = new Image();
-      img.src = coverSrc;
+      img.src = coverPc;
+    }
+    if (db.couple && db.couple.coverPhotoMobile) {
+      const imgMob = new Image();
+      imgMob.src = resolveAssetUrl(db.couple.coverPhotoMobile);
     }
 
     // Skip button triggers instant smooth morphing

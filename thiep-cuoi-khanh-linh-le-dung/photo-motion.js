@@ -158,6 +158,22 @@
     rebindGalleryElements();
   };
 
+  window.openWeddingGalleryIndex = function(targetIdx) {
+    const idx = Math.max(0, Math.min((photos.length || 1) - 1, Number(targetIdx) || 0));
+    if (dialog.open) {
+      selectPhoto(idx).catch(() => setBusy(false));
+      return;
+    }
+    const btn = document.querySelector(`[data-gallery="${idx}"]`) || document.querySelector(`[data-photo-index="${idx}"]`);
+    if (btn) {
+      openGallery(btn);
+    } else {
+      const dummy = document.createElement('button');
+      dummy.dataset.gallery = String(idx);
+      openGallery(dummy);
+    }
+  };
+
   rebindGalleryElements();
   dialog.querySelector('[data-close="gallery-dialog"]').addEventListener('click',closeGallery);
   dialog.addEventListener('cancel',event=>{event.preventDefault();closeGallery();});

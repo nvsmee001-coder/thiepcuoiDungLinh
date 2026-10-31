@@ -8,8 +8,8 @@
 
   function resolveAssetUrl(u) {
     if (!u) return '';
-    if (/^(https?:|data:|blob:|\/)/.test(u)) return u;
-    if (u.startsWith('assets/')) return u;
+    if (/^(https?:|data:|blob:)/.test(u)) return u;
+    if (u.startsWith('/')) return u;
     return '/' + u;
   }
 
@@ -61,9 +61,11 @@
     const groomMap = groomVenue.mapLink || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(groomLocation + ', ' + groomAddress)}`;
     const groomMapEmbed = groomVenue.mapEmbed || '';
 
-    // Photos
-    const coverPhoto = resolveAssetUrl((db.couple && (db.couple.coverPhoto || db.couple.heroBackdrop)) || 'assets/cover-khanh-linh-le-dung.jpg');
-    const interludePhoto = resolveAssetUrl((db.couple && (db.couple.interludePhoto || db.couple.detailsBackdrop)) || 'assets/hero.jpg');
+    // Photos (PC & Mobile)
+    const coverPhoto = resolveAssetUrl((db.couple && (db.couple.coverPhoto || db.couple.heroBackdrop)) || '/assets/cover-khanh-linh-le-dung.jpg');
+    const coverPhotoMobile = resolveAssetUrl((db.couple && db.couple.coverPhotoMobile) || '');
+    const interludePhoto = resolveAssetUrl((db.couple && (db.couple.interludePhoto || db.couple.detailsBackdrop)) || '/assets/hero.jpg');
+    const interludePhotoMobile = resolveAssetUrl((db.couple && db.couple.interludePhotoMobile) || '');
 
     const details = {
       groom: {
@@ -109,7 +111,9 @@
       coupleNamesHtml,
       monogramText,
       coverPhoto,
+      coverPhotoMobile,
       interludePhoto,
+      interludePhotoMobile,
       brideVenue,
       groomVenue,
       brideParsed,
@@ -182,33 +186,23 @@
   }
 
   function renderAlbumAndGallery(db, coupleNames) {
+    // 1. Kích hoạt Sân khấu 3D Coverflow & Tường Triển Lãm
+    if (typeof window.render3DAlbum === 'function') {
+      window.render3DAlbum(db);
+    }
+
     const albumGrid = document.querySelector('.album-grid');
     const galleryThumbs = document.getElementById('gallery-thumbs');
 
     const rawPhotos = (db && Array.isArray(db.albumPhotos) && db.albumPhotos.length > 0)
       ? db.albumPhotos
       : [
-          'assets/memory-01-garden.jpg',
-          'assets/memory-02-castle.jpg',
-          'assets/memory-03-piano.jpg'
+          '/img/wedding-photo-card-left.jpg',
+          '/img/wedding-photo-card-right.jpg',
+          '/img/02-disney-phao-hoa.jpg'
         ];
 
     const photos = rawPhotos.map(p => (typeof p === 'string' ? p : (p && p.src ? p.src : ''))).filter(Boolean).map(resolveAssetUrl);
-
-    // 1. Render Album Grid on Page
-    if (albumGrid) {
-      albumGrid.innerHTML = photos.map((src, i) => {
-        const numStr = (i + 1 < 10 ? '0' : '') + (i + 1);
-        return `
-          <button data-gallery="${i}" data-reveal aria-label="Mở ảnh cưới #${i + 1}">
-            <span class="photo-window">
-              <img src="${src}" alt="Ảnh cưới ${coupleNames} #${numStr}" loading="lazy">
-            </span>
-            <span>${numStr} / MOMENTS TO KEEP <i>↗</i></span>
-          </button>
-        `;
-      }).join('');
-    }
 
     // 2. Render Gallery Dialog Thumbs
     if (galleryThumbs) {
@@ -279,19 +273,27 @@
     });
     document.querySelectorAll('.invitation-seal').forEach(n => n.innerHTML = configData.monogramText);
 
-    // 2. Photos (Cover & Interlude)
+    // 2. Photos (Responsive Cover & Interlude)
+    const isMobile = window.innerWidth <= 600;
+    const effectiveCover = (isMobile && configData.coverPhotoMobile) ? configData.coverPhotoMobile : configData.coverPhoto;
+    const effectiveInterlude = (isMobile && configData.interludePhotoMobile) ? configData.interludePhotoMobile : configData.interludePhoto;
+
     const coverImgs = document.querySelectorAll('#finalCoverImg, .cover-photo img, .invitation-photo-watermark img');
     coverImgs.forEach(img => {
-      const src = resolveAssetUrl(configData.coverPhoto);
-      if (src && img.getAttribute('src') !== src) {
-        img.src = src;
+      if (effectiveCover && img.getAttribute('src') !== effectiveCover) {
+        img.src = effectiveCover;
       }
     });
+
+    const finalSourceMob = document.getElementById('finalCoverSourceMobile');
+    if (finalSourceMob && (configData.coverPhotoMobile || effectiveCover)) {
+      finalSourceMob.srcset = configData.coverPhotoMobile || effectiveCover;
+    }
+
     const interludeImgs = document.querySelectorAll('.photo-interlude img');
     interludeImgs.forEach(img => {
-      const src = resolveAssetUrl(configData.interludePhoto);
-      if (src && img.getAttribute('src') !== src) {
-        img.src = src;
+      if (effectiveInterlude && img.getAttribute('src') !== effectiveInterlude) {
+        img.src = effectiveInterlude;
       }
     });
 
@@ -380,6 +382,10 @@
     const curFamily = document.body.dataset.weddingFamily || 'bride';
     apply(curFamily);
   }
+
+  window.addEventListener('resize', () => {
+    initUI();
+  });
 
   // Load latest DB if available
   if (typeof window.fetchWeddingDBFromServer === 'function') {

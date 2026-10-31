@@ -435,6 +435,18 @@
       width: auto;
       margin: 0 auto;
     }
+    .slot-preview-wrap.ratio-9-16 {
+      aspect-ratio: 9 / 16;
+      max-height: 230px;
+      width: auto;
+      margin: 0 auto;
+    }
+    .slot-preview-wrap.ratio-1-1 {
+      aspect-ratio: 1 / 1;
+      max-height: 230px;
+      width: auto;
+      margin: 0 auto;
+    }
     .slot-preview-img {
       width: 100%;
       height: 100%;
@@ -844,57 +856,124 @@
         </p>
 
         <div class="slot-cards-grid">
-          <!-- 1. Ảnh Bìa Đôi Uyên Ương (Choice Stage & Hero Bìa Thiệp — Đứng 3:4) -->
-          <div class="slot-card">
+          <!-- 1. Ảnh Bìa Đôi Uyên Ương (Cover & Hero) - CHUYÊN BIỆT PC & ĐIỆN THOẠI -->
+          <div class="slot-card" style="grid-column: 1 / -1;">
             <div class="slot-card-title">
-              <span>1. Ảnh Bìa Đôi Uyên Ương (Cover &amp; Hero)</span>
-              <span class="slot-ratio-badge">Đứng 3:4 • Card Bìa</span>
+              <span>1. Ảnh Bìa Đôi Uyên Ương (Cover &amp; Hero Bìa Thiệp)</span>
+              <span class="slot-ratio-badge">Đa Giao Diện • PC &amp; Mobile</span>
             </div>
-            <div class="slot-preview-wrap ratio-3-4">
-              <img src="" alt="" class="slot-preview-img" id="prev_coverPhoto">
-            </div>
-            <input type="hidden" id="f_coverPhoto">
-            <p style="font-size:0.75rem; color:var(--text-muted); margin:0;">
-              Hiển thị tại màn hình Chọn Nhà Trai/Nhà Gái, Bìa đỉnh trang thiệp &amp; Con dấu mờ.
+            <p style="font-size:0.75rem; color:var(--text-muted); margin:0 0 12px 0;">
+              ✨ Tự động chuyển đổi: Trên Máy tính hiển thị Khung Đứng (3:4), trên Điện thoại hiển thị Khung Ngang (16:9). Căn chỉnh riêng từng bản để đảm bảo không bao giờ bị cắt mất đầu cô dâu / chú rể!
             </p>
-            <div class="slot-btn-group">
-              <button type="button" class="btn btn-primary" data-pick-slot="coverPhoto" data-ratio="3:4" data-slot-label="Ảnh Bìa Đôi Uyên Ương (Đứng 3:4)">
-                🖼️ Chọn Từ Album
-              </button>
-              <button type="button" class="btn" data-recrop-slot="coverPhoto" data-ratio="3:4" data-slot-label="Căn Chỉnh Ảnh Bìa Đôi Uyên Ương (Đứng 3:4)">
-                ✂️ Căn Chỉnh
-              </button>
-              <label class="btn" style="cursor:pointer;">
-                📤 Tải Mới
-                <input type="file" accept="image/*" style="display:none;" data-upload-slot="coverPhoto" data-ratio="3:4" data-slot-label="Ảnh Bìa Đôi Uyên Ương (Đứng 3:4)">
-              </label>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+              <!-- 1A: Bản Máy Tính (PC - Đứng 3:4) -->
+              <div style="background:rgba(0,0,0,0.28); border:1px solid rgba(226,196,142,0.25); border-radius:10px; padding:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <strong style="font-size:0.82rem; color:#ffe4ab;">🖥️ Bản Máy Tính (PC • Đứng 3:4)</strong>
+                  <span class="slot-ratio-badge">Đứng 3:4</span>
+                </div>
+                <div class="slot-preview-wrap ratio-3-4" style="height:210px;">
+                  <img src="" alt="" class="slot-preview-img" id="prev_coverPhoto">
+                </div>
+                <input type="hidden" id="f_coverPhoto">
+                <div class="slot-btn-group" style="margin-top:8px;">
+                  <button type="button" class="btn btn-sm btn-primary" data-pick-slot="coverPhoto" data-ratio="3:4" data-slot-label="Ảnh Bìa PC (Đứng 3:4)">
+                    🖼️ Chọn
+                  </button>
+                  <button type="button" class="btn btn-sm" data-recrop-slot="coverPhoto" data-ratio="3:4" data-slot-label="Căn Chỉnh Bìa PC (Đứng 3:4)">
+                    ✂️ Căn Chỉnh
+                  </button>
+                  <label class="btn btn-sm" style="cursor:pointer;">
+                    📤 Tải Mới
+                    <input type="file" accept="image/*" style="display:none;" data-upload-slot="coverPhoto" data-ratio="3:4" data-slot-label="Ảnh Bìa PC (Đứng 3:4)">
+                  </label>
+                </div>
+              </div>
+
+              <!-- 1B: Bản Điện Thoại (Mobile - Ngang 16:9) -->
+              <div style="background:rgba(0,0,0,0.28); border:1px solid rgba(226,196,142,0.25); border-radius:10px; padding:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <strong style="font-size:0.82rem; color:#ffe4ab;">📱 Bản Điện Thoại (Mobile • Ngang 16:9)</strong>
+                  <span class="slot-ratio-badge">Ngang 16:9</span>
+                </div>
+                <div class="slot-preview-wrap ratio-16-9" style="height:210px;">
+                  <img src="" alt="" class="slot-preview-img" id="prev_coverPhotoMobile">
+                </div>
+                <input type="hidden" id="f_coverPhotoMobile">
+                <div class="slot-btn-group" style="margin-top:8px;">
+                  <button type="button" class="btn btn-sm btn-primary" data-pick-slot="coverPhotoMobile" data-ratio="16:9" data-slot-label="Ảnh Bìa Mobile (Ngang 16:9)">
+                    🖼️ Chọn
+                  </button>
+                  <button type="button" class="btn btn-sm" data-recrop-slot="coverPhotoMobile" data-ratio="16:9" data-slot-label="Căn Chỉnh Bìa Mobile (Ngang 16:9)">
+                    ✂️ Căn Chỉnh
+                  </button>
+                  <label class="btn btn-sm" style="cursor:pointer;">
+                    📤 Tải Mới
+                    <input type="file" accept="image/*" style="display:none;" data-upload-slot="coverPhotoMobile" data-ratio="16:9" data-slot-label="Ảnh Bìa Mobile (Ngang 16:9)">
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- 2. Ảnh Kỷ Niệm Chuyển Đoạn (Interlude Photo — Ngang 16:9) -->
-          <div class="slot-card">
+          <!-- 2. Ảnh Kỷ Niệm Chuyển Đoạn (Interlude Photo) -->
+          <div class="slot-card" style="grid-column: 1 / -1;">
             <div class="slot-card-title">
-              <span>2. Ảnh Chuyển Tiếp Nghệ Thuật (Interlude)</span>
-              <span class="slot-ratio-badge">Ngang 16:9</span>
+              <span>2. Ảnh Chuyển Tiếp Nghệ Thuật (Interlude • Giữa Trang)</span>
+              <span class="slot-ratio-badge">Đa Giao Diện • PC &amp; Mobile</span>
             </div>
-            <div class="slot-preview-wrap ratio-16-9">
-              <img src="" alt="" class="slot-preview-img" id="prev_interludePhoto">
-            </div>
-            <input type="hidden" id="f_interludePhoto">
-            <p style="font-size:0.75rem; color:var(--text-muted); margin:0;">
+            <p style="font-size:0.75rem; color:var(--text-muted); margin:0 0 12px 0;">
               Hiển thị tại đoạn thơ chuyển tiếp "And so, our forever begins" giữa trang thiệp.
             </p>
-            <div class="slot-btn-group">
-              <button type="button" class="btn btn-primary" data-pick-slot="interludePhoto" data-ratio="16:9" data-slot-label="Ảnh Chuyển Tiếp Nghệ Thuật (Ngang 16:9)">
-                🖼️ Chọn Từ Album
-              </button>
-              <button type="button" class="btn" data-recrop-slot="interludePhoto" data-ratio="16:9" data-slot-label="Căn Chỉnh Ảnh Chuyển Tiếp (Ngang 16:9)">
-                ✂️ Căn Chỉnh
-              </button>
-              <label class="btn" style="cursor:pointer;">
-                📤 Tải Mới
-                <input type="file" accept="image/*" style="display:none;" data-upload-slot="interludePhoto" data-ratio="16:9" data-slot-label="Ảnh Chuyển Tiếp Nghệ Thuật (Ngang 16:9)">
-              </label>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+              <!-- 2A: Bản Máy Tính (PC - Ngang 16:9) -->
+              <div style="background:rgba(0,0,0,0.28); border:1px solid rgba(226,196,142,0.25); border-radius:10px; padding:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <strong style="font-size:0.82rem; color:#ffe4ab;">🖥️ Bản Máy Tính (PC • Ngang 16:9)</strong>
+                  <span class="slot-ratio-badge">Ngang 16:9</span>
+                </div>
+                <div class="slot-preview-wrap ratio-16-9" style="height:190px;">
+                  <img src="" alt="" class="slot-preview-img" id="prev_interludePhoto">
+                </div>
+                <input type="hidden" id="f_interludePhoto">
+                <div class="slot-btn-group" style="margin-top:8px;">
+                  <button type="button" class="btn btn-sm btn-primary" data-pick-slot="interludePhoto" data-ratio="16:9" data-slot-label="Ảnh Chuyển Tiếp PC (Ngang 16:9)">
+                    🖼️ Chọn
+                  </button>
+                  <button type="button" class="btn btn-sm" data-recrop-slot="interludePhoto" data-ratio="16:9" data-slot-label="Căn Chỉnh Chuyển Tiếp PC (Ngang 16:9)">
+                    ✂️ Căn Chỉnh
+                  </button>
+                  <label class="btn btn-sm" style="cursor:pointer;">
+                    📤 Tải Mới
+                    <input type="file" accept="image/*" style="display:none;" data-upload-slot="interludePhoto" data-ratio="16:9" data-slot-label="Ảnh Chuyển Tiếp PC (Ngang 16:9)">
+                  </label>
+                </div>
+              </div>
+
+              <!-- 2B: Bản Điện Thoại (Mobile - Đứng 3:4) -->
+              <div style="background:rgba(0,0,0,0.28); border:1px solid rgba(226,196,142,0.25); border-radius:10px; padding:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <strong style="font-size:0.82rem; color:#ffe4ab;">📱 Bản Điện Thoại (Mobile • Đứng 3:4)</strong>
+                  <span class="slot-ratio-badge">Đứng 3:4</span>
+                </div>
+                <div class="slot-preview-wrap ratio-3-4" style="height:190px;">
+                  <img src="" alt="" class="slot-preview-img" id="prev_interludePhotoMobile">
+                </div>
+                <input type="hidden" id="f_interludePhotoMobile">
+                <div class="slot-btn-group" style="margin-top:8px;">
+                  <button type="button" class="btn btn-sm btn-primary" data-pick-slot="interludePhotoMobile" data-ratio="3:4" data-slot-label="Ảnh Chuyển Tiếp Mobile (Đứng 3:4)">
+                    🖼️ Chọn
+                  </button>
+                  <button type="button" class="btn btn-sm" data-recrop-slot="interludePhotoMobile" data-ratio="3:4" data-slot-label="Căn Chỉnh Chuyển Tiếp Mobile (Đứng 3:4)">
+                    ✂️ Căn Chỉnh
+                  </button>
+                  <label class="btn btn-sm" style="cursor:pointer;">
+                    📤 Tải Mới
+                    <input type="file" accept="image/*" style="display:none;" data-upload-slot="interludePhotoMobile" data-ratio="3:4" data-slot-label="Ảnh Chuyển Tiếp Mobile (Đứng 3:4)">
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -904,7 +983,7 @@
       <div class="panel-card">
         <h3 class="panel-title">🎬 3 Cảnh Kỷ Niệm Mở Màn Intro (Hiệu Ứng Gõ Chữ Visual Novel)</h3>
         <p class="panel-desc">
-          Khi khách mở thiệp, 3 bức ảnh nền cùng câu thơ ý nghĩa sẽ xuất hiện với hiệu ứng gõ chữ nghệ thuật trước khi bước vào chọn Nhà Trai / Nhà Gái. Bạn có thể thay đổi cả ảnh nền và câu thơ cho từng cảnh!
+          Khi khách mở thiệp, 3 bức ảnh nền cùng câu thơ ý nghĩa sẽ xuất hiện với hiệu ứng gõ chữ nghệ thuật trước khi bước vào chọn Nhà Trai / Nhà Gái. Bạn có thể thiết lập riêng bản Ngang (PC) và bản Dọc (Điện thoại) cho từng cảnh!
         </p>
 
         <div class="slot-cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
@@ -912,24 +991,36 @@
           <div class="slot-card">
             <div class="slot-card-title">
               <span>Cảnh 1 • Thanh Âm Đầu Tiên</span>
-              <span class="slot-ratio-badge">Ngang 16:9</span>
+              <span class="slot-ratio-badge">PC &amp; Mobile</span>
             </div>
-            <div class="slot-preview-wrap ratio-16-9">
-              <img src="" alt="" class="slot-preview-img" id="prev_introScene0_backdrop">
+
+            <!-- Cảnh 1 PC & Mobile sub-slots -->
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+              <div>
+                <span style="font-size:0.74rem; color:#ffe4ab;">🖥️ PC (Ngang 16:9)</span>
+                <div class="slot-preview-wrap ratio-16-9" style="height:110px; margin-top:4px;">
+                  <img src="" alt="" class="slot-preview-img" id="prev_introScene0_backdrop">
+                </div>
+                <input type="hidden" id="f_introScene0_backdrop">
+                <div class="slot-btn-group" style="margin-top:6px;">
+                  <button type="button" class="btn btn-sm btn-primary" data-pick-slot="introScene0_backdrop" data-ratio="16:9" data-slot-label="Cảnh 1 PC (Ngang 16:9)">🖼️ Chọn</button>
+                  <button type="button" class="btn btn-sm" data-recrop-slot="introScene0_backdrop" data-ratio="16:9" data-slot-label="Căn Chỉnh Cảnh 1 PC">✂️ Sửa</button>
+                </div>
+              </div>
+
+              <div>
+                <span style="font-size:0.74rem; color:#ffe4ab;">📱 ĐT (Dọc 9:16)</span>
+                <div class="slot-preview-wrap ratio-9-16" style="height:110px; margin-top:4px;">
+                  <img src="" alt="" class="slot-preview-img" id="prev_introScene0_backdropMobile">
+                </div>
+                <input type="hidden" id="f_introScene0_backdropMobile">
+                <div class="slot-btn-group" style="margin-top:6px;">
+                  <button type="button" class="btn btn-sm btn-primary" data-pick-slot="introScene0_backdropMobile" data-ratio="9:16" data-slot-label="Cảnh 1 ĐT (Dọc 9:16)">🖼️ Chọn</button>
+                  <button type="button" class="btn btn-sm" data-recrop-slot="introScene0_backdropMobile" data-ratio="9:16" data-slot-label="Căn Chỉnh Cảnh 1 ĐT">✂️ Sửa</button>
+                </div>
+              </div>
             </div>
-            <input type="hidden" id="f_introScene0_backdrop">
-            <div class="slot-btn-group">
-              <button type="button" class="btn btn-primary" data-pick-slot="introScene0_backdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Cảnh 1 Intro (Ngang 16:9)">
-                🖼️ Chọn Từ Album
-              </button>
-              <button type="button" class="btn" data-recrop-slot="introScene0_backdrop" data-ratio="16:9" data-slot-label="Căn Chỉnh Ảnh Nền Cảnh 1 (Ngang 16:9)">
-                ✂️ Căn Chỉnh
-              </button>
-              <label class="btn" style="cursor:pointer;">
-                📤 Tải Mới
-                <input type="file" accept="image/*" style="display:none;" data-upload-slot="introScene0_backdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Cảnh 1 Intro (Ngang 16:9)">
-              </label>
-            </div>
+
             <div class="form-group" style="margin-bottom:0;">
               <label>Câu Thơ Gõ Chữ Cảnh 1</label>
               <textarea class="form-control" id="f_introScene0_verse" rows="3" placeholder="Nhập câu thơ cảnh 1..."></textarea>
@@ -940,24 +1031,36 @@
           <div class="slot-card">
             <div class="slot-card-title">
               <span>Cảnh 2 • Hành Trình Chung Đôi</span>
-              <span class="slot-ratio-badge">Ngang 16:9</span>
+              <span class="slot-ratio-badge">PC &amp; Mobile</span>
             </div>
-            <div class="slot-preview-wrap ratio-16-9">
-              <img src="" alt="" class="slot-preview-img" id="prev_introScene1_backdrop">
+
+            <!-- Cảnh 2 PC & Mobile sub-slots -->
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+              <div>
+                <span style="font-size:0.74rem; color:#ffe4ab;">🖥️ PC (Ngang 16:9)</span>
+                <div class="slot-preview-wrap ratio-16-9" style="height:110px; margin-top:4px;">
+                  <img src="" alt="" class="slot-preview-img" id="prev_introScene1_backdrop">
+                </div>
+                <input type="hidden" id="f_introScene1_backdrop">
+                <div class="slot-btn-group" style="margin-top:6px;">
+                  <button type="button" class="btn btn-sm btn-primary" data-pick-slot="introScene1_backdrop" data-ratio="16:9" data-slot-label="Cảnh 2 PC (Ngang 16:9)">🖼️ Chọn</button>
+                  <button type="button" class="btn btn-sm" data-recrop-slot="introScene1_backdrop" data-ratio="16:9" data-slot-label="Căn Chỉnh Cảnh 2 PC">✂️ Sửa</button>
+                </div>
+              </div>
+
+              <div>
+                <span style="font-size:0.74rem; color:#ffe4ab;">📱 ĐT (Dọc 9:16)</span>
+                <div class="slot-preview-wrap ratio-9-16" style="height:110px; margin-top:4px;">
+                  <img src="" alt="" class="slot-preview-img" id="prev_introScene1_backdropMobile">
+                </div>
+                <input type="hidden" id="f_introScene1_backdropMobile">
+                <div class="slot-btn-group" style="margin-top:6px;">
+                  <button type="button" class="btn btn-sm btn-primary" data-pick-slot="introScene1_backdropMobile" data-ratio="9:16" data-slot-label="Cảnh 2 ĐT (Dọc 9:16)">🖼️ Chọn</button>
+                  <button type="button" class="btn btn-sm" data-recrop-slot="introScene1_backdropMobile" data-ratio="9:16" data-slot-label="Căn Chỉnh Cảnh 2 ĐT">✂️ Sửa</button>
+                </div>
+              </div>
             </div>
-            <input type="hidden" id="f_introScene1_backdrop">
-            <div class="slot-btn-group">
-              <button type="button" class="btn btn-primary" data-pick-slot="introScene1_backdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Cảnh 2 Intro (Ngang 16:9)">
-                🖼️ Chọn Từ Album
-              </button>
-              <button type="button" class="btn" data-recrop-slot="introScene1_backdrop" data-ratio="16:9" data-slot-label="Căn Chỉnh Ảnh Nền Cảnh 2 (Ngang 16:9)">
-                ✂️ Căn Chỉnh
-              </button>
-              <label class="btn" style="cursor:pointer;">
-                📤 Tải Mới
-                <input type="file" accept="image/*" style="display:none;" data-upload-slot="introScene1_backdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Cảnh 2 Intro (Ngang 16:9)">
-              </label>
-            </div>
+
             <div class="form-group" style="margin-bottom:0;">
               <label>Câu Thơ Gõ Chữ Cảnh 2</label>
               <textarea class="form-control" id="f_introScene1_verse" rows="3" placeholder="Nhập câu thơ cảnh 2..."></textarea>
@@ -968,23 +1071,34 @@
           <div class="slot-card">
             <div class="slot-card-title">
               <span>Cảnh 3 • Lời Hứa Trăm Năm</span>
-              <span class="slot-ratio-badge">Ngang 16:9</span>
+              <span class="slot-ratio-badge">PC &amp; Mobile</span>
             </div>
-            <div class="slot-preview-wrap ratio-16-9">
-              <img src="" alt="" class="slot-preview-img" id="prev_introScene2_backdrop">
-            </div>
-            <input type="hidden" id="f_introScene2_backdrop">
-            <div class="slot-btn-group">
-              <button type="button" class="btn btn-primary" data-pick-slot="introScene2_backdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Cảnh 3 Intro (Ngang 16:9)">
-                🖼️ Chọn Từ Album
-              </button>
-              <button type="button" class="btn" data-recrop-slot="introScene2_backdrop" data-ratio="16:9" data-slot-label="Căn Chỉnh Ảnh Nền Cảnh 3 (Ngang 16:9)">
-                ✂️ Căn Chỉnh
-              </button>
-              <label class="btn" style="cursor:pointer;">
-                📤 Tải Mới
-                <input type="file" accept="image/*" style="display:none;" data-upload-slot="introScene2_backdrop" data-ratio="16:9" data-slot-label="Ảnh Nền Cảnh 3 Intro (Ngang 16:9)">
-              </label>
+
+            <!-- Cảnh 3 PC & Mobile sub-slots -->
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+              <div>
+                <span style="font-size:0.74rem; color:#ffe4ab;">🖥️ PC (Ngang 16:9)</span>
+                <div class="slot-preview-wrap ratio-16-9" style="height:110px; margin-top:4px;">
+                  <img src="" alt="" class="slot-preview-img" id="prev_introScene2_backdrop">
+                </div>
+                <input type="hidden" id="f_introScene2_backdrop">
+                <div class="slot-btn-group" style="margin-top:6px;">
+                  <button type="button" class="btn btn-sm btn-primary" data-pick-slot="introScene2_backdrop" data-ratio="16:9" data-slot-label="Cảnh 3 PC (Ngang 16:9)">🖼️ Chọn</button>
+                  <button type="button" class="btn btn-sm" data-recrop-slot="introScene2_backdrop" data-ratio="16:9" data-slot-label="Căn Chỉnh Cảnh 3 PC">✂️ Sửa</button>
+                </div>
+              </div>
+
+              <div>
+                <span style="font-size:0.74rem; color:#ffe4ab;">📱 ĐT (Dọc 9:16)</span>
+                <div class="slot-preview-wrap ratio-9-16" style="height:110px; margin-top:4px;">
+                  <img src="" alt="" class="slot-preview-img" id="prev_introScene2_backdropMobile">
+                </div>
+                <input type="hidden" id="f_introScene2_backdropMobile">
+                <div class="slot-btn-group" style="margin-top:6px;">
+                  <button type="button" class="btn btn-sm btn-primary" data-pick-slot="introScene2_backdropMobile" data-ratio="9:16" data-slot-label="Cảnh 3 ĐT (Dọc 9:16)">🖼️ Chọn</button>
+                  <button type="button" class="btn btn-sm" data-recrop-slot="introScene2_backdropMobile" data-ratio="9:16" data-slot-label="Căn Chỉnh Cảnh 3 ĐT">✂️ Sửa</button>
+                </div>
+              </div>
             </div>
             <div class="form-group" style="margin-bottom:0;">
               <label>Câu Thơ Gõ Chữ Cảnh 3</label>
@@ -1361,10 +1475,12 @@
             </div>
 
             <div class="form-group" style="margin-bottom:4px;">
-              <label>Tỉ Lệ Khung Chuẩn</label>
-              <div style="display:flex; gap:6px;">
-                <button type="button" class="btn btn-sm" id="btnRatio169" style="flex:1; justify-content:center;">Ngang 16:9</button>
-                <button type="button" class="btn btn-sm" id="btnRatio34" style="flex:1; justify-content:center;">Đứng 3:4</button>
+              <label>Tỉ Lệ Khung Chuẩn (PC &amp; Điện Thoại)</label>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button type="button" class="btn btn-sm" id="btnRatio169" style="flex:1 1 45%; justify-content:center;">🖥️ Ngang 16:9</button>
+                <button type="button" class="btn btn-sm" id="btnRatio34" style="flex:1 1 45%; justify-content:center;">🖼️ Đứng 3:4</button>
+                <button type="button" class="btn btn-sm" id="btnRatio916" style="flex:1 1 45%; justify-content:center;">📱 Dọc 9:16 (ĐT)</button>
+                <button type="button" class="btn btn-sm" id="btnRatio11" style="flex:1 1 45%; justify-content:center;">◻️ Vuông 1:1</button>
               </div>
             </div>
 
@@ -1985,10 +2101,20 @@
         var prevCover = document.getElementById("prev_coverPhoto");
         if (prevCover) prevCover.src = resolveAdminAssetUrl(coverSrc);
 
+        var coverMobSrc = c.coverPhotoMobile || "";
+        val("f_coverPhotoMobile", coverMobSrc);
+        var prevCoverMob = document.getElementById("prev_coverPhotoMobile");
+        if (prevCoverMob) prevCoverMob.src = coverMobSrc ? resolveAdminAssetUrl(coverMobSrc) : resolveAdminAssetUrl(coverSrc);
+
         var interludeSrc = c.interludePhoto || c.detailsBackdrop || "assets/hero.jpg";
         val("f_interludePhoto", interludeSrc);
         var prevInterlude = document.getElementById("prev_interludePhoto");
         if (prevInterlude) prevInterlude.src = resolveAdminAssetUrl(interludeSrc);
+
+        var interludeMobSrc = c.interludePhotoMobile || "";
+        val("f_interludePhotoMobile", interludeMobSrc);
+        var prevInterludeMob = document.getElementById("prev_interludePhotoMobile");
+        if (prevInterludeMob) prevInterludeMob.src = interludeMobSrc ? resolveAdminAssetUrl(interludeMobSrc) : resolveAdminAssetUrl(interludeSrc);
 
         var scs = Array.isArray(state.introScenes) ? state.introScenes : [];
         var defaultVerses = [
@@ -2004,11 +2130,15 @@
         for (var i = 0; i < 3; i++) {
           var sc = scs[i] || {};
           var bdSrc = sc.backdrop || defaultBackdrops[i];
+          var bdMobSrc = sc.backdropMobile || "";
           var verseTxt = sc.verse || defaultVerses[i];
           val("f_introScene" + i + "_backdrop", bdSrc);
+          val("f_introScene" + i + "_backdropMobile", bdMobSrc);
           val("f_introScene" + i + "_verse", verseTxt);
           var prevEl = document.getElementById("prev_introScene" + i + "_backdrop");
           if (prevEl) prevEl.src = resolveAdminAssetUrl(bdSrc);
+          var prevMobEl = document.getElementById("prev_introScene" + i + "_backdropMobile");
+          if (prevMobEl) prevMobEl.src = bdMobSrc ? resolveAdminAssetUrl(bdMobSrc) : resolveAdminAssetUrl(bdSrc);
         }
 
         var d = state.date || {};
@@ -2082,7 +2212,9 @@
       // GOM DỮ LIỆU TỪ FORM VÀO STATE
       function collectFormsToState() {
         var coverVal = val("f_coverPhoto") || "assets/cover-khanh-linh-le-dung.jpg";
+        var coverMobVal = val("f_coverPhotoMobile") || "";
         var interludeVal = val("f_interludePhoto") || "assets/hero.jpg";
+        var interludeMobVal = val("f_interludePhotoMobile") || "";
 
         state.couple = {
           groomName: val("f_groomName"),
@@ -2091,22 +2223,27 @@
           invitationText: val("f_invitationText"),
           signatureQuote: val("f_signatureQuote"),
           coverPhoto: coverVal,
+          coverPhotoMobile: coverMobVal,
           heroBackdrop: coverVal,
           interludePhoto: interludeVal,
+          interludePhotoMobile: interludeMobVal,
           detailsBackdrop: interludeVal
         };
 
         state.introScenes = [
           {
             backdrop: val("f_introScene0_backdrop") || "assets/memory-01-garden.jpg",
+            backdropMobile: val("f_introScene0_backdropMobile") || "",
             verse: val("f_introScene0_verse") || ""
           },
           {
             backdrop: val("f_introScene1_backdrop") || "assets/memory-02-castle.jpg",
+            backdropMobile: val("f_introScene1_backdropMobile") || "",
             verse: val("f_introScene1_verse") || ""
           },
           {
             backdrop: val("f_introScene2_backdrop") || "assets/memory-03-piano.jpg",
+            backdropMobile: val("f_introScene2_backdropMobile") || "",
             verse: val("f_introScene2_verse") || ""
           }
         ];
@@ -2308,6 +2445,8 @@
       var zoomLabel = document.getElementById("cropZoomLabel");
       var btnRatio169 = document.getElementById("btnRatio169");
       var btnRatio34 = document.getElementById("btnRatio34");
+      var btnRatio916 = document.getElementById("btnRatio916");
+      var btnRatio11 = document.getElementById("btnRatio11");
       var btnFitCover = document.getElementById("btnFitCover");
       var btnFitContain = document.getElementById("btnFitContain");
       var btnBackToPicker = document.getElementById("btnBackToPicker");
@@ -2318,7 +2457,7 @@
         targetType: "slot", // "slot" | "albumIndex"
         slotKey: "heroBackdrop",
         albumIndex: -1,
-        ratio: "16:9",      // "16:9" | "3:4"
+        ratio: "16:9",      // "16:9" | "3:4" | "9:16" | "1:1"
         fitMode: "cover",   // "cover" | "contain"
         label: "",
         zoom: 1,
@@ -2382,14 +2521,20 @@
         if (ratio === "3:4") {
           cropCanvas.width = 900;
           cropCanvas.height = 1200;
+        } else if (ratio === "9:16") {
+          cropCanvas.width = 900;
+          cropCanvas.height = 1600;
+        } else if (ratio === "1:1") {
+          cropCanvas.width = 1080;
+          cropCanvas.height = 1080;
         } else {
           cropCanvas.width = 1600;
           cropCanvas.height = 900;
         }
-        if (btnRatio169 && btnRatio34) {
-          btnRatio169.classList.toggle("btn-primary", ratio === "16:9");
-          btnRatio34.classList.toggle("btn-primary", ratio === "3:4");
-        }
+        if (btnRatio169) btnRatio169.classList.toggle("btn-primary", ratio === "16:9");
+        if (btnRatio34) btnRatio34.classList.toggle("btn-primary", ratio === "3:4");
+        if (btnRatio916) btnRatio916.classList.toggle("btn-primary", ratio === "9:16");
+        if (btnRatio11) btnRatio11.classList.toggle("btn-primary", ratio === "1:1");
       }
 
       function renderCropCanvas(showGuides) {
@@ -2567,6 +2712,20 @@
         setCropCanvasDimensions("3:4");
         renderCropCanvas(true);
       });
+      if (btnRatio916) {
+        btnRatio916.addEventListener("click", function () {
+          currentCropSession.ratio = "9:16";
+          setCropCanvasDimensions("9:16");
+          renderCropCanvas(true);
+        });
+      }
+      if (btnRatio11) {
+        btnRatio11.addEventListener("click", function () {
+          currentCropSession.ratio = "1:1";
+          setCropCanvasDimensions("1:1");
+          renderCropCanvas(true);
+        });
+      }
 
       btnFitCover.addEventListener("click", function () {
         currentCropSession.fitMode = "cover";
