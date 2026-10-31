@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Concept 2: Phong Thư Hoàng Gia (Interactive Royal Envelope) — Khánh Linh &amp; Lê Dũng</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-cream: #F4F1EA;
+      --envelope-red: #721c24;
+      --envelope-dark: #501319;
+      --envelope-light: #89252f;
+      --wax-red: #8b1822;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-cinzel: 'Cinzel', serif;
+      --font-script: 'Great Vibes', cursive;
+      --font-sans: 'Montserrat', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      background: var(--bg-cream);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-sans);
+      position: relative;
+    }
+
+    /* Subtle Luxury Wallpaper Background */
+    .bg-pattern {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.9) 0%, rgba(244, 241, 234, 0.95) 70%, rgba(228, 222, 210, 0.98) 100%);
+      pointer-events: none;
+    }
+
+    .bg-frame {
+      position: absolute;
+      inset: 24px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 6px;
+      pointer-events: none;
+    }
+
+    /* Envelope 3D Stage */
+    .stage {
+      position: relative;
+      perspective: 1400px;
+      width: min(92vw, 480px);
+      height: 330px;
+      margin-top: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .envelope {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: var(--envelope-red);
+      border-radius: 12px;
+      box-shadow: 0 35px 75px rgba(80, 19, 25, 0.28), 0 10px 25px rgba(0, 0, 0, 0.12);
+      transform-style: preserve-3d;
+      cursor: pointer;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .envelope:hover {
+      transform: translateY(-4px);
+    }
+
+    /* Inner Liner Texture */
+    .envelope-pocket {
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* Side and Bottom Folds (Layered Triangle flaps) */
+    .fold-left {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 165px 0 165px 240px;
+      border-color: transparent transparent transparent var(--envelope-light);
+      z-index: 3;
+      filter: drop-shadow(2px 0 6px rgba(0, 0, 0, 0.08));
+    }
+
+    .fold-right {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 165px 240px 165px 0;
+      border-color: transparent var(--envelope-light) transparent transparent;
+      z-index: 3;
+      filter: drop-shadow(-2px 0 6px rgba(0, 0, 0, 0.08));
+    }
+
+    .fold-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 240px 185px 240px;
+      border-color: transparent transparent var(--envelope-dark) transparent;
+      border-radius: 0 0 12px 12px;
+      z-index: 4;
+      filter: drop-shadow(0 -4px 10px rgba(0, 0, 0, 0.15));
+    }
+
+    /* Top Flap (3D Rotating Lid) */
+    .flap-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 185px 240px 0 240px;
+      border-color: var(--envelope-red) transparent transparent transparent;
+      transform-origin: top center;
+      transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 5;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.22));
+    }
+
+    /* Royal Wax Seal Button */
+    .wax-seal {
+      position: absolute;
+      top: 185px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 68px;
+      height: 68px;
+      background: radial-gradient(circle at 35% 35%, #b92b38, var(--wax-red) 65%, #590c13 100%);
+      border-radius: 50%;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 6;
+      cursor: pointer;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      border: 2px dashed rgba(212, 175, 55, 0.4);
+    }
+
+    .wax-seal:hover {
+      transform: translate(-50%, -50%) scale(1.08);
+      box-shadow: 0 12px 32px rgba(185, 43, 56, 0.5), 0 0 20px rgba(212, 175, 55, 0.4);
+    }
+
+    .wax-seal-inner {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(212, 175, 55, 0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.4);
+    }
+
+    .wax-monogram {
+      font-family: var(--font-cinzel);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gold-light);
+      letter-spacing: 1px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8), 0 0 10px rgba(212, 175, 55, 0.6);
+    }
+
+    /* The Invitation Letter inside */
+    .letter-card {
+      position: absolute;
+      top: 15px;
+      left: 20px;
+      right: 20px;
+      height: 520px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      z-index: 2;
+      transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 22px;
+      text-align: center;
+      overflow: hidden;
+      transform: translateY(0);
+    }
+
+    .letter-photo {
+      width: 100%;
+      height: 220px;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+
+    .letter-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+    }
+
+    .letter-subtitle {
+      font-family: var(--font-cinzel);
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: #999;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .letter-names {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      font-weight: 600;
+      color: #2C221E;
+      margin-bottom: 6px;
+      white-space: nowrap;
+    }
+
+    .letter-names em {
+      font-family: var(--font-script);
+      font-style: italic;
+      color: var(--gold);
+      font-size: 0.9em;
+      padding: 0 6px;
+      font-weight: 400;
+    }
+
+    .letter-date {
+      font-family: var(--font-cinzel);
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+
+    .letter-desc {
+      font-size: 12px;
+      line-height: 1.6;
+      color: #666;
+      margin-bottom: 18px;
+      font-style: italic;
+    }
+
+    .letter-choices {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .letter-btn {
+      padding: 12px 14px;
+      background: var(--bg-cream);
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      border-radius: 8px;
+      text-decoration: none;
+      color: #2C221E;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .letter-btn strong {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      color: #2C221E;
+      margin-bottom: 2px;
+    }
+
+    .letter-btn small {
+      font-size: 10px;
+      color: #888;
+    }
+
+    .letter-btn:hover {
+      background: #ffffff;
+      border-color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(212, 175, 55, 0.2);
+    }
+
+    /* STATE: ENVELOPE OPENED */
+    .stage.is-open .flap-top {
+      transform: rotateX(180deg);
+      z-index: 1;
+      filter: none;
+    }
+
+    .stage.is-open .wax-seal {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.6);
+      pointer-events: none;
+      transition: all 0.4s ease;
+    }
+
+    .stage.is-open .letter-card {
+      transform: translateY(-260px);
+      z-index: 10;
+      box-shadow: 0 35px 85px rgba(0, 0, 0, 0.35);
+    }
+
+    /* Instruction Hint */
+    .hint-tap {
+      margin-top: 32px;
+      font-family: var(--font-cinzel);
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: #721c24;
+      text-transform: uppercase;
+      animation: hintPulse 2s infinite ease-in-out;
+      cursor: pointer;
+      z-index: 5;
+    }
+
+    @keyframes hintPulse {
+      0%, 100% { opacity: 0.6; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-3px); }
+    }
+
+    @media(max-width: 600px) {
+      .stage {
+        width: 90vw;
+        height: 260px;
+        margin-top: 100px;
+      }
+      .fold-left { border-width: 130px 0 130px 45vw; }
+      .fold-right { border-width: 130px 45vw 130px 0; }
+      .fold-bottom { border-width: 0 45vw 150px 45vw; }
+      .flap-top { border-width: 150px 45vw 0 45vw; }
+      .wax-seal { top: 150px; width: 56px; height: 56px; }
+      .wax-seal-inner { width: 40px; height: 40px; }
+      .wax-monogram { font-size: 13px; }
+      .letter-card {
+        height: 480px;
+        padding: 18px 14px;
+      }
+      .letter-photo { height: 180px; margin-bottom: 12px; }
+      .letter-names { font-size: 26px; }
+      .stage.is-open .letter-card { transform: translateY(-220px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-pattern"></div>
+  <div class="bg-frame"></div>
+
+  <div class="stage" id="envelopeStage">
+    <div class="envelope" id="envelopeBody">
+      <div class="envelope-pocket"></div>
+
+      <!-- Letter hidden inside -->
+      <div class="letter-card" id="letterCard">
+        <div class="letter-photo">
+          <img src="assets/cover-khanh-linh-le-dung.jpg" alt="Khánh Linh &amp; Lê Dũng">
+        </div>
+        <div class="letter-subtitle">THƯ MỜI THAM DỰ HÔN LỄ</div>
+        <h1 class="letter-names">Khánh Linh <em>&amp;</em> Lê Dũng</h1>
+        <div class="letter-date">27 · 11 · 2026</div>
+        <p class="letter-desc">“Trân trọng kính mời quý khách đến chung vui trong ngày trọng đại của chúng mình.”</p>
+        <div class="letter-choices">
+          <a class="letter-btn" href="index.html?side=groom">
+            <strong>Nhà Trai</strong>
+            <small>Gia đình chú rể ↗</small>
+          </a>
+          <a class="letter-btn" href="index.html?side=bride">
+            <strong>Nhà Gái</strong>
+            <small>Gia đình cô dâu ↗</small>
+          </a>
+        </div>
+      </div>
+
+      <!-- Folds -->
+      <div class="fold-left"></div>
+      <div class="fold-right"></div>
+      <div class="fold-bottom"></div>
+
+      <!-- Flap & Wax Seal -->
+      <div class="flap-top" id="flapTop"></div>
+      <div class="wax-seal" id="waxSeal" title="Bấm để mở phong thư">
+        <div class="wax-seal-inner">
+          <span class="wax-monogram">K &amp; D</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hint-tap" id="hintTap">✦ CHẠM VÀO CON DẤU SÁP ĐỂ MỞ THIỆP ✦</div>
+
+  <audio id="envelopeMusic" src="assets/river-flows-in-you.mp3#t=10" preload="none" loop></audio>
+
+  <script>
+    const stage = document.getElementById('envelopeStage');
+    const seal = document.getElementById('waxSeal');
+    const hint = document.getElementById('hintTap');
+    const music = document.getElementById('envelopeMusic');
+    let opened = false;
+
+    function openEnvelope() {
+      if (opened) return;
+      opened = true;
+      stage.classList.add('is-open');
+      hint.style.opacity = '0';
+      music.play().catch(() => {});
+    }
+
+    seal.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openEnvelope();
+    });
+
+    stage.addEventListener('click', () => {
+      if (!opened) openEnvelope();
+    });
+
+    hint.addEventListener('click', openEnvelope);
+  </script>
+</body>
+</html>

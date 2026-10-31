@@ -37,7 +37,7 @@
 }
 
 .entry-dialog::backdrop {
-  background: #f4f1e6;
+  background: #F4F1EA;
   backdrop-filter: none;
   transition: background 1.0s ease;
 }
@@ -56,7 +56,7 @@
   content: "";
   position: fixed;
   inset: 20px;
-  border: 1px solid #b6bda13d;
+  border: 1px solid rgba(200, 158, 99, 0.25);
   pointer-events: none;
   transition: opacity 0.8s ease;
 }
@@ -230,35 +230,17 @@
   z-index: 5;
 }
 
-/* THE VISUAL PHOTO FRAME (Starts in Intro, glides into Arch Card) */
+/* THE VISUAL PHOTO FRAME (Editorial Luxury: Bỏ khung vòm đen, viền chỉ vàng kim sắc nét) */
 .entry-visual {
   height: 560px;
   position: relative;
   overflow: hidden;
   background: #141d18;
   isolation: isolate;
-  border-radius: 240px 240px 3px 3px;
-  box-shadow: 0 20px 50px rgba(49, 70, 51, 0.12);
-  transition: border-radius 0.95s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.95s ease,
-              border-color 0.95s ease,
-              transform 0.95s cubic-bezier(0.16, 1, 0.3, 1),
-              height 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-              width 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: border-radius, transform, height;
-}
-
-/* THE VISUAL PHOTO FRAME (Choice Arch Card) */
-.entry-visual {
-  height: 560px;
-  position: relative;
-  overflow: hidden;
-  background: #141d18;
-  isolation: isolate;
-  border-radius: 240px 240px 3px 3px;
-  box-shadow: 0 20px 50px rgba(49, 70, 51, 0.12);
-  border: 1px solid rgba(182, 189, 161, 0.24);
-  transition: opacity 0.85s ease;
+  border-radius: 12px;
+  box-shadow: 0 25px 60px rgba(44, 34, 30, 0.16), 0 4px 16px rgba(44, 34, 30, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  transition: opacity 0.85s ease, transform 0.6s ease;
 }
 
 .visual-img {
@@ -267,27 +249,27 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 22%;
-  filter: saturate(0.92);
+  object-position: center 20%;
+  filter: contrast(1.03) saturate(1.06) brightness(0.98);
 }
 
-/* Ken Burns Slow Breathing (3-5% scale over 11s) */
+/* Ken Burns Slow Breathing */
 @keyframes kenBurnsBreathing {
   0% { transform: scale(1.0); }
-  100% { transform: scale(1.05) translate3d(-1%, -1%, 0); }
+  100% { transform: scale(1.04) translate3d(-0.5%, -0.5%, 0); }
 }
 
 .ken-burns {
   animation: kenBurnsBreathing 11s ease-in-out infinite alternate;
 }
 
-/* Arch overlay captions */
+/* Photo inner border & shade */
 .entry-visual:after {
   content: "";
   position: absolute;
-  inset: 12px;
-  border: 1px solid #fff4df6b;
-  border-radius: inherit;
+  inset: 10px;
+  border: 1px solid rgba(255, 244, 223, 0.35);
+  border-radius: 6px;
   pointer-events: none;
   opacity: 1;
   transition: opacity 0.8s ease 0.3s;
@@ -296,7 +278,7 @@
 .entry-visual-shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(0deg, #18301fd9 0%, #24381f20 67%);
+  background: linear-gradient(180deg, rgba(20, 29, 24, 0.05) 0%, rgba(20, 29, 24, 0.4) 65%, rgba(15, 22, 18, 0.82) 100%);
   opacity: 1;
   transition: opacity 0.8s ease 0.3s;
 }
@@ -453,35 +435,42 @@
   opacity: 0.85;
 }
 
-/* Choice Content */
+/* Choice Content (Editorial Luxury: Kem Cát #F4F1EA & Nâu Đất #2C221E) */
 .entry-content {
-  padding: 12px 0 12px 72px;
+  padding: 16px 0 16px 64px;
   text-align: center;
   position: relative;
-  transition: opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1), transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
 
 .entry-edition {
-  font-size: 8px;
-  letter-spacing: 3px;
-  color: #7a856b;
+  font-family: var(--serif);
+  font-size: 11px;
+  letter-spacing: 6px;
+  color: #8C8C8C;
   font-weight: 500;
+  text-transform: uppercase;
+  display: block;
 }
 
 .entry-names {
   font-family: var(--serif);
-  font-size: 76px;
-  letter-spacing: -3px;
-  line-height: 1.4;
-  margin-top: 6px;
+  font-size: 64px;
+  letter-spacing: -1.5px;
+  line-height: 1.25;
+  margin-top: 10px;
+  color: #2C221E;
   white-space: nowrap;
 }
 
 .entry-names em {
-  font-size: .6em;
-  color: #98a080;
-  padding: 0 7px;
+  font-family: 'Great Vibes', cursive;
+  font-style: italic;
+  font-size: 0.85em;
+  color: #c89e63;
+  padding: 0 10px;
+  font-weight: 400;
 }
 
 .entry-rule {
@@ -489,131 +478,145 @@
   align-items: center;
   justify-content: center;
   gap: 15px;
-  color: #9a9e80;
-  font-size: 24px;
-  margin: 7px 0 21px;
+  color: #c89e63;
+  font-size: 16px;
+  margin: 12px 0 20px;
+  opacity: 0.85;
 }
 
 .entry-rule i {
   height: 1px;
-  width: 40px;
-  background: #bdc3ab;
+  width: 44px;
+  background: linear-gradient(90deg, transparent, #c89e63, transparent);
 }
 
 .entry-content h1 {
-  font-size: 34px;
-  letter-spacing: -1px;
+  font-size: 26px;
+  letter-spacing: -0.5px;
   line-height: 1.4;
+  color: #3b302a;
+  font-weight: 500;
 }
 
 .entry-content #entry-description {
-  font-size: 11px;
-  line-height: 1.9;
-  margin-top: 12px;
-  color: #6d7964;
+  font-size: 13px;
+  line-height: 1.8;
+  margin-top: 8px;
+  color: #6e645f;
+  font-style: italic;
 }
 
 .entry-choices {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 30px;
+  gap: 18px;
+  margin-top: 28px;
 }
 
+/* Glassmorphism Tabs cao cấp (bo nhẹ 10px, nền kính mờ ánh kim) */
 .entry-choice {
   position: relative;
-  min-height: 179px;
-  padding: 24px 17px 23px;
+  min-height: 135px;
+  padding: 22px 20px;
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  border: 1px solid #bac2a8;
-  background: #fffdf651;
-  border-radius: 80px 80px 3px 3px;
-  transition: transform .6s cubic-bezier(.22,1,.36,1),background .4s,border-color .4s,box-shadow .5s;
-  color: #40573e;
+  border: 1px solid rgba(200, 158, 99, 0.35);
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 10px;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.3s,
+              border-color 0.3s,
+              box-shadow 0.4s;
+  color: #2C221E;
   isolation: isolate;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(44, 34, 30, 0.05);
 }
 
 .entry-choice:after {
   content: "";
   position: absolute;
-  inset: 7px;
-  border: 1px solid #d3d8c4;
-  border-radius: inherit;
+  inset: 5px;
+  border: 1px solid rgba(200, 158, 99, 0.18);
+  border-radius: 6px;
   pointer-events: none;
-  transition: border-color .4s;
+  transition: border-color 0.3s;
 }
 
 .entry-choice-number {
   position: absolute;
-  top: 25px;
-  left: 26px;
-  font-size: 7px;
-  letter-spacing: 1px;
-  color: #8c967a;
+  top: 14px;
+  left: 16px;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #c89e63;
+  font-weight: 600;
 }
 
 .entry-choice strong {
   font-family: var(--serif);
-  font-size: 38px;
+  font-size: 28px;
   line-height: 1.25;
-  font-weight: 400;
-  letter-spacing: -.8px;
-  white-space: nowrap;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  color: #2C221E;
 }
 
 .entry-choice small {
   font-size: 12px;
-  line-height: 1.6;
-  margin-top: 14px;
-  color: #718060;
+  line-height: 1.5;
+  margin-top: 8px;
+  color: #7a706b;
+  font-weight: 400;
 }
 
 .entry-choice-arrow {
   position: absolute;
-  right: 18px;
-  bottom: 18px;
-  font-size: 18px;
-  color: #9ca786;
-  transition: transform .5s,color .4s;
+  right: 14px;
+  bottom: 12px;
+  font-size: 16px;
+  color: #c89e63;
+  transition: transform 0.4s, color 0.3s;
 }
 
 .entry-choice[aria-pressed=true] {
-  border-color: #718361;
-  background: #e8ecde;
-  box-shadow: 0 8px 22px #4f654411;
+  border-color: #c89e63;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 24px rgba(200, 158, 99, 0.22);
 }
 
 @media(hover:hover) {
   .entry-choice:hover {
-    background: #e7eddd;
-    border-color: #82956b;
-    transform: translateY(-6px);
-    box-shadow: 0 13px 30px #3b533014;
+    background: rgba(255, 255, 255, 0.95);
+    border-color: #c89e63;
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(200, 158, 99, 0.18);
   }
   .entry-choice:hover .entry-choice-arrow {
-    transform: translate(2px,-2px);
-    color: #4e6a3d;
+    transform: translate(3px, -3px);
+    color: #9f753c;
   }
 }
 
 .entry-choice:active {
-  transform: translateY(-2px) scale(.98);
+  transform: translateY(-1px) scale(.99);
 }
 
 .entry-choice:focus-visible,
 .entry-back:focus-visible {
-  outline: 2px solid #718756;
-  outline-offset: 5px;
+  outline: 2px solid #c89e63;
+  outline-offset: 4px;
 }
 
 .entry-bottom-note {
-  font-size: 6px;
-  letter-spacing: 1.9px;
-  color: #849076;
-  margin-top: 23px;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  color: #8C8C8C;
+  margin-top: 24px;
 }
 
 .entry-back {
@@ -692,6 +695,12 @@
 }
 
 /* In Morphing Mode */
+.entry-dialog.is-morphing {
+  background: #F4F1EA !important;
+  color: #2C221E !important;
+  transition: background 0.85s ease;
+}
+
 .entry-dialog.is-morphing .choice-stage {
   visibility: visible;
   opacity: 1;
@@ -709,6 +718,11 @@
 }
 
 /* In Choice Mode: completely clean up intro artifacts */
+.entry-dialog.is-choice-mode {
+  background: #F4F1EA !important;
+  color: #2C221E !important;
+}
+
 .entry-dialog.is-choice-mode .intro-scenes-wrapper,
 .entry-dialog.is-choice-mode .intro-progress-bar,
 .entry-dialog.is-choice-mode .intro-skip-btn,
@@ -783,33 +797,40 @@
     max-width: 100%;
   }
 
-  .entry-visual-shade {
-    background: linear-gradient(90deg, #1d332485, #1b312633);
+  .entry-visual {
+    width: 100%;
+    height: 180px;
+    border-radius: 10px;
+    flex-shrink: 0;
   }
-  .entry-visual:after { inset: 8px; }
+
+  .entry-visual-shade {
+    background: linear-gradient(0deg, rgba(20, 29, 24, 0.8) 0%, rgba(20, 29, 24, 0.2) 100%);
+  }
+  .entry-visual:after { inset: 8px; border-radius: 6px; }
   .entry-photo-note, .entry-photo-date { display: none; }
-  .entry-visual>p { font-size: 38px; bottom: 22px; left: 26px; letter-spacing: -1px; }
+  .entry-visual>p { font-size: 32px; bottom: 16px; left: 20px; letter-spacing: -0.5px; }
   .entry-visual>p br { display: none; }
   .entry-visual>p em { padding-left: 6px; }
 
   .entry-content {
     width: 100%;
-    padding: 26px 0 0;
+    padding: 20px 0 0;
   }
-  .entry-edition { font-size: 6px; letter-spacing: 2.6px; }
-  .entry-names { font-size: 56px; line-height: 1.2; margin-top: 11px; letter-spacing: -2px; }
-  .entry-rule { margin: 10px 0 16px; font-size: 18px; }
-  .entry-rule i { width: 29px; }
-  .entry-content h1 { font-size: 28px; letter-spacing: -.6px; }
-  .entry-content #entry-description { font-size: 10px; line-height: 1.9; margin-top: 10px; }
-  .entry-choices { margin-top: 23px; gap: 13px; }
-  .entry-choice { min-height: 157px; padding: 19px 10px 20px; border-radius: 70px 70px 3px 3px; }
-  .entry-choice strong { font-size: 32px; }
-  .entry-choice small { font-size: 10px; margin-top: 12px; }
-  .entry-choice-number { font-size: 6px; top: 23px; left: 22px; }
-  .entry-choice-arrow { font-size: 16px; right: 15px; bottom: 13px; }
-  .entry-bottom-note { font-size: 5px; letter-spacing: 1.3px; margin-top: 22px; }
-  .entry-demo { font-size: 5px; letter-spacing: .8px; margin-top: 26px; }
+  .entry-edition { font-size: 9px; letter-spacing: 4px; }
+  .entry-names { font-size: 46px; line-height: 1.2; margin-top: 8px; letter-spacing: -1px; }
+  .entry-rule { margin: 8px 0 14px; font-size: 16px; }
+  .entry-rule i { width: 28px; }
+  .entry-content h1 { font-size: 22px; letter-spacing: -.4px; }
+  .entry-content #entry-description { font-size: 11px; line-height: 1.6; margin-top: 6px; }
+  .entry-choices { margin-top: 18px; gap: 12px; }
+  .entry-choice { min-height: 110px; padding: 16px 10px; border-radius: 8px; }
+  .entry-choice strong { font-size: 24px; }
+  .entry-choice small { font-size: 10px; margin-top: 6px; }
+  .entry-choice-number { font-size: 8px; top: 12px; left: 12px; }
+  .entry-choice-arrow { font-size: 14px; right: 12px; bottom: 10px; }
+  .entry-bottom-note { font-size: 8px; letter-spacing: 2px; margin-top: 18px; }
+  .entry-demo { font-size: 7px; letter-spacing: 1px; margin-top: 20px; }
   .entry-back { font-size: 10px; margin-top: 13px; }
   .invite-family { font-size: 9px; padding: 6px 11px; margin-top: 10px; margin-bottom: -10px; }
   .invitation-paper { min-height: 620px; }
