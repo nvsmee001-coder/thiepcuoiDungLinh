@@ -683,8 +683,9 @@
       <h1 class="brand-title">Quản Lý Thiệp Cưới Dũng &amp; Linh</h1>
     </div>
     <div class="top-actions">
-      <a href="/" class="btn" target="_blank">👁️ Xem Thiệp Cưới (Mở Tab Mới)</a>
-      <a href="/" class="btn">⬅️ Quay Lại Thiệp</a>
+      <a href="/" class="btn btn-primary" target="_blank" style="background:linear-gradient(135deg,#c89e63,#e2c48e); color:#1a1a1a; font-weight:700;">🌿 Xem Thiệp Cưới Chính (Mới)</a>
+      <a href="/minimal.html" class="btn" target="_blank">✨ Bản Minimal</a>
+      <a href="/stationery.html" class="btn" target="_blank">📜 Bản Cũ</a>
       <button type="button" class="btn btn-danger" id="btnResetDefault">↺ Khôi Phục Mặc Định</button>
       <button type="button" class="btn btn-primary" id="btnSaveAll">💾 LƯU TẤT CẢ THAY ĐỔI</button>
     </div>
@@ -692,7 +693,7 @@
 
   <main class="admin-container">
 
-    <!-- 6 TAB QUẢN LÝ RÕ RÀNG -->
+    <!-- 7 TAB QUẢN LÝ RÕ RÀNG -->
     <nav class="admin-tabs">
       <button type="button" class="tab-btn active" data-tab="pane-album">📸 1. Nạp &amp; Quản Lý Album Ảnh (<span id="albumCountBadge">11</span>)</button>
       <button type="button" class="tab-btn" data-tab="pane-general">💍 2. Dâu Rể, Ngày Giờ &amp; Ảnh Nền</button>
@@ -700,6 +701,7 @@
       <button type="button" class="tab-btn" data-tab="pane-menu">🍽️ 4. Thực Đơn Tiệc Cưới</button>
       <button type="button" class="tab-btn" data-tab="pane-schedule">🕰️ 5. Lịch Biểu Hôn Lễ</button>
       <button type="button" class="tab-btn" data-tab="pane-music">🎵 6. Đĩa Nhạc Cưới (<span id="musicCountBadge">3</span>/5)</button>
+      <button type="button" class="tab-btn" data-tab="pane-rsvp">💌 7. Phản Hồi Khách (RSVP) (<span id="rsvpCountBadge">0</span>)</button>
     </nav>
 
     <!-- ====================================================================
@@ -1192,6 +1194,57 @@
 
         <!-- Audio ẩn dùng để nghe thử ngay trong Admin -->
         <audio id="adminPreviewAudio" preload="none" style="display:none;"></audio>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         PANE 7: QUẢN LÝ PHẢN HỒI THAM DỰ CỦA KHÁCH MỜI (RSVP)
+         ==================================================================== -->
+    <section class="tab-pane" id="pane-rsvp">
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>💌 Danh Sách Khách Mời Xác Nhận Tham Dự (RSVP)</span>
+          <div style="display:flex; gap:8px;">
+            <button type="button" class="btn btn-sm" id="btnRefreshRsvp" title="Tải lại danh sách mới">🔄 Làm Mới</button>
+            <button type="button" class="btn btn-sm btn-primary" id="btnExportRsvp" title="Tải file Excel / CSV">📥 Tải Danh Sách</button>
+          </div>
+        </div>
+        <p class="panel-desc">
+          Theo dõi trực tiếp những vị khách đã xác nhận tham dự tiệc cưới, phân chia rõ ràng theo Nhà Trai / Nhà Gái, số lượng người đi cùng và những lời chúc phúc ấm áp gửi đến cô dâu &amp; chú rể.
+        </p>
+
+        <!-- Thống kê tổng quan -->
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:14px; margin-bottom: 22px;">
+          <div style="background:var(--bg-card); padding:16px; border-radius:12px; border:1px solid var(--gold-dim); text-align:center;">
+            <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:6px;">Tổng Phản Hồi</div>
+            <div id="statTotalRsvp" style="font-size:1.8rem; font-weight:800; color:var(--gold-bright);">0</div>
+          </div>
+          <div style="background:var(--bg-card); padding:16px; border-radius:12px; border:1px solid rgba(81, 207, 102, 0.4); text-align:center;">
+            <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:#51cf66; margin-bottom:6px;">Sẽ Tham Dự</div>
+            <div id="statAttending" style="font-size:1.8rem; font-weight:800; color:#51cf66;">0</div>
+          </div>
+          <div style="background:var(--bg-card); padding:16px; border-radius:12px; border:1px solid var(--gold-dim); text-align:center;">
+            <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:6px;">Tổng Số Khách Đi Cùng</div>
+            <div id="statTotalGuests" style="font-size:1.8rem; font-weight:800; color:var(--text-main);">0</div>
+          </div>
+          <div style="background:var(--bg-card); padding:16px; border-radius:12px; border:1px solid rgba(226, 196, 142, 0.3); text-align:center;">
+            <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:6px;">Nhà Gái / Nhà Trai</div>
+            <div id="statFamilyRatio" style="font-size:1.3rem; font-weight:700; color:var(--gold);">0 / 0</div>
+          </div>
+        </div>
+
+        <!-- Bộ lọc Nhà Trai / Nhà Gái -->
+        <div style="display:flex; gap:10px; margin-bottom: 16px; flex-wrap:wrap; align-items:center;">
+          <span style="font-size:0.85rem; color:var(--text-muted);">Lọc theo:</span>
+          <button type="button" class="btn btn-sm btn-primary rsvp-filter-btn active" data-filter="all">Tất Cả</button>
+          <button type="button" class="btn btn-sm rsvp-filter-btn" data-filter="bride">Nhà Gái</button>
+          <button type="button" class="btn btn-sm rsvp-filter-btn" data-filter="groom">Nhà Trai</button>
+        </div>
+
+        <!-- Bảng danh sách phản hồi -->
+        <div id="rsvpListContainer" style="overflow-x:auto;">
+          <!-- Rendered by JS -->
+        </div>
       </div>
     </section>
 
@@ -2631,6 +2684,186 @@
         populateForms();
         showToast("↺ Đã khôi phục dữ liệu mặc định!");
       });
+
+      // ======================================================================
+      // RSVP MANAGEMENT (TAB 7)
+      // ======================================================================
+      var rsvpList = [];
+      var currentRsvpFilter = "all";
+
+      function escapeHtml(str) {
+        if (!str) return "";
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      async function fetchRsvps() {
+        try {
+          var res = await fetch("/api/rsvp");
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          var data = await res.json();
+          if (data && Array.isArray(data.rsvps)) {
+            rsvpList = data.rsvps;
+            renderRsvps();
+          }
+        } catch (e) {
+          console.warn("Không thể tải danh sách RSVP:", e);
+        }
+      }
+
+      function renderRsvps() {
+        var countBadge = document.getElementById("rsvpCountBadge");
+        if (countBadge) countBadge.textContent = rsvpList.length;
+
+        var statTotalRsvp = document.getElementById("statTotalRsvp");
+        var statAttending = document.getElementById("statAttending");
+        var statTotalGuests = document.getElementById("statTotalGuests");
+        var statFamilyRatio = document.getElementById("statFamilyRatio");
+
+        var attendingCount = 0;
+        var totalGuests = 0;
+        var brideCount = 0;
+        var groomCount = 0;
+
+        rsvpList.forEach(function (item) {
+          if (item.attending === "yes") {
+            attendingCount++;
+            totalGuests += (Number(item.guests) || 1);
+          }
+          if (item.family === "bride") brideCount++;
+          else if (item.family === "groom") groomCount++;
+        });
+
+        if (statTotalRsvp) statTotalRsvp.textContent = rsvpList.length;
+        if (statAttending) statAttending.textContent = attendingCount;
+        if (statTotalGuests) statTotalGuests.textContent = totalGuests;
+        if (statFamilyRatio) statFamilyRatio.textContent = brideCount + " / " + groomCount;
+
+        var container = document.getElementById("rsvpListContainer");
+        if (!container) return;
+
+        var filtered = rsvpList.filter(function (item) {
+          if (currentRsvpFilter === "all") return true;
+          return item.family === currentRsvpFilter;
+        });
+
+        if (filtered.length === 0) {
+          container.innerHTML = '<div style="text-align:center; padding:36px 16px; color:var(--text-muted); font-size:0.9rem;">Chưa có phản hồi nào trong mục này.</div>';
+          return;
+        }
+
+        var html = '<table style="width:100%; border-collapse:collapse; font-size:0.85rem; text-align:left;">';
+        html += '<thead><tr style="border-bottom:1px solid var(--gold-dim); color:var(--gold-bright);">';
+        html += '<th style="padding:10px 8px;">Khách Mời</th>';
+        html += '<th style="padding:10px 8px;">Bên Gia Đình</th>';
+        html += '<th style="padding:10px 8px;">Tham Dự</th>';
+        html += '<th style="padding:10px 8px;">Số Khách</th>';
+        html += '<th style="padding:10px 8px;">Lời Chúc / Yêu Cầu</th>';
+        html += '<th style="padding:10px 8px;">Thời Gian</th>';
+        html += '<th style="padding:10px 8px; text-align:center;">Thao Tác</th>';
+        html += '</tr></thead><tbody>';
+
+        filtered.forEach(function (item) {
+          var isYes = item.attending === "yes";
+          var familyBadge = item.family === "bride" ? '<span style="color:#f3a6b2; background:rgba(243,166,178,0.15); padding:3px 8px; border-radius:6px;">Nhà Gái</span>' : '<span style="color:#8bb6e8; background:rgba(139,182,232,0.15); padding:3px 8px; border-radius:6px;">Nhà Trai</span>';
+          var attendBadge = isYes ? '<span style="color:#51cf66; font-weight:700;">✓ Sẽ Đến</span>' : '<span style="color:#ff6b6b;">✕ Lỡ Hẹn</span>';
+          var timeStr = item.createdAt ? new Date(item.createdAt).toLocaleString("vi-VN", { dateStyle: "short", timeStyle: "short" }) : "—";
+
+          html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.06);">';
+          html += '<td style="padding:12px 8px; font-weight:600; color:#fff;">' + escapeHtml(item.name || "") + '</td>';
+          html += '<td style="padding:12px 8px;">' + familyBadge + '</td>';
+          html += '<td style="padding:12px 8px;">' + attendBadge + '</td>';
+          html += '<td style="padding:12px 8px; font-weight:700;">' + (isYes ? (item.guests || 1) : 0) + '</td>';
+          html += '<td style="padding:12px 8px; color:var(--text-muted); max-width:240px; word-break:break-word;">' + escapeHtml(item.message || "—") + '</td>';
+          html += '<td style="padding:12px 8px; font-size:0.75rem; color:var(--text-muted);">' + timeStr + '</td>';
+          html += '<td style="padding:12px 8px; text-align:center;"><button type="button" class="btn btn-sm btn-danger btn-delete-rsvp" data-id="' + item.id + '" style="padding:4px 8px; font-size:0.72rem;">Xóa</button></td>';
+          html += '</tr>';
+        });
+
+        html += '</tbody></table>';
+        container.innerHTML = html;
+
+        container.querySelectorAll(".btn-delete-rsvp").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var id = btn.getAttribute("data-id");
+            if (confirm("Bạn có chắc muốn xóa phản hồi này không?")) {
+              deleteRsvp(id);
+            }
+          });
+        });
+      }
+
+      async function deleteRsvp(id) {
+        try {
+          var res = await fetch("/api/rsvp?id=" + encodeURIComponent(id), { method: "DELETE" });
+          if (res.ok) {
+            rsvpList = rsvpList.filter(function (r) { return r.id !== id; });
+            renderRsvps();
+            showToast("Đã xóa phản hồi");
+          }
+        } catch (e) {
+          showToast("Lỗi khi xóa phản hồi");
+        }
+      }
+
+      function exportRsvps() {
+        if (rsvpList.length === 0) {
+          alert("Chưa có phản hồi nào để xuất!");
+          return;
+        }
+        var csv = "\uFEFFHọ và tên,Bên gia đình,Tham dự,Số người đi cùng,Lời nhắn chúc phúc,Thời gian gửi\r\n";
+        rsvpList.forEach(function (item) {
+          var row = [
+            '"' + (item.name || "").replace(/"/g, '""') + '"',
+            item.family === "bride" ? "Nhà Gái" : "Nhà Trai",
+            item.attending === "yes" ? "Sẽ đến" : "Lỡ hẹn",
+            item.attending === "yes" ? (item.guests || 1) : 0,
+            '"' + (item.message || "").replace(/"/g, '""') + '"',
+            item.createdAt ? new Date(item.createdAt).toLocaleString("vi-VN") : ""
+          ];
+          csv += row.join(",") + "\r\n";
+        });
+
+        var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "danh-sach-khach-moi-rsvp-" + new Date().toISOString().slice(0, 10) + ".csv";
+        a.click();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      }
+
+      var btnRefreshRsvp = document.getElementById("btnRefreshRsvp");
+      if (btnRefreshRsvp) btnRefreshRsvp.addEventListener("click", fetchRsvps);
+
+      var btnExportRsvp = document.getElementById("btnExportRsvp");
+      if (btnExportRsvp) btnExportRsvp.addEventListener("click", exportRsvps);
+
+      document.querySelectorAll(".rsvp-filter-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          document.querySelectorAll(".rsvp-filter-btn").forEach(function (b) { b.classList.remove("btn-primary", "active"); });
+          btn.classList.add("btn-primary", "active");
+          currentRsvpFilter = btn.getAttribute("data-filter") || "all";
+          renderRsvps();
+        });
+      });
+
+      // Lắng nghe RSVP gửi lên trong thời gian thực qua BroadcastChannel
+      if (window.WEDDING_LIVE_CHANNEL) {
+        window.WEDDING_LIVE_CHANNEL.addEventListener("message", function (ev) {
+          if (ev.data && ev.data.type === "RSVP_NEW") {
+            fetchRsvps();
+            showToast("🔔 Có khách mời mới vừa gửi xác nhận tham dự!");
+          }
+        });
+      }
+
+      // Tải danh sách RSVP ban đầu
+      fetchRsvps();
 
       // TẢI BẢN DB MỚI NHẤT TỪ SERVER KHI MỞ TRANG ADMIN
       populateForms();

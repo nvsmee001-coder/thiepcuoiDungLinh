@@ -37,6 +37,7 @@ if (process.platform === "win32") {
 }
 const ROOT_DIR = __dirname;
 const DB_JSON_PATH = path.join(ROOT_DIR, "data", "wedding-db.json");
+const RSVP_JSON_PATH = path.join(ROOT_DIR, "data", "wedding-rsvps.json");
 const CONTENT_JS_PATH = path.join(ROOT_DIR, "js", "content.js");
 const IMG_DIR = path.join(ROOT_DIR, "img");
 const ALBUM_UPLOAD_DIR = path.join(IMG_DIR, "album");
@@ -62,6 +63,7 @@ const MIME_TYPES = {
 
 function ensureDirs() {
   fs.mkdirSync(path.dirname(DB_JSON_PATH), { recursive: true });
+  fs.mkdirSync(path.dirname(RSVP_JSON_PATH), { recursive: true });
   fs.mkdirSync(ALBUM_UPLOAD_DIR, { recursive: true });
   fs.mkdirSync(AUDIO_UPLOAD_DIR, { recursive: true });
 }
@@ -215,11 +217,82 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // 5. STATIC FILES (Hỗ trợ Clean URL "/" và "/admin" không cần đuôi .html)
-  if (pathname === "/" || pathname === "/index.html" || pathname === "/stationery" || pathname === "/stationery/") {
+  // 5. API: GET /api/rsvp (Lấy danh sách khách mời phản hồi)
+  if (req.method === "GET" && pathname === "/api/rsvp") {
+    try {
+      if (!fs.existsSync(RSVP_JSON_PATH)) {
+        return sendJson(res, 200, { ok: true, rsvps: [] });
+      }
+      const raw = fs.readFileSync(RSVP_JSON_PATH, "utf8");
+      return sendJson(res, 200, { ok: true, rsvps: JSON.parse(raw) });
+    } catch (e) {
+      return sendJson(res, 500, { ok: false, error: e.message });
+    }
+  }
+
+  // 6. API: POST /api/rsvp (Khách mời gửi xác nhận tham dự)
+  if (req.method === "POST" && pathname === "/api/rsvp") {
+    try {
+      const bodyStr = await readRequestBody(req);
+      const entry = JSON.parse(bodyStr);
+      let list = [];
+      if (fs.existsSync(RSVP_JSON_PATH)) {
+        try {
+          list = JSON.parse(fs.readFileSync(RSVP_JSON_PATH, "utf8"));
+          if (!Array.isArray(list)) list = [];
+        } catch (_) { list = []; }
+      }
+      const newRecord = {
+        id: "rsvp_" + Date.now() + "_" + Math.floor(Math.random() * 1000),
+        name: String(entry.name || "").trim().slice(0, 100),
+        attending: entry.attending === "no" ? "no" : "yes",
+        family: entry.family === "bride" ? "bride" : "groom",
+        guests: entry.attending === "no" ? 0 : Math.max(1, Number(entry.guests) || 1),
+        message: String(entry.message || "").trim().slice(0, 1000),
+        eventDate: entry.eventDate || "",
+        createdAt: new Date().toISOString()
+      };
+      list.unshift(newRecord);
+      fs.writeFileSync(RSVP_JSON_PATH, JSON.stringify(list, null, 2), "utf8");
+      return sendJson(res, 200, { ok: true, saved: newRecord, total: list.length });
+    } catch (e) {
+      return sendJson(res, 400, { ok: false, error: e.message });
+    }
+  }
+
+  // 7. API: DELETE /api/rsvp (Xóa phản hồi rsvp)
+  if (req.method === "DELETE" && pathname === "/api/rsvp") {
+    try {
+      const parsedQuery = parsedUrl.query || "";
+      const id = new URLSearchParams(parsedQuery).get("id");
+      if (fs.existsSync(RSVP_JSON_PATH)) {
+        let list = JSON.parse(fs.readFileSync(RSVP_JSON_PATH, "utf8"));
+        if (Array.isArray(list)) {
+          list = list.filter((r) => r.id !== id);
+          fs.writeFileSync(RSVP_JSON_PATH, JSON.stringify(list, null, 2), "utf8");
+        }
+      }
+      return sendJson(res, 200, { ok: true });
+    } catch (e) {
+      return sendJson(res, 500, { ok: false, error: e.message });
+    }
+  }
+
+  // 8. STATIC FILES & CLEAN URLS
+  if (pathname === "/" || pathname === "/index.html") {
+    res.writeHead(302, { Location: "/thiep-cuoi-khanh-linh-le-dung/" });
+    return res.end();
+  }
+  if (pathname === "/thiep-cuoi-khanh-linh-le-dung") {
+    res.writeHead(301, { Location: "/thiep-cuoi-khanh-linh-le-dung/" });
+    return res.end();
+  }
+  if (pathname === "/stationery" || pathname === "/stationery/") {
     pathname = "/stationery.html";
   } else if (pathname === "/admin" || pathname === "/admin/" || pathname === "/admin/index.html") {
     pathname = "/admin.html";
+  } else if (pathname === "/minimal" || pathname === "/minimal/") {
+    pathname = "/minimal.html";
   }
   const normalizedRel = pathname.replace(/^[/\\]+/, "");
   const segments = normalizedRel.split(/[/\\]+/);
@@ -239,19 +312,31 @@ const server = http.createServer(async (req, res) => {
   }
 
   fs.stat(safePath, (err, stat) => {
-    if (err || !stat.isFile()) {
+    if (err) {
       res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
       return res.end("404 Not Found");
     }
 
-    const ext = path.extname(safePath).toLowerCase();
+    let filePath = safePath;
+    if (stat.isDirectory()) {
+      filePath = path.join(safePath, "index.html");
+      if (!fs.existsSync(filePath)) {
+        res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
+        return res.end("404 Not Found");
+      }
+    } else if (!stat.isFile()) {
+      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
+      return res.end("404 Not Found");
+    }
+
+    const ext = path.extname(filePath).toLowerCase();
     const mime = MIME_TYPES[ext] || "application/octet-stream";
     const headers = { "Content-Type": mime };
     if (ext === ".html" || ext === ".js" || ext === ".json" || ext === ".css") {
       headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0";
     }
     res.writeHead(200, headers);
-    fs.createReadStream(safePath).pipe(res);
+    fs.createReadStream(filePath).pipe(res);
   });
 });
 

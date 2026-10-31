@@ -17,8 +17,8 @@
 
 const DEFAULT_WEDDING_DB = {
   "couple": {
-    "groomName": "Dũng",
-    "brideName": "Linh",
+    "groomName": "Lê Dũng",
+    "brideName": "Khánh Linh",
     "eyebrow": "✦ CÙNG VỚI GIA ĐÌNH HAI BÊN • LỄ THÀNH HÔN ✦",
     "invitationText": "Trân trọng kính mời quý khách đến chung vui cùng gia đình chúng mình",
     "signatureQuote": "“Một hành trình mới • Trọn vẹn yêu thương”",
@@ -35,45 +35,49 @@ const DEFAULT_WEDDING_DB = {
       "img/09-wuzhen-moi.jpg"
     ],
     "leftFramePhoto": "img/wedding-photo-card-left.jpg",
-    "leftFramePlaque": "✦ DŨNG • LINH ✦",
+    "leftFramePlaque": "✦ LÊ DŨNG • KHÁNH LINH ✦",
     "rightFramePhoto": "img/wedding-photo-card-right.jpg",
-    "rightFramePlaque": "✦ 07 . 12 . 2026 ✦"
+    "rightFramePlaque": "✦ 27 & 28 . 11 . 2026 ✦"
   },
   "date": {
-    "isoTarget": "2026-12-07T11:00:00+07:00",
-    "dayOfWeek": "CHỦ NHẬT",
-    "dayNumber": "07",
-    "monthLabel": "THÁNG 12",
+    "isoTarget": "2026-11-27T11:00:00+07:00",
+    "dayOfWeek": "THỨ SÁU",
+    "dayNumber": "27",
+    "monthLabel": "THÁNG 11",
     "yearLabel": "2026",
     "eventLabel": "THÀNH HÔN",
-    "lunarDate": "(Nhằm ngày 29 tháng 10 năm Bính Ngọ)",
-    "shortDatePill": "Chủ Nhật • 07.12.2026",
-    "shortLunarPill": "(29.10 Bính Ngọ)"
+    "lunarDate": "(Tức ngày 19 tháng 10 năm Bính Ngọ)",
+    "shortDatePill": "Thứ Sáu • 27.11.2026",
+    "shortLunarPill": "(19.10 Bính Ngọ)"
   },
   "venues": {
     "groom": {
       "badgeCover": "❖ HÔN LỄ NHÀ TRAI",
-      "badgeMap": "❖ HÔN LỄ NHÀ TRAI • 11:00 TRƯA (07.12.2026)",
-      "nameShort": "Trống Đồng Palace",
-      "nameFull": "Trống Đồng Palace — Hà Nội",
-      "cityShort": "Cầu Giấy • Hà Nội",
-      "timeCover": "11:00 Trưa • 07.12.2026",
-      "parents": "Ông Nguyễn Văn A & Bà Trần Thị B",
-      "address": "Số 65 Quán Sứ / Cầu Giấy, TP. Hà Nội",
-      "mapLink": "https://maps.google.com/?q=65+Quán+Sứ,+Hoàn+Kiếm,+Hà+Nội",
-      "mapEmbed": "https://maps.google.com/maps?q=65+Qu%C3%A1n+S%E1%BB%A9,+Ho%C3%A0n+Ki%E1%BA%BFm,+H%C3%A0+N%E1%BB%99i&t=&z=15&ie=UTF8&iwloc=&output=embed"
+      "badgeMap": "❖ HÔN LỄ NHÀ TRAI • 11:00 TRƯA (28.11.2026)",
+      "nameShort": "Đại Hoàng Sơn Palace",
+      "nameFull": "Trung tâm Đại Hoàng Sơn Palace",
+      "cityShort": "Bắc Giang • Bắc Ninh",
+      "timeCover": "11:00 Trưa • Thứ Bảy 28.11.2026",
+      "date": "2026-11-28T11:00:00+07:00",
+      "lunar": "(Tức ngày 20 tháng 10 năm Bính Ngọ)",
+      "parents": "Ông Nguyễn Văn Uy & Bà Lê Thị Hảo",
+      "address": "45 Hùng Vương - Bắc Giang - Bắc Ninh",
+      "mapLink": "https://www.google.com/maps/search/?api=1&query=Trung+t%C3%A2m+%C4%90%E1%BA%A1i+Ho%C3%A0ng+S%C6%A1n+Palace,+45+H%C3%B9ng+V%C6%B0%C6%A1ng+-+B%E1%BA%AFc+Giang",
+      "mapEmbed": "https://maps.google.com/maps?q=45+H%C3%B9ng+V%C6%B0%C6%A1ng,+B%E1%BA%AFc+Giang&t=&z=15&ie=UTF8&iwloc=&output=embed"
     },
     "bride": {
       "badgeCover": "❖ VU QUY NHÀ GÁI",
-      "badgeMap": "❖ VU QUY NHÀ GÁI • 18:00 TỐI (07.12.2026)",
-      "nameShort": "White Palace",
-      "nameFull": "White Palace — TP. Hồ Chí Minh",
-      "cityShort": "Hoàng Văn Thụ • TP. HCM",
-      "timeCover": "18:00 Tối • 07.12.2026",
-      "parents": "Ông Trần Văn C & Bà Lê Thị D",
-      "address": "194 Hoàng Văn Thụ, Phường 9, Q. Phú Nhuận, TP. HCM",
-      "mapLink": "https://maps.google.com/?q=194+Hoàng+Văn+Thụ,+Phú+Nhuận,+Hồ+Chí+Minh",
-      "mapEmbed": "https://maps.google.com/maps?q=194+Ho%C3%A0ng+V%C4%83n+Th%E1%BB%A5,+Ph%C3%BA+Nhu%E1%BA%ADn,+H%E1%BB%93+Ch%C3%AD+Minh&t=&z=15&ie=UTF8&iwloc=&output=embed"
+      "badgeMap": "❖ VU QUY NHÀ GÁI • 11:00 TRƯA (27.11.2026)",
+      "nameShort": "Trống Đồng Palace",
+      "nameFull": "Trung tâm Trống Đồng Palace",
+      "cityShort": "Quán Sứ • Hoàn Kiếm • Hà Nội",
+      "timeCover": "11:00 Trưa • Thứ Sáu 27.11.2026",
+      "date": "2026-11-27T11:00:00+07:00",
+      "lunar": "(Tức ngày 19 tháng 10 năm Bính Ngọ)",
+      "parents": "Ông Phạm Ngọc Hùng & Bà Nguyễn Tuyết Nhung",
+      "address": "65 Quán Sứ - Cửa Nam - Hà Nội",
+      "mapLink": "https://www.google.com/maps/search/?api=1&query=Trung+t%C3%A2m+Tr%E1%BB%91ng+%C4%90%E1%BB%93ng+Palace,+65+Qu%C3%A1n+S%E1%BB%A9+-+C%E1%BB%ADa+Nam+-+H%C3%A0+N%E1%BB%99i",
+      "mapEmbed": "https://maps.google.com/maps?q=65+Qu%C3%A1n+S%E1%BB%A9,+Ho%C3%A0n+Ki%E1%BA%BFm,+H%C3%A0+N%E1%BB%99i&t=&z=15&ie=UTF8&iwloc=&output=embed"
     }
   },
   "checklist": [
@@ -178,6 +182,13 @@ const DEFAULT_WEDDING_DB = {
       }
     ]
   },
+  "introPhotos": [
+    "img/08-trang-an-hero.jpg",
+    "img/wedding-photo-card-left.jpg",
+    "img/02-disney-phao-hoa.jpg",
+    "img/03-disney-cau-hon.jpg",
+    "img/wedding-photo-card-right.jpg"
+  ],
   "albumPhotos": [
     "img/wedding-photo-card-left.jpg",
     "img/wedding-photo-card-right.jpg",
@@ -245,6 +256,13 @@ function deepMergeDB(base, override) {
   if (override.schedule) {
     Object.assign(out.schedule, override.schedule);
     if (Array.isArray(override.schedule.events)) out.schedule.events = override.schedule.events;
+  }
+  if (Array.isArray(override.introPhotos) && override.introPhotos.length > 0) {
+    out.introPhotos = override.introPhotos
+      .map(function (item) {
+        return typeof item === "string" ? item : (item && item.src ? item.src : "");
+      })
+      .filter(Boolean);
   }
   if (Array.isArray(override.albumPhotos) && override.albumPhotos.length > 0) {
     out.albumPhotos = override.albumPhotos
