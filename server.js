@@ -297,6 +297,22 @@ const server = http.createServer(async (req, res) => {
   } else if (pathname === "/minimal" || pathname === "/minimal/") {
     pathname = "/minimal.html";
   }
+
+  // Rewrite sub-folder relative asset requests to root
+  const subPrefix = "/thiep-cuoi-khanh-linh-le-dung";
+  if (pathname.startsWith(subPrefix + "/img/")) {
+    pathname = pathname.slice(subPrefix.length);
+  } else if (pathname.startsWith(subPrefix + "/data/")) {
+    pathname = pathname.slice(subPrefix.length);
+  } else if (pathname.startsWith(subPrefix + "/audio/")) {
+    pathname = pathname.slice(subPrefix.length);
+  } else if (pathname.startsWith(subPrefix + "/js/")) {
+    pathname = pathname.slice(subPrefix.length);
+  } else if (pathname.startsWith(subPrefix + "/css/")) {
+    pathname = pathname.slice(subPrefix.length);
+  } else if (pathname.startsWith("/assets/")) {
+    pathname = subPrefix + pathname;
+  }
   const normalizedRel = pathname.replace(/^[/\\]+/, "");
   const segments = normalizedRel.split(/[/\\]+/);
   const blockedFiles = ["server.js", "server.py", "process_envelope.py", "gemini.md", "setup-vps.sh"];

@@ -417,7 +417,7 @@ async function saveWeddingDB(newDbData) {
 
 async function fetchWeddingDBFromServer() {
   // 1. Đọc từ data/wedding-db.json trước (luôn có sẵn trên cả Nginx tĩnh lẫn server.js, không bao giờ báo 404 trong Console)
-  const endpoints = ["data/wedding-db.json?t=" + Date.now(), "/api/db?t=" + Date.now()];
+  const endpoints = ["/data/wedding-db.json?t=" + Date.now(), "/api/db?t=" + Date.now()];
   for (let i = 0; i < endpoints.length; i++) {
     try {
       const res = await fetch(endpoints[i], { cache: "no-store" });

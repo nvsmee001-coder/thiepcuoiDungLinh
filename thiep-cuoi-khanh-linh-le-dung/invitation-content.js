@@ -6,6 +6,13 @@
     return window.WEDDING_DB || window.DEFAULT_WEDDING_DB || {};
   }
 
+  function resolveAssetUrl(u) {
+    if (!u) return '';
+    if (/^(https?:|data:|blob:|\/)/.test(u)) return u;
+    if (u.startsWith('assets/')) return u;
+    return '/' + u;
+  }
+
   function parseDateParts(dateStr, timeStr) {
     let d = new Date(dateStr || '2026-11-27T11:00:00+07:00');
     if (isNaN(d.getTime())) d = new Date('2026-11-27T11:00:00+07:00');
@@ -55,8 +62,8 @@
     const groomMapEmbed = groomVenue.mapEmbed || '';
 
     // Photos
-    const coverPhoto = (db.couple && (db.couple.coverPhoto || db.couple.heroBackdrop)) || 'assets/cover-khanh-linh-le-dung.jpg';
-    const interludePhoto = (db.couple && (db.couple.interludePhoto || db.couple.detailsBackdrop)) || 'assets/hero.jpg';
+    const coverPhoto = resolveAssetUrl((db.couple && (db.couple.coverPhoto || db.couple.heroBackdrop)) || 'assets/cover-khanh-linh-le-dung.jpg');
+    const interludePhoto = resolveAssetUrl((db.couple && (db.couple.interludePhoto || db.couple.detailsBackdrop)) || 'assets/hero.jpg');
 
     const details = {
       groom: {
@@ -186,7 +193,7 @@
           'assets/memory-03-piano.jpg'
         ];
 
-    const photos = rawPhotos.map(p => (typeof p === 'string' ? p : (p && p.src ? p.src : ''))).filter(Boolean);
+    const photos = rawPhotos.map(p => (typeof p === 'string' ? p : (p && p.src ? p.src : ''))).filter(Boolean).map(resolveAssetUrl);
 
     // 1. Render Album Grid on Page
     if (albumGrid) {
@@ -233,8 +240,9 @@
 
     if (db && Array.isArray(db.music) && db.music.length > 0) {
       const track = db.music[0];
-      if (track && track.src && audio.getAttribute('src') !== track.src) {
-        audio.src = track.src;
+      const trackSrc = resolveAssetUrl(track && track.src);
+      if (track && trackSrc && audio.getAttribute('src') !== trackSrc) {
+        audio.src = trackSrc;
         if (toggle) {
           toggle.title = `${track.title || 'Nhạc cưới'} · Bật/Tắt nhạc`;
           toggle.setAttribute('aria-label', `Bật nhạc nền — ${track.title || 'Nhạc cưới'}`);
@@ -249,7 +257,7 @@
       const layer = document.getElementById(`introScene${i}`);
       if (layer && scene.backdrop) {
         const bd = layer.querySelector('.scene-backdrop');
-        if (bd) bd.style.backgroundImage = `url('${scene.backdrop}')`;
+        if (bd) bd.style.backgroundImage = `url('${resolveAssetUrl(scene.backdrop)}')`;
       }
     });
   }
@@ -274,14 +282,16 @@
     // 2. Photos (Cover & Interlude)
     const coverImgs = document.querySelectorAll('#finalCoverImg, .cover-photo img, .invitation-photo-watermark img');
     coverImgs.forEach(img => {
-      if (configData.coverPhoto && img.getAttribute('src') !== configData.coverPhoto) {
-        img.src = configData.coverPhoto;
+      const src = resolveAssetUrl(configData.coverPhoto);
+      if (src && img.getAttribute('src') !== src) {
+        img.src = src;
       }
     });
     const interludeImgs = document.querySelectorAll('.photo-interlude img');
     interludeImgs.forEach(img => {
-      if (configData.interludePhoto && img.getAttribute('src') !== configData.interludePhoto) {
-        img.src = configData.interludePhoto;
+      const src = resolveAssetUrl(configData.interludePhoto);
+      if (src && img.getAttribute('src') !== src) {
+        img.src = src;
       }
     });
 
