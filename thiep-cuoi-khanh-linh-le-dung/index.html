@@ -3,7 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script>document.documentElement.classList.add('entry-pending');window.addEventListener('load',function(){if(!document.documentElement.hasAttribute('data-entry-ready'))document.documentElement.classList.remove('entry-pending')},{once:true});</script>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <script>
+    (function () {
+      var BUILD_VER = "20261031_06";
+      try {
+        var lastVer = localStorage.getItem("wedding_build_ver");
+        if (lastVer && lastVer !== BUILD_VER) {
+          localStorage.setItem("wedding_build_ver", BUILD_VER);
+          localStorage.removeItem("THIEP_CUOI_MINI_DB_V1");
+          localStorage.removeItem("WEDDING_DB_CACHE_V1");
+          if (window.indexedDB) {
+            try { indexedDB.deleteDatabase("wedding_db_local"); } catch (_) {}
+          }
+        } else {
+          localStorage.setItem("wedding_build_ver", BUILD_VER);
+        }
+      } catch (_) {}
+    })();
+    document.documentElement.classList.add('entry-pending');
+    window.addEventListener('load',function(){
+      if(!document.documentElement.hasAttribute('data-entry-ready'))
+        document.documentElement.classList.remove('entry-pending');
+    },{once:true});
+  </script>
   <meta name="theme-color" content="#f4f2e9">
   <meta name="description" content="Khánh Linh & Lê Dũng — Trân trọng kính mời tham dự tiệc cưới Nhà gái ngày 27/11/2026 và Nhà trai ngày 28/11/2026.">
   <title>Khánh Linh & Lê Dũng — Thiệp mời lễ cưới</title>
