@@ -1406,7 +1406,7 @@
 
   <div class="admin-toast" id="adminToast">Đã lưu thay đổi!</div>
 
-  <script src="js/content.js?v=20261030_v16"></script>
+  <script src="/js/content.js?v=20261031_03"></script>
   <script>
     (function () {
       "use strict";
@@ -1448,6 +1448,13 @@
           return v;
         }
         return el.value.trim();
+      }
+
+      function resolveAdminAssetUrl(u) {
+        if (!u) return "";
+        if (/^(https?:|data:|blob:|\/)/.test(u)) return u;
+        if (u.startsWith("assets/")) return "/thiep-cuoi-khanh-linh-le-dung/" + u;
+        return "/" + u;
       }
 
       // 1. RENDER ALBUM GRID (KÈM NÚT CẮT / CĂN CHỈNH CHO TỪNG ẢNH ALBUM)
@@ -1976,12 +1983,12 @@
         var coverSrc = c.coverPhoto || c.heroBackdrop || "assets/cover-khanh-linh-le-dung.jpg";
         val("f_coverPhoto", coverSrc);
         var prevCover = document.getElementById("prev_coverPhoto");
-        if (prevCover) prevCover.src = coverSrc;
+        if (prevCover) prevCover.src = resolveAdminAssetUrl(coverSrc);
 
         var interludeSrc = c.interludePhoto || c.detailsBackdrop || "assets/hero.jpg";
         val("f_interludePhoto", interludeSrc);
         var prevInterlude = document.getElementById("prev_interludePhoto");
-        if (prevInterlude) prevInterlude.src = interludeSrc;
+        if (prevInterlude) prevInterlude.src = resolveAdminAssetUrl(interludeSrc);
 
         var scs = Array.isArray(state.introScenes) ? state.introScenes : [];
         var defaultVerses = [
@@ -2001,7 +2008,7 @@
           val("f_introScene" + i + "_backdrop", bdSrc);
           val("f_introScene" + i + "_verse", verseTxt);
           var prevEl = document.getElementById("prev_introScene" + i + "_backdrop");
-          if (prevEl) prevEl.src = bdSrc;
+          if (prevEl) prevEl.src = resolveAdminAssetUrl(bdSrc);
         }
 
         var d = state.date || {};
@@ -2641,7 +2648,7 @@
           } else {
             val("f_" + slotKey, finalPath);
             var prevEl = document.getElementById("prev_" + slotKey);
-            if (prevEl) prevEl.src = finalPath;
+            if (prevEl) prevEl.src = resolveAdminAssetUrl(finalPath);
             closeCropStudio();
             await saveAllChanges("✨ Đã căn chỉnh & áp dụng ảnh cho " + (currentCropSession.label || slotKey) + "!");
           }

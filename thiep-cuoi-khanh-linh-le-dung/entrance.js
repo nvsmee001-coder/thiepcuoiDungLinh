@@ -290,17 +290,20 @@
       }
     }
 
-    // Preload all 4 images upfront into memory
-    const images = [
-      'assets/memory-01-garden.jpg',
-      'assets/memory-02-castle.jpg',
-      'assets/memory-03-piano.jpg',
-      'assets/cover-khanh-linh-le-dung.jpg'
-    ];
-    images.forEach(src => {
+    // Preload all intro images from DB into memory
+    if (db.introScenes && Array.isArray(db.introScenes)) {
+      db.introScenes.forEach(sc => {
+        if (sc && sc.backdrop) {
+          const img = new Image();
+          img.src = resolveAssetUrl(sc.backdrop);
+        }
+      });
+    }
+    const coverSrc = resolveAssetUrl((db.couple && (db.couple.coverPhoto || db.couple.heroBackdrop)) || 'assets/cover-khanh-linh-le-dung.jpg');
+    if (coverSrc) {
       const img = new Image();
-      img.src = src;
-    });
+      img.src = coverSrc;
+    }
 
     // Skip button triggers instant smooth morphing
     if (skipBtn) {
@@ -324,6 +327,36 @@
     renderSlide(0);
   }
 
+  async function bootEntrance() {
+    if (typeof window.fetchWeddingDBFromServer === 'function') {
+      try {
+        const fresh = await window.fetchWeddingDBFromServer();
+        if (fresh) {
+          window.WEDDING_DB = fresh;
+        }
+      } catch (_) {}
+    }
+    startIntro();
+  }
+
+  // Listen for live DB updates from Admin Studio
+  if (window.WEDDING_LIVE_CHANNEL) {
+    window.WEDDING_LIVE_CHANNEL.addEventListener('message', ev => {
+      if (ev.data && (ev.data.type === 'DB_UPDATED' || ev.data.type === 'STATE_CHANGED')) {
+        if (typeof window.fetchWeddingDBFromServer === 'function') {
+          window.fetchWeddingDBFromServer().then(fresh => {
+            if (fresh) {
+              window.WEDDING_DB = fresh;
+              if (currentIdx >= 0 && !introFinished) {
+                renderSlide(currentIdx);
+              }
+            }
+          });
+        }
+      }
+    });
+  }
+
   try {
     if (!dialog || !back || typeof dialog.showModal !== 'function') throw new Error('Native dialog unavailable');
     choices.forEach(button => button.addEventListener('click', () => enter(button.dataset.family)));
@@ -334,7 +367,7 @@
     if (reduced.addEventListener) reduced.addEventListener('change', stopMotion); else reduced.addListener(stopMotion);
     root.setAttribute('data-entry-ready', '');
     dialog.showModal();
-    startIntro();
+    bootEntrance();
   } catch (_) {
     if (dialog?.open) dialog.close();
     root.classList.remove('entry-pending');
