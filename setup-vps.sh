@@ -37,6 +37,25 @@ fi
 
 echo "✅ Tìm thấy file cấu hình Nginx: $NGINX_CONF"
 
+# Tự động dọn dẹp nếu có dòng client_max_body_size bị trùng lặp
+python3 - "$NGINX_CONF" << 'PYEOF'
+import sys, re
+conf_path = sys.argv[1]
+with open(conf_path, "r", encoding="utf-8") as f:
+    lines = f.readlines()
+seen = False
+cleaned = []
+for line in lines:
+    if "client_max_body_size" in line:
+        if not seen:
+            cleaned.append("    client_max_body_size 100M;\n")
+            seen = True
+    else:
+        cleaned.append(line)
+with open(conf_path, "w", encoding="utf-8") as f:
+    f.writelines(cleaned)
+PYEOF
+
 if grep -q "location /api/" "$NGINX_CONF"; then
   echo "✅ Cấu hình location /api/ đã có sẵn trong $NGINX_CONF!"
 else
@@ -49,7 +68,6 @@ with open(conf_path, "r", encoding="utf-8") as f:
     content = f.read()
 
 snippet = """
-    client_max_body_size 100M;
     location /api/ {
         proxy_pass http://127.0.0.1:8000;
         proxy_http_version 1.1;
@@ -58,7 +76,6 @@ snippet = """
     }
 """
 
-# Chèn ngay trước dòng location / { đầu tiên hoặc sau dòng server_name
 if "location / {" in content:
     content = content.replace("location / {", snippet + "\n    location / {", 1)
 elif "server_name" in content:
