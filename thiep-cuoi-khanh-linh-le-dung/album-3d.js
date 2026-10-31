@@ -17,8 +17,11 @@
   function resolveAssetUrl(u) {
     if (!u) return '';
     if (/^(https?:|data:|blob:)/.test(u)) return u;
-    if (u.startsWith('/')) return u;
-    return '/' + u;
+    const clean = String(u).replace(/^\/+/, '');
+    if (clean.startsWith('assets/')) {
+      return '/thiep-cuoi-khanh-linh-le-dung/' + clean;
+    }
+    return '/' + clean;
   }
 
   let albumTimerId = null;

@@ -530,7 +530,7 @@
       stage.classList.add('travel-ready');
       if (!reduced) checkVisibility();
 
-      fetch('assets/world.json').then(response => {
+      fetch('/thiep-cuoi-khanh-linh-le-dung/assets/world.json').then(response => {
         if (!response.ok) throw new Error('Map unavailable');
         return response.json();
       }).then(data => {

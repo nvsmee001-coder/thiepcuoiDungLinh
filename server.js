@@ -74,6 +74,27 @@ function ensureDirs() {
   fs.mkdirSync(path.dirname(RSVP_JSON_PATH), { recursive: true });
   fs.mkdirSync(ALBUM_UPLOAD_DIR, { recursive: true });
   fs.mkdirSync(AUDIO_UPLOAD_DIR, { recursive: true });
+  ensureSymlinks();
+}
+
+function ensureSymlinks() {
+  if (process.platform === "win32") return;
+  const sub = path.join(ROOT_DIR, "thiep-cuoi-khanh-linh-le-dung");
+  const links = [
+    { target: path.join(sub, "assets"), link: path.join(ROOT_DIR, "assets") },
+    { target: path.join(ROOT_DIR, "img"), link: path.join(sub, "img") },
+    { target: path.join(ROOT_DIR, "data"), link: path.join(sub, "data") },
+    { target: path.join(ROOT_DIR, "audio"), link: path.join(sub, "audio") },
+    { target: path.join(ROOT_DIR, "js"), link: path.join(sub, "js") },
+    { target: path.join(ROOT_DIR, "css"), link: path.join(sub, "css") }
+  ];
+  links.forEach(({ target, link }) => {
+    try {
+      if (!fs.existsSync(link) && fs.existsSync(target)) {
+        fs.symlinkSync(target, link, "dir");
+      }
+    } catch (_) {}
+  });
 }
 
 function sanitizeFilename(name) {
@@ -383,6 +404,7 @@ const server = http.createServer(async (req, res) => {
   });
 });
 
+ensureDirs();
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`Wedding Mini-DB Server running at http://localhost:${PORT}/stationery.html`);
   console.log(`Admin Studio available at       http://localhost:${PORT}/admin.html`);

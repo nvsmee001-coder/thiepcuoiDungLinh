@@ -8,9 +8,9 @@
   const hint = document.getElementById('gallery-hint');
   if (!dialog || !image || !surface || !zoomButton) return;
   let photos = [
-    {src:'assets/memory-01-garden.jpg',alt:'Khánh Linh và Lê Dũng trong khu vườn hoa',caption:'01 / The two of us'},
-    {src:'assets/memory-02-castle.jpg',alt:'Khánh Linh và Lê Dũng trước lâu đài',caption:'02 / Always you'},
-    {src:'assets/memory-03-piano.jpg',alt:'Khánh Linh và Lê Dũng bên đàn piano',caption:'03 / Forever starts here'}
+    {src:'/thiep-cuoi-khanh-linh-le-dung/assets/memory-01-garden.jpg',alt:'Khánh Linh và Lê Dũng trong khu vườn hoa',caption:'01 / The two of us'},
+    {src:'/thiep-cuoi-khanh-linh-le-dung/assets/memory-02-castle.jpg',alt:'Khánh Linh và Lê Dũng trước lâu đài',caption:'02 / Always you'},
+    {src:'/thiep-cuoi-khanh-linh-le-dung/assets/memory-03-piano.jpg',alt:'Khánh Linh và Lê Dũng bên đàn piano',caption:'03 / Forever starts here'}
   ];
   const media = window.matchMedia('(prefers-reduced-motion: reduce)');
   const ease = 'cubic-bezier(.22,1,.36,1)';

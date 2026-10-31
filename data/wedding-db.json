@@ -21,8 +21,8 @@
     "leftFramePlaque": "✦ LÊ DŨNG • KHÁNH LINH ✦",
     "rightFramePhoto": "img/wedding-photo-card-right.jpg",
     "rightFramePlaque": "✦ 27 & 28 . 11 . 2026 ✦",
-    "coverPhoto": "assets/cover-khanh-linh-le-dung.jpg",
-    "interludePhoto": "assets/hero.jpg"
+    "coverPhoto": "/thiep-cuoi-khanh-linh-le-dung/assets/cover-khanh-linh-le-dung.jpg",
+    "interludePhoto": "/thiep-cuoi-khanh-linh-le-dung/assets/hero.jpg"
   },
   "date": {
     "isoTarget": "2026-11-27T11:00:00+07:00",
@@ -207,15 +207,15 @@
   ],
   "introScenes": [
     {
-      "backdrop": "assets/memory-01-garden.jpg",
+      "backdrop": "/thiep-cuoi-khanh-linh-le-dung/assets/memory-01-garden.jpg",
       "verse": "“Có những cuộc gặp gỡ ngỡ như tình cờ,\nnhưng lại là sự an bài đẹp nhất của duyên số.”"
     },
     {
-      "backdrop": "assets/memory-02-castle.jpg",
+      "backdrop": "/thiep-cuoi-khanh-linh-le-dung/assets/memory-02-castle.jpg",
       "verse": "“Cùng nhau đi qua năm tháng, cùng sẻ chia từng nụ cười,\nmỗi khoảnh khắc có nhau đều trở thành kỷ niệm vô giá.”"
     },
     {
-      "backdrop": "assets/memory-03-piano.jpg",
+      "backdrop": "/thiep-cuoi-khanh-linh-le-dung/assets/memory-03-piano.jpg",
       "verse": "“Từ hai người xa lạ, ta tìm thấy bình yên nơi ánh mắt,\nvà nhận ra rằng: đối phương chính là bến đỗ trọn đời.”"
     }
   ]

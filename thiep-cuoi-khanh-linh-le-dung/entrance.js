@@ -120,8 +120,11 @@
   function resolveAssetUrl(u) {
     if (!u) return '';
     if (/^(https?:|data:|blob:)/.test(u)) return u;
-    if (u.startsWith('/')) return u;
-    return '/' + u;
+    const clean = String(u).replace(/^\/+/, '');
+    if (clean.startsWith('assets/')) {
+      return '/thiep-cuoi-khanh-linh-le-dung/' + clean;
+    }
+    return '/' + clean;
   }
 
   function updateResponsiveCover() {
@@ -129,7 +132,7 @@
     const couple = db.couple || {};
     const isMobile = window.innerWidth <= 600;
 
-    const coverPc = resolveAssetUrl(couple.coverPhoto || couple.heroBackdrop || '/assets/cover-khanh-linh-le-dung.jpg');
+    const coverPc = resolveAssetUrl(couple.coverPhoto || couple.heroBackdrop || '/thiep-cuoi-khanh-linh-le-dung/assets/cover-khanh-linh-le-dung.jpg');
     const coverMob = couple.coverPhotoMobile ? resolveAssetUrl(couple.coverPhotoMobile) : coverPc;
 
     const finalImg = document.getElementById('finalCoverImg');
@@ -343,7 +346,7 @@
         }
       });
     }
-    const coverPc = resolveAssetUrl((db.couple && (db.couple.coverPhoto || db.couple.heroBackdrop)) || '/assets/cover-khanh-linh-le-dung.jpg');
+    const coverPc = resolveAssetUrl((db.couple && (db.couple.coverPhoto || db.couple.heroBackdrop)) || '/thiep-cuoi-khanh-linh-le-dung/assets/cover-khanh-linh-le-dung.jpg');
     if (coverPc) {
       const img = new Image();
       img.src = coverPc;

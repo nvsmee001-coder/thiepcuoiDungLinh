@@ -9,8 +9,11 @@
   function resolveAssetUrl(u) {
     if (!u) return '';
     if (/^(https?:|data:|blob:)/.test(u)) return u;
-    if (u.startsWith('/')) return u;
-    return '/' + u;
+    const clean = String(u).replace(/^\/+/, '');
+    if (clean.startsWith('assets/')) {
+      return '/thiep-cuoi-khanh-linh-le-dung/' + clean;
+    }
+    return '/' + clean;
   }
 
   function parseDateParts(dateStr, timeStr) {
@@ -62,9 +65,9 @@
     const groomMapEmbed = groomVenue.mapEmbed || '';
 
     // Photos (PC & Mobile)
-    const coverPhoto = resolveAssetUrl((db.couple && (db.couple.coverPhoto || db.couple.heroBackdrop)) || '/assets/cover-khanh-linh-le-dung.jpg');
+    const coverPhoto = resolveAssetUrl((db.couple && (db.couple.coverPhoto || db.couple.heroBackdrop)) || '/thiep-cuoi-khanh-linh-le-dung/assets/cover-khanh-linh-le-dung.jpg');
     const coverPhotoMobile = resolveAssetUrl((db.couple && db.couple.coverPhotoMobile) || '');
-    const interludePhoto = resolveAssetUrl((db.couple && (db.couple.interludePhoto || db.couple.detailsBackdrop)) || '/assets/hero.jpg');
+    const interludePhoto = resolveAssetUrl((db.couple && (db.couple.interludePhoto || db.couple.detailsBackdrop)) || '/thiep-cuoi-khanh-linh-le-dung/assets/hero.jpg');
     const interludePhotoMobile = resolveAssetUrl((db.couple && db.couple.interludePhotoMobile) || '');
 
     const details = {

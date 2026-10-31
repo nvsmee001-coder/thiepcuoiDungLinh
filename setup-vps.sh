@@ -5,6 +5,17 @@
 # ==============================================================================
 set -e
 
+echo "🔗 Đang thiết lập các đường dẫn liên kết (Symlinks) để Nginx không bao giờ 404 file tĩnh..."
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+mkdir -p img/album audio data thiep-cuoi-khanh-linh-le-dung/assets
+ln -sfn thiep-cuoi-khanh-linh-le-dung/assets assets
+ln -sfn ../img thiep-cuoi-khanh-linh-le-dung/img
+ln -sfn ../data thiep-cuoi-khanh-linh-le-dung/data
+ln -sfn ../audio thiep-cuoi-khanh-linh-le-dung/audio
+ln -sfn ../js thiep-cuoi-khanh-linh-le-dung/js
+ln -sfn ../css thiep-cuoi-khanh-linh-le-dung/css
+
 echo "🔍 Đang tìm file cấu hình Nginx cho dunglinhthiepcuoi.online / thiepcuoiDungLinh..."
 
 NGINX_CONF=$(grep -rlE "dunglinhthiepcuoi\.online|thiepcuoiDungLinh" /etc/nginx/sites-enabled/ /etc/nginx/conf.d/ /etc/nginx/sites-available/ 2>/dev/null | head -n 1 || true)

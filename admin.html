@@ -2096,7 +2096,7 @@
         val("f_invitationText", c.invitationText);
         val("f_signatureQuote", c.signatureQuote);
 
-        var coverSrc = c.coverPhoto || c.heroBackdrop || "assets/cover-khanh-linh-le-dung.jpg";
+        var coverSrc = c.coverPhoto || c.heroBackdrop || "/thiep-cuoi-khanh-linh-le-dung/assets/cover-khanh-linh-le-dung.jpg";
         val("f_coverPhoto", coverSrc);
         var prevCover = document.getElementById("prev_coverPhoto");
         if (prevCover) prevCover.src = resolveAdminAssetUrl(coverSrc);
@@ -2106,7 +2106,7 @@
         var prevCoverMob = document.getElementById("prev_coverPhotoMobile");
         if (prevCoverMob) prevCoverMob.src = coverMobSrc ? resolveAdminAssetUrl(coverMobSrc) : resolveAdminAssetUrl(coverSrc);
 
-        var interludeSrc = c.interludePhoto || c.detailsBackdrop || "assets/hero.jpg";
+        var interludeSrc = c.interludePhoto || c.detailsBackdrop || "/thiep-cuoi-khanh-linh-le-dung/assets/hero.jpg";
         val("f_interludePhoto", interludeSrc);
         var prevInterlude = document.getElementById("prev_interludePhoto");
         if (prevInterlude) prevInterlude.src = resolveAdminAssetUrl(interludeSrc);
@@ -2123,9 +2123,9 @@
           "“Từ hai người xa lạ, ta tìm thấy bình yên nơi ánh mắt,\nvà nhận ra rằng: đối phương chính là bến đỗ trọn đời.”"
         ];
         var defaultBackdrops = [
-          "assets/memory-01-garden.jpg",
-          "assets/memory-02-castle.jpg",
-          "assets/memory-03-piano.jpg"
+          "/thiep-cuoi-khanh-linh-le-dung/assets/memory-01-garden.jpg",
+          "/thiep-cuoi-khanh-linh-le-dung/assets/memory-02-castle.jpg",
+          "/thiep-cuoi-khanh-linh-le-dung/assets/memory-03-piano.jpg"
         ];
         for (var i = 0; i < 3; i++) {
           var sc = scs[i] || {};
@@ -2211,9 +2211,9 @@
 
       // GOM DỮ LIỆU TỪ FORM VÀO STATE
       function collectFormsToState() {
-        var coverVal = val("f_coverPhoto") || "assets/cover-khanh-linh-le-dung.jpg";
+        var coverVal = val("f_coverPhoto") || "/thiep-cuoi-khanh-linh-le-dung/assets/cover-khanh-linh-le-dung.jpg";
         var coverMobVal = val("f_coverPhotoMobile") || "";
-        var interludeVal = val("f_interludePhoto") || "assets/hero.jpg";
+        var interludeVal = val("f_interludePhoto") || "/thiep-cuoi-khanh-linh-le-dung/assets/hero.jpg";
         var interludeMobVal = val("f_interludePhotoMobile") || "";
 
         state.couple = {
@@ -2232,17 +2232,17 @@
 
         state.introScenes = [
           {
-            backdrop: val("f_introScene0_backdrop") || "assets/memory-01-garden.jpg",
+            backdrop: val("f_introScene0_backdrop") || "/thiep-cuoi-khanh-linh-le-dung/assets/memory-01-garden.jpg",
             backdropMobile: val("f_introScene0_backdropMobile") || "",
             verse: val("f_introScene0_verse") || ""
           },
           {
-            backdrop: val("f_introScene1_backdrop") || "assets/memory-02-castle.jpg",
+            backdrop: val("f_introScene1_backdrop") || "/thiep-cuoi-khanh-linh-le-dung/assets/memory-02-castle.jpg",
             backdropMobile: val("f_introScene1_backdropMobile") || "",
             verse: val("f_introScene1_verse") || ""
           },
           {
-            backdrop: val("f_introScene2_backdrop") || "assets/memory-03-piano.jpg",
+            backdrop: val("f_introScene2_backdrop") || "/thiep-cuoi-khanh-linh-le-dung/assets/memory-03-piano.jpg",
             backdropMobile: val("f_introScene2_backdropMobile") || "",
             verse: val("f_introScene2_verse") || ""
           }
