@@ -3,3 +3,7 @@
 img-new/
 thiep-cuoi-khanh-linh-le-dung/assets/_originals/
 ref/
+
+# Dữ liệu khách hàng tùy chỉnh (không bị git pull ghi đè)
+data/wedding-db.custom.json
+data/wedding-rsvps.custom.json

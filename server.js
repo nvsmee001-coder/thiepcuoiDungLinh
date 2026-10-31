@@ -37,11 +37,19 @@ if (process.platform === "win32") {
 }
 const ROOT_DIR = __dirname;
 const DB_JSON_PATH = path.join(ROOT_DIR, "data", "wedding-db.json");
+const DB_CUSTOM_PATH = path.join(ROOT_DIR, "data", "wedding-db.custom.json");
 const RSVP_JSON_PATH = path.join(ROOT_DIR, "data", "wedding-rsvps.json");
 const CONTENT_JS_PATH = path.join(ROOT_DIR, "js", "content.js");
 const IMG_DIR = path.join(ROOT_DIR, "img");
 const ALBUM_UPLOAD_DIR = path.join(IMG_DIR, "album");
 const AUDIO_UPLOAD_DIR = path.join(ROOT_DIR, "audio");
+
+function getEffectiveDbPath() {
+  if (fs.existsSync(DB_CUSTOM_PATH)) {
+    return DB_CUSTOM_PATH;
+  }
+  return DB_JSON_PATH;
+}
 
 const MIME_TYPES = {
   ".html": "text/html; charset=utf-8",
@@ -157,7 +165,8 @@ const server = http.createServer(async (req, res) => {
   // 1. API: GET /api/db
   if (req.method === "GET" && pathname === "/api/db") {
     try {
-      const raw = fs.readFileSync(DB_JSON_PATH, "utf8");
+      const dbPath = getEffectiveDbPath();
+      const raw = fs.readFileSync(dbPath, "utf8");
       return sendJson(res, 200, JSON.parse(raw));
     } catch (e) {
       return sendJson(res, 404, { ok: false, error: e.message });
@@ -174,9 +183,12 @@ const server = http.createServer(async (req, res) => {
     try {
       const bodyStr = await readRequestBody(req);
       const data = JSON.parse(bodyStr);
-      fs.writeFileSync(DB_JSON_PATH, JSON.stringify(data, null, 2), "utf8");
-      syncContentJs(data);
-      return sendJson(res, 200, { ok: true, saved: "data/wedding-db.json + js/content.js" });
+      // Luôn ghi vào wedding-db.custom.json (được .gitignore bảo vệ khỏi git pull)
+      fs.writeFileSync(DB_CUSTOM_PATH, JSON.stringify(data, null, 2), "utf8");
+      try {
+        fs.writeFileSync(DB_JSON_PATH, JSON.stringify(data, null, 2), "utf8");
+      } catch (_) {}
+      return sendJson(res, 200, { ok: true, saved: "data/wedding-db.custom.json" });
     } catch (e) {
       return sendJson(res, 400, { ok: false, error: e.message });
     }
@@ -312,6 +324,18 @@ const server = http.createServer(async (req, res) => {
     pathname = pathname.slice(subPrefix.length);
   } else if (pathname.startsWith("/assets/")) {
     pathname = subPrefix + pathname;
+  }
+
+  // Phục vụ dữ liệu tùy chỉnh custom.json nếu có
+  if (pathname === "/data/wedding-db.json" && fs.existsSync(DB_CUSTOM_PATH)) {
+    const raw = fs.readFileSync(DB_CUSTOM_PATH);
+    res.writeHead(200, {
+      "Content-Type": "application/json; charset=utf-8",
+      "Content-Length": raw.length,
+      "Cache-Control": "no-store, no-cache, must-revalidate",
+      "Access-Control-Allow-Origin": "*"
+    });
+    return res.end(raw);
   }
   const normalizedRel = pathname.replace(/^[/\\]+/, "");
   const segments = normalizedRel.split(/[/\\]+/);
