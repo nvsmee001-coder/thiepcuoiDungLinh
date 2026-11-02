@@ -239,12 +239,13 @@
         }
       });
 
-      // Cuộn thumbnail dải phim ra giữa
+      // Cuộn thumbnail dải phim ra giữa (CHỈ cuộn ngang riêng thanh filmstripContainer, TUYỆT ĐỐI không gọi scrollIntoView làm nhảy vị trí trang của người dùng)
       thumbBtns.forEach((btn, i) => {
         const isCurrent = i === currentIndex;
         btn.classList.toggle('active', isCurrent);
-        if (isCurrent && btn.scrollIntoView) {
-          btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        if (isCurrent && filmstripContainer) {
+          const targetLeft = btn.offsetLeft - (filmstripContainer.clientWidth / 2) + (btn.clientWidth / 2);
+          filmstripContainer.scrollTo({ left: targetLeft, behavior: 'smooth' });
         }
       });
 
@@ -281,12 +282,17 @@
       });
 
       card.addEventListener('mouseenter', () => {
-        if (idx === currentIndex) isHoverPaused = true;
+        if (idx === currentIndex && window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+          isHoverPaused = true;
+        }
       });
       card.addEventListener('mouseleave', () => {
         isHoverPaused = false;
         if (idx === currentIndex) card.style.transform = '';
       });
+      card.addEventListener('touchstart', () => {
+        isHoverPaused = false;
+      }, { passive: true });
 
       card.addEventListener('mousemove', e => {
         if (idx !== currentIndex || window.innerWidth < 992) return;

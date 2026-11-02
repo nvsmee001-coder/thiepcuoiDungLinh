@@ -1130,12 +1130,13 @@
         }
       });
 
-      // Cập nhật Dải Phim & tự động cuộn thumbnail đang chọn ra giữa dải phim
+      // Cập nhật Dải Phim & tự động cuộn thumbnail đang chọn ra giữa dải phim (chỉ cuộn ngang thanh dải phim, không cuộn màn hình người dùng)
       thumbBtns.forEach(function (btn, i) {
         var isCurrent = i === currentIndex;
         btn.classList.toggle("active", isCurrent);
-        if (isCurrent && btn.scrollIntoView) {
-          btn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        if (isCurrent && filmstripContainer) {
+          var targetLeft = btn.offsetLeft - (filmstripContainer.clientWidth / 2) + (btn.clientWidth / 2);
+          filmstripContainer.scrollTo({ left: targetLeft, behavior: "smooth" });
         }
       });
 
