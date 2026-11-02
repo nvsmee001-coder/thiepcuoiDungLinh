@@ -37,10 +37,17 @@
     const coupleNames = `${brideName} & ${groomName}`;
     const coupleNamesHtml = `<span>${brideName}</span><em>&amp;</em><span>${groomName}</span>`;
 
-    // Monogram (e.g. K & D or K & L)
+    // Monogram (e.g. L & D)
+    const invCard = (db && db.invitationCard) || {};
     const brideInitial = brideName.trim().split(/\s+/).pop()[0]?.toUpperCase() || 'L';
     const groomInitial = groomName.trim().split(/\s+/).pop()[0]?.toUpperCase() || 'D';
-    const monogramText = `${brideInitial}<span>&amp;</span>${groomInitial}`;
+    const monogramText = invCard.monogram ? invCard.monogram.replace('&', '<span>&amp;</span>') : `${brideInitial}<span>&amp;</span>${groomInitial}`;
+    const subTitle = invCard.subTitle || 'THE WEDDING INVITATION';
+    const kinhMoiTitle = invCard.kinhMoiTitle || 'Kính mời';
+    const defaultGuestName = invCard.defaultGuestName || '....................................................';
+    const introGroom = invCard.introGroom || 'Gia đình nhà trai trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi';
+    const introBride = invCard.introBride || 'Gia đình nhà gái trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi';
+    const bottomMessage = invCard.bottomMessage || 'Một ngày đặc biệt, bên những người thương.';
 
     // Venues
     const brideVenue = (db.venues && db.venues.bride) || {};
@@ -113,6 +120,12 @@
       coupleNames,
       coupleNamesHtml,
       monogramText,
+      subTitle,
+      kinhMoiTitle,
+      defaultGuestName,
+      introGroom,
+      introBride,
+      bottomMessage,
       coverPhoto,
       coverPhotoMobile,
       interludePhoto,
@@ -276,6 +289,54 @@
     });
     document.querySelectorAll('.invitation-seal').forEach(n => n.innerHTML = configData.monogramText);
 
+    // Invitation Paper Card elements
+    const subTitleEl = document.getElementById('invitationSubTitle');
+    if (subTitleEl) subTitleEl.textContent = configData.subTitle;
+
+    const kinhMoiEl = document.getElementById('invitationKinhMoi');
+    if (kinhMoiEl) kinhMoiEl.textContent = configData.kinhMoiTitle;
+
+    const introTextEl = document.getElementById('invitationIntroText');
+    if (introTextEl) {
+      introTextEl.innerHTML = isBride ? configData.introBride : configData.introGroom;
+    }
+
+    document.querySelectorAll('.invite-message').forEach(n => n.textContent = configData.bottomMessage);
+
+    // Guest name handling (?to=... or ?guest=...)
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const guestParam = urlParams.get('to') || urlParams.get('guest') || urlParams.get('k');
+      const guestNameEl = document.getElementById('invitationGuestName');
+      if (guestNameEl) {
+        if (guestParam && guestParam.trim()) {
+          guestNameEl.textContent = guestParam.trim();
+          guestNameEl.classList.add('has-guest-name');
+        } else if (!guestNameEl.dataset.userEdited) {
+          guestNameEl.textContent = configData.defaultGuestName;
+          guestNameEl.classList.remove('has-guest-name');
+        }
+        if (!guestNameEl.dataset.bound) {
+          guestNameEl.dataset.bound = 'true';
+          guestNameEl.addEventListener('input', () => {
+            guestNameEl.dataset.userEdited = 'true';
+            if (guestNameEl.textContent.trim() && !guestNameEl.textContent.includes('...')) {
+              guestNameEl.classList.add('has-guest-name');
+            } else {
+              guestNameEl.classList.remove('has-guest-name');
+            }
+          });
+        }
+      }
+    } catch (_) {}
+
+    // Synchronize all side switch buttons
+    document.querySelectorAll('[data-family-switch]').forEach(btn => {
+      const match = btn.dataset.familySwitch === family;
+      btn.classList.toggle('is-active', match);
+      btn.setAttribute('aria-selected', String(match));
+    });
+
     // 2. Photos (Responsive Cover & Interlude)
     const isMobile = window.innerWidth <= 600;
     const effectiveCover = (isMobile && configData.coverPhotoMobile) ? configData.coverPhotoMobile : configData.coverPhoto;
@@ -382,7 +443,16 @@
   window.addEventListener('wedding:sidechange', event => apply(event.detail.family));
 
   function initUI() {
-    const curFamily = document.body.dataset.weddingFamily || 'bride';
+    let curFamily = document.body.dataset.weddingFamily;
+    if (!curFamily) {
+      try {
+        const u = new URLSearchParams(window.location.search);
+        const s = u.get('side') || u.get('family');
+        if (s === 'groom' || s === 'bride') curFamily = s;
+      } catch (_) {}
+    }
+    curFamily = curFamily || 'groom';
+    document.body.dataset.weddingFamily = curFamily;
     apply(curFamily);
   }
 

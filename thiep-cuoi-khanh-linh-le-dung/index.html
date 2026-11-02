@@ -8,7 +8,7 @@
   <meta http-equiv="Expires" content="0">
   <script>
     (function () {
-      var BUILD_VER = "20261102_01";
+      var BUILD_VER = "20261102_02";
       try {
         var lastVer = localStorage.getItem("wedding_build_ver");
         if (lastVer && lastVer !== BUILD_VER) {
@@ -36,13 +36,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20261031_06">
-  <link rel="stylesheet" href="invitation.css?v=20261031_06">
-  <link rel="stylesheet" href="travel.css?v=20261031_06">
-  <link rel="stylesheet" href="flight-polish.css?v=20261031_06">
-  <link rel="stylesheet" href="photo-motion.css?v=20261031_06">
-  <link rel="stylesheet" href="entrance.css?v=20261031_06">
-  <link rel="stylesheet" href="bride-invitation.css?v=20261031_06">
+  <link rel="stylesheet" href="style.css?v=20261102_02">
+  <link rel="stylesheet" href="invitation.css?v=20261102_02">
+  <link rel="stylesheet" href="travel.css?v=20261102_02">
+  <link rel="stylesheet" href="flight-polish.css?v=20261102_02">
+  <link rel="stylesheet" href="photo-motion.css?v=20261102_02">
+  <link rel="stylesheet" href="entrance.css?v=20261102_02">
+  <link rel="stylesheet" href="bride-invitation.css?v=20261102_02">
   <style>
     /* CRITICAL INLINE STYLING CHO SÂN KHẤU 3D ALBUM (CHỐNG CACHE VÀ CHỐNG TRÀN ẢNH) */
     .living-3d-album-section {
@@ -167,15 +167,15 @@
       }
     }
   </style>
-  <script src="/js/content.js?v=20261031_06"></script>
-  <script src="invitation-content.js?v=20261031_06" defer></script>
-  <script src="entrance.js?v=20261031_06" defer></script>
-  <script src="album-3d.js?v=20261102_01" defer></script>
-  <script src="app.js?v=20261031_06" defer></script>
-  <script src="/thiep-cuoi-khanh-linh-le-dung/assets/d3.min.js?v=20261031_06" defer></script>
-  <script src="travel.js?v=20261031_06" defer></script>
-  <script src="motion.js?v=20261031_06" defer></script>
-  <script src="photo-motion.js?v=20261031_06" defer></script>
+  <script src="/js/content.js?v=20261102_02"></script>
+  <script src="invitation-content.js?v=20261102_02" defer></script>
+  <script src="entrance.js?v=20261102_02" defer></script>
+  <script src="album-3d.js?v=20261102_02" defer></script>
+  <script src="app.js?v=20261102_02" defer></script>
+  <script src="/thiep-cuoi-khanh-linh-le-dung/assets/d3.min.js?v=20261102_02" defer></script>
+  <script src="travel.js?v=20261102_02" defer></script>
+  <script src="motion.js?v=20261102_02" defer></script>
+  <script src="photo-motion.js?v=20261102_02" defer></script>
 </head>
 <body>
   <!-- UNIFIED CINEMATIC INTRO & WEDDING INVITATION DIALOG -->
@@ -260,6 +260,10 @@
       <a href="#home" class="is-active">Thiệp mời</a><a href="#journey">Câu chuyện</a><a href="#celebration">Ngày chung đôi</a><a href="#album">Album ảnh</a>
     </nav>
     <div class="header-actions">
+      <div class="header-family-toggle" role="tablist" title="Chuyển đổi thiệp Nhà Trai / Nhà Gái">
+        <button type="button" class="hdr-switch-btn is-active" data-family-switch="groom">Nhà Trai</button>
+        <button type="button" class="hdr-switch-btn" data-family-switch="bride">Nhà Gái</button>
+      </div>
       <button class="sound-button" id="sound-toggle" title="River Flows in You — Yiruma · Bật nhạc" aria-controls="background-music" aria-label="Bật nhạc nền — River Flows in You" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/></svg><span class="sound-dot"></span></button>
       <button class="button button-small" data-rsvp>Xác nhận tham dự <span>↗</span></button>
     </div>
@@ -273,25 +277,43 @@
         <div class="photo-corner-note">Một lời hẹn. Một đời bên nhau.</div>
         <div class="photo-date-badge" aria-hidden="true"><span>save the</span><em>date</em><b>20 · 12</b></div>
       </div>
-      <div class="invitation-paper" data-reveal data-parallax="0.4">
-        <div class="invitation-photo-watermark" aria-hidden="true"><img src="/thiep-cuoi-khanh-linh-le-dung/assets/cover-khanh-linh-le-dung.jpg" alt="" decoding="async"></div>
-        <svg class="paper-botanical botanical-left" viewBox="0 0 120 240" aria-hidden="true"><path d="M90 230C28 174 70 91 31 15M71 188c-43-4-58-28-48-33 17-10 36 12 48 33Zm-7-43c32-12 43-39 31-39-17-1-26 20-31 39Zm-5-40C24 90 13 65 24 65c20 1 28 19 35 40Zm-12-42c29-14 32-36 23-34-15 3-22 19-23 34Z"/></svg>
-        <svg class="paper-botanical botanical-right" viewBox="0 0 120 240" aria-hidden="true"><path d="M90 230C28 174 70 91 31 15M71 188c-43-4-58-28-48-33 17-10 36 12 48 33Zm-7-43c32-12 43-39 31-39-17-1-26 20-31 39Zm-5-40C24 90 13 65 24 65c20 1 28 19 35 40Zm-12-42c29-14 32-36 23-34-15 3-22 19-23 34Z"/></svg>
-        <div class="invitation-seal" aria-hidden="true">K<span>&amp;</span>L</div>
-        <p class="eyebrow invitation-eyebrow">THE WEDDING INVITATION</p>
-        <button class="invite-family" data-change-side type="button" hidden><span data-selected-family></span><span class="invite-family-change">Đổi ↗</span></button>
-        <p class="invitation-intro">Trân trọng kính mời bạn đến dự<br>lễ thành hôn của chúng mình</p>
-        <h1 id="hero-title"><span>Khánh Linh</span><em>&amp;</em><span>Lê Dũng</span></h1>
-        <div class="invite-flourish" aria-hidden="true"><i></i>✧<i></i></div>
-        <p class="invite-time" hidden data-bride-only>VÀO LÚC: <strong>11 GIỜ 00</strong></p>
-        <div class="invite-date"><span>CHỦ NHẬT</span><strong>20.12</strong><span>2026</span></div>
-        <p class="invite-lunar" hidden data-bride-only>(Tức ngày 19 tháng 10 năm Bính Ngọ)</p>
-        <p class="invite-location">17:00 · Thảo Điền, TP. Hồ Chí Minh</p>
-        <p class="invite-message">Một ngày đặc biệt, bên những người thương.</p>
-        <div class="invitation-families" hidden data-bride-only><div><h3>Nhà Gái</h3><p>PHẠM NGỌC HÙNG<br>NGUYỄN TUYẾT NHUNG</p><span>Cô dâu: Khánh Linh</span></div><div><h3>Nhà Trai</h3><p>NGUYỄN VĂN UY<br>LÊ THỊ HẢO</p><span>Chú rể: Lê Dũng</span></div></div>
-        <button class="button invitation-rsvp" data-rsvp>Xác nhận tham dự <span>↗</span></button>
-        <button class="invite-calendar" id="save-date">Lưu ngày chung đôi <span>＋</span></button>
-        <span class="invitation-demo">THIỆP MỜI MẪU · THÔNG TIN MINH HỌA</span>
+      <div class="invitation-paper-column" data-reveal>
+        <div class="hero-family-switcher" role="region" aria-label="Xem thiệp cưới Nhà Trai hoặc Nhà Gái">
+          <span class="switcher-hint">BÊN MỜI:</span>
+          <div class="family-switch-pill" role="tablist">
+            <button type="button" class="family-switch-btn is-active" data-family-switch="groom" role="tab" aria-selected="true">
+              <span class="pill-spark">❖</span> Thiệp Nhà Trai
+            </button>
+            <button type="button" class="family-switch-btn" data-family-switch="bride" role="tab" aria-selected="false">
+              <span class="pill-spark">❖</span> Thiệp Nhà Gái
+            </button>
+          </div>
+        </div>
+        <div class="invitation-paper" data-parallax="0.4">
+          <div class="invitation-photo-watermark" aria-hidden="true"><img src="/thiep-cuoi-khanh-linh-le-dung/assets/cover-khanh-linh-le-dung.jpg" alt="" decoding="async"></div>
+          <svg class="paper-botanical botanical-left" viewBox="0 0 120 240" aria-hidden="true"><path d="M90 230C28 174 70 91 31 15M71 188c-43-4-58-28-48-33 17-10 36 12 48 33Zm-7-43c32-12 43-39 31-39-17-1-26 20-31 39Zm-5-40C24 90 13 65 24 65c20 1 28 19 35 40Zm-12-42c29-14 32-36 23-34-15 3-22 19-23 34Z"/></svg>
+          <svg class="paper-botanical botanical-right" viewBox="0 0 120 240" aria-hidden="true"><path d="M90 230C28 174 70 91 31 15M71 188c-43-4-58-28-48-33 17-10 36 12 48 33Zm-7-43c32-12 43-39 31-39-17-1-26 20-31 39Zm-5-40C24 90 13 65 24 65c20 1 28 19 35 40Zm-12-42c29-14 32-36 23-34-15 3-22 19-23 34Z"/></svg>
+          <div class="invitation-seal" id="invitationSeal" aria-hidden="true">L<span>&amp;</span>D</div>
+          <p class="eyebrow invitation-eyebrow" id="invitationSubTitle">THE WEDDING INVITATION</p>
+          <div class="invitation-salutation">
+            <h2 class="invitation-kinh-moi" id="invitationKinhMoi">Kính mời</h2>
+            <div class="invitation-guest-wrap">
+              <span class="invitation-guest-name" id="invitationGuestName" title="Bấm để nhập tên khách hoặc mở link có ?to=Tên+Khách" contenteditable="true" spellcheck="false">....................................................</span>
+            </div>
+          </div>
+          <p class="invitation-intro" id="invitationIntroText">Gia đình nhà trai trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi</p>
+          <h1 id="hero-title"><span>Khánh Linh</span><em>&amp;</em><span>Lê Dũng</span></h1>
+          <div class="invite-flourish" aria-hidden="true"><i></i>✧<i></i></div>
+          <p class="invite-time" hidden data-bride-only>VÀO LÚC: <strong>11 GIỜ 00</strong></p>
+          <div class="invite-date"><span>CHỦ NHẬT</span><strong>20.12</strong><span>2026</span></div>
+          <p class="invite-lunar" hidden data-bride-only>(Tức ngày 19 tháng 10 năm Bính Ngọ)</p>
+          <p class="invite-location">17:00 · Thảo Điền, TP. Hồ Chí Minh</p>
+          <p class="invite-message">Một ngày đặc biệt, bên những người thương.</p>
+          <div class="invitation-families" hidden data-bride-only><div><h3>Nhà Gái</h3><p>PHẠM NGỌC HÙNG<br>NGUYỄN TUYẾT NHUNG</p><span>Cô dâu: Khánh Linh</span></div><div><h3>Nhà Trai</h3><p>NGUYỄN VĂN UY<br>LÊ THỊ HẢO</p><span>Chú rể: Lê Dũng</span></div></div>
+          <button class="button invitation-rsvp" data-rsvp>Xác nhận tham dự <span>↗</span></button>
+          <button class="invite-calendar" id="save-date">Lưu ngày chung đôi <span>＋</span></button>
+          <span class="invitation-demo">THIỆP MỜI MẪU · THÔNG TIN MINH HỌA</span>
+        </div>
       </div>
       <a class="cover-scroll" href="#journey"><span>VÀ ĐÂY LÀ CÂU CHUYỆN CỦA CHÚNG MÌNH</span><i>↓</i></a>
       <span class="cover-edition" aria-hidden="true">A LOVE LETTER / VOL. 01</span>

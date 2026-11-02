@@ -730,4 +730,264 @@ body.motion-ready .living-3d-album-section [data-reveal].is-revealed {
   }
 }
 
+/* ==========================================================================
+   PAPER COLUMN, STANDALONE FAMILY SWITCHER & PROMINENT KÍNH MỜI
+   ========================================================================== */
+.invitation-paper-column {
+  width: 100%;
+  max-width: 550px;
+  justify-self: end;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+}
+
+/* Luxury Segmented Side Switcher (Above Paper Card) */
+.hero-family-switcher {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  width: 100%;
+}
+
+.switcher-hint {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2.2px;
+  color: #7a826c;
+  text-transform: uppercase;
+}
+
+.family-switch-pill {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(247, 244, 235, 0.94);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(162, 145, 106, 0.45);
+  border-radius: 999px;
+  padding: 4px;
+  box-shadow: 0 6px 20px rgba(52, 70, 56, 0.08);
+  gap: 4px;
+}
+
+.family-switch-btn {
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  color: #626e5c;
+  padding: 7px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.28s var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  outline: none;
+}
+
+.family-switch-btn:hover {
+  color: #2b3b2e;
+  background: rgba(162, 145, 106, 0.12);
+}
+
+.family-switch-btn.is-active {
+  background: #344638 !important;
+  color: #f7f4eb !important;
+  box-shadow: 0 3px 12px rgba(52, 70, 56, 0.25);
+}
+
+.pill-spark {
+  font-size: 9px;
+  color: #bfa87a;
+  transition: transform 0.3s ease;
+}
+
+.family-switch-btn.is-active .pill-spark {
+  color: #f3dfba;
+  transform: scale(1.15);
+}
+
+/* Header Compact Toggle Button */
+.header-family-toggle {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(232, 235, 223, 0.75);
+  border: 1px solid rgba(162, 145, 106, 0.35);
+  border-radius: 999px;
+  padding: 3px;
+  gap: 3px;
+  margin-right: 6px;
+}
+
+.hdr-switch-btn {
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #626e5c;
+  padding: 5px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  outline: none;
+}
+
+.hdr-switch-btn:hover {
+  color: #2e3e30;
+}
+
+.hdr-switch-btn.is-active {
+  background: #344638 !important;
+  color: #f7f4eb !important;
+  box-shadow: 0 2px 8px rgba(52, 70, 56, 0.22);
+}
+
+@media (max-width: 680px) {
+  .header-family-toggle {
+    display: none;
+  }
+}
+
+/* Burgundy Wax Seal Styling (Con dấu sáp tròn L&D như ảnh thực tế) */
+.invitation-seal {
+  margin: 0 auto 14px !important;
+  width: 52px !important;
+  height: 52px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: var(--serif, 'Playfair Display', serif) !important;
+  font-size: 21px !important;
+  font-weight: 600 !important;
+  letter-spacing: -1px !important;
+  background: radial-gradient(circle at 35% 35%, #963838 0%, #6d2424 70%, #4d1818 100%) !important;
+  color: #fcf9ee !important;
+  border-radius: 50% !important;
+  box-shadow: 0 6px 18px rgba(109, 36, 36, 0.38), inset 0 0 0 2px rgba(255, 245, 230, 0.3), inset 0 0 0 5px rgba(60, 16, 16, 0.45) !important;
+  transform: rotate(-5deg);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.invitation-seal span {
+  font-style: italic !important;
+  font-size: 14px !important;
+  margin: 0 1px !important;
+  opacity: 0.85 !important;
+}
+
+/* Prominent KÍNH MỜI Header & Handwritten Guest Line */
+.invitation-salutation {
+  margin: 12px auto 14px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.invitation-kinh-moi {
+  font-family: var(--serif, 'Playfair Display', 'Cinzel', serif);
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: #344638;
+  margin: 0 0 8px 0;
+  line-height: 1.15;
+  background: linear-gradient(135deg, #2b3d2f 0%, #6e5e3e 55%, #344638 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.06));
+}
+
+.invitation-guest-wrap {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 95%;
+  position: relative;
+}
+
+.invitation-guest-name {
+  font-family: var(--serif);
+  font-size: 15px;
+  letter-spacing: 2.2px;
+  color: #8c947c;
+  display: inline-block;
+  padding: 4px 16px;
+  border-radius: 4px;
+  outline: none;
+  transition: all 0.3s ease;
+  word-break: break-word;
+  user-select: text;
+}
+
+.invitation-guest-name.has-guest-name {
+  font-family: 'Great Vibes', cursive, var(--serif);
+  font-size: 34px;
+  font-weight: 500;
+  line-height: 1.25;
+  color: #8b2b2b;
+  letter-spacing: 1px;
+  padding: 3px 22px;
+  background: rgba(244, 239, 230, 0.7);
+  border-bottom: 1.5px solid rgba(162, 145, 106, 0.45);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.invitation-guest-name:focus {
+  background: #ffffff;
+  border-bottom: 2px solid var(--gold, #a2916a);
+  color: #2b392e;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+@media (max-width: 600px) {
+  .invitation-kinh-moi {
+    font-size: 32px;
+    letter-spacing: 4px;
+  }
+  .invitation-guest-name.has-guest-name {
+    font-size: 28px;
+  }
+  .invitation-paper-column {
+    max-width: 380px;
+    margin: 0 auto;
+  }
+}
+
+/* In ấn sạch đẹp chuẩn giấy A5/A6 */
+@media print {
+  .site-header, #petal-field, .cover-visual, .hero-family-switcher, .cover-scroll, .cover-edition,
+  .journey, .photo-interlude, .wedding, .album, .rsvp-section, footer, #reading-progress,
+  .invitation-rsvp, .invite-calendar, .invitation-demo {
+    display: none !important;
+  }
+  body, .invitation-hero {
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: auto !important;
+    display: block !important;
+  }
+  .invitation-paper-column, .invitation-paper {
+    max-width: 100% !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 auto !important;
+    padding: 20px !important;
+  }
+}
+
+
 

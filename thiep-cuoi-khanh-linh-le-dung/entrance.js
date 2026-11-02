@@ -18,12 +18,14 @@
     document.querySelectorAll('[data-change-side],[data-rsvp-family]').forEach(node => node.hidden = false);
     document.querySelectorAll('input[name="family"]').forEach(node => node.value = family);
     choices.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.family === family)));
-    const introNode = document.querySelector('.invitation-intro');
-    if (introNode) {
-      introNode.innerHTML = 'Gia đình ' + labels[family].toLowerCase() + ' trân trọng kính mời<br>bạn đến dự lễ thành hôn của chúng mình';
-    }
+    document.querySelectorAll('[data-family-switch]').forEach(btn => {
+      const isMatch = btn.dataset.familySwitch === family;
+      btn.classList.toggle('is-active', isMatch);
+      btn.setAttribute('aria-selected', String(isMatch));
+    });
     window.dispatchEvent(new CustomEvent('wedding:sidechange', { detail: { family } }));
   }
+  window.applyWeddingFamily = applyFamily;
 
   function animate(element, frames, options) {
     if (reduced.matches || !element || typeof element.animate !== 'function') return null;
@@ -79,6 +81,11 @@
 
   function showChoice() {
     if (dialog.open || leaving) return;
+    if (entered) {
+      const nextFamily = selected === 'groom' ? 'bride' : 'groom';
+      applyFamily(nextFamily);
+      return;
+    }
     originFocus = document.activeElement;
     back.hidden = !entered;
     root.classList.add('entry-pending');
@@ -86,6 +93,13 @@
     if (introFinished) {
       dialog.classList.remove('is-intro-mode', 'is-morphing');
       dialog.classList.add('is-choice-mode');
+    }
+    dialog.getAnimations().forEach(a => a.cancel());
+    dialog.style.opacity = '1';
+    const shell = dialog.querySelector('.entry-shell');
+    if (shell) {
+      shell.style.opacity = '1';
+      shell.style.transform = 'none';
     }
     dialog.showModal();
     choices.find(button => button.dataset.family === selected)?.focus({ preventScroll: true });
@@ -412,6 +426,13 @@
     if (!dialog || !back || typeof dialog.showModal !== 'function') throw new Error('Native dialog unavailable');
     choices.forEach(button => button.addEventListener('click', () => enter(button.dataset.family)));
     document.querySelectorAll('[data-change-side]').forEach(button => button.addEventListener('click', showChoice));
+    document.querySelectorAll('[data-family-switch]').forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        const f = button.dataset.familySwitch;
+        if (f) applyFamily(f);
+      });
+    });
     back.addEventListener('click', () => enter());
     dialog.addEventListener('cancel', event => { event.preventDefault(); if (entered) enter(); });
     const stopMotion = () => { if (reduced.matches) { animations.forEach(animation => animation.cancel()); animations.clear(); } };

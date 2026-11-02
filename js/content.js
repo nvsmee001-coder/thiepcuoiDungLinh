@@ -41,6 +41,15 @@ const DEFAULT_WEDDING_DB = {
     "coverPhoto": "/thiep-cuoi-khanh-linh-le-dung/assets/cover-khanh-linh-le-dung.jpg",
     "interludePhoto": "/thiep-cuoi-khanh-linh-le-dung/assets/hero.jpg"
   },
+  "invitationCard": {
+    "monogram": "L&D",
+    "subTitle": "THE WEDDING INVITATION",
+    "kinhMoiTitle": "Kính mời",
+    "defaultGuestName": "....................................................",
+    "introGroom": "Gia đình nhà trai trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi",
+    "introBride": "Gia đình nhà gái trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi",
+    "bottomMessage": "Một ngày đặc biệt, bên những người thương."
+  },
   "date": {
     "isoTarget": "2026-11-27T11:00:00+07:00",
     "dayOfWeek": "THỨ SÁU",

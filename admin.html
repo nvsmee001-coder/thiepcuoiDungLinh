@@ -377,6 +377,107 @@
       color: #ffa8a8;
     }
 
+    /* MÔ PHỎNG TỜ THIỆP GIẤY TRỰC QUAN TRONG ADMIN */
+    .admin-card-mockup {
+      background: #fbf9f0;
+      color: #344638;
+      border: 1px solid #b8bda6;
+      border-radius: 12px;
+      padding: 26px 20px;
+      text-align: center;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.24);
+      position: relative;
+      font-family: 'Playfair Display', serif;
+    }
+    .mockup-seal {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #963838, #6d2424);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(109,36,36,0.35);
+      margin-bottom: 8px;
+    }
+    .mockup-subtitle {
+      font-size: 8px;
+      letter-spacing: 2px;
+      color: #7a826c;
+      text-transform: uppercase;
+      font-family: 'Be Vietnam Pro', sans-serif;
+    }
+    .mockup-kinh-moi {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #2b3d2f;
+      margin: 8px 0 4px;
+    }
+    .mockup-guest {
+      font-size: 15px;
+      letter-spacing: 1.5px;
+      color: #8c947c;
+      min-height: 24px;
+    }
+    .mockup-guest.has-name {
+      font-family: 'Great Vibes', cursive;
+      font-size: 24px;
+      color: #8b2b2b;
+    }
+    .mockup-intro {
+      font-size: 10px;
+      color: #626e5c;
+      margin: 8px auto;
+      line-height: 1.5;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      max-width: 90%;
+    }
+    .mockup-names {
+      font-size: 24px;
+      font-weight: 400;
+      color: #2b3d2f;
+      margin: 8px 0;
+    }
+    .mockup-flourish {
+      color: #a2916a;
+      font-size: 11px;
+      letter-spacing: 4px;
+      margin-bottom: 8px;
+    }
+    .mockup-datetime {
+      font-size: 10px;
+      color: #626e5c;
+      margin: 8px 0;
+      font-family: 'Be Vietnam Pro', sans-serif;
+    }
+    .mockup-venue {
+      font-size: 10px;
+      color: #344638;
+      margin: 10px 0;
+      line-height: 1.5;
+      font-family: 'Be Vietnam Pro', sans-serif;
+    }
+    .mockup-parents {
+      font-size: 9px;
+      color: #626e5c;
+      border-top: 1px solid #d9dac9;
+      border-bottom: 1px solid #d9dac9;
+      padding: 8px 0;
+      margin: 10px 0;
+      line-height: 1.6;
+      font-family: 'Be Vietnam Pro', sans-serif;
+    }
+    .mockup-message {
+      font-size: 10px;
+      font-style: italic;
+      color: #7f866d;
+    }
+
     /* IMAGE PICKER PREVIEW CARDS (4 VỊ TRÍ ẢNH NỀN & KHUNG TRANH) */
     .slot-cards-grid {
       display: grid;
@@ -705,15 +806,16 @@
 
   <main class="admin-container">
 
-    <!-- 7 TAB QUẢN LÝ RÕ RÀNG -->
+    <!-- 8 TAB QUẢN LÝ RÕ RÀNG -->
     <nav class="admin-tabs">
       <button type="button" class="tab-btn active" data-tab="pane-album">📸 1. Nạp &amp; Quản Lý Album Ảnh (<span id="albumCountBadge">11</span>)</button>
       <button type="button" class="tab-btn" data-tab="pane-general">💍 2. Dâu Rể, Ngày Giờ, Ảnh Bìa &amp; Intro</button>
-      <button type="button" class="tab-btn" data-tab="pane-venues">📍 3. Địa Điểm &amp; Bản Đồ 2 Nhà</button>
-      <button type="button" class="tab-btn" data-tab="pane-menu">🍽️ 4. Thực Đơn Tiệc Cưới</button>
-      <button type="button" class="tab-btn" data-tab="pane-schedule">🕰️ 5. Lịch Biểu Hôn Lễ</button>
-      <button type="button" class="tab-btn" data-tab="pane-music">🎵 6. Đĩa Nhạc Cưới (<span id="musicCountBadge">3</span>/5)</button>
-      <button type="button" class="tab-btn" data-tab="pane-rsvp">💌 7. Phản Hồi Khách (RSVP) (<span id="rsvpCountBadge">0</span>)</button>
+      <button type="button" class="tab-btn" data-tab="pane-invitation">💌 3. Tờ Thiệp Mời &amp; Tạo Link Khách</button>
+      <button type="button" class="tab-btn" data-tab="pane-venues">📍 4. Địa Điểm &amp; Bản Đồ 2 Nhà</button>
+      <button type="button" class="tab-btn" data-tab="pane-menu">🍽️ 5. Thực Đơn Tiệc Cưới</button>
+      <button type="button" class="tab-btn" data-tab="pane-schedule">🕰️ 6. Lịch Biểu Hôn Lễ</button>
+      <button type="button" class="tab-btn" data-tab="pane-music">🎵 7. Đĩa Nhạc Cưới (<span id="musicCountBadge">3</span>/5)</button>
+      <button type="button" class="tab-btn" data-tab="pane-rsvp">💌 8. Phản Hồi Khách (RSVP) (<span id="rsvpCountBadge">0</span>)</button>
     </nav>
 
     <!-- ====================================================================
@@ -1110,7 +1212,155 @@
     </section>
 
     <!-- ====================================================================
-         PANE 3: ĐỊA ĐIỂM & BẢN ĐỒ 2 NHÀ (NHÀ TRAI & NHÀ GÁI)
+         PANE 3: QUẢN LÝ TỜ THIỆP MỜI GIẤY & TẠO LINK KHÁCH MỜI
+         ==================================================================== -->
+    <section class="tab-pane" id="pane-invitation">
+      
+      <!-- CÔNG CỤ TẠO LINK GỬI RIÊNG CHO TỪNG KHÁCH MỜI -->
+      <div class="panel-card" style="border: 1px solid var(--gold); box-shadow: 0 8px 32px rgba(226, 196, 142, 0.12);">
+        <div class="panel-title">
+          <span>✨ Công Cụ Tạo Link Mời Riêng Từng Khách (Ghi Tên Nghệ Thuật Lên Thiệp)</span>
+          <span style="font-size:0.75rem; color:#7be895; font-weight:600;">⚡ 1-Click Sao Chép Link</span>
+        </div>
+        <p class="panel-desc">
+          Nhập tên khách mời bên dưới, hệ thống sẽ tự động tạo một đường link thiệp cưới cá nhân hóa. Khi khách bấm mở link này, dòng chữ <strong>"Kính mời"</strong> trên tờ thiệp sẽ hiện đích danh tên khách mời bằng phông chữ viết tay nghệ thuật sang trọng!
+        </p>
+
+        <div class="form-grid-2" style="background: rgba(0,0,0,0.22); padding: 18px; border-radius: 12px; border: 1px solid rgba(226,196,142,0.2);">
+          <div>
+            <div class="form-group">
+              <label>1. Nhập Tên Khách Mời Cần Gửi Thiệp</label>
+              <input type="text" class="form-control" id="gen_guestName" placeholder="VD: Anh Nam &amp; Chị Lan, hoặc Gia đình Bác Hùng, Bạn Thắng..." style="font-size: 1rem; color: #ffe4ab;">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>2. Bạn Muốn Gửi Thiệp Mời Của Bên Nào?</label>
+              <div style="display:flex; gap:16px; margin-top:8px;">
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.9rem; color:#e1ded2;">
+                  <input type="radio" name="gen_side" value="groom" checked> ❖ Thiệp Nhà Trai
+                </label>
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.9rem; color:#e1ded2;">
+                  <input type="radio" name="gen_side" value="bride"> ❖ Thiệp Nhà Gái
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="form-group">
+              <label>Đường Link Thiệp Cá Nhân Hóa Tự Động Sinh</label>
+              <div style="display:flex; gap:8px;">
+                <input type="text" class="form-control" id="gen_generatedLink" readonly style="opacity:0.95; font-size:0.82rem; font-family:monospace; background:rgba(0,0,0,0.35);">
+                <button type="button" class="btn btn-primary" id="btnCopyGuestLink" style="white-space:nowrap;">📋 Sao Chép Link</button>
+              </div>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
+              <button type="button" class="btn btn-sm" id="btnTestOpenLink" style="flex:1;">👁️ Mở Xem Thử Link Này</button>
+              <button type="button" class="btn btn-sm" id="btnPrintCleanCard" style="flex:1;">🖨️ In Thiệp Ra Giấy / PDF</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHỈNH SỬA CÂU CHỮ TRÊN TỜ THIỆP & BẢN XEM TRƯỚC TRỰC QUAN -->
+      <div class="form-grid-2">
+        
+        <!-- Cột Trái: Các Trường Chữ Trên Tờ Thiệp Giấy -->
+        <div class="panel-card">
+          <h3 class="panel-title">💌 Tùy Chỉnh Chữ Trên Tờ Thiệp Mời</h3>
+          <p class="panel-desc">Thay đổi câu chữ, con dấu sáp và lời mời hiển thị trực tiếp trên tờ thiệp giấy trắng.</p>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Ký Tự Con Dấu Sáp Đỏ (Monogram)</label>
+              <input type="text" class="form-control" id="f_inv_monogram" placeholder="VD: L&amp;D">
+            </div>
+            <div class="form-group">
+              <label>Dòng Chữ Nhỏ Dưới Con Dấu</label>
+              <input type="text" class="form-control" id="f_inv_subTitle" placeholder="THE WEDDING INVITATION">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Tiêu Đề Kính Mời (Chữ Lớn)</label>
+              <input type="text" class="form-control" id="f_inv_kinhMoiTitle" placeholder="Kính mời">
+            </div>
+            <div class="form-group">
+              <label>Dòng Tên Khách Mặc Định (Khi Chưa Có Tên)</label>
+              <input type="text" class="form-control" id="f_inv_defaultGuestName" placeholder="....................................................">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label style="display:flex; justify-content:space-between; align-items:center;">
+              <span>Lời Kính Mời Mở Đầu (Nhà Trai)</span>
+              <span style="font-size:0.75rem; color:#ffe4ab;">Mẫu Nhà Trai</span>
+            </label>
+            <textarea class="form-control" id="f_inv_introGroom" rows="2" placeholder="Gia đình nhà trai trân trọng kính mời quý khách..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label style="display:flex; justify-content:space-between; align-items:center;">
+              <span>Lời Kính Mời Mở Đầu (Nhà Gái)</span>
+              <span style="font-size:0.75rem; color:#ffe4ab;">Mẫu Nhà Gái</span>
+            </label>
+            <textarea class="form-control" id="f_inv_introBride" rows="2" placeholder="Gia đình nhà gái trân trọng kính mời quý khách..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Thông Điệp Chân Thiệp</label>
+            <input type="text" class="form-control" id="f_inv_bottomMessage" placeholder="Một ngày đặc biệt, bên những người thương.">
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-sm" id="btnQuickSampleTraditional">📜 Mẫu Lời Mời Truyền Thống</button>
+            <button type="button" class="btn btn-sm" id="btnQuickSampleModern">✨ Mẫu Lời Mời Hiện Đại</button>
+          </div>
+        </div>
+
+        <!-- Cột Phải: Khung Mô Phỏng Tờ Thiệp Giấy Trực Quan (Live Interactive Mockup) -->
+        <div class="panel-card">
+          <div class="panel-title">
+            <span>👁️ Mô Phỏng Tờ Thiệp Giấy Thật</span>
+            <div style="display:flex; gap:6px;">
+              <button type="button" class="btn btn-sm btn-primary" id="btnPreviewSideGroom">Nhà Trai</button>
+              <button type="button" class="btn btn-sm" id="btnPreviewSideBride">Nhà Gái</button>
+            </div>
+          </div>
+          <p class="panel-desc">Khung mô phỏng hiển thị thời gian thực theo dữ liệu bạn nhập bên trái và thông tin Dâu Rể / Địa Điểm.</p>
+
+          <!-- KHUNG PREVIEW TỜ THIỆP -->
+          <div class="admin-card-mockup" id="adminCardMockup">
+            <div class="mockup-seal" id="mock_seal">L&amp;D</div>
+            <div class="mockup-subtitle" id="mock_subtitle">THE WEDDING INVITATION</div>
+            <div class="mockup-kinh-moi" id="mock_kinhmoi">Kính mời</div>
+            <div class="mockup-guest" id="mock_guest">....................................................</div>
+            <div class="mockup-intro" id="mock_intro">Gia đình nhà trai trân trọng kính mời quý khách đến dự lễ thành hôn của hai con chúng tôi</div>
+            <div class="mockup-names" id="mock_names">Khánh Linh &amp; Lê Dũng</div>
+            <div class="mockup-flourish">✧ ❖ ✧</div>
+            <div class="mockup-datetime" id="mock_datetime">
+              <div>VÀO LÚC: <strong id="mock_time">11:00</strong></div>
+              <div style="font-size:1.15rem; font-weight:700; color:#344638; margin: 4px 0;" id="mock_date">THỨ BẢY • 28.11 • NĂM 2026</div>
+              <div style="font-size:0.75rem; color:#7a826c;" id="mock_lunar">(Tức ngày 20 tháng 10 năm Bính Ngọ)</div>
+            </div>
+            <div class="mockup-venue" id="mock_venue">
+              <strong id="mock_venue_name">TRUNG TÂM ĐẠI HOÀNG SƠN PALACE</strong><br>
+              <span id="mock_venue_addr">45 Hùng Vương - Bắc Giang - Bắc Ninh</span>
+            </div>
+            <div class="mockup-parents" id="mock_parents">
+              <div><strong>Họ Nhà Trai:</strong> <span id="mock_p_groom">Ông Nguyễn Văn Uy &amp; Bà Lê Thị Hảo</span></div>
+              <div><strong>Họ Nhà Gái:</strong> <span id="mock_p_bride">Ông Phạm Ngọc Hùng &amp; Bà Nguyễn Tuyết Nhung</span></div>
+            </div>
+            <div class="mockup-message" id="mock_message">“Một ngày đặc biệt, bên những người thương.”</div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ====================================================================
+         PANE 4: ĐỊA ĐIỂM & BẢN ĐỒ 2 NHÀ (NHÀ TRAI & NHÀ GÁI)
          ==================================================================== -->
     <section class="tab-pane" id="pane-venues">
       <div class="form-grid-2">
@@ -2203,10 +2453,21 @@
         val("f_sch_eyebrow", s.eyebrow);
         val("f_sch_heading", s.heading);
 
+        var inv = state.invitationCard || {};
+        val("f_inv_monogram", inv.monogram || "L&D");
+        val("f_inv_subTitle", inv.subTitle || "THE WEDDING INVITATION");
+        val("f_inv_kinhMoiTitle", inv.kinhMoiTitle || "Kính mời");
+        val("f_inv_defaultGuestName", inv.defaultGuestName || "....................................................");
+        val("f_inv_introGroom", inv.introGroom || "Gia đình nhà trai trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi");
+        val("f_inv_introBride", inv.introBride || "Gia đình nhà gái trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi");
+        val("f_inv_bottomMessage", inv.bottomMessage || "Một ngày đặc biệt, bên những người thương.");
+
         renderAlbumGrid();
         renderMenuCourses();
         renderScheduleEvents();
         renderMusicTracks();
+        if (typeof updateGeneratedGuestLink === "function") updateGeneratedGuestLink();
+        if (typeof updateCardMockup === "function") updateCardMockup();
       }
 
       // GOM DỮ LIỆU TỪ FORM VÀO STATE
@@ -2293,6 +2554,16 @@
 
         state.schedule.eyebrow = val("f_sch_eyebrow");
         state.schedule.heading = val("f_sch_heading");
+
+        state.invitationCard = {
+          monogram: val("f_inv_monogram") || "L&D",
+          subTitle: val("f_inv_subTitle") || "THE WEDDING INVITATION",
+          kinhMoiTitle: val("f_inv_kinhMoiTitle") || "Kính mời",
+          defaultGuestName: val("f_inv_defaultGuestName") || "....................................................",
+          introGroom: val("f_inv_introGroom") || "Gia đình nhà trai trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi",
+          introBride: val("f_inv_introBride") || "Gia đình nhà gái trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi",
+          bottomMessage: val("f_inv_bottomMessage") || "Một ngày đặc biệt, bên những người thương."
+        };
       }
 
       // HÀM ĐỌC FILE & TỰ ĐỘNG NÉN ẢNH GỐC MÁY CƠ (10MB -> ~300KB FULL HD 2048PX) TRƯỚC KHI LÊN VPS
@@ -2926,6 +3197,220 @@
       document.getElementById("btnAddScheduleEvent").addEventListener("click", function () {
         state.schedule.events.push({ time: "12:00", title: "Nghi Thức Mới", desc: "Mô tả chi tiết nghi thức", highlight: true });
         renderScheduleEvents();
+      });
+
+      // ======================================================================
+      // TAB 3: TỜ THIỆP MỜI GIẤY, TẠO LINK KHÁCH & MOCKUP
+      // ======================================================================
+      var currentMockupSide = "groom";
+
+      function updateCardMockup() {
+        var isBride = currentMockupSide === "bride";
+        var monogram = val("f_inv_monogram") || "L&D";
+        var subTitle = val("f_inv_subTitle") || "THE WEDDING INVITATION";
+        var kinhMoi = val("f_inv_kinhMoiTitle") || "Kính mời";
+        var guestNameInput = val("gen_guestName").trim();
+        var defaultGuest = val("f_inv_defaultGuestName") || "....................................................";
+        var intro = isBride ? val("f_inv_introBride") : val("f_inv_introGroom");
+        var bottomMsg = val("f_inv_bottomMessage") || "Một ngày đặc biệt, bên những người thương.";
+        var groomName = val("f_groomName") || "Lê Dũng";
+        var brideName = val("f_brideName") || "Khánh Linh";
+
+        var sealEl = document.getElementById("mock_seal");
+        if (sealEl) sealEl.innerHTML = monogram.replace("&", "&amp;");
+
+        var subEl = document.getElementById("mock_subtitle");
+        if (subEl) subEl.textContent = subTitle;
+
+        var kmEl = document.getElementById("mock_kinhmoi");
+        if (kmEl) kmEl.textContent = kinhMoi;
+
+        var guestEl = document.getElementById("mock_guest");
+        if (guestEl) {
+          if (guestNameInput) {
+            guestEl.textContent = guestNameInput;
+            guestEl.className = "mockup-guest has-name";
+          } else {
+            guestEl.textContent = defaultGuest;
+            guestEl.className = "mockup-guest";
+          }
+        }
+
+        var introEl = document.getElementById("mock_intro");
+        if (introEl) introEl.innerHTML = intro;
+
+        var namesEl = document.getElementById("mock_names");
+        if (namesEl) namesEl.textContent = brideName + " & " + groomName;
+
+        var venueName = isBride ? val("f_bride_nameFull") : val("f_groom_nameFull");
+        var venueAddr = isBride ? val("f_bride_address") : val("f_groom_address");
+        var vNameEl = document.getElementById("mock_venue_name");
+        if (vNameEl) vNameEl.textContent = (venueName || "").toUpperCase();
+        var vAddrEl = document.getElementById("mock_venue_addr");
+        if (vAddrEl) vAddrEl.textContent = venueAddr || "";
+
+        var pGroom = val("f_groom_parents");
+        var pBride = val("f_bride_parents");
+        var pGEl = document.getElementById("mock_p_groom");
+        if (pGEl) pGEl.textContent = pGroom || "";
+        var pBEl = document.getElementById("mock_p_bride");
+        if (pBEl) pBEl.textContent = pBride || "";
+
+        var msgEl = document.getElementById("mock_message");
+        if (msgEl) msgEl.textContent = "“" + bottomMsg + "”";
+
+        // Date and Time
+        var timeEl = document.getElementById("mock_time");
+        var dateEl = document.getElementById("mock_date");
+        var lunarEl = document.getElementById("mock_lunar");
+
+        var pDate = isBride ? val("picker_bride_date") : val("picker_groom_date");
+        var pTime = isBride ? val("picker_bride_time") : val("picker_groom_time");
+        if (timeEl) timeEl.textContent = pTime || "11:00";
+        if (dateEl) {
+          var dObj = new Date(pDate || "2026-11-28");
+          var dowArr = ["CHỦ NHẬT", "THỨ HAI", "THỨ BA", "THỨ TƯ", "THỨ NĂM", "THỨ SÁU", "THỨ BẢY"];
+          var dow = dowArr[dObj.getDay()] || "THỨ BẢY";
+          var day = String(dObj.getDate()).padStart(2, "0");
+          var month = String(dObj.getMonth() + 1).padStart(2, "0");
+          var year = dObj.getFullYear() || 2026;
+          dateEl.textContent = dow + " • " + day + "." + month + " • NĂM " + year;
+        }
+        if (lunarEl) {
+          lunarEl.textContent = isBride ? val("f_lunarDate") : "(Tức ngày 20 tháng 10 năm Bính Ngọ)";
+        }
+      }
+
+      function updateGeneratedGuestLink() {
+        var name = (val("gen_guestName") || "").trim();
+        var selectedSideRadio = document.querySelector('input[name="gen_side"]:checked');
+        var side = selectedSideRadio ? selectedSideRadio.value : "groom";
+
+        var origin = window.location.origin || "https://dunglinhthiepcuoi.online";
+        var basePath = "/thiep-cuoi-khanh-linh-le-dung/";
+        var url = new URL(basePath, origin);
+        url.searchParams.set("side", side);
+        if (name) {
+          url.searchParams.set("to", name);
+        }
+        var finalLink = url.toString();
+        var linkInput = document.getElementById("gen_generatedLink");
+        if (linkInput) linkInput.value = finalLink;
+        updateCardMockup();
+      }
+
+      // Guest Link Generator Listeners
+      var guestInputEl = document.getElementById("gen_guestName");
+      if (guestInputEl) {
+        guestInputEl.addEventListener("input", updateGeneratedGuestLink);
+      }
+      document.querySelectorAll('input[name="gen_side"]').forEach(function (r) {
+        r.addEventListener("change", function () {
+          currentMockupSide = r.value;
+          updateCardMockupSideButtons();
+          updateGeneratedGuestLink();
+        });
+      });
+
+      // Mockup Side Switchers
+      function updateCardMockupSideButtons() {
+        var btnG = document.getElementById("btnPreviewSideGroom");
+        var btnB = document.getElementById("btnPreviewSideBride");
+        if (btnG) btnG.classList.toggle("btn-primary", currentMockupSide === "groom");
+        if (btnB) btnB.classList.toggle("btn-primary", currentMockupSide === "bride");
+      }
+      var btnG = document.getElementById("btnPreviewSideGroom");
+      if (btnG) {
+        btnG.addEventListener("click", function () {
+          currentMockupSide = "groom";
+          var rG = document.querySelector('input[name="gen_side"][value="groom"]');
+          if (rG) rG.checked = true;
+          updateCardMockupSideButtons();
+          updateGeneratedGuestLink();
+        });
+      }
+      var btnB = document.getElementById("btnPreviewSideBride");
+      if (btnB) {
+        btnB.addEventListener("click", function () {
+          currentMockupSide = "bride";
+          var rB = document.querySelector('input[name="gen_side"][value="bride"]');
+          if (rB) rB.checked = true;
+          updateCardMockupSideButtons();
+          updateGeneratedGuestLink();
+        });
+      }
+
+      // Copy Guest Link
+      var btnCopy = document.getElementById("btnCopyGuestLink");
+      if (btnCopy) {
+        btnCopy.addEventListener("click", async function () {
+          var link = val("gen_generatedLink");
+          if (!link) return;
+          try {
+            await navigator.clipboard.writeText(link);
+            showToast("📋 Đã sao chép link mời vào bộ nhớ tạm!");
+          } catch (e) {
+            var temp = document.getElementById("gen_generatedLink");
+            temp.select();
+            document.execCommand("copy");
+            showToast("📋 Đã sao chép link mời!");
+          }
+        });
+      }
+
+      // Test Open Link
+      var btnTest = document.getElementById("btnTestOpenLink");
+      if (btnTest) {
+        btnTest.addEventListener("click", function () {
+          var link = val("gen_generatedLink");
+          if (link) window.open(link, "_blank");
+        });
+      }
+
+      // Print Clean Card
+      var btnPrint = document.getElementById("btnPrintCleanCard");
+      if (btnPrint) {
+        btnPrint.addEventListener("click", function () {
+          var link = val("gen_generatedLink");
+          if (link) {
+            var win = window.open(link, "_blank");
+            win.onload = function () {
+              setTimeout(function () { win.print(); }, 800);
+            };
+          }
+        });
+      }
+
+      // Sample Text Buttons
+      var btnSampleTrad = document.getElementById("btnQuickSampleTraditional");
+      if (btnSampleTrad) {
+        btnSampleTrad.addEventListener("click", function () {
+          val("f_inv_introGroom", "Gia đình nhà trai trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi");
+          val("f_inv_introBride", "Gia đình nhà gái trân trọng kính mời quý khách<br>đến dự lễ vu quy của hai con chúng tôi");
+          updateCardMockup();
+          showToast("Đã áp dụng mẫu lời mời truyền thống!");
+        });
+      }
+      var btnSampleMod = document.getElementById("btnQuickSampleModern");
+      if (btnSampleMod) {
+        btnSampleMod.addEventListener("click", function () {
+          val("f_inv_introGroom", "Trân trọng kính mời bạn và người thương cùng đến chung vui<br>trong ngày trọng đại nhất của chúng mình");
+          val("f_inv_introBride", "Trân trọng kính mời bạn và người thương cùng đến chung vui<br>trong ngày trọng đại nhất của chúng mình");
+          updateCardMockup();
+          showToast("Đã áp dụng mẫu lời mời hiện đại!");
+        });
+      }
+
+      // Auto update mockup when editing invitation text fields
+      [
+        "f_inv_monogram", "f_inv_subTitle", "f_inv_kinhMoiTitle",
+        "f_inv_defaultGuestName", "f_inv_introGroom", "f_inv_introBride",
+        "f_inv_bottomMessage", "f_groomName", "f_brideName",
+        "f_groom_nameFull", "f_bride_nameFull", "f_groom_parents", "f_bride_parents",
+        "f_groom_address", "f_bride_address"
+      ].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.addEventListener("input", updateCardMockup);
       });
 
       // LƯU TẤT CẢ THAY ĐỔI
