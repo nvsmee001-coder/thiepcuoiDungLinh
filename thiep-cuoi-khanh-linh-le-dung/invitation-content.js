@@ -235,7 +235,7 @@
       : 'Quý khách và gia đình';
     const introGroom = invCard.introGroom || 'Gia đình nhà trai trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi';
     const introBride = invCard.introBride || 'Gia đình nhà gái trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi';
-    const bottomMessage = invCard.bottomMessage || 'Một ngày đặc biệt, bên những người thương.';
+    const bottomMessage = invCard.bottomMessage || '';
 
     // Venues
     const brideVenue = (db.venues && db.venues.bride) || {};

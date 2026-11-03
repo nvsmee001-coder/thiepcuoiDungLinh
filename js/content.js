@@ -48,7 +48,8 @@ const DEFAULT_WEDDING_DB = {
     "defaultGuestName": "Quý khách và gia đình",
     "introGroom": "Gia đình nhà trai trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi",
     "introBride": "Gia đình nhà gái trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi",
-    "bottomMessage": "Một ngày đặc biệt, bên những người thương."
+    "bottomMessage": "",
+    "skipIntroDefault": true
   },
   "date": {
     "isoTarget": "2026-11-27T11:00:00+07:00",

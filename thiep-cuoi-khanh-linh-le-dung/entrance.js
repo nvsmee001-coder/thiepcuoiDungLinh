@@ -276,6 +276,32 @@
     updateResponsiveChoiceBackdrop();
   });
 
+  function shouldSkipIntroNow() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const skipParam = urlParams.get('skipIntro');
+    const introParam = urlParams.get('intro') || urlParams.get('playIntro');
+
+    // 1. Tham số ép xem intro: ?intro=1 hoặc ?skipIntro=0
+    if (skipParam === '0' || introParam === '1' || introParam === 'true') {
+      return false;
+    }
+
+    // 2. Tham số ép bỏ qua intro hoặc hash #choice
+    if (skipParam === '1' || skipParam === 'true' || window.location.hash === '#choice') {
+      return true;
+    }
+
+    // 3. Đọc cấu hình từ DB (Mặc định: true - vào thẳng màn hình chọn Nhà Trai / Nhà Gái)
+    const db = (typeof window.WEDDING_DB === 'object' && window.WEDDING_DB) || (typeof window.DEFAULT_WEDDING_DB === 'object' && window.DEFAULT_WEDDING_DB) || {};
+    const invCard = (db && db.invitationCard) || {};
+
+    if (invCard.skipIntroDefault === false || db.skipIntroDefault === false) {
+      return false;
+    }
+    return true;
+  }
+  window.shouldSkipIntroNow = shouldSkipIntroNow;
+
   function morphToChoice(instant = false) {
     if (introFinished && !instant) return;
     introFinished = true;
@@ -435,13 +461,16 @@
   }
 
   function startIntro() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const shouldSkip = urlParams.get('skipIntro') === '1' || urlParams.get('skipIntro') === 'true' || window.location.hash === '#choice';
+    const shouldSkip = shouldSkipIntroNow();
 
     if (shouldSkip || reduced.matches) {
       morphToChoice(true);
       return;
     }
+
+    dialog.classList.remove('is-choice-mode', 'is-morphing');
+    dialog.classList.add('is-intro-mode');
+    introFinished = false;
 
     // Sync DB configurations if present
     const db = (typeof window.WEDDING_DB === 'object' && window.WEDDING_DB) || (typeof window.DEFAULT_WEDDING_DB === 'object' && window.DEFAULT_WEDDING_DB) || {};
@@ -553,10 +582,9 @@
     const stopMotion = () => { if (reduced.matches) { animations.forEach(animation => animation.cancel()); animations.clear(); } };
     if (reduced.addEventListener) reduced.addEventListener('change', stopMotion); else reduced.addListener(stopMotion);
     root.setAttribute('data-entry-ready', '');
-    const urlParams = new URLSearchParams(window.location.search);
-    const shouldSkip = urlParams.get('skipIntro') === '1' || urlParams.get('skipIntro') === 'true' || window.location.hash === '#choice';
+    const shouldSkip = shouldSkipIntroNow();
     if (shouldSkip) {
-      dialog.classList.remove('is-intro-mode');
+      dialog.classList.remove('is-intro-mode', 'is-morphing');
       dialog.classList.add('is-choice-mode');
       introFinished = true;
       updateResponsiveCover();

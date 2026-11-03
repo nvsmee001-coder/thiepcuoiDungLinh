@@ -1365,6 +1365,19 @@
           Khi khách mở thiệp, 3 bức ảnh nền cùng câu thơ ý nghĩa sẽ xuất hiện với hiệu ứng gõ chữ nghệ thuật trước khi bước vào chọn Nhà Trai / Nhà Gái. Bạn có thể thiết lập riêng bản Ngang (PC) và bản Dọc (Điện thoại) cho từng cảnh!
         </p>
 
+        <!-- Bật / Tắt Mặc Định Bỏ Qua Intro -->
+        <div style="background: rgba(19, 126, 94, 0.15); border: 1px solid rgba(19, 126, 94, 0.45); border-radius: 10px; padding: 14px 16px; margin-bottom: 20px;">
+          <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer; margin: 0;">
+            <input type="checkbox" id="f_inv_skipIntroDefault" style="width: 20px; height: 20px; margin-top: 2px; accent-color: #137e5e; cursor: pointer;">
+            <div>
+              <strong style="color: #a3f7bf; font-size: 0.98rem;">Mặc định bỏ qua 3 cảnh Intro (Vào thẳng chọn Nhà Trai / Nhà Gái)</strong>
+              <div style="font-size: 0.82rem; color: #d6ded7; line-height: 1.55; margin-top: 4px;">
+                <strong>Được khuyên dùng cho phụ huynh và người lớn tuổi:</strong> Khách bấm link sẽ vào ngay màn hình chọn Nhà Trai / Nhà Gái kèm kính mời trang trọng tức thì, không phải chờ chạy qua 3 cảnh thơ mở đầu. (Nếu tắt tùy chọn này, thiệp sẽ chạy 3 cảnh thơ trước khi vào chọn nhà).
+              </div>
+            </div>
+          </label>
+        </div>
+
         <div class="slot-cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
           <!-- Cảnh 1 -->
           <div class="slot-card">
@@ -1524,17 +1537,17 @@
               <label>3. Điểm Đến Khi Khách Mở Link</label>
               <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
                 <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; font-size:0.86rem; color:#e1ded2;">
-                  <input type="radio" name="gen_intro_mode" value="intro" checked style="margin-top:3px;">
+                  <input type="radio" name="gen_intro_mode" value="skipIntro" checked style="margin-top:3px;">
                   <div>
-                    <strong style="color:#ffe4ab;">Xem 3 Cảnh Intro trước rồi vào thiệp (Gợi ý)</strong>
-                    <div style="font-size:0.75rem; color:var(--text-muted);">Khách sẽ được xem lời dẫn gõ chữ lãng mạn trên nền ảnh kỷ niệm, rồi chuyển sang màn hình chọn thiệp có sẵn tên khách.</div>
+                    <strong style="color:#7be895;">Vào thẳng màn hình chọn thiệp (Mặc định)</strong>
+                    <div style="font-size:0.75rem; color:var(--text-muted);">Bỏ qua 3 cảnh intro, mở thẳng màn hình chọn Nhà Trai / Nhà Gái với kính mời cá nhân hóa tức thì.</div>
                   </div>
                 </label>
                 <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; font-size:0.86rem; color:#e1ded2;">
-                  <input type="radio" name="gen_intro_mode" value="skipIntro" style="margin-top:3px;">
+                  <input type="radio" name="gen_intro_mode" value="intro" style="margin-top:3px;">
                   <div>
-                    <strong style="color:#7be895;">Vào thẳng màn hình chọn thiệp (Bỏ qua Intro)</strong>
-                    <div style="font-size:0.75rem; color:var(--text-muted);">Bỏ qua 3 cảnh intro, mở thẳng màn hình chọn Nhà Trai / Nhà Gái với kính mời cá nhân hóa tức thì.</div>
+                    <strong style="color:#ffe4ab;">Xem 3 Cảnh Intro trước rồi vào thiệp</strong>
+                    <div style="font-size:0.75rem; color:var(--text-muted);">Khách sẽ được xem lời dẫn gõ chữ lãng mạn trên nền ảnh kỷ niệm, rồi chuyển sang màn hình chọn thiệp có sẵn tên khách.</div>
                   </div>
                 </label>
               </div>
@@ -2986,7 +2999,11 @@
         val("f_inv_defaultGuestName", defaultGuestVal);
         val("f_inv_introGroom", inv.introGroom || "Gia đình nhà trai trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi");
         val("f_inv_introBride", inv.introBride || "Gia đình nhà gái trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi");
-        val("f_inv_bottomMessage", inv.bottomMessage || "Một ngày đặc biệt, bên những người thương.");
+        val("f_inv_bottomMessage", inv.bottomMessage !== undefined ? inv.bottomMessage : "");
+        var skipIntroCheckbox = document.getElementById("f_inv_skipIntroDefault");
+        if (skipIntroCheckbox) {
+          skipIntroCheckbox.checked = (inv.skipIntroDefault !== false);
+        }
 
         renderAlbumGrid();
         renderMenuCourses();
@@ -3109,7 +3126,8 @@
           defaultGuestName: val("f_inv_defaultGuestName") || "Quý khách và gia đình",
           introGroom: val("f_inv_introGroom") || "Gia đình nhà trai trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi",
           introBride: val("f_inv_introBride") || "Gia đình nhà gái trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi",
-          bottomMessage: val("f_inv_bottomMessage") || "Một ngày đặc biệt, bên những người thương."
+          bottomMessage: val("f_inv_bottomMessage") || "",
+          skipIntroDefault: document.getElementById("f_inv_skipIntroDefault") ? document.getElementById("f_inv_skipIntroDefault").checked : true
         };
 
         state.interlude = {
@@ -4090,7 +4108,10 @@
         var mode = domainModeRadio ? domainModeRadio.value : "online";
 
         var introModeRadio = document.querySelector('input[name="gen_intro_mode"]:checked');
-        var introMode = introModeRadio ? introModeRadio.value : "intro";
+        var introMode = introModeRadio ? introModeRadio.value : "skipIntro";
+
+        var skipIntroCheckbox = document.getElementById("f_inv_skipIntroDefault");
+        var isSkipDefault = skipIntroCheckbox ? skipIntroCheckbox.checked : true;
 
         var origin = "https://dunglinhthiepcuoi.online";
         if (mode === "local") {
@@ -4103,7 +4124,9 @@
         if (name) {
           url.searchParams.set("to", name);
         }
-        if (introMode === "skipIntro") {
+        if (introMode === "intro") {
+          url.searchParams.set("intro", "1");
+        } else if (introMode === "skipIntro" && !isSkipDefault) {
           url.searchParams.set("skipIntro", "1");
         }
         var finalLink = url.toString();
@@ -4142,6 +4165,10 @@
       document.querySelectorAll('input[name="gen_intro_mode"]').forEach(function (r) {
         r.addEventListener("change", updateGeneratedGuestLink);
       });
+      var skipIntroEl = document.getElementById("f_inv_skipIntroDefault");
+      if (skipIntroEl) {
+        skipIntroEl.addEventListener("change", updateGeneratedGuestLink);
+      }
 
       // Clear choice stage custom background
       window.clearChoiceBackdrop = function (type) {
@@ -4211,12 +4238,18 @@
           var selectedSideRadio = document.querySelector('input[name="gen_side"]:checked');
           var side = selectedSideRadio ? selectedSideRadio.value : "groom";
           var introModeRadio = document.querySelector('input[name="gen_intro_mode"]:checked');
-          var introMode = introModeRadio ? introModeRadio.value : "intro";
+          var introMode = introModeRadio ? introModeRadio.value : "skipIntro";
+          var skipIntroCheckbox = document.getElementById("f_inv_skipIntroDefault");
+          var isSkipDefault = skipIntroCheckbox ? skipIntroCheckbox.checked : true;
 
           var testUrl = new URL("/thiep-cuoi-khanh-linh-le-dung/", window.location.origin);
           testUrl.searchParams.set("side", side);
           if (name) testUrl.searchParams.set("to", name);
-          if (introMode === "skipIntro") testUrl.searchParams.set("skipIntro", "1");
+          if (introMode === "intro") {
+            testUrl.searchParams.set("intro", "1");
+          } else if (introMode === "skipIntro" && !isSkipDefault) {
+            testUrl.searchParams.set("skipIntro", "1");
+          }
           window.open(testUrl.toString(), "_blank");
         });
       }
