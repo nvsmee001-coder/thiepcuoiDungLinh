@@ -56,7 +56,7 @@
       const f = (venueObj.father || '').trim();
       const m = (venueObj.mother || '').trim();
       if (f && m) {
-        return `<span class="parent-name">${f}</span><span class="parent-amp">&amp;</span><span class="parent-name">${m}</span>`;
+        return `<span class="parent-name">${f}</span><span class="parent-name">${m}</span>`;
       }
       if (f || m) {
         return `<span class="parent-name">${f || m}</span>`;
@@ -124,7 +124,7 @@
     }
 
     if (father && mother) {
-      return `<span class="parent-name">${father}</span><span class="parent-amp">&amp;</span><span class="parent-name">${mother}</span>`;
+      return `<span class="parent-name">${father}</span><span class="parent-name">${mother}</span>`;
     }
     return `<span class="parent-name">${father || mother || raw}</span>`;
   }
@@ -598,8 +598,6 @@
     if (introTextEl) {
       introTextEl.innerHTML = isBride ? configData.introBride : configData.introGroom;
     }
-
-    document.querySelectorAll('.invite-message').forEach(n => n.textContent = configData.bottomMessage);
 
     // Guest name handling (?to=... or ?guest=...)
     try {

@@ -1616,10 +1616,7 @@
             <textarea class="form-control" id="f_inv_introBride" rows="2" placeholder="Gia đình nhà gái trân trọng kính mời quý khách..."></textarea>
           </div>
 
-          <div class="form-group">
-            <label>Thông Điệp Chân Thiệp</label>
-            <input type="text" class="form-control" id="f_inv_bottomMessage" placeholder="Một ngày đặc biệt, bên những người thương.">
-          </div>
+          <input type="hidden" id="f_inv_bottomMessage" value="">
 
           <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
             <button type="button" class="btn btn-sm" id="btnQuickSampleTraditional">📜 Mẫu Lời Mời Truyền Thống</button>
@@ -1657,10 +1654,9 @@
               <span id="mock_venue_addr">45 Hùng Vương - Bắc Giang - Bắc Ninh</span>
             </div>
             <div class="mockup-parents" id="mock_parents">
-              <div><strong>Họ Nhà Trai:</strong> <span id="mock_p_groom">Ông Nguyễn Văn Uy &amp; Bà Lê Thị Hảo</span></div>
-              <div><strong>Họ Nhà Gái:</strong> <span id="mock_p_bride">Ông Phạm Ngọc Hùng &amp; Bà Nguyễn Tuyết Nhung</span></div>
+              <div><strong>Họ Nhà Trai:</strong><br><span id="mock_p_groom">Ông Nguyễn Văn Uy<br>Bà Lê Thị Hảo</span></div>
+              <div style="margin-top:8px;"><strong>Họ Nhà Gái:</strong><br><span id="mock_p_bride">Ông Phạm Ngọc Hùng<br>Bà Nguyễn Tuyết Nhung</span></div>
             </div>
-            <div class="mockup-message" id="mock_message">“Một ngày đặc biệt, bên những người thương.”</div>
           </div>
         </div>
 
@@ -1729,7 +1725,7 @@
           <div class="form-group">
             <label style="display:flex; justify-content:space-between; align-items:center;">
               <span>Song Thân Nhà Trai</span>
-              <span style="font-size:11px; color:var(--gold-dim); font-weight:normal;">2 Dòng Riêng Biệt &bull; Tự Động Thêm &amp;</span>
+              <span style="font-size:11px; color:var(--gold-dim); font-weight:normal;">2 Dòng Riêng Biệt &bull; Dòng 1: Cha, Dòng 2: Mẹ</span>
             </label>
             <div style="display:grid; grid-template-columns:1fr; gap:8px;">
               <div style="display:flex; align-items:center; gap:8px;">
@@ -1813,7 +1809,7 @@
           <div class="form-group">
             <label style="display:flex; justify-content:space-between; align-items:center;">
               <span>Song Thân Nhà Gái</span>
-              <span style="font-size:11px; color:var(--gold-dim); font-weight:normal;">2 Dòng Riêng Biệt &bull; Tự Động Thêm &amp;</span>
+              <span style="font-size:11px; color:var(--gold-dim); font-weight:normal;">2 Dòng Riêng Biệt &bull; Dòng 1: Cha, Dòng 2: Mẹ</span>
             </label>
             <div style="display:grid; grid-template-columns:1fr; gap:8px;">
               <div style="display:flex; align-items:center; gap:8px;">
@@ -4053,15 +4049,15 @@
 
         var pGEl = document.getElementById("mock_p_groom");
         if (pGEl) {
-          pGEl.innerHTML = (gFat && gMot) ? (gFat + " &amp; " + gMot) : (pGroom || "");
+          pGEl.innerHTML = (gFat && gMot) ? ('<span>' + gFat + '</span><br><span>' + gMot + '</span>') : (pGroom ? pGroom.replace('&', '<br>') : "");
         }
         var pBEl = document.getElementById("mock_p_bride");
         if (pBEl) {
-          pBEl.innerHTML = (bFat && bMot) ? (bFat + " &amp; " + bMot) : (pBride || "");
+          pBEl.innerHTML = (bFat && bMot) ? ('<span>' + bFat + '</span><br><span>' + bMot + '</span>') : (pBride ? pBride.replace('&', '<br>') : "");
         }
 
         var msgEl = document.getElementById("mock_message");
-        if (msgEl) msgEl.textContent = "“" + bottomMsg + "”";
+        if (msgEl) msgEl.textContent = "";
 
         // Date and Time
         var timeEl = document.getElementById("mock_time");
