@@ -379,6 +379,19 @@ function deepMergeDB(base, override) {
         };
       });
   }
+  if (Array.isArray(override.faq)) {
+    out.faq = override.faq
+      .filter(function (item) { return item && (item.q || item.a); })
+      .map(function (item) {
+        return {
+          q: item.q || "",
+          a: item.a || ""
+        };
+      });
+  }
+  if (override.invitationCard) {
+    out.invitationCard = Object.assign(out.invitationCard || {}, override.invitationCard);
+  }
   return out;
 }
 

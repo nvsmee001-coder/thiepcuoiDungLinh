@@ -3227,7 +3227,7 @@
             var q = (row.querySelector(".f-q") ? row.querySelector(".f-q").value : "").trim();
             var a = (row.querySelector(".f-a") ? row.querySelector(".f-a").value : "").trim();
             return { q: q, a: a };
-          }).filter(function(item) { return item.q; });
+          }).filter(function(item) { return item.q || item.a; });
         }
 
         state.invitationCard = {
