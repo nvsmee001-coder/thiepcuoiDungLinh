@@ -38,7 +38,7 @@
       // After card slides up out of envelope, smoothly reveal the main invitation
       setTimeout(function () {
         screen.classList.add("opened-complete");
-        showEnvToast("Chào mừng bạn đến với thiệp cưới Dũng & Linh! ✨");
+        showEnvToast("Chào mừng bạn đến với thiệp cưới Dũng & Linh!");
       }, 1300);
     }
 

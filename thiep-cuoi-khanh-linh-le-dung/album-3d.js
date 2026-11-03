@@ -42,21 +42,7 @@
 
     if (!deckContainer || !filmstripContainer || !wallContainer) return;
 
-    const rawPhotos = (Array.isArray(db.albumPhotos) && db.albumPhotos.length > 0)
-      ? db.albumPhotos
-      : [
-          '/img/wedding-photo-card-left.jpg',
-          '/img/wedding-photo-card-right.jpg',
-          '/img/02-disney-phao-hoa.jpg',
-          '/img/03-disney-cau-hon.jpg',
-          '/img/08-trang-an-hero.jpg',
-          '/img/07-trang-an-b.jpg',
-          '/img/01-trang-an-a.jpg',
-          '/img/06-shanghai-dem.jpg',
-          '/img/04-shanghai-mua.jpg',
-          '/img/09-wuzhen-moi.jpg',
-          '/img/05-wuzhen-ma.jpg'
-        ];
+    const rawPhotos = Array.isArray(db.albumPhotos) ? db.albumPhotos : [];
 
     const allPhotos = rawPhotos.map((item, idx) => {
       const src = typeof item === 'string' ? item : (item && item.src ? item.src : '');
@@ -342,7 +328,7 @@
       viewToggleBtn.onclick = () => {
         const isWall = !albumSection.classList.contains('is-wall-mode');
         albumSection.classList.toggle('is-wall-mode', isWall);
-        if (viewToggleIcon) viewToggleIcon.textContent = isWall ? '❖' : '⊞';
+        if (viewToggleIcon) viewToggleIcon.textContent = '';
         if (viewToggleLabel) {
           viewToggleLabel.textContent = isWall ? 'Về Sân Khấu 3D' : `Xem Lưới ${totalSlides} Ảnh`;
         }

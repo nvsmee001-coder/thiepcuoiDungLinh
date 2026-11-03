@@ -30,6 +30,136 @@
     return { day, month, year, dow, dowTitle, time, dotDate: `${day}.${month}.${year}` };
   }
 
+  function formatParentsHtml(parentsStr) {
+    if (!parentsStr) return '';
+    const raw = String(parentsStr).trim();
+    if (raw.includes('parent-name')) return raw;
+
+    let father = '';
+    let mother = '';
+
+    if (raw.includes('&')) {
+      const parts = raw.split('&');
+      father = parts[0].trim();
+      mother = parts.slice(1).join('&').trim();
+    } else if (/\s+v[àa]\s+/i.test(raw)) {
+      const parts = raw.split(/\s+v[àa]\s+/i);
+      father = parts[0].trim();
+      mother = parts.slice(1).join(' & ').trim();
+    } else if (raw.includes('+')) {
+      const parts = raw.split('+');
+      father = parts[0].trim();
+      mother = parts.slice(1).join('+').trim();
+    } else if (/<br\s*\/?>/i.test(raw)) {
+      const parts = raw.split(/<br\s*\/?>/i).map(s => s.trim()).filter(Boolean);
+      if (parts.length >= 2) {
+        father = parts[0];
+        mother = parts.slice(1).join(' ');
+      } else {
+        return `<span class="parent-name">${raw}</span>`;
+      }
+    } else if (raw.includes('\n')) {
+      const parts = raw.split('\n').map(s => s.trim()).filter(Boolean);
+      if (parts.length >= 2) {
+        father = parts[0];
+        mother = parts.slice(1).join(' ');
+      } else {
+        return `<span class="parent-name">${raw}</span>`;
+      }
+    } else {
+      return `<span class="parent-name">${raw}</span>`;
+    }
+
+    return `<span class="parent-name">${father}</span><span class="parent-amp">&amp;</span><span class="parent-name">${mother}</span>`;
+  }
+
+  function cleanMapEmbedUrl(raw, fallbackQuery) {
+    if (!raw || typeof raw !== 'string') {
+      if (fallbackQuery) {
+        return 'https://maps.google.com/maps?q=' + encodeURIComponent(fallbackQuery) + '&t=&z=15&ie=UTF8&iwloc=&output=embed';
+      }
+      return '';
+    }
+    let str = raw.trim();
+
+    // 1. Trích xuất src="..." nếu dán nguyên thẻ <iframe> từ Google Maps
+    if (/<iframe/i.test(str)) {
+      const srcMatch = str.match(/src\s*=\s*["']([^"']+)["']/i);
+      if (srcMatch && srcMatch[1]) {
+        str = srcMatch[1].trim();
+      }
+    }
+
+    // 2. Khử các ký tự HTML entity như &amp;
+    str = str.replace(/&amp;/g, '&');
+
+    // 3. Khử dấu ngoặc kép hoặc đơn thừa ở hai đầu
+    str = str.replace(/^["']+|["']+$/g, '').trim();
+
+    // 4. Nếu đã là link nhúng chuẩn Google Maps
+    if (str.includes('/maps/embed') || str.includes('output=embed')) {
+      return str;
+    }
+
+    // 5. Nếu là link Google Maps có tham số q=
+    if (str.includes('google.com/maps') || str.includes('maps.google.com')) {
+      try {
+        const u = new URL(str);
+        const q = u.searchParams.get('q') || u.searchParams.get('query');
+        if (q) {
+          return 'https://maps.google.com/maps?q=' + encodeURIComponent(q) + '&t=&z=15&ie=UTF8&iwloc=&output=embed';
+        }
+      } catch (_) {}
+    }
+
+    // 6. Nếu là link rút gọn maps.app.goo.gl (không nhúng iframe trực tiếp được), fallback sang query địa chỉ
+    if (str.includes('maps.app.goo.gl') || str.includes('goo.gl/maps')) {
+      if (fallbackQuery) {
+        return 'https://maps.google.com/maps?q=' + encodeURIComponent(fallbackQuery) + '&t=&z=15&ie=UTF8&iwloc=&output=embed';
+      }
+    }
+
+    if (/^https?:\/\//i.test(str)) {
+      return str;
+    }
+
+    if (fallbackQuery) {
+      return 'https://maps.google.com/maps?q=' + encodeURIComponent(fallbackQuery) + '&t=&z=15&ie=UTF8&iwloc=&output=embed';
+    }
+
+    return '';
+  }
+
+  function cleanMapLinkUrl(raw, fallbackQuery) {
+    if (!raw || typeof raw !== 'string') {
+      if (fallbackQuery) {
+        return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(fallbackQuery);
+      }
+      return '';
+    }
+    let str = raw.trim();
+
+    if (/<iframe/i.test(str)) {
+      const srcMatch = str.match(/src\s*=\s*["']([^"']+)["']/i);
+      if (srcMatch && srcMatch[1]) str = srcMatch[1].trim();
+    } else if (/<a/i.test(str)) {
+      const hrefMatch = str.match(/href\s*=\s*["']([^"']+)["']/i);
+      if (hrefMatch && hrefMatch[1]) str = hrefMatch[1].trim();
+    }
+
+    str = str.replace(/&amp;/g, '&');
+    str = str.replace(/^["']+|["']+$/g, '').trim();
+
+    if (/^https?:\/\//i.test(str)) {
+      return str;
+    }
+
+    if (fallbackQuery) {
+      return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(fallbackQuery);
+    }
+    return str;
+  }
+
   function buildConfig() {
     const db = getDB();
     const groomName = (db.couple && db.couple.groomName) || 'Lê Dũng';
@@ -44,7 +174,9 @@
     const monogramText = invCard.monogram ? invCard.monogram.replace('&', '<span>&amp;</span>') : `${brideInitial}<span>&amp;</span>${groomInitial}`;
     const subTitle = invCard.subTitle || 'THE WEDDING INVITATION';
     const kinhMoiTitle = invCard.kinhMoiTitle || 'Kính mời';
-    const defaultGuestName = invCard.defaultGuestName || '....................................................';
+    const defaultGuestName = (invCard.defaultGuestName && !invCard.defaultGuestName.includes('...'))
+      ? invCard.defaultGuestName
+      : 'Quý khách và gia đình';
     const introGroom = invCard.introGroom || 'Gia đình nhà trai trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi';
     const introBride = invCard.introBride || 'Gia đình nhà gái trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi';
     const bottomMessage = invCard.bottomMessage || 'Một ngày đặc biệt, bên những người thương.';
@@ -59,8 +191,9 @@
     const brideDateIso = brideVenue.date || (db.date && db.date.isoTarget) || '2026-11-27T11:00:00+07:00';
     const brideParsed = parseDateParts(brideDateIso, '11:00');
     const brideLunar = brideVenue.lunar || '(Tức ngày 19 tháng 10 năm Bính Ngọ)';
-    const brideMap = brideVenue.mapLink || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(brideLocation + ', ' + brideAddress)}`;
-    const brideMapEmbed = brideVenue.mapEmbed || '';
+    const brideFallbackQuery = `${brideLocation}, ${brideAddress}`;
+    const brideMap = cleanMapLinkUrl(brideVenue.mapLink, brideFallbackQuery);
+    const brideMapEmbed = cleanMapEmbedUrl(brideVenue.mapEmbed, brideFallbackQuery);
 
     const groomLocation = groomVenue.nameFull || groomVenue.nameShort || 'Trung tâm Đại Hoàng Sơn Palace';
     const groomAddress = groomVenue.address || '45 Hùng Vương - Bắc Giang - Bắc Ninh';
@@ -68,8 +201,9 @@
     const groomDateIso = groomVenue.date || '2026-11-28T11:00:00+07:00';
     const groomParsed = parseDateParts(groomDateIso, '11:00');
     const groomLunar = groomVenue.lunar || '(Tức ngày 20 tháng 10 năm Bính Ngọ)';
-    const groomMap = groomVenue.mapLink || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(groomLocation + ', ' + groomAddress)}`;
-    const groomMapEmbed = groomVenue.mapEmbed || '';
+    const groomFallbackQuery = `${groomLocation}, ${groomAddress}`;
+    const groomMap = cleanMapLinkUrl(groomVenue.mapLink, groomFallbackQuery);
+    const groomMapEmbed = cleanMapEmbedUrl(groomVenue.mapEmbed, groomFallbackQuery);
 
     // Photos (PC & Mobile)
     const coverPhoto = resolveAssetUrl((db.couple && (db.couple.coverPhoto || db.couple.heroBackdrop)) || '/thiep-cuoi-khanh-linh-le-dung/assets/cover-khanh-linh-le-dung.jpg');
@@ -182,10 +316,9 @@
       : null;
 
     if (events) {
-      const icons = ['✧', '♡', '♧', '✳', '❖', '★'];
       timelineEl.innerHTML = events.map((ev, i) => `
         <div>
-          <span class="timeline-icon">${icons[i % icons.length]}</span>
+          <span class="timeline-icon">${i + 1}</span>
           <time>${ev.time || ''}</time>
           <h4>${ev.title || ''}</h4>
           <p>${ev.desc || ''}</p>
@@ -193,10 +326,10 @@
       `).join('');
     } else {
       timelineEl.innerHTML = `
-        <div><span class="timeline-icon">✧</span><time>11:00</time><h4>Đón khách & Chụp hình</h4><p>Chào đón quý khách đến chung vui cùng gia đình tại ${activeConfig.venueName}</p></div>
-        <div><span class="timeline-icon">♡</span><time>11:30</time><h4>Lễ thành hôn</h4><p>Nghi thức trao nhẫn cưới &amp; nhận lời chúc phúc của hai bên gia đình</p></div>
-        <div><span class="timeline-icon">♧</span><time>12:00</time><h4>Khai tiệc mừng</h4><p>Nâng ly chúc phúc và cùng thưởng thức bữa tiệc thân mật</p></div>
-        <div><span class="timeline-icon">✳</span><time>13:30</time><h4>Tiễn khách &amp; Cảm tạ</h4><p>Lưu lại những tấm hình kỷ niệm đẹp cùng cô dâu &amp; chú rể</p></div>
+        <div><span class="timeline-icon">1</span><time>11:00</time><h4>Đón khách & Chụp hình</h4><p>Chào đón quý khách đến chung vui cùng gia đình tại ${activeConfig.venueName}</p></div>
+        <div><span class="timeline-icon">2</span><time>11:30</time><h4>Lễ thành hôn</h4><p>Nghi thức trao nhẫn cưới &amp; nhận lời chúc phúc của hai bên gia đình</p></div>
+        <div><span class="timeline-icon">3</span><time>12:00</time><h4>Khai tiệc mừng</h4><p>Nâng ly chúc phúc và cùng thưởng thức bữa tiệc thân mật</p></div>
+        <div><span class="timeline-icon">4</span><time>13:30</time><h4>Tiễn khách &amp; Cảm tạ</h4><p>Lưu lại những tấm hình kỷ niệm đẹp cùng cô dâu &amp; chú rể</p></div>
       `;
     }
   }
@@ -210,13 +343,7 @@
     const albumGrid = document.querySelector('.album-grid');
     const galleryThumbs = document.getElementById('gallery-thumbs');
 
-    const rawPhotos = (db && Array.isArray(db.albumPhotos) && db.albumPhotos.length > 0)
-      ? db.albumPhotos
-      : [
-          '/img/wedding-photo-card-left.jpg',
-          '/img/wedding-photo-card-right.jpg',
-          '/img/02-disney-phao-hoa.jpg'
-        ];
+    const rawPhotos = (db && Array.isArray(db.albumPhotos)) ? db.albumPhotos : [];
 
     const photos = rawPhotos.map(p => (typeof p === 'string' ? p : (p && p.src ? p.src : ''))).filter(Boolean).map(resolveAssetUrl);
 
@@ -243,21 +370,134 @@
     }
   }
 
+  let currentMusicTrackIdx = 0;
   function renderMusic(db) {
     const audio = document.getElementById('background-music');
     const toggle = document.getElementById('sound-toggle');
     if (!audio) return;
 
-    if (db && Array.isArray(db.music) && db.music.length > 0) {
-      const track = db.music[0];
-      const trackSrc = resolveAssetUrl(track && track.src);
-      if (track && trackSrc && audio.getAttribute('src') !== trackSrc) {
-        audio.src = trackSrc;
-        if (toggle) {
-          toggle.title = `${track.title || 'Nhạc cưới'} · Bật/Tắt nhạc`;
-          toggle.setAttribute('aria-label', `Bật nhạc nền — ${track.title || 'Nhạc cưới'}`);
+    const list = (db && Array.isArray(db.music) && db.music.length > 0)
+      ? db.music
+      : [{ title: 'River Flows in You — Yiruma', src: '/thiep-cuoi-khanh-linh-le-dung/assets/river-flows-in-you.mp3#t=10' }];
+
+    window.__WEDDING_PLAYLIST = list;
+    window.__WEDDING_CURRENT_MUSIC_INDEX = currentMusicTrackIdx;
+
+    if (!audio.__playlistBound) {
+      audio.__playlistBound = true;
+      audio.addEventListener('ended', () => {
+        const pl = window.__WEDDING_PLAYLIST || [];
+        if (pl.length > 1) {
+          currentMusicTrackIdx = (currentMusicTrackIdx + 1) % pl.length;
+          window.__WEDDING_CURRENT_MUSIC_INDEX = currentMusicTrackIdx;
+          const nextTrack = pl[currentMusicTrackIdx];
+          const nextSrc = resolveAssetUrl(nextTrack && nextTrack.src);
+          if (nextSrc) {
+            audio.src = nextSrc;
+            audio.setAttribute('data-loaded-src', nextSrc);
+            audio.play().catch(() => {});
+            if (toggle) {
+              toggle.title = `${nextTrack.title || 'Nhạc cưới'} · Bật/Tắt nhạc`;
+              toggle.setAttribute('aria-label', `Bật nhạc nền — ${nextTrack.title || 'Nhạc cưới'}`);
+            }
+          }
+        } else {
+          audio.currentTime = 0;
+          audio.play().catch(() => {});
         }
+      });
+    }
+
+    const track = list[currentMusicTrackIdx % list.length];
+    const trackSrc = resolveAssetUrl(track && track.src);
+    if (track && trackSrc && audio.getAttribute('data-loaded-src') !== trackSrc) {
+      audio.setAttribute('data-loaded-src', trackSrc);
+      audio.src = trackSrc;
+      if (toggle) {
+        toggle.title = `${track.title || 'Nhạc cưới'} · Bật/Tắt nhạc`;
+        toggle.setAttribute('aria-label', `Bật nhạc nền — ${track.title || 'Nhạc cưới'}`);
       }
+    }
+
+    if (typeof window.refreshMusicPlaylistUI === 'function') {
+      window.refreshMusicPlaylistUI();
+    }
+  }
+
+  function renderInterlude(db, configData) {
+    const intData = (db && db.interlude) || {};
+    const eyebrow = intData.eyebrow || 'AND SO, OUR FOREVER BEGINS';
+    const quote = intData.quote || 'Và rồi chúng mình lựa chọn<br><em>trở thành một nửa của nhau.</em>';
+
+    document.querySelectorAll('.interlude-copy .eyebrow').forEach(el => el.textContent = eyebrow);
+    document.querySelectorAll('.interlude-copy>p:not(.eyebrow)').forEach(el => {
+      el.innerHTML = quote;
+    });
+  }
+
+  function renderJourney(db) {
+    const j = (db && db.journey) || {};
+    const origin = j.originCity || 'Hà Nội';
+    const dest = j.destinationCity || 'Shanghai';
+    const subtitle = j.subtitle || 'Hai thành phố. Một hành trình chung.<br>Và những khoảnh khắc muốn giữ lại mãi.';
+    const arrivalTitle = j.arrivalTitle || 'Chạm đến một nơi.<br><em>Mở ra những kỷ niệm.</em>';
+
+    // Heading
+    const jTitle = document.getElementById('journey-title');
+    if (jTitle) {
+      jTitle.innerHTML = `${origin} <span class="heading-route" aria-label="đến">—</span> <em>${dest}.</em>`;
+    }
+    const jSubtitle = document.querySelector('.travel-heading>p');
+    if (jSubtitle && j.subtitle) {
+      jSubtitle.innerHTML = subtitle;
+    }
+
+    // Topline & Footnote
+    const topline = document.querySelector('.travel-topline');
+    if (topline) {
+      topline.innerHTML = `<span>${origin.toUpperCase()} <i>—</i> ${dest.toUpperCase()}</span><span>A JOURNEY TOGETHER</span>`;
+    }
+    const footnote = document.querySelector('.travel-footnote');
+    if (footnote) {
+      footnote.textContent = `${origin.toUpperCase()} — ${dest.toUpperCase()} · TWO CITIES, ONE LOVE`;
+    }
+
+    // City labels on canvas
+    const originLabel = document.getElementById('travel-hanoi');
+    if (originLabel) {
+      const strong = originLabel.querySelector('strong');
+      if (strong) strong.textContent = origin;
+    }
+    const destLabel = document.getElementById('travel-shanghai');
+    if (destLabel) {
+      const strong = destLabel.querySelector('strong');
+      if (strong) strong.textContent = dest;
+    }
+
+    // Arrival title
+    const arrivalTitleEl = document.querySelector('.arrival-heading h3');
+    if (arrivalTitleEl && j.arrivalTitle) {
+      arrivalTitleEl.innerHTML = arrivalTitle;
+    }
+
+    // 3 Polaroids
+    const polaroids = Array.isArray(j.polaroids) && j.polaroids.length > 0 ? j.polaroids : null;
+    if (polaroids) {
+      const buttons = document.querySelectorAll('.arrival-photos .arrival-photo');
+      buttons.forEach((btn, idx) => {
+        if (polaroids[idx]) {
+          const item = polaroids[idx];
+          const img = btn.querySelector('img');
+          if (img && item.photo) {
+            img.src = resolveAssetUrl(item.photo);
+            img.alt = `${origin} - ${dest} kỷ niệm ${idx + 1}`;
+          }
+          const cap = btn.querySelector('span:last-child');
+          if (cap && item.caption) {
+            cap.innerHTML = `${item.caption}`;
+          }
+        }
+      });
     }
   }
 
@@ -314,16 +554,17 @@
           guestNameEl.classList.add('has-guest-name');
         } else if (!guestNameEl.dataset.userEdited) {
           guestNameEl.textContent = configData.defaultGuestName;
-          guestNameEl.classList.remove('has-guest-name');
+          guestNameEl.classList.add('has-guest-name');
         }
         if (!guestNameEl.dataset.bound) {
           guestNameEl.dataset.bound = 'true';
           guestNameEl.addEventListener('input', () => {
             guestNameEl.dataset.userEdited = 'true';
-            if (guestNameEl.textContent.trim() && !guestNameEl.textContent.includes('...')) {
+            if (guestNameEl.textContent.trim()) {
               guestNameEl.classList.add('has-guest-name');
             } else {
-              guestNameEl.classList.remove('has-guest-name');
+              guestNameEl.textContent = configData.defaultGuestName;
+              guestNameEl.classList.add('has-guest-name');
             }
           });
         }
@@ -381,8 +622,10 @@
       n.innerHTML = `<strong>TẠI: ${config.venueName.toUpperCase()}</strong><br><span>${config.venueAddress}</span>`;
     });
     document.querySelectorAll('.invitation-families').forEach(n => {
-      const brideCard = `<div><h3>Nhà Gái</h3><p>${configData.details.bride.parents}</p><span>Cô dâu: ${configData.brideName}</span></div>`;
-      const groomCard = `<div><h3>Nhà Trai</h3><p>${configData.details.groom.parents}</p><span>Chú rể: ${configData.groomName}</span></div>`;
+      const brideParentsHtml = formatParentsHtml(configData.details.bride.parents);
+      const groomParentsHtml = formatParentsHtml(configData.details.groom.parents);
+      const brideCard = `<div><h3>Nhà Gái</h3><p class="family-parents">${brideParentsHtml}</p><span class="family-role">Cô dâu: ${configData.brideName}</span></div>`;
+      const groomCard = `<div><h3>Nhà Trai</h3><p class="family-parents">${groomParentsHtml}</p><span class="family-role">Chú rể: ${configData.groomName}</span></div>`;
       n.innerHTML = isBride ? brideCard + groomCard : groomCard + brideCard;
       n.hidden = false;
     });
@@ -395,28 +638,37 @@
     document.querySelectorAll('.venue-note').forEach(n => n.textContent = config.lunar);
 
     // Map link & embed
+    const mapFallback = `${config.venueName || ''}, ${config.venueAddress || ''}`.trim();
     const mapLink = document.querySelector('.celebration-venue .text-link');
     if (mapLink) {
-      mapLink.href = config.mapLink;
-      mapLink.innerHTML = 'Xem đường đi trên Google Maps <span>↗</span>';
+      const targetUrl = cleanMapLinkUrl(config.mapLink, mapFallback);
+      mapLink.href = targetUrl || '#';
+      mapLink.target = '_blank';
+      mapLink.rel = 'noopener noreferrer';
+      mapLink.innerHTML = 'Xem đường đi trên Google Maps';
     }
     const mapBox = document.getElementById('celebration-map-box');
     const mapIframe = document.getElementById('celebration-map-iframe');
     if (mapBox && mapIframe) {
-      if (config.mapEmbed) {
-        mapIframe.src = config.mapEmbed;
+      const cleanEmbed = cleanMapEmbedUrl(config.mapEmbed, mapFallback);
+      if (cleanEmbed) {
+        if (mapIframe.src !== cleanEmbed) {
+          mapIframe.src = cleanEmbed;
+        }
         mapBox.hidden = false;
       } else {
         mapBox.hidden = true;
       }
     }
 
-    // 6. Timeline, Menu, Album & Music
+    // 6. Timeline, Menu, Album & Music, Interlude & Journey
     renderTimeline(configData.db, config);
     renderMenu(configData.db);
     renderAlbumAndGallery(configData.db, configData.coupleNames);
     renderMusic(configData.db);
     renderIntroScenes(configData.db);
+    renderInterlude(configData.db, configData);
+    renderJourney(configData.db);
 
     // 7. Page title & meta
     document.title = `${configData.coupleNames} — Thiệp Mời ${config.side} · ${config.dateLabel}`;

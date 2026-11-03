@@ -10,6 +10,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 mkdir -p img/album audio data thiep-cuoi-khanh-linh-le-dung/assets
 ln -sfn thiep-cuoi-khanh-linh-le-dung/assets assets
+ln -sfn thiep-cuoi-khanh-linh-le-dung/album.html album.html
 ln -sfn ../img thiep-cuoi-khanh-linh-le-dung/img
 ln -sfn ../data thiep-cuoi-khanh-linh-le-dung/data
 ln -sfn ../audio thiep-cuoi-khanh-linh-le-dung/audio

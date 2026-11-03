@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#14100c">
+  <title>Album Ảnh Cưới — Khánh Linh &amp; Lê Dũng</title>
+  <meta name="description" content="Khám phá toàn bộ album ảnh cưới của Khánh Linh & Lê Dũng với không gian triển lãm ảnh 3D nghệ thuật.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect rx='32' width='64' height='64' fill='%233d5145'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='serif' font-size='38' fill='%23f4f2e9'%3E%26%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="invitation.css?v=20261102_02">
+  <style>
+    :root {
+      --gold: #a2916a;
+      --gold-bright: #e2c48e;
+      --gold-dim: rgba(226, 196, 142, 0.35);
+      --bg-dark: #120e0b;
+      --card-bg: #1c1612;
+      --paper: #f7f4eb;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: var(--bg-dark);
+      color: var(--paper);
+      font-family: 'Be Vietnam Pro', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ALBUM PAGE ROOT SHELL */
+    .album-page-container {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      isolation: isolate;
+    }
+
+    /* BACKGROUND AMBIENT GLOW LAYER */
+    .album-ambient-stage {
+      position: fixed;
+      inset: -5%;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .album-ambient-layer {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center 38%;
+      filter: blur(55px) saturate(1.3) brightness(0.38);
+      opacity: 0;
+      transform: scale(1.08);
+      transition: opacity 1.3s cubic-bezier(0.22, 1, 0.36, 1), transform 1.6s ease;
+      will-change: opacity, transform;
+    }
+    .album-ambient-layer.is-visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .album-ambient-scrim {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 45%, rgba(18, 14, 11, 0.6) 0%, rgba(18, 14, 11, 0.92) 80%, #0d0a08 100%);
+    }
+
+    /* TOP NAVIGATION BAR - CỐ ĐỊNH CHẶT CHẼ TRÊN ĐẦU TRANG */
+    .album-nav-header {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      height: 72px !important;
+      z-index: 9999 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 0 clamp(16px, 3.5vw, 40px) !important;
+      background: rgba(14, 11, 8, 0.94) !important;
+      backdrop-filter: blur(25px) saturate(1.4) !important;
+      -webkit-backdrop-filter: blur(25px) saturate(1.4) !important;
+      border-bottom: 1px solid rgba(226, 196, 142, 0.24) !important;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.65) !important;
+      box-sizing: border-box !important;
+    }
+    .album-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      color: var(--paper);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(226, 196, 142, 0.3);
+      transition: all 0.25s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .album-back-link:hover {
+      background: rgba(226, 196, 142, 0.16);
+      border-color: var(--gold-bright);
+      color: var(--gold-bright);
+      transform: translateX(-3px);
+    }
+    .album-brand-center {
+      text-align: center;
+      pointer-events: none;
+    }
+    .album-brand-sub {
+      display: block;
+      font-size: 8px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .album-brand-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(18px, 2.2vw, 28px);
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin: 0;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #ffffff 0%, #fae8c8 60%, #e2c48e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .album-brand-names {
+      font-family: 'Great Vibes', cursive;
+      font-size: 18px;
+      color: #dfcdb5;
+      display: block;
+      margin-top: -2px;
+    }
+
+    .album-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    }
+    .sound-btn-circle {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(226, 196, 142, 0.35);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--paper);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.25s ease;
+    }
+    .sound-btn-circle:hover {
+      border-color: var(--gold-bright);
+      background: rgba(226, 196, 142, 0.15);
+      color: var(--gold-bright);
+    }
+    .sound-btn-circle svg { width: 18px; height: 18px; fill: currentColor; }
+    .sound-btn-circle.is-playing .sound-dot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 7px;
+      height: 7px;
+      background: #75e088;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #75e088;
+    }
+
+    /* 3D STAGE & MASONRY VIEWS */
+    .album-main-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      margin-top: 72px; /* Tránh bị header cố định đè lên */
+      padding-bottom: 24px;
+    }
+    .album-page-container.is-wall-mode .album-living-stage-view,
+    .album-page-container.is-wall-mode .album-filmstrip-dock {
+      display: none !important;
+    }
+    .album-page-container.is-wall-mode .album-wall-view {
+      display: block !important;
+    }
+
+    .album-3d-deck-stage {
+      position: relative !important;
+      width: 100% !important;
+      max-width: 1200px !important;
+      height: clamp(380px, 58vh, 520px) !important;
+      margin: 12px auto 10px !important;
+      perspective: 1250px !important;
+      perspective-origin: 50% 50% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      user-select: none !important;
+      touch-action: pan-y !important;
+    }
+    .album-3d-deck {
+      position: relative !important;
+      width: 100% !important;
+      height: 100% !important;
+      transform-style: preserve-3d !important;
+    }
+    .deck-photo-card {
+      position: absolute !important;
+      left: 50% !important;
+      top: 50% !important;
+      width: clamp(260px, 27vw, 380px) !important;
+      height: clamp(370px, 40vw, 510px) !important;
+      transform: translate3d(-50%, -50%, -200px) scale(0.65) !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.75s ease, filter 0.75s ease !important;
+      transform-style: preserve-3d !important;
+      cursor: pointer !important;
+    }
+    .deck-photo-card.is-active {
+      transform: translate3d(-50%, -50%, 0) rotateY(0deg) scale(1) !important;
+      opacity: 1 !important;
+      z-index: 20 !important;
+      pointer-events: auto !important;
+    }
+    .deck-photo-card.is-prev-1 {
+      transform: translate3d(calc(-50% - clamp(160px, 20vw, 290px)), -50%, -70px) rotateY(24deg) scale(0.85) !important;
+      opacity: 0.88 !important;
+      z-index: 15 !important;
+      pointer-events: auto !important;
+    }
+    .deck-photo-card.is-next-1 {
+      transform: translate3d(calc(-50% + clamp(160px, 20vw, 290px)), -50%, -70px) rotateY(-24deg) scale(0.85) !important;
+      opacity: 0.88 !important;
+      z-index: 15 !important;
+      pointer-events: auto !important;
+    }
+    .deck-photo-card.is-prev-2 {
+      transform: translate3d(calc(-50% - clamp(280px, 35vw, 480px)), -50%, -150px) rotateY(35deg) scale(0.7) !important;
+      opacity: 0.55 !important;
+      z-index: 10 !important;
+      pointer-events: auto !important;
+    }
+    .deck-photo-card.is-next-2 {
+      transform: translate3d(calc(-50% + clamp(280px, 35vw, 480px)), -50%, -150px) rotateY(-35deg) scale(0.7) !important;
+      opacity: 0.55 !important;
+      z-index: 10 !important;
+      pointer-events: auto !important;
+    }
+    .deck-gilded-frame {
+      position: relative !important;
+      width: 100% !important;
+      height: 100% !important;
+      background: linear-gradient(135deg, #e3c58c 0%, #a87e45 28%, #fae6ba 50%, #855e2b 75%, #d1ab6c 100%) !important;
+      border-radius: 14px !important;
+      padding: 8px !important;
+      box-shadow: 0 25px 65px rgba(0,0,0,0.85) !important;
+    }
+    .deck-velvet-mat {
+      width: 100% !important;
+      height: 100% !important;
+      background: #17120e !important;
+      border-radius: 8px !important;
+      padding: 6px !important;
+    }
+    .deck-img-viewport {
+      position: relative !important;
+      width: 100% !important;
+      height: 100% !important;
+      border-radius: 5px !important;
+      overflow: hidden !important;
+    }
+    .deck-img-viewport img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      display: block !important;
+    }
+
+    @media (max-width: 860px) {
+      .album-nav-header {
+        height: 60px !important;
+        padding: 0 12px !important;
+      }
+      .album-main-body {
+        margin-top: 60px !important;
+      }
+      .album-back-link {
+        padding: 6px 12px !important;
+        font-size: 10px !important;
+        gap: 5px !important;
+      }
+      .album-brand-sub {
+        display: none !important;
+      }
+      .album-brand-title {
+        font-size: 16px !important;
+        line-height: 1.15 !important;
+      }
+      .album-brand-names {
+        font-size: 13px !important;
+        margin-top: 0 !important;
+      }
+      .salon-action-btn {
+        padding: 6px 10px !important;
+        font-size: 10px !important;
+        gap: 5px !important;
+      }
+      .sound-btn-circle {
+        width: 32px !important;
+        height: 32px !important;
+      }
+      .album-top-actions {
+        gap: 6px !important;
+      }
+      .album-3d-deck-stage {
+        height: clamp(340px, 52vh, 440px) !important;
+        margin: 10px auto !important;
+      }
+      .deck-photo-card {
+        width: clamp(230px, 58vw, 300px) !important;
+        height: clamp(320px, 46vh, 420px) !important;
+      }
+      .deck-photo-card.is-prev-1 {
+        transform: translate3d(calc(-50% - 130px), -50%, -45px) rotateY(22deg) scale(0.85) !important;
+      }
+      .deck-photo-card.is-next-1 {
+        transform: translate3d(calc(-50% + 130px), -50%, -45px) rotateY(-22deg) scale(0.85) !important;
+      }
+      .deck-photo-card.is-prev-2 {
+        transform: translate3d(calc(-50% - 230px), -50%, -100px) rotateY(28deg) scale(0.7) !important;
+      }
+      .deck-photo-card.is-next-2 {
+        transform: translate3d(calc(-50% + 230px), -50%, -100px) rotateY(-28deg) scale(0.7) !important;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .album-brand-center {
+        display: none !important;
+      }
+      .album-nav-header {
+        justify-content: space-between !important;
+      }
+      #albumAutoplayLabel {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ROOT SHELL -->
+  <div class="album-page-container living-3d-album-section" id="album">
+    
+    <!-- LỚP NỀN CHIẾU ÁNH SÁNG ĐỔI MÀU THEO ẢNH -->
+    <div class="album-ambient-stage" aria-hidden="true">
+      <div class="album-ambient-layer is-visible" id="albumAmbientA"></div>
+      <div class="album-ambient-layer" id="albumAmbientB"></div>
+      <div class="album-ambient-scrim"></div>
+    </div>
+
+    <!-- THANH HEADER CHUYÊN NGHIỆP CỦA TRANG ALBUM -->
+    <header class="album-nav-header">
+      <a href="./?skipIntro=1" class="album-back-link" id="albumBackToWeddingBtn" title="Quay lại chọn thiệp cưới">
+        <span>←</span> <span>Về Thiệp Cưới</span>
+      </a>
+
+      <div class="album-brand-center">
+        <span class="album-brand-sub">ROYAL EXHIBITION · THƯ VIỆN KỶ NIỆM</span>
+        <h1 class="album-brand-title">Album Ảnh Cưới</h1>
+        <span class="album-brand-names" id="albumCoupleNames">Khánh Linh &amp; Lê Dũng</span>
+      </div>
+
+      <div class="album-top-actions">
+        <button type="button" class="salon-action-btn is-playing" id="albumAutoplayBtn" title="Bật / Tắt tự động trình chiếu">
+          <span class="autoplay-dot"></span>
+          <span id="albumAutoplayLabel">Đang Chiếu</span>
+        </button>
+        <button type="button" class="salon-action-btn" id="albumViewToggleBtn" title="Chuyển đổi giữa Sân khấu 3D và Lưới toàn cảnh">
+          <span id="albumViewToggleIcon"></span>
+          <span id="albumViewToggleLabel">Xem Lưới 56 Ảnh</span>
+        </button>
+        <div class="wedding-music-widget" id="albumMusicWidget">
+          <button type="button" class="sound-btn-circle is-playing" id="albumSoundBtn" title="Đĩa Nhạc Cưới · Chọn bài &amp; Bật/Tắt nhạc" aria-label="Đĩa nhạc cưới">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/></svg>
+            <span class="sound-dot"></span>
+          </button>
+
+          <!-- HỘP ĐIỀU KHIỂN & CHỌN BÀI HÁT ALBUM -->
+          <div class="music-playlist-popover" id="albumPlaylistPopover" role="dialog" aria-label="Danh sách đĩa nhạc cưới">
+            <div class="popover-header">
+              <div class="popover-badge-row">
+                <span class="popover-badge">ĐĨA NHẠC CƯỚI</span>
+                <span class="popover-counter" id="albumTrackCounter">1 / 4</span>
+              </div>
+              <div class="popover-current-title">
+                <div class="eq-bars" aria-hidden="true">
+                  <span class="eq-bar"></span>
+                  <span class="eq-bar"></span>
+                  <span class="eq-bar"></span>
+                </div>
+                <span id="albumCurrentTrackName" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Đang tải bài hát...</span>
+              </div>
+            </div>
+
+            <div class="popover-controls">
+              <button type="button" class="popover-ctrl-btn" id="albumBtnPrev" title="Bài trước">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+              </button>
+              <button type="button" class="popover-ctrl-btn btn-play-toggle" id="albumBtnPlay">
+                <span id="albumPlayIcon">⏸</span>
+                <span id="albumPlayText">Dừng nhạc</span>
+              </button>
+              <button type="button" class="popover-ctrl-btn" id="albumBtnNext" title="Bài tiếp theo">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+              </button>
+            </div>
+
+            <div class="popover-tracklist-label">CHỌN BÀI HÁT TỪ DANH SÁCH</div>
+            <ul class="popover-tracklist" id="albumTracklist"></ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- THÂN TRANG ALBUM -->
+    <main class="album-main-body">
+
+      <!-- SÂN KHẤU 3D COVERFLOW TOÀN MÀN HÌNH -->
+      <div class="album-living-stage-view" id="albumLivingStage">
+        <div class="album-3d-deck-stage">
+          <button type="button" class="deck-stage-nav deck-nav-prev" id="albumPrevBtn" title="Ảnh trước" aria-label="Ảnh trước">&#10094;</button>
+          <div class="album-3d-deck" id="album3DDeck"></div>
+          <button type="button" class="deck-stage-nav deck-nav-next" id="albumNextBtn" title="Ảnh tiếp theo" aria-label="Ảnh tiếp theo">&#10095;</button>
+        </div>
+
+        <!-- Thanh HUD Dưới Chân Sân Khấu 3D -->
+        <div class="album-floating-hud">
+          <div class="hud-top-row">
+            <span class="hud-counter"><span id="albumStoryIndex">01</span> / <span id="albumTotalCount">11</span></span>
+            <button type="button" class="hud-zoom-btn" id="albumZoomActiveBtn" title="Xem ảnh lớn toàn màn hình">Phóng to ảnh</button>
+          </div>
+          <div class="story-progress-wrap" title="Tiến trình tự động chuyển ảnh">
+            <div class="story-progress-fill" id="albumProgressFill"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DẢI PHIM CUỘN ĐÁY MÀN HÌNH -->
+      <div class="album-filmstrip-dock" id="albumFilmstrip" aria-label="Dải phim ảnh kỷ niệm"></div>
+
+      <!-- CHẾ ĐỘ TƯỜNG TRIỂN LÃM TOÀN CẢNH (MASONRY GRID) -->
+      <div class="album-wall-view" id="albumWallView" style="display:none; max-width: 1400px; margin: 30px auto; padding: 0 20px;">
+        <div class="curated-masonry-wall" id="albumMasonryGrid"></div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- NHẠC NỀN -->
+  <audio id="albumMusic" src="/thiep-cuoi-khanh-linh-le-dung/assets/river-flows-in-you.mp3#t=10" loop preload="auto"></audio>
+
+  <!-- LIGHTBOX ZOOM TOÀN CẢNH -->
+  <dialog id="gallery-dialog" class="gallery-dialog" aria-label="Album ảnh" style="border:none; padding:0; background:rgba(10,8,6,0.95); max-width:100vw; max-height:100vh;">
+    <button class="dialog-close" data-close="gallery-dialog" aria-label="Đóng album" style="position:fixed; top:20px; right:25px; z-index:99; background:rgba(0,0,0,0.5); border:1px solid #c89e63; color:#fff; width:40px; height:40px; border-radius:50%; font-size:22px; cursor:pointer;">×</button>
+    <button class="gallery-prev" aria-label="Ảnh trước" style="position:fixed; left:20px; top:50%; transform:translateY(-50%); z-index:99; background:rgba(0,0,0,0.5); border:1px solid #c89e63; color:#fff; width:44px; height:44px; border-radius:50%; font-size:20px; cursor:pointer;">←</button>
+    <figure style="margin:0; display:flex; align-items:center; justify-content:center; width:100vw; height:100vh;">
+      <img id="gallery-image" src="" alt="" style="max-width:92vw; max-height:90vh; object-fit:contain; border-radius:8px; box-shadow:0 10px 40px rgba(0,0,0,0.8);">
+      <figcaption style="position:fixed; bottom:25px; left:50%; transform:translateX(-50%); color:#e2c48e; font-size:14px; font-weight:600; letter-spacing:1px; background:rgba(0,0,0,0.6); padding:6px 16px; border-radius:999px;">
+        <span id="gallery-counter"></span>
+      </figcaption>
+    </figure>
+    <button class="gallery-next" aria-label="Ảnh tiếp theo" style="position:fixed; right:20px; top:50%; transform:translateY(-50%); z-index:99; background:rgba(0,0,0,0.5); border:1px solid #c89e63; color:#fff; width:44px; height:44px; border-radius:50%; font-size:20px; cursor:pointer;">→</button>
+  </dialog>
+
+  <!-- SCRIPTS -->
+  <script src="/js/content.js?v=20261102_02"></script>
+  <script src="album-3d.js?v=20261102_02"></script>
+  <script>
+    // Đồng bộ tên dâu rể
+    function syncAlbumCoupleNames() {
+      var db = window.WEDDING_DB || window.DEFAULT_WEDDING_DB || {};
+      var c = db.couple || {};
+      var nameEl = document.getElementById('albumCoupleNames');
+      if (nameEl && c.brideName && c.groomName) {
+        nameEl.textContent = c.brideName + ' & ' + c.groomName;
+      }
+    }
+    syncAlbumCoupleNames();
+
+    // Lightbox Modal Controller cho trang Album
+    var galleryDlg = document.getElementById('gallery-dialog');
+    var galleryImg = document.getElementById('gallery-image');
+    var galleryCounter = document.getElementById('gallery-counter');
+    var currentGalleryIndex = 0;
+    var albumGalleryList = [];
+
+    window.syncGalleryPhotos = function(photos) {
+      if (Array.isArray(photos)) {
+        albumGalleryList = photos;
+      }
+    };
+
+    function showLightboxPhoto(idx) {
+      if (!albumGalleryList.length) return;
+      currentGalleryIndex = (idx + albumGalleryList.length) % albumGalleryList.length;
+      var item = albumGalleryList[currentGalleryIndex];
+      var src = typeof item === 'string' ? item : (item && item.src ? item.src : '');
+      if (galleryImg && src) {
+        galleryImg.src = src;
+      }
+      if (galleryCounter) {
+        var num = currentGalleryIndex + 1;
+        galleryCounter.textContent = (num < 10 ? '0' + num : num) + ' / ' + albumGalleryList.length;
+      }
+    }
+
+    window.openWeddingGalleryIndex = function(idx) {
+      if (!galleryDlg) return;
+      showLightboxPhoto(idx);
+      if (typeof galleryDlg.showModal === 'function' && !galleryDlg.open) {
+        galleryDlg.showModal();
+      }
+    };
+
+    if (galleryDlg) {
+      var closeBtn = galleryDlg.querySelector('[data-close="gallery-dialog"]');
+      if (closeBtn) {
+        closeBtn.onclick = function() { galleryDlg.close(); };
+      }
+      var prevBtn = galleryDlg.querySelector('.gallery-prev');
+      if (prevBtn) {
+        prevBtn.onclick = function() { showLightboxPhoto(currentGalleryIndex - 1); };
+      }
+      var nextBtn = galleryDlg.querySelector('.gallery-next');
+      if (nextBtn) {
+        nextBtn.onclick = function() { showLightboxPhoto(currentGalleryIndex + 1); };
+      }
+      galleryDlg.onclick = function(e) {
+        if (e.target === galleryDlg) galleryDlg.close();
+      };
+      window.addEventListener('keydown', function(e) {
+        if (!galleryDlg.open) return;
+        if (e.key === 'ArrowLeft') showLightboxPhoto(currentGalleryIndex - 1);
+        else if (e.key === 'ArrowRight') showLightboxPhoto(currentGalleryIndex + 1);
+        else if (e.key === 'Escape') galleryDlg.close();
+      });
+    }
+
+    // Nhạc nền & Hộp chọn bài hát trang album
+    var albumAudio = document.getElementById('albumMusic');
+    var albumSoundBtn = document.getElementById('albumSoundBtn');
+    var albumWidget = document.getElementById('albumMusicWidget');
+    var albumPopover = document.getElementById('albumPlaylistPopover');
+    var albumTracklist = document.getElementById('albumTracklist');
+    var albumTitleEl = document.getElementById('albumCurrentTrackName');
+    var albumCounterEl = document.getElementById('albumTrackCounter');
+    var albumBtnPrev = document.getElementById('albumBtnPrev');
+    var albumBtnPlay = document.getElementById('albumBtnPlay');
+    var albumPlayIcon = document.getElementById('albumPlayIcon');
+    var albumPlayText = document.getElementById('albumPlayText');
+    var albumBtnNext = document.getElementById('albumBtnNext');
+    var albumCurIdx = 0;
+
+    function getAlbumPlaylist() {
+      var db = window.WEDDING_DB || {};
+      return (Array.isArray(db.music) && db.music.length)
+        ? db.music
+        : [{ title: 'River Flows in You — Yiruma', src: '/thiep-cuoi-khanh-linh-le-dung/assets/river-flows-in-you.mp3#t=10' }];
+    }
+
+    function renderAlbumTracklist() {
+      if (!albumTracklist) return;
+      var list = getAlbumPlaylist();
+      var playing = albumAudio && !albumAudio.paused && !albumAudio.ended;
+
+      albumTracklist.innerHTML = list.map(function(item, idx) {
+        var active = idx === albumCurIdx;
+        var numStr = (idx + 1 < 10 ? '0' : '') + (idx + 1);
+        var title = item.title || ('Bản nhạc #' + (idx + 1));
+        var status = active ? (playing ? '♫ Đang phát' : '⏸ Đang chọn') : '';
+        return '<li class="popover-track-item ' + (active ? 'active' : '') + '" data-track-idx="' + idx + '" role="button" tabindex="0">' +
+          '<span class="track-num">' + numStr + '</span>' +
+          '<span class="track-name" title="' + title + '">' + title + '</span>' +
+          (status ? '<span class="track-status">' + status + '</span>' : '') +
+          '</li>';
+      }).join('');
+
+      albumTracklist.querySelectorAll('.popover-track-item').forEach(function(el) {
+        el.addEventListener('click', function() {
+          var idx = parseInt(el.getAttribute('data-track-idx'), 10);
+          if (!isNaN(idx)) loadAndPlayAlbumTrack(idx);
+        });
+      });
+    }
+
+    function syncAlbumMusicUI() {
+      if (!albumAudio) return;
+      var playing = !albumAudio.paused && !albumAudio.ended;
+      var list = getAlbumPlaylist();
+      albumCurIdx = (albumCurIdx + list.length) % list.length;
+      var cur = list[albumCurIdx] || list[0];
+      var title = cur.title || 'Nhạc cưới';
+
+      if (albumWidget) albumWidget.classList.toggle('is-playing', playing);
+      if (albumSoundBtn) {
+        albumSoundBtn.classList.toggle('is-playing', playing);
+        albumSoundBtn.title = title + ' · ' + (playing ? 'Đang phát' : 'Đã dừng');
+      }
+      if (albumTitleEl) {
+        albumTitleEl.textContent = title;
+        albumTitleEl.title = title;
+      }
+      if (albumCounterEl) albumCounterEl.textContent = (albumCurIdx + 1) + ' / ' + list.length;
+      if (albumPlayIcon) albumPlayIcon.textContent = playing ? '⏸' : '▶';
+      if (albumPlayText) albumPlayText.textContent = playing ? 'Dừng nhạc' : 'Phát nhạc';
+
+      renderAlbumTracklist();
+    }
+
+    function loadAndPlayAlbumTrack(idx) {
+      if (!albumAudio) return;
+      var list = getAlbumPlaylist();
+      albumCurIdx = (idx + list.length) % list.length;
+      var target = list[albumCurIdx];
+      if (!target || !target.src) return;
+
+      var src = target.src;
+      if (!/^(https?:|data:|blob:|\/)/.test(src)) src = '/' + src;
+      if (albumAudio.getAttribute('data-loaded-src') !== src) {
+        albumAudio.setAttribute('data-loaded-src', src);
+        albumAudio.src = src;
+      }
+      albumAudio.play().catch(function() {});
+      syncAlbumMusicUI();
+    }
+
+    if (albumAudio && albumSoundBtn) {
+      albumAudio.addEventListener('play', syncAlbumMusicUI);
+      albumAudio.addEventListener('pause', syncAlbumMusicUI);
+      albumAudio.addEventListener('ended', function() {
+        var list = getAlbumPlaylist();
+        if (list.length > 1) {
+          loadAndPlayAlbumTrack(albumCurIdx + 1);
+        } else {
+          albumAudio.currentTime = 0;
+          albumAudio.play().catch(function() {});
+          syncAlbumMusicUI();
+        }
+      });
+
+      albumSoundBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var isOpen = albumWidget && albumWidget.classList.contains('is-open');
+        if (isOpen) {
+          albumWidget.classList.remove('is-open');
+        } else if (albumWidget) {
+          albumWidget.classList.add('is-open');
+          if (albumAudio.paused) {
+            albumAudio.play().catch(function() {});
+          }
+        }
+      });
+
+      document.addEventListener('click', function(e) {
+        if (albumWidget && albumWidget.classList.contains('is-open') && !albumWidget.contains(e.target)) {
+          albumWidget.classList.remove('is-open');
+        }
+      });
+
+      if (albumBtnPlay) {
+        albumBtnPlay.addEventListener('click', function(e) {
+          e.stopPropagation();
+          if (albumAudio.paused) albumAudio.play().catch(function() {});
+          else albumAudio.pause();
+          syncAlbumMusicUI();
+        });
+      }
+
+      if (albumBtnPrev) {
+        albumBtnPrev.addEventListener('click', function(e) {
+          e.stopPropagation();
+          loadAndPlayAlbumTrack(albumCurIdx - 1);
+        });
+      }
+
+      if (albumBtnNext) {
+        albumBtnNext.addEventListener('click', function(e) {
+          e.stopPropagation();
+          loadAndPlayAlbumTrack(albumCurIdx + 1);
+        });
+      }
+
+      // Tự động phát khi tương tác trang lần đầu
+      document.body.addEventListener('click', function () {
+        if (albumAudio.paused) {
+          albumAudio.play().then(syncAlbumMusicUI).catch(function () {});
+        }
+      }, { once: true });
+
+      syncAlbumMusicUI();
+    }
+
+    if (typeof window.fetchWeddingDBFromServer === 'function') {
+      window.fetchWeddingDBFromServer().then(function (db) {
+        if (db) {
+          window.WEDDING_DB = db;
+          syncAlbumCoupleNames();
+          syncAlbumMusicUI();
+          if (typeof window.render3DAlbum === 'function') {
+            window.render3DAlbum(db);
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
+

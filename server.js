@@ -90,7 +90,17 @@ function ensureSymlinks() {
   ];
   links.forEach(({ target, link }) => {
     try {
-      if (!fs.existsSync(link) && fs.existsSync(target)) {
+      if (!fs.existsSync(target)) return;
+      try {
+        const stat = fs.lstatSync(link);
+        if (stat.isSymbolicLink()) {
+          try {
+            if (fs.realpathSync(link) === fs.realpathSync(target)) return;
+          } catch (_) {}
+          fs.unlinkSync(link);
+        }
+      } catch (_) {}
+      if (!fs.existsSync(link)) {
         fs.symlinkSync(target, link, "dir");
       }
     } catch (_) {}
@@ -157,15 +167,62 @@ function listAllImages(dir, out = []) {
   if (!fs.existsSync(dir)) return out;
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   for (const entry of entries) {
+    if (entry.name.startsWith(".") || entry.name === "_originals") continue;
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
       listAllImages(fullPath, out);
     } else if (/\.(jpe?g|png|webp|gif)$/i.test(entry.name)) {
-      const rel = path.relative(ROOT_DIR, fullPath).replace(/\\/g, "/");
+      const rel = "/" + path.relative(ROOT_DIR, fullPath).replace(/\\/g, "/").replace(/^\/+/, "");
       out.push(rel);
     }
   }
   return out;
+}
+
+function cleanMapEmbedUrl(raw, fallbackQuery) {
+  if (!raw || typeof raw !== "string") {
+    if (fallbackQuery) return "https://maps.google.com/maps?q=" + encodeURIComponent(fallbackQuery) + "&t=&z=15&ie=UTF8&iwloc=&output=embed";
+    return "";
+  }
+  let str = raw.trim();
+  if (/<iframe/i.test(str)) {
+    const srcMatch = str.match(/src\s*=\s*["']([^"']+)["']/i);
+    if (srcMatch && srcMatch[1]) str = srcMatch[1].trim();
+  }
+  str = str.replace(/&amp;/g, "&").replace(/^["']+|["']+$/g, "").trim();
+  if (str.includes("/maps/embed") || str.includes("output=embed")) return str;
+  if (str.includes("google.com/maps") || str.includes("maps.google.com")) {
+    try {
+      const u = new URL(str);
+      const q = u.searchParams.get("q") || u.searchParams.get("query");
+      if (q) return "https://maps.google.com/maps?q=" + encodeURIComponent(q) + "&t=&z=15&ie=UTF8&iwloc=&output=embed";
+    } catch (_) {}
+  }
+  if (str.includes("maps.app.goo.gl") || str.includes("goo.gl/maps")) {
+    if (fallbackQuery) return "https://maps.google.com/maps?q=" + encodeURIComponent(fallbackQuery) + "&t=&z=15&ie=UTF8&iwloc=&output=embed";
+  }
+  if (/^https?:\/\//i.test(str)) return str;
+  if (fallbackQuery) return "https://maps.google.com/maps?q=" + encodeURIComponent(fallbackQuery) + "&t=&z=15&ie=UTF8&iwloc=&output=embed";
+  return "";
+}
+
+function cleanMapLinkUrl(raw, fallbackQuery) {
+  if (!raw || typeof raw !== "string") {
+    if (fallbackQuery) return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(fallbackQuery);
+    return "";
+  }
+  let str = raw.trim();
+  if (/<iframe/i.test(str)) {
+    const srcMatch = str.match(/src\s*=\s*["']([^"']+)["']/i);
+    if (srcMatch && srcMatch[1]) str = srcMatch[1].trim();
+  } else if (/<a/i.test(str)) {
+    const hrefMatch = str.match(/href\s*=\s*["']([^"']+)["']/i);
+    if (hrefMatch && hrefMatch[1]) str = hrefMatch[1].trim();
+  }
+  str = str.replace(/&amp;/g, "&").replace(/^["']+|["']+$/g, "").trim();
+  if (/^https?:\/\//i.test(str)) return str;
+  if (fallbackQuery) return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(fallbackQuery);
+  return str;
 }
 
 ensureDirs();
@@ -196,7 +253,15 @@ const server = http.createServer(async (req, res) => {
 
   // 2. API: GET /api/images
   if (req.method === "GET" && pathname === "/api/images") {
-    return sendJson(res, 200, { ok: true, images: listAllImages(IMG_DIR) });
+    const all = listAllImages(IMG_DIR);
+    all.sort((a, b) => {
+      const aAlbum = a.startsWith("/img/album/") || a.startsWith("img/album/");
+      const bAlbum = b.startsWith("/img/album/") || b.startsWith("img/album/");
+      if (aAlbum && !bAlbum) return -1;
+      if (!aAlbum && bAlbum) return 1;
+      return 0;
+    });
+    return sendJson(res, 200, { ok: true, images: all });
   }
 
   // 3. API: POST /api/db
@@ -204,6 +269,25 @@ const server = http.createServer(async (req, res) => {
     try {
       const bodyStr = await readRequestBody(req);
       const data = JSON.parse(bodyStr);
+      // Chuẩn hóa đường dẫn ảnh album luôn bắt đầu bằng /
+      if (Array.isArray(data.albumPhotos)) {
+        data.albumPhotos = data.albumPhotos.map(p => {
+          if (!p || typeof p !== "string") return p;
+          if (/^(https?:|data:|blob:|\/)/.test(p)) return p;
+          return "/" + p.trim().replace(/\\/g, "/").replace(/^\/+/, "");
+        }).filter(Boolean);
+      }
+      // Tự động làm sạch mapEmbed & mapLink nếu người dùng dán thẻ iframe
+      if (data && data.venues) {
+        ["groom", "bride"].forEach(k => {
+          if (data.venues[k]) {
+            const v = data.venues[k];
+            const fallback = v.address || v.nameFull || "";
+            if (v.mapEmbed) v.mapEmbed = cleanMapEmbedUrl(v.mapEmbed, fallback);
+            if (v.mapLink) v.mapLink = cleanMapLinkUrl(v.mapLink, fallback);
+          }
+        });
+      }
       // Luôn ghi vào wedding-db.custom.json (được .gitignore bảo vệ khỏi git pull)
       fs.writeFileSync(DB_CUSTOM_PATH, JSON.stringify(data, null, 2), "utf8");
       try {
@@ -236,11 +320,11 @@ const server = http.createServer(async (req, res) => {
         if (isAudio) {
           const outFull = path.join(AUDIO_UPLOAD_DIR, outName);
           fs.writeFileSync(outFull, buf);
-          savedPaths.push(`audio/${outName}`);
+          savedPaths.push(`/audio/${outName}`);
         } else {
           const outFull = path.join(ALBUM_UPLOAD_DIR, outName);
           fs.writeFileSync(outFull, buf);
-          savedPaths.push(`img/album/${outName}`);
+          savedPaths.push(`/img/album/${outName}`);
         }
       });
 
@@ -329,6 +413,8 @@ const server = http.createServer(async (req, res) => {
     pathname = "/guest-list.html";
   } else if (pathname === "/minimal" || pathname === "/minimal/") {
     pathname = "/minimal.html";
+  } else if (pathname === "/album" || pathname === "/album/" || pathname === "/album.html") {
+    pathname = "/thiep-cuoi-khanh-linh-le-dung/album.html";
   }
 
   // Rewrite sub-folder relative asset requests to root

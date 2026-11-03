@@ -104,12 +104,14 @@ class WeddingDBHandler(SimpleHTTPRequestHandler):
         if parsed.path == "/api/images":
             ensure_dirs()
             images = []
-            for root, _, files in os.walk(IMG_DIR):
+            for root, dirs, files in os.walk(IMG_DIR):
+                dirs[:] = [d for d in dirs if not d.startswith(".") and d != "_originals"]
                 for file in sorted(files):
                     if file.lower().endswith((".jpg", ".jpeg", ".png", ".webp", ".gif")):
                         full_p = os.path.join(root, file)
-                        rel_p = os.path.relpath(full_p, ROOT_DIR).replace("\\", "/")
+                        rel_p = "/" + os.path.relpath(full_p, ROOT_DIR).replace("\\", "/").lstrip("/")
                         images.append(rel_p)
+            images.sort(key=lambda p: (0 if "img/album/" in p else 1, p))
             return self._send_json(200, {"ok": True, "images": images})
 
         if parsed.path in ("/", "/index.html", "/stationery", "/stationery/"):
@@ -171,10 +173,10 @@ class WeddingDBHandler(SimpleHTTPRequestHandler):
                     out_name = f"{clean_base}-{ts}-{idx + 1:02d}{ext}"
                     if is_audio:
                         out_full = os.path.join(AUDIO_UPLOAD_DIR, out_name)
-                        rel_path = f"audio/{out_name}"
+                        rel_path = f"/audio/{out_name}"
                     else:
                         out_full = os.path.join(ALBUM_UPLOAD_DIR, out_name)
-                        rel_path = f"img/album/{out_name}"
+                        rel_path = f"/img/album/{out_name}"
 
                     with open(out_full, "wb") as out_f:
                         out_f.write(binary_data)

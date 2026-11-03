@@ -797,7 +797,8 @@
     </div>
     <div class="top-actions">
       <a href="/" class="btn btn-primary" target="_blank" style="background:linear-gradient(135deg,#c89e63,#e2c48e); color:#1a1a1a; font-weight:700;">🌿 Xem Thiệp Cưới Chính (Mới)</a>
-      <a href="/minimal.html" class="btn" target="_blank">✨ Bản Minimal</a>
+      <a href="/thiep-cuoi-khanh-linh-le-dung/album.html" class="btn" target="_blank">📸 Xem Album 3D Riêng</a>
+      <a href="/minimal.html" class="btn" target="_blank">Bản Minimal</a>
       <a href="/stationery.html" class="btn" target="_blank">📜 Bản Cũ</a>
       <button type="button" class="btn btn-danger" id="btnResetDefault">↺ Khôi Phục Mặc Định</button>
       <button type="button" class="btn btn-primary" id="btnSaveAll">💾 LƯU TẤT CẢ THAY ĐỔI</button>
@@ -808,7 +809,7 @@
 
     <!-- 8 TAB QUẢN LÝ RÕ RÀNG -->
     <nav class="admin-tabs">
-      <button type="button" class="tab-btn active" data-tab="pane-album">📸 1. Nạp &amp; Quản Lý Album Ảnh (<span id="albumCountBadge">11</span>)</button>
+      <button type="button" class="tab-btn active" data-tab="pane-album">📸 1. Nạp &amp; Quản Lý Album Ảnh (<span id="albumCountBadge">0</span>)</button>
       <button type="button" class="tab-btn" data-tab="pane-general">💍 2. Dâu Rể, Ngày Giờ, Ảnh Bìa &amp; Intro</button>
       <button type="button" class="tab-btn" data-tab="pane-invitation">💌 3. Tờ Thiệp Mời &amp; Tạo Link Khách</button>
       <button type="button" class="tab-btn" data-tab="pane-venues">📍 4. Địa Điểm &amp; Bản Đồ 2 Nhà</button>
@@ -825,7 +826,9 @@
       <div class="panel-card">
         <div class="panel-title">
           <span>📸 Nạp Ảnh Mới Vào Album (Hỗ trợ chọn 30 – 50+ ảnh cùng lúc)</span>
-          <div style="display:flex; gap:8px;">
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-sm btn-primary" id="btnSyncServerPhotos" title="Quét toàn bộ ảnh trong thư mục img/album/ trên máy chủ và nạp lại vào danh sách">🔄 Quét &amp; Nạp Lại Ảnh Máy Chủ</button>
+            <button type="button" class="btn btn-sm" id="btnFixPhotoUrls" title="Chuẩn hóa tất cả đường dẫn ảnh tuyệt đối (bắt đầu bằng /) để trang thiệp hiển thị 100% không bị trống">🔗 Chuẩn Hóa Đường Dẫn Cho Thiệp</button>
             <button type="button" class="btn btn-sm" id="btnReverseAlbum" title="Đảo ngược thứ tự ảnh">⇅ Đảo Thứ Tự</button>
           </div>
         </div>
@@ -843,7 +846,7 @@
 
         <!-- Thêm nhanh bằng đường dẫn nếu ảnh đã có sẵn trong thư mục img/ -->
         <div style="display:flex; gap:10px; margin-bottom: 22px; flex-wrap:wrap;">
-          <input type="text" id="manualPhotoInput" class="form-control" placeholder="Hoặc nhập đường dẫn ảnh sẵn có (VD: img/08-trang-an-hero.jpg)..." style="flex:1; min-width:260px;">
+          <input type="text" id="manualPhotoInput" class="form-control" placeholder="Hoặc nhập đường dẫn ảnh sẵn có (VD: /img/album/anh-01.jpg)..." style="flex:1; min-width:260px;">
           <button type="button" class="btn" id="btnAddManualPhoto">+ Thêm Đường Dẫn</button>
         </div>
 
@@ -894,7 +897,7 @@
         <div class="panel-card">
           <h3 class="panel-title">
             <span>📅 Ngày Giờ &amp; Đồng Hồ Đếm Ngược</span>
-            <span style="font-size:0.75rem; font-family:'Be Vietnam Pro',sans-serif; color:#7be895; font-weight:600;">⚡ Tự động chuẩn Giờ VN (GMT+7)</span>
+            <span style="font-size:0.75rem; font-family:'Be Vietnam Pro',sans-serif; color:#7be895; font-weight:600;">Tự động chuẩn Giờ VN (GMT+7)</span>
           </h3>
           <p class="panel-desc">Chỉ cần bấm chọn <strong>Ngày trên lịch</strong> và <strong>Giờ làm lễ</strong> bên dưới — hệ thống sẽ tự động tính Thứ, Ngày, Tháng, Năm, Đồng hồ đếm ngược và <strong>tự động quy đổi ra Ngày Âm Lịch Việt Nam</strong>!</p>
 
@@ -912,8 +915,8 @@
 
           <!-- BẢNG XEM TRƯỚC TỰ ĐỘNG (DƯƠNG LỊCH + ÂM LỊCH VIỆT NAM) -->
           <div class="auto-date-preview-box" id="mainDateAutoPreview">
-            <div>✦ <strong>Dương lịch hiển thị:</strong> <span id="prev_solar_summary">CHỦ NHẬT • Ngày 07 • THÁNG 12 • Năm 2026 (Lúc 11:00)</span></div>
-            <div>✦ <strong>Âm lịch tự động:</strong> <span id="prev_lunar_summary">(Nhằm ngày 29 tháng 10 năm Bính Ngọ)</span></div>
+            <div><strong>Dương lịch hiển thị:</strong> <span id="prev_solar_summary">CHỦ NHẬT • Ngày 07 • THÁNG 12 • Năm 2026 (Lúc 11:00)</span></div>
+            <div><strong>Âm lịch tự động:</strong> <span id="prev_lunar_summary">(Nhằm ngày 29 tháng 10 năm Bính Ngọ)</span></div>
           </div>
 
           <div class="form-group">
@@ -965,7 +968,7 @@
               <span class="slot-ratio-badge">Đa Giao Diện • PC &amp; Mobile</span>
             </div>
             <p style="font-size:0.75rem; color:var(--text-muted); margin:0 0 12px 0;">
-              ✨ Tự động chuyển đổi: Trên Máy tính hiển thị Khung Đứng (3:4), trên Điện thoại hiển thị Khung Ngang (16:9). Căn chỉnh riêng từng bản để đảm bảo không bao giờ bị cắt mất đầu cô dâu / chú rể!
+              Tự động chuyển đổi: Trên Máy tính hiển thị Khung Đứng (3:4), trên Điện thoại hiển thị Khung Ngang (16:9). Căn chỉnh riêng từng bản để đảm bảo không bao giờ bị cắt mất đầu cô dâu / chú rể!
             </p>
 
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
@@ -1077,7 +1080,211 @@
                 </div>
               </div>
             </div>
+
+            <!-- Câu chữ trích dẫn nghệ thuật chuyển tiếp -->
+            <div style="background:rgba(0,0,0,0.22); border:1px solid rgba(226,196,142,0.25); border-radius:10px; padding:12px; margin-top:14px;">
+              <strong style="font-size:0.84rem; color:#ffe4ab; display:block; margin-bottom:8px;">✍️ Tiêu Đề &amp; Câu Nói Nghệ Thuật (Hiển thị đè lên ảnh chuyển tiếp)</strong>
+              <div class="form-grid-2">
+                <div class="form-group" style="margin-bottom:8px;">
+                  <label>Dòng tiêu đề nhỏ (Eyebrow)</label>
+                  <input type="text" class="form-control" id="f_interlude_eyebrow" placeholder="AND SO, OUR FOREVER BEGINS">
+                </div>
+                <div class="form-group" style="margin-bottom:8px;">
+                  <label>Câu trích dẫn chính</label>
+                  <input type="text" class="form-control" id="f_interlude_quote" placeholder="Và rồi chúng mình lựa chọn trở thành một nửa của nhau.">
+                </div>
+              </div>
+            </div>
+
           </div>
+
+          <!-- 3. Ảnh Nền Màn Hình Chọn Thiệp (Choice Stage Background - Sau Intro) -->
+          <div class="slot-card" style="grid-column: 1 / -1;">
+            <div class="slot-card-title">
+              <span>3. Ảnh Nền Màn Hình Chọn Thiệp (Choice Stage • Sau Intro)</span>
+              <span class="slot-ratio-badge">Đa Giao Diện • PC &amp; Mobile</span>
+            </div>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin:0 0 12px 0;">
+              Hình nền xuất hiện tại màn hình chọn thiệp Nhà Trai / Nhà Gái (sau khi xem xong hoặc bỏ qua Intro). Nếu không tải ảnh, hệ thống tự động áp dụng tông nền sâm banh ngọc trai hoàng gia sang trọng.
+            </p>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+              <!-- 3A: Bản Máy Tính (PC - Ngang 16:9) -->
+              <div style="background:rgba(0,0,0,0.28); border:1px solid rgba(226,196,142,0.25); border-radius:10px; padding:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <strong style="font-size:0.82rem; color:#ffe4ab;">🖥️ Bản Máy Tính (PC • Ngang 16:9)</strong>
+                  <span class="slot-ratio-badge">Ngang 16:9</span>
+                </div>
+                <div class="slot-preview-wrap ratio-16-9" style="height:190px;">
+                  <img src="" alt="" class="slot-preview-img" id="prev_choiceBackdrop">
+                </div>
+                <input type="hidden" id="f_choiceBackdrop">
+                <div class="slot-btn-group" style="margin-top:8px;">
+                  <button type="button" class="btn btn-sm btn-primary" data-pick-slot="choiceBackdrop" data-ratio="16:9" data-slot-label="Nền Chọn Thiệp PC (Ngang 16:9)">
+                    🖼️ Chọn
+                  </button>
+                  <button type="button" class="btn btn-sm" data-recrop-slot="choiceBackdrop" data-ratio="16:9" data-slot-label="Căn Chỉnh Nền Chọn Thiệp PC (Ngang 16:9)">
+                    ✂️ Căn Chỉnh
+                  </button>
+                  <label class="btn btn-sm" style="cursor:pointer;">
+                    📤 Tải Mới
+                    <input type="file" accept="image/*" style="display:none;" data-upload-slot="choiceBackdrop" data-ratio="16:9" data-slot-label="Nền Chọn Thiệp PC (Ngang 16:9)">
+                  </label>
+                  <button type="button" class="btn btn-sm" onclick="clearChoiceBackdrop('pc')" title="Xóa nền này để dùng nền sâm banh mặc định">
+                    🗑️ Xóa Nền
+                  </button>
+                </div>
+              </div>
+
+              <!-- 3B: Bản Điện Thoại (Mobile - Đứng 9:16) -->
+              <div style="background:rgba(0,0,0,0.28); border:1px solid rgba(226,196,142,0.25); border-radius:10px; padding:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <strong style="font-size:0.82rem; color:#ffe4ab;">📱 Bản Điện Thoại (Mobile • Đứng 9:16)</strong>
+                  <span class="slot-ratio-badge">Đứng 9:16</span>
+                </div>
+                <div class="slot-preview-wrap ratio-9-16" style="height:190px;">
+                  <img src="" alt="" class="slot-preview-img" id="prev_choiceBackdropMobile">
+                </div>
+                <input type="hidden" id="f_choiceBackdropMobile">
+                <div class="slot-btn-group" style="margin-top:8px;">
+                  <button type="button" class="btn btn-sm btn-primary" data-pick-slot="choiceBackdropMobile" data-ratio="9:16" data-slot-label="Nền Chọn Thiệp Mobile (Đứng 9:16)">
+                    🖼️ Chọn
+                  </button>
+                  <button type="button" class="btn btn-sm" data-recrop-slot="choiceBackdropMobile" data-ratio="9:16" data-slot-label="Căn Chỉnh Nền Chọn Thiệp Mobile (Đứng 9:16)">
+                    ✂️ Căn Chỉnh
+                  </button>
+                  <label class="btn btn-sm" style="cursor:pointer;">
+                    📤 Tải Mới
+                    <input type="file" accept="image/*" style="display:none;" data-upload-slot="choiceBackdropMobile" data-ratio="9:16" data-slot-label="Nền Chọn Thiệp Mobile (Đứng 9:16)">
+                  </label>
+                  <button type="button" class="btn btn-sm" onclick="clearChoiceBackdrop('mobile')" title="Xóa nền này để dùng nền sâm banh mặc định">
+                    🗑️ Xóa Nền
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Khối Hành Trình Chuyến Bay & 3 Ảnh Kỷ Niệm Polaroid -->
+      <div class="panel-card">
+        <h3 class="panel-title">✈️ Hành Trình Chuyến Bay &amp; 3 Ảnh Polaroid Kỷ Niệm (Our Little Journey)</h3>
+        <p class="panel-desc">
+          Tùy chỉnh chặng đường tình yêu của đôi uyên ương trên quả địa cầu 3D (Điểm khởi hành, Điểm đến, Lời dẫn) và <strong>3 bức ảnh Polaroid kỷ niệm</strong> xuất hiện khi hạ cánh cùng dòng ghi chú dưới mỗi ảnh.
+        </p>
+
+        <!-- Thông tin chặng bay & câu chữ -->
+        <div style="background:rgba(0,0,0,0.22); border:1px solid rgba(226,196,142,0.25); border-radius:12px; padding:14px; margin-bottom:16px;">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>1. Thành phố Khởi hành</label>
+              <input type="text" class="form-control" id="f_journey_originCity" placeholder="Hà Nội">
+            </div>
+            <div class="form-group">
+              <label>2. Thành phố Đến</label>
+              <input type="text" class="form-control" id="f_journey_destCity" placeholder="Shanghai (hoặc Bắc Giang,...)">
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group" style="margin-bottom:0;">
+              <label>3. Lời dẫn dưới tiêu đề hành trình</label>
+              <textarea class="form-control" id="f_journey_subtitle" rows="2" placeholder="Hai thành phố. Một hành trình chung.&#10;Và những khoảnh khắc muốn giữ lại mãi."></textarea>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>4. Tiêu đề chào đón khi máy bay hạ cánh</label>
+              <textarea class="form-control" id="f_journey_arrivalTitle" rows="2" placeholder="Chạm đến một nơi.&#10;&lt;em&gt;Mở ra những kỷ niệm.&lt;/em&gt;"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Ảnh Polaroid Kỷ Niệm -->
+        <strong style="font-size:0.86rem; color:#ffe4ab; display:block; margin-bottom:10px;">📸 3 Tấm Ảnh Khung Polaroid Kỷ Niệm &amp; Dòng Ghi Chú</strong>
+        <div class="slot-cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+
+          <!-- Polaroid 1 -->
+          <div class="slot-card">
+            <div class="slot-card-title">
+              <span>Polaroid #1</span>
+              <span class="slot-ratio-badge">Ảnh Vuông / Dọc</span>
+            </div>
+            <div class="slot-preview-wrap ratio-1-1" style="height:170px;">
+              <img src="" alt="" class="slot-preview-img" id="prev_polaroid0_photo">
+            </div>
+            <input type="hidden" id="f_polaroid0_photo">
+            <div class="slot-btn-group" style="margin-top:6px;">
+              <button type="button" class="btn btn-sm btn-primary" data-pick-slot="polaroid0_photo" data-ratio="1:1" data-slot-label="Ảnh Polaroid 1 (Vuông 1:1)">
+                🖼️ Chọn
+              </button>
+              <button type="button" class="btn btn-sm" data-recrop-slot="polaroid0_photo" data-ratio="1:1" data-slot-label="Căn Chỉnh Polaroid 1">
+                ✂️ Sửa
+              </button>
+              <label class="btn btn-sm" style="cursor:pointer;">
+                📤 Tải Mới
+                <input type="file" accept="image/*" style="display:none;" data-upload-slot="polaroid0_photo" data-ratio="1:1" data-slot-label="Ảnh Polaroid 1">
+              </label>
+            </div>
+            <div class="form-group" style="margin-top:8px; margin-bottom:0;">
+              <label>Dòng ghi chú (Caption dưới ảnh 1)</label>
+              <input type="text" class="form-control" id="f_polaroid0_caption" placeholder="you &amp; me">
+            </div>
+          </div>
+
+          <!-- Polaroid 2 -->
+          <div class="slot-card">
+            <div class="slot-card-title">
+              <span>Polaroid #2</span>
+              <span class="slot-ratio-badge">Ảnh Vuông / Dọc</span>
+            </div>
+            <div class="slot-preview-wrap ratio-1-1" style="height:170px;">
+              <img src="" alt="" class="slot-preview-img" id="prev_polaroid1_photo">
+            </div>
+            <input type="hidden" id="f_polaroid1_photo">
+            <div class="slot-btn-group" style="margin-top:6px;">
+              <button type="button" class="btn btn-sm btn-primary" data-pick-slot="polaroid1_photo" data-ratio="1:1" data-slot-label="Ảnh Polaroid 2 (Vuông 1:1)">
+                🖼️ Chọn
+              </button>
+              <button type="button" class="btn btn-sm" data-recrop-slot="polaroid1_photo" data-ratio="1:1" data-slot-label="Căn Chỉnh Polaroid 2">
+                ✂️ Sửa
+              </button>
+              <label class="btn btn-sm" style="cursor:pointer;">
+                📤 Tải Mới
+                <input type="file" accept="image/*" style="display:none;" data-upload-slot="polaroid1_photo" data-ratio="1:1" data-slot-label="Ảnh Polaroid 2">
+              </label>
+            </div>
+            <div class="form-group" style="margin-top:8px; margin-bottom:0;">
+              <label>Dòng ghi chú (Caption dưới ảnh 2)</label>
+              <input type="text" class="form-control" id="f_polaroid1_caption" placeholder="everywhere, together">
+            </div>
+          </div>
+
+          <!-- Polaroid 3 -->
+          <div class="slot-card">
+            <div class="slot-card-title">
+              <span>Polaroid #3</span>
+              <span class="slot-ratio-badge">Ảnh Vuông / Dọc</span>
+            </div>
+            <div class="slot-preview-wrap ratio-1-1" style="height:170px;">
+              <img src="" alt="" class="slot-preview-img" id="prev_polaroid2_photo">
+            </div>
+            <input type="hidden" id="f_polaroid2_photo">
+            <div class="slot-btn-group" style="margin-top:6px;">
+              <button type="button" class="btn btn-sm btn-primary" data-pick-slot="polaroid2_photo" data-ratio="1:1" data-slot-label="Ảnh Polaroid 3 (Vuông 1:1)">
+                🖼️ Chọn
+              </button>
+              <button type="button" class="btn btn-sm" data-recrop-slot="polaroid2_photo" data-ratio="1:1" data-slot-label="Căn Chỉnh Polaroid 3">
+                ✂️ Sửa
+              </button>
+              <label class="btn btn-sm" style="cursor:pointer;">
+                📤 Tải Mới
+                <input type="file" accept="image/*" style="display:none;" data-upload-slot="polaroid2_photo" data-ratio="1:1" data-slot-label="Ảnh Polaroid 3">
+              </label>
+            </div>
+            <div class="form-group" style="margin-top:8px; margin-bottom:0;">
+              <label>Dòng ghi chú (Caption dưới ảnh 3)</label>
+              <input type="text" class="form-control" id="f_polaroid2_caption" placeholder="our next chapter">
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -1219,8 +1426,8 @@
       <!-- CÔNG CỤ TẠO LINK GỬI RIÊNG CHO TỪNG KHÁCH MỜI -->
       <div class="panel-card" style="border: 1px solid var(--gold); box-shadow: 0 8px 32px rgba(226, 196, 142, 0.12);">
         <div class="panel-title">
-          <span>✨ Công Cụ Tạo Link Mời Riêng Từng Khách (Ghi Tên Nghệ Thuật Lên Thiệp)</span>
-          <span style="font-size:0.75rem; color:#7be895; font-weight:600;">⚡ 1-Click Sao Chép Link</span>
+          <span>Công Cụ Tạo Link Mời Riêng Từng Khách (Ghi Tên Nghệ Thuật Lên Thiệp)</span>
+          <span style="font-size:0.75rem; color:#7be895; font-weight:600;">Sao chép link nhanh</span>
         </div>
         <p class="panel-desc">
           Nhập tên khách mời bên dưới, hệ thống sẽ tự động tạo một đường link thiệp cưới cá nhân hóa. Khi khách bấm mở link này, dòng chữ <strong>"Kính mời"</strong> trên tờ thiệp sẽ hiện đích danh tên khách mời bằng phông chữ viết tay nghệ thuật sang trọng!
@@ -1236,26 +1443,58 @@
               <label>2. Bạn Muốn Gửi Thiệp Mời Của Bên Nào?</label>
               <div style="display:flex; gap:16px; margin-top:8px;">
                 <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.9rem; color:#e1ded2;">
-                  <input type="radio" name="gen_side" value="groom" checked> ❖ Thiệp Nhà Trai
+                  <input type="radio" name="gen_side" value="groom" checked> Thiệp Nhà Trai
                 </label>
                 <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.9rem; color:#e1ded2;">
-                  <input type="radio" name="gen_side" value="bride"> ❖ Thiệp Nhà Gái
+                  <input type="radio" name="gen_side" value="bride"> Thiệp Nhà Gái
+                </label>
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:0; margin-top:12px;">
+              <label>3. Điểm Đến Khi Khách Mở Link</label>
+              <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+                <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; font-size:0.86rem; color:#e1ded2;">
+                  <input type="radio" name="gen_intro_mode" value="intro" checked style="margin-top:3px;">
+                  <div>
+                    <strong style="color:#ffe4ab;">Xem 3 Cảnh Intro trước rồi vào thiệp (Gợi ý)</strong>
+                    <div style="font-size:0.75rem; color:var(--text-muted);">Khách sẽ được xem lời dẫn gõ chữ lãng mạn trên nền ảnh kỷ niệm, rồi chuyển sang màn hình chọn thiệp có sẵn tên khách.</div>
+                  </div>
+                </label>
+                <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; font-size:0.86rem; color:#e1ded2;">
+                  <input type="radio" name="gen_intro_mode" value="skipIntro" style="margin-top:3px;">
+                  <div>
+                    <strong style="color:#7be895;">Vào thẳng màn hình chọn thiệp (Bỏ qua Intro)</strong>
+                    <div style="font-size:0.75rem; color:var(--text-muted);">Bỏ qua 3 cảnh intro, mở thẳng màn hình chọn Nhà Trai / Nhà Gái với kính mời cá nhân hóa tức thì.</div>
+                  </div>
                 </label>
               </div>
             </div>
           </div>
 
           <div style="display:flex; flex-direction:column; justify-content:space-between;">
-            <div class="form-group">
-              <label>Đường Link Thiệp Cá Nhân Hóa Tự Động Sinh</label>
+            <div class="form-group" style="margin-bottom:8px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; flex-wrap:wrap; gap:6px;">
+                <label style="margin:0;">Đường Link Thiệp Cá Nhân Hóa</label>
+                <div style="display:inline-flex; gap:12px; font-size:0.75rem;">
+                  <label style="cursor:pointer; color:#7be895; display:inline-flex; align-items:center; gap:4px;">
+                    <input type="radio" name="gen_domain_mode" value="online" checked> Tên miền Online
+                  </label>
+                  <label style="cursor:pointer; color:#e2c48e; display:inline-flex; align-items:center; gap:4px;">
+                    <input type="radio" name="gen_domain_mode" value="local"> Localhost
+                  </label>
+                </div>
+              </div>
               <div style="display:flex; gap:8px;">
                 <input type="text" class="form-control" id="gen_generatedLink" readonly style="opacity:0.95; font-size:0.82rem; font-family:monospace; background:rgba(0,0,0,0.35);">
-                <button type="button" class="btn btn-primary" id="btnCopyGuestLink" style="white-space:nowrap;">📋 Sao Chép Link</button>
+                <button type="button" class="btn btn-primary" id="btnCopyGuestLink" style="white-space:nowrap;">Sao Chép Link</button>
               </div>
+              <small style="font-size:0.72rem; color:#7be895; margin-top:4px; display:block;" id="gen_link_hint">
+                Mặc định dùng tên miền <strong>https://dunglinhthiepcuoi.online</strong> để bạn sao chép gửi khách qua Zalo/Facebook!
+              </small>
             </div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
-              <button type="button" class="btn btn-sm" id="btnTestOpenLink" style="flex:1;">👁️ Mở Xem Thử Link Này</button>
-              <button type="button" class="btn btn-sm" id="btnPrintCleanCard" style="flex:1;">🖨️ In Thiệp Ra Giấy / PDF</button>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:6px;">
+              <button type="button" class="btn btn-sm" id="btnTestOpenLink" style="flex:1;">Mở Xem Thử Link Này</button>
+              <button type="button" class="btn btn-sm" id="btnPrintCleanCard" style="flex:1;">In Thiệp Ra Giấy / PDF</button>
             </div>
           </div>
         </div>
@@ -1266,7 +1505,7 @@
         
         <!-- Cột Trái: Các Trường Chữ Trên Tờ Thiệp Giấy -->
         <div class="panel-card">
-          <h3 class="panel-title">💌 Tùy Chỉnh Chữ Trên Tờ Thiệp Mời</h3>
+          <h3 class="panel-title">Tùy Chỉnh Chữ Trên Tờ Thiệp Mời</h3>
           <p class="panel-desc">Thay đổi câu chữ, con dấu sáp và lời mời hiển thị trực tiếp trên tờ thiệp giấy trắng.</p>
 
           <div class="form-grid-2">
@@ -1286,8 +1525,8 @@
               <input type="text" class="form-control" id="f_inv_kinhMoiTitle" placeholder="Kính mời">
             </div>
             <div class="form-group">
-              <label>Dòng Tên Khách Mặc Định (Khi Chưa Có Tên)</label>
-              <input type="text" class="form-control" id="f_inv_defaultGuestName" placeholder="....................................................">
+              <label>Danh Xưng Khách Mặc Định (Khi Chưa Có Tên Riêng)</label>
+              <input type="text" class="form-control" id="f_inv_defaultGuestName" placeholder="Quý khách và gia đình">
             </div>
           </div>
 
@@ -1314,7 +1553,7 @@
 
           <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
             <button type="button" class="btn btn-sm" id="btnQuickSampleTraditional">📜 Mẫu Lời Mời Truyền Thống</button>
-            <button type="button" class="btn btn-sm" id="btnQuickSampleModern">✨ Mẫu Lời Mời Hiện Đại</button>
+            <button type="button" class="btn btn-sm" id="btnQuickSampleModern">Mẫu Lời Mời Hiện Đại</button>
           </div>
         </div>
 
@@ -1334,10 +1573,10 @@
             <div class="mockup-seal" id="mock_seal">L&amp;D</div>
             <div class="mockup-subtitle" id="mock_subtitle">THE WEDDING INVITATION</div>
             <div class="mockup-kinh-moi" id="mock_kinhmoi">Kính mời</div>
-            <div class="mockup-guest" id="mock_guest">....................................................</div>
+            <div class="mockup-guest has-name" id="mock_guest">Quý khách và gia đình</div>
             <div class="mockup-intro" id="mock_intro">Gia đình nhà trai trân trọng kính mời quý khách đến dự lễ thành hôn của hai con chúng tôi</div>
             <div class="mockup-names" id="mock_names">Khánh Linh &amp; Lê Dũng</div>
-            <div class="mockup-flourish">✧ ❖ ✧</div>
+            <div class="mockup-flourish">·</div>
             <div class="mockup-datetime" id="mock_datetime">
               <div>VÀO LÚC: <strong id="mock_time">11:00</strong></div>
               <div style="font-size:1.15rem; font-weight:700; color:#344638; margin: 4px 0;" id="mock_date">THỨ BẢY • 28.11 • NĂM 2026</div>
@@ -1427,11 +1666,12 @@
           </div>
           <div class="form-group">
             <label>Link Mở Google Maps (Nút Chỉ Đường)</label>
-            <input type="text" class="form-control" id="f_groom_mapLink">
+            <input type="text" class="form-control" id="f_groom_mapLink" placeholder="https://maps.app.goo.gl/... hoặc link Google Maps">
           </div>
           <div class="form-group">
-            <label>Link Nhúng Iframe Bản Đồ (Google Maps Embed URL)</label>
-            <input type="text" class="form-control" id="f_groom_mapEmbed">
+            <label>Link Nhúng Iframe Bản Đồ (Dán link URL hoặc mã &lt;iframe&gt; từ Google Maps)</label>
+            <input type="text" class="form-control" id="f_groom_mapEmbed" placeholder="https://www.google.com/maps/embed?pb=... hoặc dán nguyên mã <iframe>">
+            <small style="display:block; font-size:11px; color:var(--gold); margin-top:4px;">💡 Chấp nhận cả mã &lt;iframe&gt; khi bấm "Sao chép HTML" trên Google Maps — hệ thống sẽ tự động lọc link nhúng chuẩn.</small>
           </div>
         </div>
 
@@ -1497,11 +1737,12 @@
           </div>
           <div class="form-group">
             <label>Link Mở Google Maps (Nút Chỉ Đường)</label>
-            <input type="text" class="form-control" id="f_bride_mapLink">
+            <input type="text" class="form-control" id="f_bride_mapLink" placeholder="https://maps.app.goo.gl/... hoặc link Google Maps">
           </div>
           <div class="form-group">
-            <label>Link Nhúng Iframe Bản Đồ (Google Maps Embed URL)</label>
-            <input type="text" class="form-control" id="f_bride_mapEmbed">
+            <label>Link Nhúng Iframe Bản Đồ (Dán link URL hoặc mã &lt;iframe&gt; từ Google Maps)</label>
+            <input type="text" class="form-control" id="f_bride_mapEmbed" placeholder="https://www.google.com/maps/embed?pb=... hoặc dán nguyên mã <iframe>">
+            <small style="display:block; font-size:11px; color:var(--gold); margin-top:4px;">💡 Chấp nhận cả mã &lt;iframe&gt; khi bấm "Sao chép HTML" trên Google Maps — hệ thống sẽ tự động lọc link nhúng chuẩn.</small>
           </div>
         </div>
 
@@ -1738,10 +1979,10 @@
               <label>Chế Độ Khớp Khung (Tránh Méo Ảnh)</label>
               <div style="display:flex; flex-direction:column; gap:6px;">
                 <button type="button" class="btn btn-sm btn-primary" id="btnFitCover" style="justify-content:center;">
-                  ✦ Lấp Đầy Khung (Cắt Gọn Sắc Nét)
+                  Lấp Đầy Khung (Cắt Gọn Sắc Nét)
                 </button>
                 <button type="button" class="btn btn-sm" id="btnFitContain" style="justify-content:center;">
-                  ❖ Giữ Trọn Ảnh (+ Nền Mờ Nghệ Thuật)
+                  Giữ Trọn Ảnh (+ Nền Mờ Nghệ Thuật)
                 </button>
               </div>
             </div>
@@ -1823,6 +2064,56 @@
         return "/" + u;
       }
 
+      function cleanMapEmbedUrl(raw, fallbackQuery) {
+        if (!raw || typeof raw !== "string") {
+          if (fallbackQuery) {
+            return "https://maps.google.com/maps?q=" + encodeURIComponent(fallbackQuery) + "&t=&z=15&ie=UTF8&iwloc=&output=embed";
+          }
+          return "";
+        }
+        var str = raw.trim();
+        if (/<iframe/i.test(str)) {
+          var srcMatch = str.match(/src\s*=\s*["']([^"']+)["']/i);
+          if (srcMatch && srcMatch[1]) str = srcMatch[1].trim();
+        }
+        str = str.replace(/&amp;/g, "&").replace(/^["']+|["']+$/g, "").trim();
+        if (str.indexOf("/maps/embed") !== -1 || str.indexOf("output=embed") !== -1) {
+          return str;
+        }
+        if (str.indexOf("google.com/maps") !== -1 || str.indexOf("maps.google.com") !== -1) {
+          try {
+            var u = new URL(str);
+            var q = u.searchParams.get("q") || u.searchParams.get("query");
+            if (q) return "https://maps.google.com/maps?q=" + encodeURIComponent(q) + "&t=&z=15&ie=UTF8&iwloc=&output=embed";
+          } catch (_) {}
+        }
+        if (str.indexOf("maps.app.goo.gl") !== -1 || str.indexOf("goo.gl/maps") !== -1) {
+          if (fallbackQuery) return "https://maps.google.com/maps?q=" + encodeURIComponent(fallbackQuery) + "&t=&z=15&ie=UTF8&iwloc=&output=embed";
+        }
+        if (/^https?:\/\//i.test(str)) return str;
+        if (fallbackQuery) return "https://maps.google.com/maps?q=" + encodeURIComponent(fallbackQuery) + "&t=&z=15&ie=UTF8&iwloc=&output=embed";
+        return "";
+      }
+
+      function cleanMapLinkUrl(raw, fallbackQuery) {
+        if (!raw || typeof raw !== "string") {
+          if (fallbackQuery) return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(fallbackQuery);
+          return "";
+        }
+        var str = raw.trim();
+        if (/<iframe/i.test(str)) {
+          var srcMatch = str.match(/src\s*=\s*["']([^"']+)["']/i);
+          if (srcMatch && srcMatch[1]) str = srcMatch[1].trim();
+        } else if (/<a/i.test(str)) {
+          var hrefMatch = str.match(/href\s*=\s*["']([^"']+)["']/i);
+          if (hrefMatch && hrefMatch[1]) str = hrefMatch[1].trim();
+        }
+        str = str.replace(/&amp;/g, "&").replace(/^["']+|["']+$/g, "").trim();
+        if (/^https?:\/\//i.test(str)) return str;
+        if (fallbackQuery) return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(fallbackQuery);
+        return str;
+      }
+
       // 1. RENDER ALBUM GRID (KÈM NÚT CẮT / CĂN CHỈNH CHO TỪNG ẢNH ALBUM)
       function renderAlbumGrid() {
         var grid = document.getElementById("albumAdminGrid");
@@ -1843,7 +2134,7 @@
           card.className = "album-item-card";
           card.innerHTML =
             '<span class="album-item-badge">#' + numStr + "</span>" +
-            '<img src="' + src + '" alt="" class="album-item-thumb" loading="lazy">' +
+            '<img src="' + resolveAdminAssetUrl(src) + '" alt="" class="album-item-thumb" loading="lazy">' +
             '<div class="album-item-actions">' +
               '<button type="button" class="icon-btn" data-act="prev" title="Đẩy lên trước">←</button>' +
               '<button type="button" class="icon-btn" data-act="next" title="Đẩy ra sau">→</button>' +
@@ -1928,7 +2219,7 @@
             '<input type="text" class="form-control s-title" placeholder="Tên nghi lễ" value="' + (ev.title || "").replace(/"/g, "&quot;") + '">' +
             '<input type="text" class="form-control s-desc" placeholder="Chi tiết nghi lễ / địa điểm" value="' + (ev.desc || "").replace(/"/g, "&quot;") + '">' +
             '<label style="display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--gold-bright);cursor:pointer;white-space:nowrap;">' +
-              '<input type="checkbox" class="s-hl" ' + (ev.highlight ? "checked" : "") + "> ❖ Nổi bật" +
+              '<input type="checkbox" class="s-hl" ' + (ev.highlight ? "checked" : "") + "> Nổi bật" +
             "</label>" +
             '<button type="button" class="btn btn-sm btn-danger s-del">✕</button>';
 
@@ -2246,7 +2537,7 @@
         if (parts.length !== 3) return;
         var dotDate = parts[2] + "." + parts[1] + "." + parts[0];
         var sess = getSessionLabel(tStr);
-        var badgeCover = val("f_" + side + "_badgeCover") || (side === "groom" ? "❖ HÔN LỄ NHÀ TRAI" : "❖ VU QUY NHÀ GÁI");
+        var badgeCover = val("f_" + side + "_badgeCover") || (side === "groom" ? "HÔN LỄ NHÀ TRAI" : "VU QUY NHÀ GÁI");
 
         var timeCoverStr = tStr + " " + sess + " • " + dotDate;
         var badgeMapStr = badgeCover.toUpperCase() + " • " + tStr + " " + sess.toUpperCase() + " (" + dotDate + ")";
@@ -2366,6 +2657,16 @@
         var prevInterludeMob = document.getElementById("prev_interludePhotoMobile");
         if (prevInterludeMob) prevInterludeMob.src = interludeMobSrc ? resolveAdminAssetUrl(interludeMobSrc) : resolveAdminAssetUrl(interludeSrc);
 
+        var choiceBgSrc = c.choiceBackdrop || "";
+        val("f_choiceBackdrop", choiceBgSrc);
+        var prevChoiceBg = document.getElementById("prev_choiceBackdrop");
+        if (prevChoiceBg) prevChoiceBg.src = choiceBgSrc ? resolveAdminAssetUrl(choiceBgSrc) : "";
+
+        var choiceBgMobSrc = c.choiceBackdropMobile || "";
+        val("f_choiceBackdropMobile", choiceBgMobSrc);
+        var prevChoiceBgMob = document.getElementById("prev_choiceBackdropMobile");
+        if (prevChoiceBgMob) prevChoiceBgMob.src = choiceBgMobSrc ? resolveAdminAssetUrl(choiceBgMobSrc) : (choiceBgSrc ? resolveAdminAssetUrl(choiceBgSrc) : "");
+
         var scs = Array.isArray(state.introScenes) ? state.introScenes : [];
         var defaultVerses = [
           "“Có những cuộc gặp gỡ ngỡ như tình cờ,\nnhưng lại là sự an bài đẹp nhất của duyên số.”",
@@ -2389,6 +2690,34 @@
           if (prevEl) prevEl.src = resolveAdminAssetUrl(bdSrc);
           var prevMobEl = document.getElementById("prev_introScene" + i + "_backdropMobile");
           if (prevMobEl) prevMobEl.src = bdMobSrc ? resolveAdminAssetUrl(bdMobSrc) : resolveAdminAssetUrl(bdSrc);
+        }
+
+        // Khởi tạo giá trị Interlude (Ảnh 2) & Journey (Ảnh 1)
+        var intObj = state.interlude || {};
+        val("f_interlude_eyebrow", intObj.eyebrow || "AND SO, OUR FOREVER BEGINS");
+        val("f_interlude_quote", intObj.quote || "Và rồi chúng mình lựa chọn trở thành một nửa của nhau.");
+
+        var jObj = state.journey || {};
+        val("f_journey_originCity", jObj.originCity || "Hà Nội");
+        val("f_journey_destCity", jObj.destinationCity || "Shanghai");
+        val("f_journey_subtitle", jObj.subtitle || "Hai thành phố. Một hành trình chung.\nVà những khoảnh khắc muốn giữ lại mãi.");
+        val("f_journey_arrivalTitle", jObj.arrivalTitle || "Chạm đến một nơi.\n<em>Mở ra những kỷ niệm.</em>");
+
+        var defaultPolPhotos = [
+          "/thiep-cuoi-khanh-linh-le-dung/assets/memory-01-garden.jpg",
+          "/thiep-cuoi-khanh-linh-le-dung/assets/memory-02-castle.jpg",
+          "/thiep-cuoi-khanh-linh-le-dung/assets/memory-03-piano.jpg"
+        ];
+        var defaultPolCaps = ["you & me", "everywhere, together", "our next chapter"];
+        var pols = Array.isArray(jObj.polaroids) ? jObj.polaroids : [];
+        for (var pi = 0; pi < 3; pi++) {
+          var pItem = pols[pi] || {};
+          var pSrc = pItem.photo || defaultPolPhotos[pi];
+          var pCap = pItem.caption || defaultPolCaps[pi];
+          val("f_polaroid" + pi + "_photo", pSrc);
+          val("f_polaroid" + pi + "_caption", pCap);
+          var pPrev = document.getElementById("prev_polaroid" + pi + "_photo");
+          if (pPrev) pPrev.src = resolveAdminAssetUrl(pSrc);
         }
 
         var d = state.date || {};
@@ -2457,7 +2786,8 @@
         val("f_inv_monogram", inv.monogram || "L&D");
         val("f_inv_subTitle", inv.subTitle || "THE WEDDING INVITATION");
         val("f_inv_kinhMoiTitle", inv.kinhMoiTitle || "Kính mời");
-        val("f_inv_defaultGuestName", inv.defaultGuestName || "....................................................");
+        var defaultGuestVal = (inv.defaultGuestName && !inv.defaultGuestName.includes("...")) ? inv.defaultGuestName : "Quý khách và gia đình";
+        val("f_inv_defaultGuestName", defaultGuestVal);
         val("f_inv_introGroom", inv.introGroom || "Gia đình nhà trai trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi");
         val("f_inv_introBride", inv.introBride || "Gia đình nhà gái trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi");
         val("f_inv_bottomMessage", inv.bottomMessage || "Một ngày đặc biệt, bên những người thương.");
@@ -2476,6 +2806,8 @@
         var coverMobVal = val("f_coverPhotoMobile") || "";
         var interludeVal = val("f_interludePhoto") || "/thiep-cuoi-khanh-linh-le-dung/assets/hero.jpg";
         var interludeMobVal = val("f_interludePhotoMobile") || "";
+        var choiceBgVal = val("f_choiceBackdrop") || "";
+        var choiceBgMobVal = val("f_choiceBackdropMobile") || "";
 
         state.couple = {
           groomName: val("f_groomName"),
@@ -2488,7 +2820,9 @@
           heroBackdrop: coverVal,
           interludePhoto: interludeVal,
           interludePhotoMobile: interludeMobVal,
-          detailsBackdrop: interludeVal
+          detailsBackdrop: interludeVal,
+          choiceBackdrop: choiceBgVal,
+          choiceBackdropMobile: choiceBgMobVal
         };
 
         state.introScenes = [
@@ -2521,6 +2855,9 @@
           shortLunarPill: val("f_shortLunarPill")
         };
 
+        var gFallback = val("f_groom_address") || val("f_groom_nameFull");
+        var bFallback = val("f_bride_address") || val("f_bride_nameFull");
+
         state.venues = {
           groom: {
             badgeCover: val("f_groom_badgeCover"),
@@ -2531,8 +2868,8 @@
             nameFull: val("f_groom_nameFull"),
             parents: val("f_groom_parents"),
             address: val("f_groom_address"),
-            mapLink: val("f_groom_mapLink"),
-            mapEmbed: val("f_groom_mapEmbed")
+            mapLink: cleanMapLinkUrl(val("f_groom_mapLink"), gFallback),
+            mapEmbed: cleanMapEmbedUrl(val("f_groom_mapEmbed"), gFallback)
           },
           bride: {
             badgeCover: val("f_bride_badgeCover"),
@@ -2543,8 +2880,8 @@
             nameFull: val("f_bride_nameFull"),
             parents: val("f_bride_parents"),
             address: val("f_bride_address"),
-            mapLink: val("f_bride_mapLink"),
-            mapEmbed: val("f_bride_mapEmbed")
+            mapLink: cleanMapLinkUrl(val("f_bride_mapLink"), bFallback),
+            mapEmbed: cleanMapEmbedUrl(val("f_bride_mapEmbed"), bFallback)
           }
         };
 
@@ -2559,11 +2896,46 @@
           monogram: val("f_inv_monogram") || "L&D",
           subTitle: val("f_inv_subTitle") || "THE WEDDING INVITATION",
           kinhMoiTitle: val("f_inv_kinhMoiTitle") || "Kính mời",
-          defaultGuestName: val("f_inv_defaultGuestName") || "....................................................",
+          defaultGuestName: val("f_inv_defaultGuestName") || "Quý khách và gia đình",
           introGroom: val("f_inv_introGroom") || "Gia đình nhà trai trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi",
           introBride: val("f_inv_introBride") || "Gia đình nhà gái trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi",
           bottomMessage: val("f_inv_bottomMessage") || "Một ngày đặc biệt, bên những người thương."
         };
+
+        state.interlude = {
+          eyebrow: val("f_interlude_eyebrow") || "AND SO, OUR FOREVER BEGINS",
+          quote: val("f_interlude_quote") || "Và rồi chúng mình lựa chọn trở thành một nửa của nhau."
+        };
+
+        state.journey = {
+          originCity: val("f_journey_originCity") || "Hà Nội",
+          destinationCity: val("f_journey_destCity") || "Shanghai",
+          subtitle: val("f_journey_subtitle") || "Hai thành phố. Một hành trình chung.\nVà những khoảnh khắc muốn giữ lại mãi.",
+          arrivalTitle: val("f_journey_arrivalTitle") || "Chạm đến một nơi.\n<em>Mở ra những kỷ niệm.</em>",
+          polaroids: [
+            {
+              photo: val("f_polaroid0_photo") || "/thiep-cuoi-khanh-linh-le-dung/assets/memory-01-garden.jpg",
+              caption: val("f_polaroid0_caption") || "you & me"
+            },
+            {
+              photo: val("f_polaroid1_photo") || "/thiep-cuoi-khanh-linh-le-dung/assets/memory-02-castle.jpg",
+              caption: val("f_polaroid1_caption") || "everywhere, together"
+            },
+            {
+              photo: val("f_polaroid2_photo") || "/thiep-cuoi-khanh-linh-le-dung/assets/memory-03-piano.jpg",
+              caption: val("f_polaroid2_caption") || "our next chapter"
+            }
+          ]
+        };
+
+        if (Array.isArray(state.albumPhotos)) {
+          state.albumPhotos = state.albumPhotos.map(function (p) {
+            var s = typeof p === "string" ? p : (p && p.src ? p.src : "");
+            if (!s) return "";
+            if (/^(https?:|data:|blob:|\/)/.test(s)) return s;
+            return "/" + s.trim().replace(/\\/g, "/").replace(/^\/+/, "");
+          }).filter(Boolean);
+        }
       }
 
       // HÀM ĐỌC FILE & TỰ ĐỘNG NÉN ẢNH GỐC MÁY CƠ (10MB -> ~300KB FULL HD 2048PX) TRƯỚC KHI LÊN VPS
@@ -2637,7 +3009,12 @@
             if (res.ok) {
               var json = await res.json();
               if (Array.isArray(json.paths)) {
-                allPaths = allPaths.concat(json.paths);
+                var normPaths = json.paths.map(function (p) {
+                  if (!p) return "";
+                  if (/^(https?:|data:|blob:|\/)/.test(p)) return p;
+                  return "/" + p.trim().replace(/\\/g, "/").replace(/^\/+/, "");
+                }).filter(Boolean);
+                allPaths = allPaths.concat(normPaths);
                 uploadedThisBatch = true;
               }
             }
@@ -2686,11 +3063,14 @@
         });
       }
 
-      // THÊM ĐƯỜNG DẪN ẢNH THỦ CÔNG
+      // THÊM ĐƯỜNG DẪN ẢNH THỦ CÔNG (TỰ ĐỘNG CHUẨN HÓA BẮT ĐẦU BẰNG /)
       document.getElementById("btnAddManualPhoto").addEventListener("click", function () {
         var inp = document.getElementById("manualPhotoInput");
         var v = inp.value.trim();
         if (!v) return;
+        if (!/^(https?:|data:|blob:|\/)/.test(v)) {
+          v = "/" + v.replace(/\\/g, "/").replace(/^\/+/, "");
+        }
         state.albumPhotos.push(v);
         inp.value = "";
         renderAlbumGrid();
@@ -2701,6 +3081,77 @@
         state.albumPhotos.reverse();
         renderAlbumGrid();
       });
+
+      // 1. QUÉT & NẠP LẠI ẢNH TỪ MÁY CHỦ (IMG/ALBUM/)
+      var btnSyncServer = document.getElementById("btnSyncServerPhotos");
+      if (btnSyncServer) {
+        btnSyncServer.addEventListener("click", async function () {
+          btnSyncServer.disabled = true;
+          showToast("Đang quét ảnh từ thư mục máy chủ (img/album/)...");
+          try {
+            var res = await fetch("/api/images?t=" + Date.now());
+            if (res.ok) {
+              var data = await res.json();
+              if (data && Array.isArray(data.images) && data.images.length > 0) {
+                // Ưu tiên các ảnh trong img/album/
+                var albumImages = data.images.filter(function (img) {
+                  return img.includes("img/album/") || img.includes("/album/");
+                });
+                if (albumImages.length === 0) albumImages = data.images;
+
+                // Chuẩn hóa toàn bộ đường dẫn ảnh: luôn bắt đầu bằng /
+                albumImages = albumImages.map(function (p) {
+                  if (/^(https?:|data:|blob:)/.test(p)) return p;
+                  return "/" + p.trim().replace(/\\/g, "/").replace(/^\/+/, "");
+                }).filter(Boolean);
+
+                // Ghép cùng ảnh hiện có (nếu có), loại trừ trùng lặp
+                var curList = (state.albumPhotos || []).map(function (p) {
+                  var s = typeof p === "string" ? p : (p && p.src ? p.src : "");
+                  if (!s) return "";
+                  if (/^(https?:|data:|blob:)/.test(s)) return s;
+                  return "/" + s.trim().replace(/\\/g, "/").replace(/^\/+/, "");
+                }).filter(Boolean);
+
+                var mergedSet = new Set(albumImages);
+                curList.forEach(function (p) { mergedSet.add(p); });
+                var finalPhotos = Array.from(mergedSet).filter(Boolean);
+
+                state.albumPhotos = finalPhotos;
+                renderAlbumGrid();
+                await saveAllChanges("Đã quét & nạp " + finalPhotos.length + " ảnh từ máy chủ. Đường dẫn đã sẵn sàng cho thiệp!");
+                showToast("Thành công: Đã nạp " + finalPhotos.length + " ảnh máy chủ và chuẩn hóa đường dẫn!");
+              } else {
+                showToast("Không tìm thấy ảnh nào trong thư mục máy chủ.");
+              }
+            } else {
+              showToast("Không thể kết nối đến máy chủ để quét ảnh.");
+            }
+          } catch (err) {
+            showToast("Lỗi quét ảnh: " + err.message);
+          } finally {
+            btnSyncServer.disabled = false;
+          }
+        });
+      }
+
+      // 2. CHUẨN HÓA TOÀN BỘ ĐƯỜNG DẪN ẢNH CHO THIỆP
+      var btnFixUrls = document.getElementById("btnFixPhotoUrls");
+      if (btnFixUrls) {
+        btnFixUrls.addEventListener("click", async function () {
+          var photos = (state.albumPhotos || []).map(function (p) {
+            var s = typeof p === "string" ? p : (p && p.src ? p.src : "");
+            if (!s) return "";
+            if (/^(https?:|data:|blob:)/.test(p)) return s;
+            return "/" + s.trim().replace(/\\/g, "/").replace(/^\/+/, "");
+          }).filter(Boolean);
+
+          state.albumPhotos = photos;
+          renderAlbumGrid();
+          await saveAllChanges("Đã chuẩn hóa toàn bộ " + photos.length + " đường dẫn ảnh cho thiệp!");
+          showToast("Đã chuẩn hóa toàn bộ " + photos.length + " ảnh (đường dẫn / để thiệp không bị trống)!");
+        });
+      }
 
       // ====================================================================
       // HỆ THỐNG CHỌN ẢNH TỪ ALBUM + BÀN CĂN CHỈNH & CẮT KHUNG CHUẨN TỈ LỆ
@@ -3060,7 +3511,7 @@
           state.albumPhotos[currentCropSession.albumIndex] = finalPath;
           renderAlbumGrid();
           closeCropStudio();
-          await saveAllChanges("✨ Đã căn chỉnh & cập nhật ảnh trong Album!");
+          await saveAllChanges("Đã căn chỉnh & cập nhật ảnh trong Album!");
         } else {
           var slotKey = currentCropSession.slotKey;
           if (slotKey === "heroBackdrop" || slotKey === "detailsBackdrop") {
@@ -3074,13 +3525,13 @@
             }
             renderBackdropStrip(slotKey);
             closeCropStudio();
-            await saveAllChanges("✨ Đã cập nhật Slideshow Ảnh Nền (" + arr.length + " ảnh)!");
+            await saveAllChanges("Đã cập nhật Slideshow Ảnh Nền (" + arr.length + " ảnh)!");
           } else {
             val("f_" + slotKey, finalPath);
             var prevEl = document.getElementById("prev_" + slotKey);
             if (prevEl) prevEl.src = resolveAdminAssetUrl(finalPath);
             closeCropStudio();
-            await saveAllChanges("✨ Đã căn chỉnh & áp dụng ảnh cho " + (currentCropSession.label || slotKey) + "!");
+            await saveAllChanges("Đã căn chỉnh & áp dụng ảnh cho " + (currentCropSession.label || slotKey) + "!");
           }
         }
       });
@@ -3188,6 +3639,43 @@
       document.getElementById("btnAutoMapGroom").addEventListener("click", function () { autoBuildMapUrls("groom"); });
       document.getElementById("btnAutoMapBride").addEventListener("click", function () { autoBuildMapUrls("bride"); });
 
+      // TỰ ĐỘNG LỌC LINK KHI DÁN NGUYÊN MÃ <iframe> HOẶC LINK GOOGLE MAPS
+      ["groom", "bride"].forEach(function (prefix) {
+        var embedInput = document.getElementById("f_" + prefix + "_mapEmbed");
+        if (embedInput) {
+          function onEmbedInput() {
+            var raw = embedInput.value.trim();
+            if (/<iframe/i.test(raw)) {
+              var cleaned = cleanMapEmbedUrl(raw);
+              if (cleaned) {
+                embedInput.value = cleaned;
+                showToast("Đã tự động trích xuất link URL chuẩn từ thẻ iframe Google Maps!");
+              }
+            }
+          }
+          embedInput.addEventListener("input", onEmbedInput);
+          embedInput.addEventListener("change", onEmbedInput);
+          embedInput.addEventListener("paste", function () { setTimeout(onEmbedInput, 50); });
+        }
+
+        var linkInput = document.getElementById("f_" + prefix + "_mapLink");
+        if (linkInput) {
+          function onLinkInput() {
+            var raw = linkInput.value.trim();
+            if (/<iframe|<a/i.test(raw)) {
+              var cleaned = cleanMapLinkUrl(raw);
+              if (cleaned) {
+                linkInput.value = cleaned;
+                showToast("Đã tự động trích xuất link Google Maps chuẩn!");
+              }
+            }
+          }
+          linkInput.addEventListener("input", onLinkInput);
+          linkInput.addEventListener("change", onLinkInput);
+          linkInput.addEventListener("paste", function () { setTimeout(onLinkInput, 50); });
+        }
+      });
+
       // THÊM MÓN ĂN & THÊM MỐC LỊCH TRÌNH
       document.getElementById("btnAddCourse").addEventListener("click", function () {
         state.menu.courses.push({ name: "Món Mới Thượng Hạng", tag: "Món Chính", desc: "Mô tả hương vị món ăn" });
@@ -3210,7 +3698,7 @@
         var subTitle = val("f_inv_subTitle") || "THE WEDDING INVITATION";
         var kinhMoi = val("f_inv_kinhMoiTitle") || "Kính mời";
         var guestNameInput = val("gen_guestName").trim();
-        var defaultGuest = val("f_inv_defaultGuestName") || "....................................................";
+        var defaultGuest = (val("f_inv_defaultGuestName") && !val("f_inv_defaultGuestName").includes("...")) ? val("f_inv_defaultGuestName") : "Quý khách và gia đình";
         var intro = isBride ? val("f_inv_introBride") : val("f_inv_introGroom");
         var bottomMsg = val("f_inv_bottomMessage") || "Một ngày đặc biệt, bên những người thương.";
         var groomName = val("f_groomName") || "Lê Dũng";
@@ -3232,7 +3720,7 @@
             guestEl.className = "mockup-guest has-name";
           } else {
             guestEl.textContent = defaultGuest;
-            guestEl.className = "mockup-guest";
+            guestEl.className = "mockup-guest has-name";
           }
         }
 
@@ -3286,16 +3774,41 @@
         var selectedSideRadio = document.querySelector('input[name="gen_side"]:checked');
         var side = selectedSideRadio ? selectedSideRadio.value : "groom";
 
-        var origin = window.location.origin || "https://dunglinhthiepcuoi.online";
+        var domainModeRadio = document.querySelector('input[name="gen_domain_mode"]:checked');
+        var mode = domainModeRadio ? domainModeRadio.value : "online";
+
+        var introModeRadio = document.querySelector('input[name="gen_intro_mode"]:checked');
+        var introMode = introModeRadio ? introModeRadio.value : "intro";
+
+        var origin = "https://dunglinhthiepcuoi.online";
+        if (mode === "local") {
+          origin = window.location.origin;
+        }
+
         var basePath = "/thiep-cuoi-khanh-linh-le-dung/";
         var url = new URL(basePath, origin);
         url.searchParams.set("side", side);
         if (name) {
           url.searchParams.set("to", name);
         }
+        if (introMode === "skipIntro") {
+          url.searchParams.set("skipIntro", "1");
+        }
         var finalLink = url.toString();
         var linkInput = document.getElementById("gen_generatedLink");
         if (linkInput) linkInput.value = finalLink;
+
+        var hintEl = document.getElementById("gen_link_hint");
+        if (hintEl) {
+          if (origin.includes("localhost") || origin.includes("127.0.0.1")) {
+            hintEl.innerHTML = "⚠️ Đang dùng link <strong>localhost</strong> (chỉ máy bạn xem được, không gửi link này cho khách).";
+            hintEl.style.color = "#ffb37c";
+          } else {
+            hintEl.innerHTML = "Link chuẩn tên miền <strong>https://dunglinhthiepcuoi.online</strong> sẵn sàng gửi khách qua Zalo/Facebook!";
+            hintEl.style.color = "#7be895";
+          }
+        }
+
         updateCardMockup();
       }
 
@@ -3311,6 +3824,26 @@
           updateGeneratedGuestLink();
         });
       });
+      document.querySelectorAll('input[name="gen_domain_mode"]').forEach(function (r) {
+        r.addEventListener("change", updateGeneratedGuestLink);
+      });
+      document.querySelectorAll('input[name="gen_intro_mode"]').forEach(function (r) {
+        r.addEventListener("change", updateGeneratedGuestLink);
+      });
+
+      // Clear choice stage custom background
+      window.clearChoiceBackdrop = function (type) {
+        if (type === "pc") {
+          val("f_choiceBackdrop", "");
+          var prev = document.getElementById("prev_choiceBackdrop");
+          if (prev) prev.src = "";
+        } else {
+          val("f_choiceBackdropMobile", "");
+          var prevMob = document.getElementById("prev_choiceBackdropMobile");
+          if (prevMob) prevMob.src = "";
+        }
+        showToast("Đã xóa ảnh nền, màn hình chọn thiệp sẽ dùng phong cách hoàng gia mặc định.");
+      };
 
       // Mockup Side Switchers
       function updateCardMockupSideButtons() {
@@ -3348,22 +3881,31 @@
           if (!link) return;
           try {
             await navigator.clipboard.writeText(link);
-            showToast("📋 Đã sao chép link mời vào bộ nhớ tạm!");
+            showToast("Đã sao chép link mời vào bộ nhớ tạm!");
           } catch (e) {
             var temp = document.getElementById("gen_generatedLink");
             temp.select();
             document.execCommand("copy");
-            showToast("📋 Đã sao chép link mời!");
+            showToast("Đã sao chép link mời!");
           }
         });
       }
 
-      // Test Open Link
+      // Test Open Link (Luôn mở xem thử được ngay trên trình duyệt hiện tại)
       var btnTest = document.getElementById("btnTestOpenLink");
       if (btnTest) {
         btnTest.addEventListener("click", function () {
-          var link = val("gen_generatedLink");
-          if (link) window.open(link, "_blank");
+          var name = (val("gen_guestName") || "").trim();
+          var selectedSideRadio = document.querySelector('input[name="gen_side"]:checked');
+          var side = selectedSideRadio ? selectedSideRadio.value : "groom";
+          var introModeRadio = document.querySelector('input[name="gen_intro_mode"]:checked');
+          var introMode = introModeRadio ? introModeRadio.value : "intro";
+
+          var testUrl = new URL("/thiep-cuoi-khanh-linh-le-dung/", window.location.origin);
+          testUrl.searchParams.set("side", side);
+          if (name) testUrl.searchParams.set("to", name);
+          if (introMode === "skipIntro") testUrl.searchParams.set("skipIntro", "1");
+          window.open(testUrl.toString(), "_blank");
         });
       }
 
@@ -3418,7 +3960,7 @@
         collectFormsToState();
         var result = await window.saveWeddingDB(state);
         if (result && result.ok) {
-          showToast(customMsg || "✨ Đã lưu toàn bộ thay đổi vào DB & Thiệp Cưới!");
+          showToast(customMsg || "Đã lưu toàn bộ thay đổi vào DB & Thiệp Cưới!");
         }
       }
 

@@ -139,47 +139,240 @@ document.getElementById('edit-response').addEventListener('click', () => {
   rsvpDialog.setAttribute('aria-labelledby','rsvp-dialog-title'); rsvpForm.elements.name.focus();
 });
 
-// User-provided piano recording; playback starts only after a guest clicks.
+// Audio controller with interactive playlist popover & user-gesture auto-play
 const backgroundMusic = document.getElementById('background-music');
 const soundButton = document.getElementById('sound-toggle');
+const musicWidget = document.getElementById('weddingMusicWidget');
+const playlistPopover = document.getElementById('musicPlaylistPopover');
+const popoverTitle = document.getElementById('popoverCurrentTrackName');
+const popoverCounter = document.getElementById('popoverTrackCounter');
+const btnPrevTrack = document.getElementById('btnPrevTrack');
+const btnPlayToggle = document.getElementById('btnPlayToggle');
+const playToggleIcon = document.getElementById('playToggleIcon');
+const playToggleText = document.getElementById('playToggleText');
+const btnNextTrack = document.getElementById('btnNextTrack');
+const popoverTracklist = document.getElementById('popoverTracklist');
+
 let audioPending = false;
-backgroundMusic.volume = 0.45;
-const musicStartSeconds = 10;
-function skipMusicIntro() {
-  if (backgroundMusic.currentTime >= musicStartSeconds) return;
-  try { backgroundMusic.currentTime = musicStartSeconds; }
-  catch (_) { /* Retry when media metadata becomes available. */ }
-}
-backgroundMusic.addEventListener('loadedmetadata',skipMusicIntro);
-backgroundMusic.addEventListener('seeking',skipMusicIntro);
-backgroundMusic.addEventListener('timeupdate',skipMusicIntro);
-function syncMusicButton() {
-  const playing = !backgroundMusic.paused && !backgroundMusic.ended;
-  soundButton.setAttribute('aria-pressed',String(playing));
-  soundButton.setAttribute('aria-label',(playing ? 'Tắt' : 'Bật')+' nhạc nền — River Flows in You');
-  soundButton.title = 'River Flows in You — Yiruma · '+(playing ? 'Tắt nhạc' : 'Bật nhạc');
-}
-backgroundMusic.addEventListener('play',syncMusicButton);
-backgroundMusic.addEventListener('pause',syncMusicButton);
-backgroundMusic.addEventListener('ended',syncMusicButton);
-backgroundMusic.addEventListener('error',() => {
-  backgroundMusic.pause(); syncMusicButton();
-  audioPending = false; soundButton.disabled = false;
-});
-soundButton.addEventListener('click',async () => {
-  if (audioPending) return;
-  if (!backgroundMusic.paused) { backgroundMusic.pause(); return; }
-  audioPending = true; soundButton.disabled = true;
-  try {
-    skipMusicIntro();
-    await backgroundMusic.play();
-    syncMusicButton();
-  } catch (_) {
-    backgroundMusic.pause(); syncMusicButton();
-    showToast('Chưa phát được nhạc. Bạn hãy thử bấm lại nút nhạc nhé.');
-  } finally {
-    audioPending = false; soundButton.disabled = false;
+let currentTrackIndex = 0;
+
+if (backgroundMusic) {
+  backgroundMusic.volume = 0.45;
+
+  function getPlaylist() {
+    return (Array.isArray(window.__WEDDING_PLAYLIST) && window.__WEDDING_PLAYLIST.length > 0)
+      ? window.__WEDDING_PLAYLIST
+      : [{ title: 'River Flows in You — Yiruma', src: '/thiep-cuoi-khanh-linh-le-dung/assets/river-flows-in-you.mp3#t=10' }];
   }
-});
-window.addEventListener('pagehide',() => backgroundMusic.pause());
-syncMusicButton();
+
+  function resolveAssetUrl(u) {
+    if (!u) return '';
+    if (/^(https?:|data:|blob:)/.test(u)) return u;
+    const clean = String(u).replace(/^\/+/, '');
+    if (clean.startsWith('assets/')) {
+      return '/thiep-cuoi-khanh-linh-le-dung/' + clean;
+    }
+    return '/' + clean;
+  }
+
+  function getCurrentTrack() {
+    const list = getPlaylist();
+    currentTrackIndex = (currentTrackIndex + list.length) % list.length;
+    return list[currentTrackIndex] || list[0];
+  }
+
+  function skipMusicIntro() {
+    const src = backgroundMusic.currentSrc || backgroundMusic.src || '';
+    if (src.includes('#t=10') || src.includes('river-flows-in-you')) {
+      if (backgroundMusic.currentTime < 10) {
+        try { backgroundMusic.currentTime = 10; } catch (_) {}
+      }
+    }
+  }
+  backgroundMusic.addEventListener('loadedmetadata', skipMusicIntro);
+
+  function renderPopoverTracklist() {
+    if (!popoverTracklist) return;
+    const list = getPlaylist();
+    const playing = !backgroundMusic.paused && !backgroundMusic.ended;
+
+    popoverTracklist.innerHTML = list.map((item, idx) => {
+      const active = idx === currentTrackIndex;
+      const numStr = (idx + 1 < 10 ? '0' : '') + (idx + 1);
+      const title = item.title || ('Bản nhạc #' + (idx + 1));
+      const statusText = active ? (playing ? '♫ Đang phát' : '⏸ Đang chọn') : '';
+      return `
+        <li class="popover-track-item ${active ? 'active' : ''}" data-track-idx="${idx}" role="button" tabindex="0">
+          <span class="track-num">${numStr}</span>
+          <span class="track-name" title="${title}">${title}</span>
+          ${statusText ? `<span class="track-status">${statusText}</span>` : ''}
+        </li>
+      `;
+    }).join('');
+
+    popoverTracklist.querySelectorAll('.popover-track-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const idx = parseInt(item.dataset.trackIdx, 10);
+        if (!isNaN(idx)) {
+          loadAndPlayTrack(idx);
+        }
+      });
+    });
+  }
+
+  function syncMusicUI() {
+    const playing = !backgroundMusic.paused && !backgroundMusic.ended;
+    const cur = getCurrentTrack();
+    const list = getPlaylist();
+    const title = cur.title || 'Nhạc cưới';
+
+    if (musicWidget) {
+      musicWidget.classList.toggle('is-playing', playing);
+    }
+    if (soundButton) {
+      soundButton.setAttribute('aria-pressed', String(playing));
+      soundButton.setAttribute('aria-label', (playing ? 'Tắt' : 'Bật') + ' nhạc nền — ' + title);
+      soundButton.title = title + ' · ' + (playing ? 'Đang phát' : 'Đã dừng');
+    }
+    if (popoverTitle) {
+      popoverTitle.textContent = title;
+      popoverTitle.title = title;
+    }
+    if (popoverCounter) {
+      popoverCounter.textContent = `${currentTrackIndex + 1} / ${list.length}`;
+    }
+    if (playToggleIcon) {
+      playToggleIcon.textContent = playing ? '⏸' : '▶';
+    }
+    if (playToggleText) {
+      playToggleText.textContent = playing ? 'Dừng nhạc' : 'Phát nhạc';
+    }
+
+    renderPopoverTracklist();
+  }
+
+  async function loadAndPlayTrack(idx) {
+    const list = getPlaylist();
+    currentTrackIndex = (idx + list.length) % list.length;
+    window.__WEDDING_CURRENT_MUSIC_INDEX = currentTrackIndex;
+    const target = list[currentTrackIndex];
+    if (!target) return;
+
+    const targetSrc = resolveAssetUrl(target.src);
+    if (backgroundMusic.getAttribute('data-loaded-src') !== targetSrc) {
+      backgroundMusic.setAttribute('data-loaded-src', targetSrc);
+      backgroundMusic.src = targetSrc;
+    }
+
+    try {
+      skipMusicIntro();
+      await backgroundMusic.play();
+    } catch (_) {}
+    syncMusicUI();
+  }
+
+  backgroundMusic.addEventListener('play', syncMusicUI);
+  backgroundMusic.addEventListener('pause', syncMusicUI);
+  backgroundMusic.addEventListener('ended', () => {
+    const list = getPlaylist();
+    if (list.length > 1) {
+      loadAndPlayTrack(currentTrackIndex + 1);
+    } else {
+      backgroundMusic.currentTime = 0;
+      backgroundMusic.play().catch(() => {});
+      syncMusicUI();
+    }
+  });
+
+  backgroundMusic.addEventListener('error', () => {
+    backgroundMusic.pause();
+    syncMusicUI();
+    audioPending = false;
+    if (soundButton) soundButton.disabled = false;
+  });
+
+  window.playWeddingMusic = async function() {
+    if (!backgroundMusic) return;
+    if (!backgroundMusic.paused) return;
+    try {
+      skipMusicIntro();
+      await backgroundMusic.play();
+    } catch (_) {}
+    syncMusicUI();
+  };
+
+  // Nút trên Header: Bấm để mở / đóng Hộp chọn bài hát (Playlist Popover)
+  if (soundButton && musicWidget) {
+    soundButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = musicWidget.classList.contains('is-open');
+      if (isOpen) {
+        musicWidget.classList.remove('is-open');
+        soundButton.setAttribute('aria-expanded', 'false');
+      } else {
+        musicWidget.classList.add('is-open');
+        soundButton.setAttribute('aria-expanded', 'true');
+        // Nếu đang dừng, tự động phát luôn khi mở popover
+        if (backgroundMusic.paused) {
+          window.playWeddingMusic();
+        }
+      }
+    });
+
+    // Bấm ra ngoài popover để đóng
+    document.addEventListener('click', (e) => {
+      if (musicWidget.classList.contains('is-open') && !musicWidget.contains(e.target)) {
+        musicWidget.classList.remove('is-open');
+        soundButton.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  // Nút Dừng / Phát bên trong Popover
+  if (btnPlayToggle) {
+    btnPlayToggle.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      if (audioPending) return;
+      if (!backgroundMusic.paused) {
+        backgroundMusic.pause();
+        return;
+      }
+      audioPending = true;
+      btnPlayToggle.disabled = true;
+      try {
+        skipMusicIntro();
+        await backgroundMusic.play();
+      } catch (_) {
+        if (typeof showToast === 'function') {
+          showToast('Chưa phát được nhạc. Hãy thử chọn bài khác nhé.');
+        }
+      } finally {
+        audioPending = false;
+        btnPlayToggle.disabled = false;
+        syncMusicUI();
+      }
+    });
+  }
+
+  // Nút Bài trước
+  if (btnPrevTrack) {
+    btnPrevTrack.addEventListener('click', (e) => {
+      e.stopPropagation();
+      loadAndPlayTrack(currentTrackIndex - 1);
+    });
+  }
+
+  // Nút Bài tiếp theo
+  if (btnNextTrack) {
+    btnNextTrack.addEventListener('click', (e) => {
+      e.stopPropagation();
+      loadAndPlayTrack(currentTrackIndex + 1);
+    });
+  }
+
+  window.addEventListener('pagehide', () => backgroundMusic.pause());
+  window.refreshMusicPlaylistUI = syncMusicUI;
+
+  // Lần đầu tải
+  syncMusicUI();
+}

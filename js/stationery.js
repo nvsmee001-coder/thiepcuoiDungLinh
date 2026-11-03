@@ -196,8 +196,12 @@
           if (addr0 && vg.address) {
             addr0.textContent = vg.address.indexOf("📍") === 0 ? vg.address : "📍 " + vg.address;
           }
-          if (link0 && vg.mapLink) link0.href = vg.mapLink;
-          if (iframe0 && vg.mapEmbed) iframe0.src = vg.mapEmbed;
+          if (link0 && vg.mapLink) {
+            link0.href = window.cleanMapLinkUrl ? window.cleanMapLinkUrl(vg.mapLink, vg.address || vg.nameFull) : vg.mapLink;
+          }
+          if (iframe0 && vg.mapEmbed) {
+            iframe0.src = window.cleanMapEmbedUrl ? window.cleanMapEmbedUrl(vg.mapEmbed, vg.address || vg.nameFull) : vg.mapEmbed;
+          }
         }
       }
 
@@ -224,8 +228,12 @@
           if (addr1 && vb.address) {
             addr1.textContent = vb.address.indexOf("📍") === 0 ? vb.address : "📍 " + vb.address;
           }
-          if (link1 && vb.mapLink) link1.href = vb.mapLink;
-          if (iframe1 && vb.mapEmbed) iframe1.src = vb.mapEmbed;
+          if (link1 && vb.mapLink) {
+            link1.href = window.cleanMapLinkUrl ? window.cleanMapLinkUrl(vb.mapLink, vb.address || vb.nameFull) : vb.mapLink;
+          }
+          if (iframe1 && vb.mapEmbed) {
+            iframe1.src = window.cleanMapEmbedUrl ? window.cleanMapEmbedUrl(vb.mapEmbed, vb.address || vb.nameFull) : vb.mapEmbed;
+          }
         }
       }
     }
@@ -272,7 +280,7 @@
           schListEl.innerHTML = db.schedule.events
             .map(function (ev) {
               var hlClass = ev.highlight ? " is-highlight" : "";
-              var symbol = ev.highlight ? "❖" : "✦";
+              var symbol = ev.highlight ? "•" : "·";
               return (
                 '<div class="schedule-row' + hlClass + '">' +
                   '<div class="sch-time">' + (ev.time || "") + "</div>" +
@@ -704,7 +712,7 @@
         if (toggleBtn) toggleBtn.classList.remove("is-off");
         if (toggleLabel) toggleLabel.textContent = "Bụi Vàng";
         localStorage.setItem("THIEP_SPARKS_OFF", "0");
-        if (notify) showToast("✨ Đã bật bụi vàng lấp lánh");
+        if (notify) showToast("Đã bật bụi vàng lấp lánh");
       } else {
         canvas.classList.add("is-hidden");
         if (toggleBtn) toggleBtn.classList.add("is-off");
@@ -886,7 +894,7 @@
           "img/wedding-photo-card-left.jpg";
         imgEl.src = leftSrc;
         if (typeof globalSetLightboxZoom === "function") globalSetLightboxZoom(1);
-        if (captionEl) captionEl.textContent = (window.WEDDING_DB && window.WEDDING_DB.couple && window.WEDDING_DB.couple.leftFramePlaque) || "✦ DŨNG • LINH ✦";
+        if (captionEl) captionEl.textContent = (window.WEDDING_DB && window.WEDDING_DB.couple && window.WEDDING_DB.couple.leftFramePlaque) || "DŨNG • LINH";
         modal.classList.add("active");
         document.body.style.overflow = "hidden";
       });
@@ -899,7 +907,7 @@
           "img/wedding-photo-card-right.jpg";
         imgEl.src = rightSrc;
         if (typeof globalSetLightboxZoom === "function") globalSetLightboxZoom(1);
-        if (captionEl) captionEl.textContent = (window.WEDDING_DB && window.WEDDING_DB.couple && window.WEDDING_DB.couple.rightFramePlaque) || "✦ 07 . 12 . 2026 ✦";
+        if (captionEl) captionEl.textContent = (window.WEDDING_DB && window.WEDDING_DB.couple && window.WEDDING_DB.couple.rightFramePlaque) || "07 . 12 . 2026";
         modal.classList.add("active");
         document.body.style.overflow = "hidden";
       });
@@ -924,21 +932,7 @@
     if (!tabGallery || !deckContainer || !filmstripContainer || !wallContainer) return;
 
     var db = window.WEDDING_DB || {};
-    var rawPhotos = Array.isArray(db.albumPhotos) && db.albumPhotos.length
-      ? db.albumPhotos
-      : [
-          "img/wedding-photo-card-left.jpg",
-          "img/wedding-photo-card-right.jpg",
-          "img/02-disney-phao-hoa.jpg",
-          "img/03-disney-cau-hon.jpg",
-          "img/08-trang-an-hero.jpg",
-          "img/07-trang-an-b.jpg",
-          "img/01-trang-an-a.jpg",
-          "img/06-shanghai-dem.jpg",
-          "img/04-shanghai-mua.jpg",
-          "img/09-wuzhen-moi.jpg",
-          "img/05-wuzhen-ma.jpg"
-        ];
+    var rawPhotos = Array.isArray(db.albumPhotos) ? db.albumPhotos : [];
 
     // Chuẩn hóa danh sách ảnh (chỉ lấy đường dẫn ảnh, không dùng tag hay tên)
     var allPhotos = rawPhotos
@@ -1314,7 +1308,7 @@
       viewToggleBtn.onclick = function () {
         isWallMode = !isWallMode;
         tabGallery.classList.toggle("is-wall-mode", isWallMode);
-        if (viewToggleIcon) viewToggleIcon.textContent = isWallMode ? "❖" : "⊞";
+        if (viewToggleIcon) viewToggleIcon.textContent = isWallMode ? "" : "";
         if (viewToggleLabel) {
           viewToggleLabel.textContent = isWallMode
             ? "Về Sân Khấu 3D"
@@ -1519,7 +1513,7 @@
             syncDOMFromWeddingDB();
             initGalleryLightbox();
             if (typeof refreshMusicPlaylistFn === "function") refreshMusicPlaylistFn();
-            showToast("✨ Đã cập nhật dữ liệu mới từ trang Quản Lý!");
+            showToast("Đã cập nhật dữ liệu mới từ trang Quản Lý!");
           });
         }
       });

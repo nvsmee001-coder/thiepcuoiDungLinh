@@ -52,6 +52,10 @@
     const firstEntry = !entered;
     entered = true;
     dialog.close();
+    dialog.style.display = 'none';
+    dialog.style.pointerEvents = 'none';
+    dialog.style.visibility = 'hidden';
+    dialog.setAttribute('aria-hidden', 'true');
     animations.forEach(animation => animation.cancel());
     animations.clear();
     dialog.classList.remove('is-leaving');
@@ -59,6 +63,9 @@
     root.classList.remove('entry-pending');
     leaving = false;
     if (firstEntry) {
+      if (typeof window.playWeddingMusic === 'function') {
+        window.playWeddingMusic();
+      }
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       const title = document.getElementById('hero-title');
       if (title) {
@@ -89,6 +96,11 @@
     originFocus = document.activeElement;
     back.hidden = !entered;
     root.classList.add('entry-pending');
+
+    dialog.style.display = '';
+    dialog.style.pointerEvents = '';
+    dialog.style.visibility = '';
+    dialog.removeAttribute('aria-hidden');
 
     if (introFinished) {
       dialog.classList.remove('is-intro-mode', 'is-morphing');
@@ -176,18 +188,110 @@
     });
   }
 
+  function updateResponsiveChoiceBackdrop() {
+    const db = window.WEDDING_DB || window.DEFAULT_WEDDING_DB || {};
+    const couple = db.couple || {};
+    const isMobile = window.innerWidth <= 600;
+    const backdropEl = document.getElementById('choiceStageBackdrop');
+    if (!backdropEl) return;
+
+    const bgPc = couple.choiceBackdrop ? resolveAssetUrl(couple.choiceBackdrop) : '';
+    const bgMob = couple.choiceBackdropMobile ? resolveAssetUrl(couple.choiceBackdropMobile) : bgPc;
+    const targetBg = (isMobile && bgMob) ? bgMob : bgPc;
+
+    if (targetBg) {
+      backdropEl.style.backgroundImage = `url('${targetBg}')`;
+      backdropEl.classList.add('has-custom-bg');
+    } else {
+      backdropEl.style.backgroundImage = '';
+      backdropEl.classList.remove('has-custom-bg');
+    }
+  }
+
+  function updateChoicePersonalization() {
+    const db = window.WEDDING_DB || window.DEFAULT_WEDDING_DB || {};
+    const couple = db.couple || {};
+    const bName = couple.brideName || 'Khánh Linh';
+    const gName = couple.groomName || 'Lê Dũng';
+
+    // Update couple names on Choice Stage
+    const entryNamesEl = document.querySelector('.entry-names');
+    if (entryNamesEl) {
+      entryNamesEl.innerHTML = `<span>${bName}</span><em>&amp;</em><span>${gName}</span>`;
+    }
+
+    // Personalized Guest Greeting Box
+    const urlParams = new URLSearchParams(window.location.search);
+    const guestParam = urlParams.get('to') || urlParams.get('guest') || urlParams.get('k');
+    const guestNameEl = document.getElementById('entryGuestName');
+    const invCard = (db && db.invitationCard) || {};
+    const defaultGreeting = (invCard.defaultGuestName && !invCard.defaultGuestName.includes('...'))
+      ? invCard.defaultGuestName
+      : 'Quý khách và gia đình';
+
+    if (guestNameEl) {
+      if (guestParam && guestParam.trim()) {
+        guestNameEl.textContent = guestParam.trim();
+        guestNameEl.classList.add('has-guest-name');
+      } else {
+        guestNameEl.textContent = defaultGreeting;
+        guestNameEl.classList.add('has-guest-name');
+      }
+    }
+
+    // Side Recommendation Highlighting
+    const sideParam = urlParams.get('side') || urlParams.get('family');
+    const btnGroom = document.getElementById('entryChoiceGroom');
+    const btnBride = document.getElementById('entryChoiceBride');
+    const hintGroom = document.getElementById('groomChoiceHint');
+    const hintBride = document.getElementById('brideChoiceHint');
+
+    if (sideParam === 'groom') {
+      if (btnGroom) {
+        btnGroom.classList.add('is-invited-side');
+        btnGroom.setAttribute('aria-pressed', 'true');
+      }
+      if (hintGroom) hintGroom.textContent = 'Thiệp dành riêng cho bạn';
+      if (btnBride) btnBride.classList.remove('is-invited-side');
+      if (hintBride) hintBride.textContent = '';
+    } else if (sideParam === 'bride') {
+      if (btnBride) {
+        btnBride.classList.add('is-invited-side');
+        btnBride.setAttribute('aria-pressed', 'true');
+      }
+      if (hintBride) hintBride.textContent = 'Thiệp dành riêng cho bạn';
+      if (btnGroom) btnGroom.classList.remove('is-invited-side');
+      if (hintGroom) hintGroom.textContent = '';
+    } else {
+      if (btnGroom) btnGroom.classList.remove('is-invited-side');
+      if (btnBride) btnBride.classList.remove('is-invited-side');
+      if (hintGroom) hintGroom.textContent = '';
+      if (hintBride) hintBride.textContent = '';
+    }
+  }
+
   window.addEventListener('resize', () => {
     updateResponsiveCover();
     updateResponsiveIntroScenes();
+    updateResponsiveChoiceBackdrop();
   });
 
-  function morphToChoice() {
-    if (introFinished) return;
+  function morphToChoice(instant = false) {
+    if (introFinished && !instant) return;
     introFinished = true;
     if (typingTimer) { clearTimeout(typingTimer); typingTimer = null; }
     if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
 
     updateResponsiveCover();
+    updateResponsiveChoiceBackdrop();
+    updateChoicePersonalization();
+
+    if (instant) {
+      dialog.classList.remove('is-intro-mode', 'is-morphing');
+      dialog.classList.add('is-choice-mode');
+      choices.find(button => button.dataset.family === selected)?.focus({ preventScroll: true });
+      return;
+    }
 
     // Transition dialog: Intro dark scene fades away, Choice Stage unveils smoothly
     dialog.classList.remove('is-intro-mode');
@@ -331,8 +435,11 @@
   }
 
   function startIntro() {
-    if (reduced.matches) {
-      morphToChoice();
+    const urlParams = new URLSearchParams(window.location.search);
+    const shouldSkip = urlParams.get('skipIntro') === '1' || urlParams.get('skipIntro') === 'true' || window.location.hash === '#choice';
+
+    if (shouldSkip || reduced.matches) {
+      morphToChoice(true);
       return;
     }
 
@@ -412,6 +519,9 @@
           window.fetchWeddingDBFromServer().then(fresh => {
             if (fresh) {
               window.WEDDING_DB = fresh;
+              updateResponsiveCover();
+              updateResponsiveChoiceBackdrop();
+              updateChoicePersonalization();
               if (currentIdx >= 0 && !introFinished) {
                 renderSlide(currentIdx);
               }
@@ -424,7 +534,12 @@
 
   try {
     if (!dialog || !back || typeof dialog.showModal !== 'function') throw new Error('Native dialog unavailable');
-    choices.forEach(button => button.addEventListener('click', () => enter(button.dataset.family)));
+    choices.forEach(button => button.addEventListener('click', () => {
+      if (typeof window.playWeddingMusic === 'function') {
+        window.playWeddingMusic();
+      }
+      enter(button.dataset.family);
+    }));
     document.querySelectorAll('[data-change-side]').forEach(button => button.addEventListener('click', showChoice));
     document.querySelectorAll('[data-family-switch]').forEach(button => {
       button.addEventListener('click', (e) => {
@@ -438,6 +553,16 @@
     const stopMotion = () => { if (reduced.matches) { animations.forEach(animation => animation.cancel()); animations.clear(); } };
     if (reduced.addEventListener) reduced.addEventListener('change', stopMotion); else reduced.addListener(stopMotion);
     root.setAttribute('data-entry-ready', '');
+    const urlParams = new URLSearchParams(window.location.search);
+    const shouldSkip = urlParams.get('skipIntro') === '1' || urlParams.get('skipIntro') === 'true' || window.location.hash === '#choice';
+    if (shouldSkip) {
+      dialog.classList.remove('is-intro-mode');
+      dialog.classList.add('is-choice-mode');
+      introFinished = true;
+      updateResponsiveCover();
+      updateResponsiveChoiceBackdrop();
+      updateChoicePersonalization();
+    }
     dialog.showModal();
     bootEntrance();
   } catch (_) {

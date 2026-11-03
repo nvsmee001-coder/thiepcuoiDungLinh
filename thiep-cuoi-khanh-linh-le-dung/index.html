@@ -8,7 +8,7 @@
   <meta http-equiv="Expires" content="0">
   <script>
     (function () {
-      var BUILD_VER = "20261102_02";
+      var BUILD_VER = "20261103_01";
       try {
         var lastVer = localStorage.getItem("wedding_build_ver");
         if (lastVer && lastVer !== BUILD_VER) {
@@ -35,151 +35,102 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect rx='32' width='64' height='64' fill='%233d5145'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='serif' font-size='38' fill='%23f4f2e9'%3E%26%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20261102_02">
-  <link rel="stylesheet" href="invitation.css?v=20261102_02">
-  <link rel="stylesheet" href="travel.css?v=20261102_02">
-  <link rel="stylesheet" href="flight-polish.css?v=20261102_02">
-  <link rel="stylesheet" href="photo-motion.css?v=20261102_02">
-  <link rel="stylesheet" href="entrance.css?v=20261102_02">
-  <link rel="stylesheet" href="bride-invitation.css?v=20261102_02">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20261103_01">
+  <link rel="stylesheet" href="invitation.css?v=20261103_01">
+  <link rel="stylesheet" href="travel.css?v=20261103_01">
+  <link rel="stylesheet" href="flight-polish.css?v=20261103_01">
+  <link rel="stylesheet" href="photo-motion.css?v=20261103_01">
+  <link rel="stylesheet" href="entrance.css?v=20261103_01">
+  <link rel="stylesheet" href="bride-invitation.css?v=20261103_01">
   <style>
-    /* CRITICAL INLINE STYLING CHO SÂN KHẤU 3D ALBUM (CHỐNG CACHE VÀ CHỐNG TRÀN ẢNH) */
-    .living-3d-album-section {
-      position: relative !important;
-      padding: 85px 0 100px 0 !important;
-      background: #14100c !important;
-      color: #f7f4eb !important;
-      overflow: hidden !important;
-      isolation: isolate !important;
+    /* STYLING CHO KHỐI GIỚI THIỆU TRANG ALBUM RIÊNG */
+    .album-portal-section {
+      padding: 95px 6% 90px !important;
+      background: radial-gradient(ellipse at center, #edf0e6 0%, #e2e7d8 70%) !important;
+      text-align: center !important;
     }
-    .album-3d-deck-stage {
-      position: relative !important;
-      width: 100% !important;
-      max-width: 1100px !important;
-      height: clamp(380px, 60vh, 560px) !important;
+    .album-portal-card {
+      max-width: 780px !important;
       margin: 0 auto !important;
-      perspective: 1200px !important;
-      perspective-origin: 50% 50% !important;
-      display: flex !important;
+      padding: 48px 36px !important;
+      background: rgba(251, 249, 240, 0.95) !important;
+      border: 1px solid rgba(162, 145, 106, 0.38) !important;
+      border-radius: 16px !important;
+      box-shadow: 0 16px 45px rgba(52, 70, 56, 0.08) !important;
+      position: relative !important;
+    }
+    .album-portal-card .eyebrow {
+      font-size: 8px !important;
+      letter-spacing: 3px !important;
+      color: #7a826c !important;
+      text-transform: uppercase !important;
+      margin-bottom: 12px !important;
+    }
+    .album-portal-card h2 {
+      font-family: var(--serif, 'Playfair Display', serif) !important;
+      font-size: clamp(34px, 4.5vw, 54px) !important;
+      line-height: 1.25 !important;
+      color: #2e3f32 !important;
+      margin: 0 0 16px !important;
+      letter-spacing: -1px !important;
+    }
+    .album-portal-card h2 em {
+      font-style: italic !important;
+      color: #8c957e !important;
+    }
+    .album-portal-card p {
+      font-size: 13px !important;
+      line-height: 1.9 !important;
+      color: #5d6957 !important;
+      max-width: 580px !important;
+      margin: 0 auto 28px !important;
+    }
+    .button-album-portal {
+      display: inline-flex !important;
       align-items: center !important;
-      justify-content: center !important;
-      user-select: none !important;
-      touch-action: pan-y !important;
+      gap: 14px !important;
+      padding: 16px 36px !important;
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      letter-spacing: 1px !important;
+      text-transform: uppercase !important;
+      background: #344638 !important;
+      color: #f7f4eb !important;
+      border: none !important;
+      border-radius: 999px !important;
+      text-decoration: none !important;
+      box-shadow: 0 6px 22px rgba(52, 70, 56, 0.28) !important;
+      transition: all 0.3s ease !important;
     }
-    .album-3d-deck {
-      position: relative !important;
-      width: 100% !important;
-      height: 100% !important;
-      transform-style: preserve-3d !important;
+    .button-album-portal:hover {
+      background: #233126 !important;
+      color: #fff !important;
+      transform: translateY(-3px) !important;
+      box-shadow: 0 10px 28px rgba(52, 70, 56, 0.38) !important;
     }
-    .deck-photo-card {
-      position: absolute !important;
-      left: 50% !important;
-      top: 50% !important;
-      width: clamp(260px, 28vw, 380px) !important;
-      height: clamp(370px, 42vw, 530px) !important;
-      transform: translate3d(-50%, -50%, -200px) scale(0.65) !important;
-      opacity: 0 !important;
-      pointer-events: none !important;
-      transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.75s ease, filter 0.75s ease !important;
-      transform-style: preserve-3d !important;
-      cursor: pointer !important;
-    }
-    .deck-photo-card.is-active {
-      transform: translate3d(-50%, -50%, 0) rotateY(0deg) scale(1) !important;
-      opacity: 1 !important;
-      z-index: 20 !important;
-      pointer-events: auto !important;
-    }
-    .deck-photo-card.is-prev-1 {
-      transform: translate3d(calc(-50% - clamp(140px, 18vw, 260px)), -50%, -60px) rotateY(24deg) scale(0.85) !important;
-      opacity: 0.88 !important;
-      z-index: 15 !important;
-      pointer-events: auto !important;
-    }
-    .deck-photo-card.is-next-1 {
-      transform: translate3d(calc(-50% + clamp(140px, 18vw, 260px)), -50%, -60px) rotateY(-24deg) scale(0.85) !important;
-      opacity: 0.88 !important;
-      z-index: 15 !important;
-      pointer-events: auto !important;
-    }
-    .deck-photo-card.is-prev-2 {
-      transform: translate3d(calc(-50% - clamp(250px, 32vw, 440px)), -50%, -140px) rotateY(35deg) scale(0.7) !important;
-      opacity: 0.55 !important;
-      z-index: 10 !important;
-      pointer-events: auto !important;
-    }
-    .deck-photo-card.is-next-2 {
-      transform: translate3d(calc(-50% + clamp(250px, 32vw, 440px)), -50%, -140px) rotateY(-35deg) scale(0.7) !important;
-      opacity: 0.55 !important;
-      z-index: 10 !important;
-      pointer-events: auto !important;
-    }
-    .deck-gilded-frame {
-      position: relative !important;
-      width: 100% !important;
-      height: 100% !important;
-      background: linear-gradient(135deg, #e3c58c 0%, #a87e45 28%, #fae6ba 50%, #855e2b 75%, #d1ab6c 100%) !important;
-      border-radius: 12px !important;
-      padding: 7px !important;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.85) !important;
-    }
-    .deck-velvet-mat {
-      width: 100% !important;
-      height: 100% !important;
-      background: #17120e !important;
-      border-radius: 7px !important;
-      padding: 6px !important;
-    }
-    .deck-img-viewport {
-      position: relative !important;
-      width: 100% !important;
-      height: 100% !important;
-      border-radius: 4px !important;
-      overflow: hidden !important;
-    }
-    .deck-img-viewport img {
-      width: 100% !important;
-      height: 100% !important;
-      object-fit: cover !important;
-      display: block !important;
-    }
-    @media (max-width: 860px) {
-      .album-3d-deck-stage {
-        height: clamp(320px, 50vh, 420px) !important;
-      }
-      .deck-photo-card {
-        width: clamp(210px, 58vw, 290px) !important;
-        height: clamp(290px, 44vh, 390px) !important;
-      }
-      .deck-photo-card.is-prev-1 {
-        transform: translate3d(calc(-50% - 135px), -50%, -40px) rotateY(22deg) scale(0.85) !important;
-      }
-      .deck-photo-card.is-next-1 {
-        transform: translate3d(calc(-50% + 135px), -50%, -40px) rotateY(-22deg) scale(0.85) !important;
-      }
-      .deck-photo-card.is-prev-2 {
-        transform: translate3d(calc(-50% - 240px), -50%, -100px) rotateY(30deg) scale(0.7) !important;
-      }
-      .deck-photo-card.is-next-2 {
-        transform: translate3d(calc(-50% + 240px), -50%, -100px) rotateY(-30deg) scale(0.7) !important;
-      }
+    @media (max-width: 600px) {
+      .album-portal-section { padding: 65px 20px 60px !important; }
+      .album-portal-card { padding: 32px 20px !important; }
+      .album-portal-card h2 { font-size: 32px !important; }
+      .button-album-portal { padding: 14px 24px !important; font-size: 10px !important; }
     }
   </style>
-  <script src="/js/content.js?v=20261102_02"></script>
-  <script src="invitation-content.js?v=20261102_02" defer></script>
-  <script src="entrance.js?v=20261102_02" defer></script>
-  <script src="album-3d.js?v=20261102_02" defer></script>
-  <script src="app.js?v=20261102_02" defer></script>
-  <script src="/thiep-cuoi-khanh-linh-le-dung/assets/d3.min.js?v=20261102_02" defer></script>
-  <script src="travel.js?v=20261102_02" defer></script>
-  <script src="motion.js?v=20261102_02" defer></script>
-  <script src="photo-motion.js?v=20261102_02" defer></script>
+  <script src="/js/content.js?v=20261103_01"></script>
+  <script src="invitation-content.js?v=20261103_01" defer></script>
+  <script src="entrance.js?v=20261103_01" defer></script>
+  <script src="app.js?v=20261103_01" defer></script>
+  <script src="/thiep-cuoi-khanh-linh-le-dung/assets/d3.min.js?v=20261103_01" defer></script>
+  <script src="travel.js?v=20261103_01" defer></script>
+  <script src="motion.js?v=20261103_01" defer></script>
+  <script src="photo-motion.js?v=20261103_01" defer></script>
 </head>
 <body>
   <!-- UNIFIED CINEMATIC INTRO & WEDDING INVITATION DIALOG -->
   <dialog class="entry-dialog is-intro-mode" id="entry-dialog" aria-labelledby="entry-title" aria-describedby="entry-description">
+    <!-- NỀN CHOICE STAGE (Sau Intro: Tự động đổi theo ảnh từ Admin hoặc màu hoàng gia cổ điển) -->
+    <div class="choice-stage-backdrop" id="choiceStageBackdrop" aria-hidden="true"></div>
+
     <!-- Nút Bỏ Qua -->
     <button type="button" class="intro-skip-btn" id="btnSkipIntro" title="Bỏ qua phần giới thiệu">
       <span>Bỏ qua</span>
@@ -236,20 +187,33 @@
 
       <div class="entry-content" id="entryContent">
         <span class="entry-edition">THE WEDDING OF</span>
-        <p class="entry-names"><span>Khánh Linh</span><em>&amp;</em><span>Lê Dũng</span></p>
-        <div class="entry-rule" aria-hidden="true"><i></i>✧<i></i></div>
-        <h1 id="entry-title">Tham dự lễ cưới</h1>
+        <h2 class="entry-names" id="entry-title"><span>Khánh Linh</span><em>&amp;</em><span>Lê Dũng</span></h2>
+        <div class="entry-rule" aria-hidden="true"><i></i></div>
+
+        <!-- KHỐI KÍNH MỜI TỰ NHIÊN, TRANG TRỌNG -->
+        <div class="entry-invitation-greeting">
+          <div class="entry-kinh-moi">Kính mời</div>
+          <div class="entry-guest-name" id="entryGuestName">Quý khách và gia đình</div>
+        </div>
+
         <p id="entry-description">Trân trọng kính mời quý khách đến chung vui cùng chúng mình.<br>Bạn là khách mời của nhà trai hay nhà gái?</p>
+        
         <div class="entry-choices" role="group" aria-label="Chọn bên gia đình mời bạn">
-          <button class="entry-choice" data-family="groom" type="button"><span class="entry-choice-number">01</span><strong>Nhà trai</strong><small>Gia đình chú rể</small><span class="entry-choice-arrow" aria-hidden="true">↗</span></button>
-          <button class="entry-choice" data-family="bride" type="button"><span class="entry-choice-number">02</span><strong>Nhà gái</strong><small>Gia đình cô dâu</small><span class="entry-choice-arrow" aria-hidden="true">↗</span></button>
+          <button class="entry-choice" data-family="groom" type="button" id="entryChoiceGroom">
+            <strong>Nhà Trai</strong>
+            <small>Gia đình chú rể · Lễ Thành Hôn</small>
+            <span class="entry-choice-badge" id="groomChoiceHint"></span>
+          </button>
+          <button class="entry-choice" data-family="bride" type="button" id="entryChoiceBride">
+            <strong>Nhà Gái</strong>
+            <small>Gia đình cô dâu · Lễ Vu Quy</small>
+            <span class="entry-choice-badge" id="brideChoiceHint"></span>
+          </button>
         </div>
         <p class="entry-bottom-note">HAI GIA ĐÌNH · MỘT NGÀY CHUNG ĐÔI</p>
         <button class="entry-back" id="entry-back" type="button" hidden>Quay lại thiệp mời <span aria-hidden="true">→</span></button>
       </div>
     </div>
-
-    <span class="entry-demo">THIỆP MỜI MẪU · THÔNG TIN &amp; ẢNH MINH HỌA</span>
   </dialog>
   <audio id="background-music" src="/thiep-cuoi-khanh-linh-le-dung/assets/river-flows-in-you.mp3#t=10" preload="none" loop playsinline></audio>
   <div id="reading-progress" aria-hidden="true"></div>
@@ -257,15 +221,53 @@
   <header class="site-header">
     <a class="monogram" href="#home" aria-label="Khánh Linh và Lê Dũng — Trang đầu">K<span>&amp;</span>L<i>27 &amp; 28.11.26</i></a>
     <nav aria-label="Điều hướng chính">
-      <a href="#home" class="is-active">Thiệp mời</a><a href="#journey">Câu chuyện</a><a href="#celebration">Ngày chung đôi</a><a href="#album">Album ảnh</a>
+      <a href="#home" class="is-active">Thiệp mời</a><a href="#journey">Câu chuyện</a><a href="#celebration">Ngày chung đôi</a><a href="album.html" title="Khám phá toàn bộ album ảnh cưới 3D">Album ảnh</a>
     </nav>
     <div class="header-actions">
       <div class="header-family-toggle" role="tablist" title="Chuyển đổi thiệp Nhà Trai / Nhà Gái">
         <button type="button" class="hdr-switch-btn is-active" data-family-switch="groom">Nhà Trai</button>
         <button type="button" class="hdr-switch-btn" data-family-switch="bride">Nhà Gái</button>
       </div>
-      <button class="sound-button" id="sound-toggle" title="River Flows in You — Yiruma · Bật nhạc" aria-controls="background-music" aria-label="Bật nhạc nền — River Flows in You" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/></svg><span class="sound-dot"></span></button>
-      <button class="button button-small" data-rsvp>Xác nhận tham dự <span>↗</span></button>
+      <div class="wedding-music-widget" id="weddingMusicWidget">
+        <button class="sound-button" id="sound-toggle" title="Đĩa Nhạc Cưới · Chọn bài &amp; Bật/Tắt nhạc" aria-controls="background-music" aria-label="Đĩa nhạc cưới" aria-pressed="false" aria-haspopup="dialog" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/></svg><span class="sound-dot"></span></button>
+
+        <!-- HỘP ĐIỀU KHIỂN & CHỌN BÀI HÁT CƯỚI (POPOVER) -->
+        <div class="music-playlist-popover" id="musicPlaylistPopover" role="dialog" aria-label="Danh sách đĩa nhạc cưới">
+          <div class="popover-header">
+            <div class="popover-badge-row">
+              <span class="popover-badge">ĐĨA NHẠC CƯỚI</span>
+              <span class="popover-counter" id="popoverTrackCounter">1 / 4</span>
+            </div>
+            <div class="popover-current-title">
+              <div class="eq-bars" aria-hidden="true">
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+              </div>
+              <span id="popoverCurrentTrackName" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Đang tải bài hát...</span>
+            </div>
+          </div>
+
+          <!-- BỘ NÚT ĐIỀU KHIỂN -->
+          <div class="popover-controls">
+            <button type="button" class="popover-ctrl-btn" id="btnPrevTrack" title="Bài trước">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+            </button>
+            <button type="button" class="popover-ctrl-btn btn-play-toggle" id="btnPlayToggle">
+              <span id="playToggleIcon">▶</span>
+              <span id="playToggleText">Phát nhạc</span>
+            </button>
+            <button type="button" class="popover-ctrl-btn" id="btnNextTrack" title="Bài tiếp theo">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+            </button>
+          </div>
+
+          <!-- DANH SÁCH BÀI HÁT TỪ ADMIN -->
+          <div class="popover-tracklist-label">CHỌN BÀI HÁT TỪ DANH SÁCH</div>
+          <ul class="popover-tracklist" id="popoverTracklist"></ul>
+        </div>
+      </div>
+      <button class="button button-small" data-rsvp>Xác nhận tham dự</button>
     </div>
   </header>
 
@@ -282,10 +284,10 @@
           <span class="switcher-hint">BÊN MỜI:</span>
           <div class="family-switch-pill" role="tablist">
             <button type="button" class="family-switch-btn is-active" data-family-switch="groom" role="tab" aria-selected="true">
-              <span class="pill-spark">❖</span> Thiệp Nhà Trai
+              Thiệp Nhà Trai
             </button>
             <button type="button" class="family-switch-btn" data-family-switch="bride" role="tab" aria-selected="false">
-              <span class="pill-spark">❖</span> Thiệp Nhà Gái
+              Thiệp Nhà Gái
             </button>
           </div>
         </div>
@@ -298,21 +300,31 @@
           <div class="invitation-salutation">
             <h2 class="invitation-kinh-moi" id="invitationKinhMoi">Kính mời</h2>
             <div class="invitation-guest-wrap">
-              <span class="invitation-guest-name" id="invitationGuestName" title="Bấm để nhập tên khách hoặc mở link có ?to=Tên+Khách" contenteditable="true" spellcheck="false">....................................................</span>
+              <span class="invitation-guest-name" id="invitationGuestName" title="Bấm để nhập tên khách hoặc mở link có ?to=Tên+Khách" contenteditable="true" spellcheck="false">Quý khách và gia đình</span>
             </div>
           </div>
           <p class="invitation-intro" id="invitationIntroText">Gia đình nhà trai trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi</p>
           <h1 id="hero-title"><span>Khánh Linh</span><em>&amp;</em><span>Lê Dũng</span></h1>
-          <div class="invite-flourish" aria-hidden="true"><i></i>✧<i></i></div>
+          <div class="invite-flourish" aria-hidden="true"><i></i></div>
           <p class="invite-time" hidden data-bride-only>VÀO LÚC: <strong>11 GIỜ 00</strong></p>
           <div class="invite-date"><span>CHỦ NHẬT</span><strong>20.12</strong><span>2026</span></div>
           <p class="invite-lunar" hidden data-bride-only>(Tức ngày 19 tháng 10 năm Bính Ngọ)</p>
           <p class="invite-location">17:00 · Thảo Điền, TP. Hồ Chí Minh</p>
           <p class="invite-message">Một ngày đặc biệt, bên những người thương.</p>
-          <div class="invitation-families" hidden data-bride-only><div><h3>Nhà Gái</h3><p>PHẠM NGỌC HÙNG<br>NGUYỄN TUYẾT NHUNG</p><span>Cô dâu: Khánh Linh</span></div><div><h3>Nhà Trai</h3><p>NGUYỄN VĂN UY<br>LÊ THỊ HẢO</p><span>Chú rể: Lê Dũng</span></div></div>
-          <button class="button invitation-rsvp" data-rsvp>Xác nhận tham dự <span>↗</span></button>
+          <div class="invitation-families" hidden data-bride-only>
+            <div>
+              <h3>Nhà Trai</h3>
+              <p class="family-parents"><span class="parent-name">Ông Nguyễn Văn Uy</span><span class="parent-amp">&amp;</span><span class="parent-name">Bà Lê Thị Hảo</span></p>
+              <span class="family-role">Chú rể: Lê Dũng</span>
+            </div>
+            <div>
+              <h3>Nhà Gái</h3>
+              <p class="family-parents"><span class="parent-name">Ông Phạm Ngọc Hùng</span><span class="parent-amp">&amp;</span><span class="parent-name">Bà Nguyễn Tuyết Nhung</span></p>
+              <span class="family-role">Cô dâu: Khánh Linh</span>
+            </div>
+          </div>
+          <button class="button invitation-rsvp" data-rsvp>Xác nhận tham dự</button>
           <button class="invite-calendar" id="save-date">Lưu ngày chung đôi <span>＋</span></button>
-          <span class="invitation-demo">THIỆP MỜI MẪU · THÔNG TIN MINH HỌA</span>
         </div>
       </div>
       <a class="cover-scroll" href="#journey"><span>VÀ ĐÂY LÀ CÂU CHUYỆN CỦA CHÚNG MÌNH</span><i>↓</i></a>
@@ -320,97 +332,50 @@
     </section>
 
     <section class="journey section travel-section" id="journey" aria-labelledby="journey-title">
-      <div class="travel-heading" data-reveal><div><p class="eyebrow">02 / OUR LITTLE JOURNEY</p><h2 id="journey-title">Hà Nội <span class="heading-route" aria-label="đến">↗</span> <em>Shanghai.</em></h2></div><p>Hai thành phố. Một hành trình chung.<br>Và những khoảnh khắc muốn giữ lại mãi.</p></div>
+      <div class="travel-heading" data-reveal><div><p class="eyebrow">OUR LITTLE JOURNEY</p><h2 id="journey-title">Hà Nội <span class="heading-route" aria-label="đến">—</span> <em>Shanghai.</em></h2></div><p>Hai thành phố. Một hành trình chung.<br>Và những khoảnh khắc muốn giữ lại mãi.</p></div>
       <div class="travel-stage" id="travel-stage" data-state="idle">
         <div class="travel-grain" aria-hidden="true"></div>
-        <div class="travel-topline"><span>HÀ NỘI <i>→</i> SHANGHAI</span><span>A JOURNEY TOGETHER</span></div>
+        <div class="travel-topline"><span>HÀ NỘI <i>—</i> SHANGHAI</span><span>A JOURNEY TOGETHER</span></div>
         <div class="travel-scene" aria-label="Mô phỏng chuyến bay từ Hà Nội đến Shanghai">
           <canvas id="travel-globe" width="1000" height="600" aria-hidden="true"></canvas>
           <svg id="travel-route-svg" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="flight-route-gold"><stop stop-color="#c6cfae"/><stop offset="1" stop-color="#f3dfa9"/></linearGradient></defs><path id="travel-route-track"/><path id="travel-route-progress"/><path id="travel-contrail"/><circle id="travel-origin-dot" r="5"/><circle id="travel-destination-dot" r="5"/><circle id="travel-arrival-ring" r="5"/><circle id="travel-arrival-ring-two" r="5"/></svg>
           <div id="travel-plane" class="travel-plane" aria-hidden="true"><div class="plane-shadow"></div><svg class="plane-model" viewBox="-50 -60 100 120"><defs><linearGradient id="plane-body" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#879b91"/><stop offset=".32" stop-color="#f5f3e7"/><stop offset=".5" stop-color="#fffef7"/><stop offset=".75" stop-color="#dbe0d3"/><stop offset="1" stop-color="#789084"/></linearGradient><linearGradient id="plane-wing" x1="0" y1="0" x2=".15" y2="1"><stop stop-color="#fffdf4"/><stop offset=".4" stop-color="#e5e9db"/><stop offset="1" stop-color="#9dae9b"/></linearGradient><linearGradient id="plane-engine" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#748c7e"/><stop offset=".4" stop-color="#fbfaf1"/><stop offset="1" stop-color="#aab8a8"/></linearGradient></defs><path d="M-5-19-44 5l-3 11 39-10 3 3H5l3-3 39 10-3-11L5-19Z" fill="url(#plane-wing)"/><path d="m-4 29-16 15-2 7L0 44l22 7-2-7L4 29Z" fill="url(#plane-wing)"/><g fill="url(#plane-engine)"><rect x="-27" y="-1" width="7" height="19" rx="3.5"/><rect x="20" y="-1" width="7" height="19" rx="3.5"/></g><path d="M0-55C-4-55-6.5-45-6.5-27L-5 28-2 48h4l3-20 1.5-55C6.5-45 4-55 0-55Z" fill="url(#plane-body)"/><path d="M-3-40Q0-44 3-40l1 6-4-2-4 2Z" fill="#3f635e"/><path d="M-5-25V21M5-25V21" stroke="#718e8070" stroke-width="1.2" stroke-dasharray="1 4"/><path d="M0-29v65" stroke="#fffdf0" stroke-width="1" opacity=".8"/><path d="m-9-15-32 22m50-22L41 7" stroke="#fffef4" stroke-width=".8" opacity=".7"/><path d="M0 30v17" stroke="#5c7865" stroke-width="2.5" stroke-linecap="round"/></svg></div>
           <div class="travel-city travel-city-origin" id="travel-hanoi"><span>ĐIỂM KHỞI HÀNH</span><strong>Hà Nội</strong><small>21.028° N · 105.854° E</small></div>
           <div class="travel-city travel-city-destination" id="travel-shanghai"><span>ĐIỂM ĐẾN</span><strong>Shanghai</strong><small>31.230° N · 121.474° E</small></div>
-          <div class="flight-coordinates" aria-hidden="true">HAN <span>♡</span> SHA</div>
+          <div class="flight-coordinates" aria-hidden="true">HAN <span>·</span> SHA</div>
         </div>
-        <div class="travel-album" id="travel-album" aria-label="Album ảnh kỷ niệm"><div class="arrival-heading"><span class="eyebrow">WE’VE ARRIVED, TOGETHER</span><h3>Chạm đến một nơi.<br><em>Mở ra những kỷ niệm.</em></h3></div><div class="arrival-photos"><button class="arrival-photo" data-gallery="0" aria-label="Mở ảnh kỷ niệm 1"><span class="photo-window"><img src="/thiep-cuoi-khanh-linh-le-dung/assets/memory-01-garden.jpg" alt="Khánh Linh và Lê Dũng trong khu vườn hoa" loading="lazy"></span><span>you & me <i>↗</i></span></button><button class="arrival-photo" data-gallery="1" aria-label="Mở ảnh kỷ niệm 2"><span class="photo-window"><img src="/thiep-cuoi-khanh-linh-le-dung/assets/memory-02-castle.jpg" alt="Khánh Linh và Lê Dũng trước lâu đài" loading="lazy"></span><span>everywhere, together <i>↗</i></span></button><button class="arrival-photo" data-gallery="2" aria-label="Mở ảnh kỷ niệm 3"><span class="photo-window"><img src="/thiep-cuoi-khanh-linh-le-dung/assets/memory-03-piano.jpg" alt="Khánh Linh và Lê Dũng bên đàn piano" loading="lazy"></span><span>our next chapter <i>↗</i></span></button></div><p class="album-touch-note">CHẠM MỘT TẤM ẢNH ĐỂ MỞ ALBUM</p></div>
-        <div class="travel-bottomline"><p id="travel-status" role="status" aria-live="polite">Hà Nội → Shanghai · Cùng nhau lưu giữ kỷ niệm</p><div class="travel-controls"><button id="travel-start" type="button"><span aria-hidden="true">↗</span> Bắt đầu chuyến đi</button><button id="travel-skip" type="button">Mở album ngay <span aria-hidden="true">→</span></button></div></div>
+        <div class="travel-album" id="travel-album" aria-label="Album ảnh kỷ niệm"><div class="arrival-heading"><span class="eyebrow">WE’VE ARRIVED, TOGETHER</span><h3>Chạm đến một nơi.<br><em>Mở ra những kỷ niệm.</em></h3></div><div class="arrival-photos"><button class="arrival-photo" data-gallery="0" aria-label="Mở ảnh kỷ niệm 1"><span class="photo-window"><img src="/thiep-cuoi-khanh-linh-le-dung/assets/memory-01-garden.jpg" alt="Khánh Linh và Lê Dũng trong khu vườn hoa" loading="lazy"></span><span>you & me</span></button><button class="arrival-photo" data-gallery="1" aria-label="Mở ảnh kỷ niệm 2"><span class="photo-window"><img src="/thiep-cuoi-khanh-linh-le-dung/assets/memory-02-castle.jpg" alt="Khánh Linh và Lê Dũng trước lâu đài" loading="lazy"></span><span>everywhere, together</span></button><button class="arrival-photo" data-gallery="2" aria-label="Mở ảnh kỷ niệm 3"><span class="photo-window"><img src="/thiep-cuoi-khanh-linh-le-dung/assets/memory-03-piano.jpg" alt="Khánh Linh và Lê Dũng bên đàn piano" loading="lazy"></span><span>our next chapter</span></button></div><p class="album-touch-note">CHẠM MỘT TẤM ẢNH ĐỂ MỞ ALBUM</p></div>
+        <div class="travel-bottomline"><p id="travel-status" role="status" aria-live="polite">Hà Nội — Shanghai · Cùng nhau lưu giữ kỷ niệm</p><div class="travel-controls"><button id="travel-start" type="button">Bắt đầu chuyến đi</button><button id="travel-skip" type="button">Mở album ngay</button></div></div>
       </div>
-      <p class="travel-footnote">HÀ NỘI → SHANGHAI · TWO CITIES, ONE LOVE</p>
+      <p class="travel-footnote">HÀ NỘI — SHANGHAI · TWO CITIES, ONE LOVE</p>
     </section>
 
     <div class="photo-interlude" data-reveal aria-label="Một lời hẹn trăm năm"><div class="interlude-image" data-parallax="0.45"><img src="/thiep-cuoi-khanh-linh-le-dung/assets/hero.jpg" alt="Ánh nắng dịu dàng trong ngày cưới" loading="lazy"></div><div class="interlude-shade"></div><div class="interlude-copy" data-reveal><p class="eyebrow">AND SO, OUR FOREVER BEGINS</p><p><span>Và rồi chúng mình lựa chọn</span><br><em>trở thành một nửa của nhau.</em></p><span>Minh & Anh · 20.12.2026</span></div></div>
     <section class="wedding section" id="celebration" aria-labelledby="wedding-title">
-      <div class="wedding-heading" data-reveal><p class="eyebrow">03 / THE CELEBRATION</p><span class="tiny-star">✳</span><h2 id="wedding-title">Ngày mình <em>chung đôi.</em></h2><p>Sẽ thật trọn vẹn khi có bạn ở đây,<br>cùng chúng mình viết nên chương mới.</p></div>
-      <div class="celebration-details" data-reveal><div class="celebration-venue"><p class="eyebrow">LỄ THÀNH HÔN & TIỆC TỐI</p><h3>Một buổi tiệc trong vườn</h3><p>17:00 · Chủ nhật, 20 tháng 12 năm 2026<br>Thảo Điền, TP. Hồ Chí Minh</p><p class="venue-note">Địa chỉ chính xác sẽ được cập nhật.</p><a class="text-link" href="https://www.google.com/maps/search/?api=1&query=Thao+Dien+Ho+Chi+Minh+City" target="_blank" rel="noopener noreferrer">Khám phá khu vực <span>↗</span></a><div class="celebration-map-box" id="celebration-map-box" hidden><iframe id="celebration-map-iframe" src="" allowfullscreen="" loading="lazy"></iframe></div></div><div class="celebration-countdown"><p class="eyebrow">ĐẾM TỪNG NGÀY ĐỂ GẶP BẠN</p><div class="countdown" aria-label="Đếm ngược đến ngày cưới"><div><b id="count-days">00</b><span>NGÀY</span></div><i>:</i><div><b id="count-hours">00</b><span>GIỜ</span></div><i>:</i><div><b id="count-minutes">00</b><span>PHÚT</span></div><i>:</i><div><b id="count-seconds">00</b><span>GIÂY</span></div></div><span class="handwriting">A little closer to forever.</span></div></div>
+      <div class="wedding-heading" data-reveal><p class="eyebrow">THE CELEBRATION</p><h2 id="wedding-title">Ngày mình <em>chung đôi.</em></h2><p>Sẽ thật trọn vẹn khi có bạn ở đây,<br>cùng chúng mình viết nên chương mới.</p></div>
+      <div class="celebration-details" data-reveal><div class="celebration-venue"><p class="eyebrow">LỄ THÀNH HÔN & TIỆC TỐI</p><h3>Một buổi tiệc trong vườn</h3><p>17:00 · Chủ nhật, 20 tháng 12 năm 2026<br>Thảo Điền, TP. Hồ Chí Minh</p><p class="venue-note">Địa chỉ chính xác sẽ được cập nhật.</p><a class="text-link" href="https://www.google.com/maps/search/?api=1&query=Thao+Dien+Ho+Chi+Minh+City" target="_blank" rel="noopener noreferrer">Khám phá khu vực</a><div class="celebration-map-box" id="celebration-map-box" hidden><iframe id="celebration-map-iframe" src="" allowfullscreen="" loading="lazy"></iframe></div></div><div class="celebration-countdown"><p class="eyebrow">ĐẾM TỪNG NGÀY ĐỂ GẶP BẠN</p><div class="countdown" aria-label="Đếm ngược đến ngày cưới"><div><b id="count-days">00</b><span>NGÀY</span></div><i>:</i><div><b id="count-hours">00</b><span>GIỜ</span></div><i>:</i><div><b id="count-minutes">00</b><span>PHÚT</span></div><i>:</i><div><b id="count-seconds">00</b><span>GIÂY</span></div></div><span class="handwriting">A little closer to forever.</span></div></div>
       <div class="event-tabs" data-reveal role="tablist" aria-label="Thông tin buổi lễ"><button id="event-tab-timeline" role="tab" data-event="timeline" aria-selected="true" aria-controls="event-timeline">Lịch trình</button><button id="event-tab-menu" role="tab" data-event="menu" aria-selected="false" aria-controls="event-menu" tabindex="-1">Thực đơn tiệc</button><button id="event-tab-dresscode" role="tab" data-event="dresscode" aria-selected="false" aria-controls="event-dresscode" tabindex="-1">Trang phục</button><button id="event-tab-faq" role="tab" data-event="faq" aria-selected="false" aria-controls="event-faq" tabindex="-1">Bạn cần biết</button></div>
-      <div id="event-timeline" class="event-panel timeline" role="tabpanel" aria-labelledby="event-tab-timeline"><div><span class="timeline-icon">✧</span><time>17:00</time><h4>Đón khách</h4><p>Những cái ôm & tấm ảnh đầu tiên</p></div><div><span class="timeline-icon">♡</span><time>17:30</time><h4>Lễ thành hôn</h4><p>Một lời hứa, một đời bên nhau</p></div><div><span class="timeline-icon">♧</span><time>18:00</time><h4>Nâng ly & dùng tiệc</h4><p>Cùng ăn ngon, cùng kể chuyện</p></div><div><span class="timeline-icon">✳</span><time>20:00</time><h4>Let’s celebrate!</h4><p>Âm nhạc, tiếng cười và tình yêu</p></div></div>
+      <div id="event-timeline" class="event-panel timeline" role="tabpanel" aria-labelledby="event-tab-timeline"><div><span class="timeline-icon">1</span><time>17:00</time><h4>Đón khách</h4><p>Những cái ôm & tấm ảnh đầu tiên</p></div><div><span class="timeline-icon">2</span><time>17:30</time><h4>Lễ thành hôn</h4><p>Một lời hứa, một đời bên nhau</p></div><div><span class="timeline-icon">3</span><time>18:00</time><h4>Nâng ly & dùng tiệc</h4><p>Cùng ăn ngon, cùng kể chuyện</p></div><div><span class="timeline-icon">4</span><time>20:00</time><h4>Let’s celebrate!</h4><p>Âm nhạc, tiếng cười và tình yêu</p></div></div>
       <div id="event-menu" class="event-panel menu-panel" role="tabpanel" aria-labelledby="event-tab-menu" hidden><div class="menu-panel-heading"><p class="eyebrow" id="menu-eyebrow">ROYAL BANQUET • ẨM THỰC ĐÃI TIỆC</p><h3 id="menu-heading">Thực Đơn Tiệc Cưới</h3><p id="menu-subnote">Hương vị tinh tuyển chiêu đãi quan viên hai họ &amp; quý khách</p></div><div class="menu-courses-grid" id="menu-courses-grid"></div></div>
       <div id="event-dresscode" class="event-panel dresscode" role="tabpanel" aria-labelledby="event-tab-dresscode" hidden><div><h3>Chọn trang phục khiến bạn tự tin.</h3><p>Một chút thanh lịch, một chút thoải mái. Chúng mình gợi ý các tông màu tự nhiên để hòa cùng khu vườn buổi chiều.</p></div><div class="swatches"><span style="--swatch:#eeeadf">Kem</span><span style="--swatch:#b5b8a3">Sage</span><span style="--swatch:#b79c84">Be</span><span style="--swatch:#4e5d4a">Olive</span></div></div>
       <div id="event-faq" class="event-panel faq" role="tabpanel" aria-labelledby="event-tab-faq" hidden><details><summary>Mình nên đến vào lúc nào?<span>+</span></summary><p>Bạn có thể đến từ 17:00 để chụp ảnh, trò chuyện và tìm chỗ ngồi trước khi buổi lễ bắt đầu lúc 17:30.</p></details><details><summary>Mình có thể đi cùng người thân không?<span>+</span></summary><p>Vui lòng ghi số người đi cùng trong phần xác nhận tham dự để chúng mình chuẩn bị chu đáo nhé.</p></details><details><summary>Nếu mình ăn chay hoặc có yêu cầu đặc biệt?<span>+</span></summary><p>Bạn hãy để lại yêu cầu trong phần lời nhắn của thiệp xác nhận. Chúng mình sẽ lưu ý để chuẩn bị thực đơn phù hợp.</p></details></div>
     </section>
 
-    <section class="album section living-3d-album-section" id="album" aria-labelledby="album-title">
-      <!-- Lớp nền Phản Chiếu Ánh Sáng Động (Cross-Fading Ambient Photo Aura) -->
-      <div class="album-ambient-stage" aria-hidden="true">
-        <div class="album-ambient-layer is-visible" id="albumAmbientA"></div>
-        <div class="album-ambient-layer" id="albumAmbientB"></div>
-        <div class="album-ambient-scrim"></div>
-      </div>
-
-      <div class="album-exhibition-shell">
-        <header class="album-salon-topbar">
-          <div class="salon-brand-group">
-            <p class="eyebrow">04 / MOMENTS TO KEEP</p>
-            <h2 id="album-title" class="salon-main-title">Những ngày <em>có nhau.</em></h2>
-            <p class="album-subnote">Chẳng cần một nơi thật đặc biệt. Chỉ cần người ở cạnh là bạn.</p>
-          </div>
-
-          <!-- Cụm nút Tự Động Chiếu & Chuyển Đổi Chế Độ Xem -->
-          <div class="album-mode-controls">
-            <button type="button" class="salon-action-btn is-playing" id="albumAutoplayBtn" title="Bật / Tắt tự động trình chiếu">
-              <span class="autoplay-dot"></span>
-              <span id="albumAutoplayLabel">Đang Chiếu Tự Động</span>
-            </button>
-            <button type="button" class="salon-action-btn" id="albumViewToggleBtn" title="Chuyển đổi giữa Sân khấu 3D và Lưới toàn cảnh">
-              <span id="albumViewToggleIcon">⊞</span>
-              <span id="albumViewToggleLabel">Xem Lưới Toàn Cảnh</span>
-            </button>
-          </div>
-        </header>
-
-        <!-- SÂN KHẤU 3D COVERFLOW TOÀN MÀN HÌNH -->
-        <div class="album-living-stage-view" id="albumLivingStage">
-          <div class="album-3d-deck-stage">
-            <button type="button" class="deck-stage-nav deck-nav-prev" id="albumPrevBtn" title="Ảnh trước" aria-label="Ảnh trước">&#10094;</button>
-            <div class="album-3d-deck" id="album3DDeck"></div>
-            <button type="button" class="deck-stage-nav deck-nav-next" id="albumNextBtn" title="Ảnh tiếp theo" aria-label="Ảnh tiếp theo">&#10095;</button>
-          </div>
-
-          <!-- Thanh HUD Dưới Chân Sân Khấu 3D -->
-          <div class="album-floating-hud">
-            <div class="hud-top-row">
-              <span class="hud-counter"><span id="albumStoryIndex">01</span> / <span id="albumTotalCount">11</span></span>
-              <button type="button" class="hud-zoom-btn" id="albumZoomActiveBtn" title="Xem ảnh lớn toàn màn hình">⤢ Phóng To</button>
-            </div>
-            <div class="story-progress-wrap" title="Tiến trình tự động chuyển ảnh">
-              <div class="story-progress-fill" id="albumProgressFill"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- DẢI PHIM CUỘN ĐÁY SÂN KHẤU -->
-        <div class="album-filmstrip-dock" id="albumFilmstrip" aria-label="Dải phim ảnh kỷ niệm"></div>
-
-        <!-- CHẾ ĐỘ TƯỜNG TRIỂN LÃM TOÀN CẢNH (MASONRY GRID) -->
-        <div class="album-wall-view" id="albumWallView">
-          <div class="curated-masonry-wall" id="albumMasonryGrid"></div>
-        </div>
+    <!-- KHỐI KẾT NỐI SANG TRANG ALBUM ẢNH CƯỚI RIÊNG -->
+    <section class="album-portal-section section" id="album" aria-labelledby="album-portal-title">
+      <div class="album-portal-card" data-reveal>
+        <p class="eyebrow">MOMENTS TO KEEP</p>
+        <h2 id="album-portal-title">Những ngày <em>có nhau.</em></h2>
+        <p>Chẳng cần một nơi thật đặc biệt. Chỉ cần người ở cạnh là bạn.<br>Mời bạn cùng ghé thăm không gian triển lãm toàn bộ ảnh cưới nghệ thuật của chúng mình.</p>
+        <a href="album.html" class="button button-album-portal">
+          <span>Khám Phá Toàn Bộ Album Ảnh Cưới (56 Ảnh)</span>
+        </a>
       </div>
     </section>
 
-    <section class="rsvp-section" data-reveal aria-labelledby="rsvp-title"><span class="tiny-star">✳</span><p class="eyebrow">YOU’RE PART OF OUR STORY</p><h2 id="rsvp-title">Hẹn bạn ở chương<br><em>đẹp nhất.</em></h2><p>Sự hiện diện của bạn là món quà ý nghĩa nhất<br>trong ngày chung đôi của chúng mình.</p><button class="button" data-rsvp>Xác nhận tham dự <span>↗</span></button><span class="rsvp-deadline">MONG NHẬN PHẢN HỒI CỦA BẠN TRƯỚC 10.12.2026</span></section>
+    <section class="rsvp-section" data-reveal aria-labelledby="rsvp-title"><p class="eyebrow">YOU’RE PART OF OUR STORY</p><h2 id="rsvp-title">Hẹn bạn ở chương<br><em>đẹp nhất.</em></h2><p>Sự hiện diện của bạn là món quà ý nghĩa nhất<br>trong ngày chung đôi của chúng mình.</p><button class="button" data-rsvp>Xác nhận tham dự</button><span class="rsvp-deadline">MONG NHẬN PHẢN HỒI CỦA BẠN TRƯỚC 10.12.2026</span></section>
   </main>
-  <footer><a class="footer-names" href="#home">Minh <em>&</em> Anh</a><p>Made with love. For a lifetime.</p><a href="#home" aria-label="Về đầu trang">↑</a><span class="footer-demo">BẢN THIẾT KẾ MẪU · TÊN, NGÀY CƯỚI & ẢNH MINH HỌA</span></footer>
+  <footer><a class="footer-names" href="#home">Minh <em>&</em> Anh</a><p>Made with love. For a lifetime.</p><a href="#home" aria-label="Về đầu trang">↑</a></footer>
 
   <dialog id="rsvp-dialog" class="rsvp-dialog" aria-labelledby="rsvp-dialog-title"><button class="dialog-close" data-close="rsvp-dialog" aria-label="Đóng biểu mẫu">×</button><div id="rsvp-form-view"><p class="eyebrow">A LITTLE NOTE FOR US</p><h2 id="rsvp-dialog-title">Bạn sẽ đến <em>chứ?</em></h2><p class="dialog-intro">Để chúng mình dành một chỗ thật xinh cho bạn.</p><p class="rsvp-family-note" hidden data-rsvp-family>Khách mời <strong data-selected-family></strong></p><form id="rsvp-form"><input type="hidden" name="family" value=""><label for="guest-name">Tên của bạn <span>*</span></label><input id="guest-name" name="name" autocomplete="name" required maxlength="100" placeholder="Cho chúng mình biết tên bạn nhé"><label for="guest-phone">Số điện thoại <span>*</span></label><input id="guest-phone" name="phone" type="tel" autocomplete="tel" required maxlength="20" placeholder="Số điện thoại để tiện liên lạc nhé"><fieldset><legend>Bạn có thể tham dự không?</legend><label class="radio-choice"><input type="radio" name="attending" value="yes" checked> Mình sẽ đến ♡</label><label class="radio-choice"><input type="radio" name="attending" value="no"> Tiếc quá, mình lỡ hẹn</label></fieldset><label for="guest-count">Tổng số người tham dự</label><select id="guest-count" name="guests"><option value="1">1 người — Chỉ mình thôi</option><option value="2">2 người</option><option value="3">3 người</option><option value="4">4 người</option><option value="5">5 người</option></select><label for="guest-message">Lời chúc &amp; nhắn gửi dâu rể</label><textarea id="guest-message" name="message" rows="3" maxlength="1000" placeholder="Một lời chúc phúc trăm năm, hay nhắn gửi dâu rể nhé…"></textarea><p class="form-note">Phản hồi của bạn sẽ được gửi trực tiếp đến cô dâu &amp; chú rể để chuẩn bị chu đáo nhất.</p><button class="button" type="submit">Gửi phản hồi cho chúng mình <span>♡</span></button></form></div><div id="rsvp-success" hidden><span class="success-heart">♡</span><p class="eyebrow">THANK YOU, WITH LOVE</p><h2>Thật vui khi<br>có <em>bạn.</em></h2><p id="success-message"></p><p class="form-note">Phản hồi của bạn đã được gửi thành công đến cô dâu &amp; chú rể.</p><button class="button" data-close="rsvp-dialog">Hoàn tất <span>✓</span></button><button class="edit-response" id="edit-response">Sửa phản hồi</button></div></dialog>
   <dialog id="gallery-dialog" class="gallery-dialog" aria-label="Album ảnh"><span class="gallery-edition">OUR LITTLE MOMENTS</span><button class="dialog-close" data-close="gallery-dialog" aria-label="Đóng album">×</button><button class="gallery-zoom-toggle" id="gallery-zoom-toggle" aria-pressed="false">Phóng to <span>＋</span></button><button class="gallery-prev" aria-label="Ảnh trước">←</button><figure><button class="gallery-zoom-surface" id="gallery-zoom-surface" aria-label="Phóng to ảnh" aria-pressed="false"><img id="gallery-image" src="/thiep-cuoi-khanh-linh-le-dung/assets/memory-01-garden.jpg" alt="" draggable="false"></button><figcaption><span id="gallery-caption"></span><span id="gallery-counter"></span></figcaption></figure><button class="gallery-next" aria-label="Ảnh tiếp theo">→</button><p class="gallery-hint" id="gallery-hint">Chạm ảnh để phóng to · Vuốt hoặc dùng ← → để chuyển ảnh</p><div class="gallery-thumbs" id="gallery-thumbs" role="group" aria-label="Chọn ảnh"><button type="button" data-photo-index="0" aria-label="Xem ảnh 1"><img src="/thiep-cuoi-khanh-linh-le-dung/assets/memory-01-garden.jpg" alt=""></button><button type="button" data-photo-index="1" aria-label="Xem ảnh 2"><img src="/thiep-cuoi-khanh-linh-le-dung/assets/memory-02-castle.jpg" alt=""></button><button type="button" data-photo-index="2" aria-label="Xem ảnh 3"><img src="/thiep-cuoi-khanh-linh-le-dung/assets/memory-03-piano.jpg" alt=""></button></div></dialog>

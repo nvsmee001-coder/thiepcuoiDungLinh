@@ -7,3 +7,6 @@ ref/
 # Dữ liệu khách hàng tùy chỉnh (không bị git pull ghi đè)
 data/wedding-db.custom.json
 data/wedding-rsvps.custom.json
+
+# Local agent config
+.agents/

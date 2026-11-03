@@ -19,7 +19,7 @@ const DEFAULT_WEDDING_DB = {
   "couple": {
     "groomName": "Lê Dũng",
     "brideName": "Khánh Linh",
-    "eyebrow": "✦ CÙNG VỚI GIA ĐÌNH HAI BÊN • LỄ THÀNH HÔN ✦",
+    "eyebrow": "CÙNG VỚI GIA ĐÌNH HAI BÊN • LỄ THÀNH HÔN",
     "invitationText": "Trân trọng kính mời quý khách đến chung vui cùng gia đình chúng mình",
     "signatureQuote": "“Một hành trình mới • Trọn vẹn yêu thương”",
     "heroBackdrop": "img/08-trang-an-hero.jpg",
@@ -35,9 +35,9 @@ const DEFAULT_WEDDING_DB = {
       "img/09-wuzhen-moi.jpg"
     ],
     "leftFramePhoto": "img/wedding-photo-card-left.jpg",
-    "leftFramePlaque": "✦ LÊ DŨNG • KHÁNH LINH ✦",
+    "leftFramePlaque": "LÊ DŨNG • KHÁNH LINH",
     "rightFramePhoto": "img/wedding-photo-card-right.jpg",
-    "rightFramePlaque": "✦ 27 & 28 . 11 . 2026 ✦",
+    "rightFramePlaque": "27 & 28 . 11 . 2026",
     "coverPhoto": "/thiep-cuoi-khanh-linh-le-dung/assets/cover-khanh-linh-le-dung.jpg",
     "interludePhoto": "/thiep-cuoi-khanh-linh-le-dung/assets/hero.jpg"
   },
@@ -45,7 +45,7 @@ const DEFAULT_WEDDING_DB = {
     "monogram": "L&D",
     "subTitle": "THE WEDDING INVITATION",
     "kinhMoiTitle": "Kính mời",
-    "defaultGuestName": "....................................................",
+    "defaultGuestName": "Quý khách và gia đình",
     "introGroom": "Gia đình nhà trai trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi",
     "introBride": "Gia đình nhà gái trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi",
     "bottomMessage": "Một ngày đặc biệt, bên những người thương."
@@ -63,8 +63,8 @@ const DEFAULT_WEDDING_DB = {
   },
   "venues": {
     "groom": {
-      "badgeCover": "❖ HÔN LỄ NHÀ TRAI",
-      "badgeMap": "❖ HÔN LỄ NHÀ TRAI • 11:00 TRƯA (28.11.2026)",
+      "badgeCover": "HÔN LỄ NHÀ TRAI",
+      "badgeMap": "HÔN LỄ NHÀ TRAI • 11:00 TRƯA (28.11.2026)",
       "nameShort": "Đại Hoàng Sơn Palace",
       "nameFull": "Trung tâm Đại Hoàng Sơn Palace",
       "cityShort": "Bắc Giang • Bắc Ninh",
@@ -77,8 +77,8 @@ const DEFAULT_WEDDING_DB = {
       "mapEmbed": "https://maps.google.com/maps?q=45+H%C3%B9ng+V%C6%B0%C6%A1ng,+B%E1%BA%AFc+Giang&t=&z=15&ie=UTF8&iwloc=&output=embed"
     },
     "bride": {
-      "badgeCover": "❖ VU QUY NHÀ GÁI",
-      "badgeMap": "❖ VU QUY NHÀ GÁI • 11:00 TRƯA (27.11.2026)",
+      "badgeCover": "VU QUY NHÀ GÁI",
+      "badgeMap": "VU QUY NHÀ GÁI • 11:00 TRƯA (27.11.2026)",
       "nameShort": "Trống Đồng Palace",
       "nameFull": "Trung tâm Trống Đồng Palace",
       "cityShort": "Quán Sứ • Hoàn Kiếm • Hà Nội",
@@ -200,19 +200,7 @@ const DEFAULT_WEDDING_DB = {
     "img/03-disney-cau-hon.jpg",
     "img/wedding-photo-card-right.jpg"
   ],
-  "albumPhotos": [
-    "img/wedding-photo-card-left.jpg",
-    "img/wedding-photo-card-right.jpg",
-    "img/02-disney-phao-hoa.jpg",
-    "img/03-disney-cau-hon.jpg",
-    "img/08-trang-an-hero.jpg",
-    "img/07-trang-an-b.jpg",
-    "img/01-trang-an-a.jpg",
-    "img/06-shanghai-dem.jpg",
-    "img/04-shanghai-mua.jpg",
-    "img/09-wuzhen-moi.jpg",
-    "img/05-wuzhen-ma.jpg"
-  ],
+  "albumPhotos": [],
   "music": [
     {
       "title": "River Flows in You — Yiruma",
@@ -254,6 +242,57 @@ const IDB_KEY = "main_db";
 
 const liveChannel = typeof BroadcastChannel !== "undefined" ? new BroadcastChannel("THIEP_CUOI_LIVE_SYNC") : null;
 
+function cleanMapEmbedUrl(raw, fallbackQuery) {
+  if (!raw || typeof raw !== "string") {
+    if (fallbackQuery) return "https://maps.google.com/maps?q=" + encodeURIComponent(fallbackQuery) + "&t=&z=15&ie=UTF8&iwloc=&output=embed";
+    return "";
+  }
+  let str = raw.trim();
+  if (/<iframe/i.test(str)) {
+    const srcMatch = str.match(/src\s*=\s*["']([^"']+)["']/i);
+    if (srcMatch && srcMatch[1]) str = srcMatch[1].trim();
+  }
+  str = str.replace(/&amp;/g, "&").replace(/^["']+|["']+$/g, "").trim();
+  if (str.includes("/maps/embed") || str.includes("output=embed")) return str;
+  if (str.includes("google.com/maps") || str.includes("maps.google.com")) {
+    try {
+      const u = new URL(str);
+      const q = u.searchParams.get("q") || u.searchParams.get("query");
+      if (q) return "https://maps.google.com/maps?q=" + encodeURIComponent(q) + "&t=&z=15&ie=UTF8&iwloc=&output=embed";
+    } catch (_) {}
+  }
+  if (str.includes("maps.app.goo.gl") || str.includes("goo.gl/maps")) {
+    if (fallbackQuery) return "https://maps.google.com/maps?q=" + encodeURIComponent(fallbackQuery) + "&t=&z=15&ie=UTF8&iwloc=&output=embed";
+  }
+  if (/^https?:\/\//i.test(str)) return str;
+  if (fallbackQuery) return "https://maps.google.com/maps?q=" + encodeURIComponent(fallbackQuery) + "&t=&z=15&ie=UTF8&iwloc=&output=embed";
+  return "";
+}
+
+function cleanMapLinkUrl(raw, fallbackQuery) {
+  if (!raw || typeof raw !== "string") {
+    if (fallbackQuery) return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(fallbackQuery);
+    return "";
+  }
+  let str = raw.trim();
+  if (/<iframe/i.test(str)) {
+    const srcMatch = str.match(/src\s*=\s*["']([^"']+)["']/i);
+    if (srcMatch && srcMatch[1]) str = srcMatch[1].trim();
+  } else if (/<a/i.test(str)) {
+    const hrefMatch = str.match(/href\s*=\s*["']([^"']+)["']/i);
+    if (hrefMatch && hrefMatch[1]) str = hrefMatch[1].trim();
+  }
+  str = str.replace(/&amp;/g, "&").replace(/^["']+|["']+$/g, "").trim();
+  if (/^https?:\/\//i.test(str)) return str;
+  if (fallbackQuery) return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(fallbackQuery);
+  return str;
+}
+
+if (typeof window !== "undefined") {
+  window.cleanMapEmbedUrl = cleanMapEmbedUrl;
+  window.cleanMapLinkUrl = cleanMapLinkUrl;
+}
+
 function deepMergeDB(base, override) {
   if (!override || typeof override !== "object") return JSON.parse(JSON.stringify(base));
   const out = JSON.parse(JSON.stringify(base));
@@ -274,8 +313,18 @@ function deepMergeDB(base, override) {
   }
   if (override.date) Object.assign(out.date, override.date);
   if (override.venues) {
-    if (override.venues.groom) Object.assign(out.venues.groom, override.venues.groom);
-    if (override.venues.bride) Object.assign(out.venues.bride, override.venues.bride);
+    if (override.venues.groom) {
+      Object.assign(out.venues.groom, override.venues.groom);
+      const fg = out.venues.groom.address || out.venues.groom.nameFull || "";
+      if (out.venues.groom.mapEmbed) out.venues.groom.mapEmbed = cleanMapEmbedUrl(out.venues.groom.mapEmbed, fg);
+      if (out.venues.groom.mapLink) out.venues.groom.mapLink = cleanMapLinkUrl(out.venues.groom.mapLink, fg);
+    }
+    if (override.venues.bride) {
+      Object.assign(out.venues.bride, override.venues.bride);
+      const fb = out.venues.bride.address || out.venues.bride.nameFull || "";
+      if (out.venues.bride.mapEmbed) out.venues.bride.mapEmbed = cleanMapEmbedUrl(out.venues.bride.mapEmbed, fb);
+      if (out.venues.bride.mapLink) out.venues.bride.mapLink = cleanMapLinkUrl(out.venues.bride.mapLink, fb);
+    }
   }
   if (Array.isArray(override.checklist)) out.checklist = override.checklist;
   if (override.menu) {
@@ -293,10 +342,13 @@ function deepMergeDB(base, override) {
       })
       .filter(Boolean);
   }
-  if (Array.isArray(override.albumPhotos) && override.albumPhotos.length > 0) {
+  if (Array.isArray(override.albumPhotos)) {
     out.albumPhotos = override.albumPhotos
       .map(function (item) {
-        return typeof item === "string" ? item : (item && item.src ? item.src : "");
+        var s = typeof item === "string" ? item : (item && item.src ? item.src : "");
+        if (!s) return "";
+        if (/^(https?:|data:|blob:)/.test(s)) return s;
+        return "/" + s.trim().replace(/\\/g, "/").replace(/^\/+/, "");
       })
       .filter(Boolean);
   }
@@ -425,8 +477,8 @@ async function saveWeddingDB(newDbData) {
 }
 
 async function fetchWeddingDBFromServer() {
-  // 1. Đọc từ data/wedding-db.json trước (luôn có sẵn trên cả Nginx tĩnh lẫn server.js, không bao giờ báo 404 trong Console)
-  const endpoints = ["/data/wedding-db.json?t=" + Date.now(), "/api/db?t=" + Date.now()];
+  // 1. Ưu tiên /api/db trước (trả về wedding-db.custom.json bảo vệ dữ liệu người dùng khi git pull), sau đó fallback sang /data/wedding-db.json
+  const endpoints = ["/api/db?t=" + Date.now(), "/data/wedding-db.json?t=" + Date.now()];
   for (let i = 0; i < endpoints.length; i++) {
     try {
       const res = await fetch(endpoints[i], { cache: "no-store" });

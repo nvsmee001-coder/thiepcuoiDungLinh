@@ -480,7 +480,10 @@
       route.style.strokeDasharray = '1';
       resize(); render(reduced ? 1 : 0, 0, true);
       startButton.addEventListener('click', start);
-      skipButton.addEventListener('click', finish);
+      skipButton.addEventListener('click', () => {
+        finish();
+        window.location.href = 'album.html';
+      });
       window.addEventListener('resize', queueResize, { passive: true });
       window.addEventListener('pagehide', stopFrame);
       window.addEventListener('wedding:entered', resumeAfterEntry);

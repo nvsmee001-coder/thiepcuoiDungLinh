@@ -2,7 +2,7 @@
   "couple": {
     "groomName": "Lê Dũng",
     "brideName": "Khánh Linh",
-    "eyebrow": "✦ CÙNG VỚI GIA ĐÌNH HAI BÊN • LỄ THÀNH HÔN ✦",
+    "eyebrow": "CÙNG VỚI GIA ĐÌNH HAI BÊN • LỄ THÀNH HÔN",
     "invitationText": "Trân trọng kính mời quý khách đến chung vui cùng gia đình chúng mình",
     "signatureQuote": "“Một hành trình mới • Trọn vẹn yêu thương”",
     "heroBackdrop": "img/08-trang-an-hero.jpg",
@@ -18,17 +18,19 @@
       "img/09-wuzhen-moi.jpg"
     ],
     "leftFramePhoto": "img/wedding-photo-card-left.jpg",
-    "leftFramePlaque": "✦ LÊ DŨNG • KHÁNH LINH ✦",
+    "leftFramePlaque": "LÊ DŨNG • KHÁNH LINH",
     "rightFramePhoto": "img/wedding-photo-card-right.jpg",
-    "rightFramePlaque": "✦ 27 & 28 . 11 . 2026 ✦",
+    "rightFramePlaque": "27 & 28 . 11 . 2026",
     "coverPhoto": "/thiep-cuoi-khanh-linh-le-dung/assets/cover-khanh-linh-le-dung.jpg",
-    "interludePhoto": "/thiep-cuoi-khanh-linh-le-dung/assets/hero.jpg"
+    "interludePhoto": "/thiep-cuoi-khanh-linh-le-dung/assets/hero.jpg",
+    "choiceBackdrop": "",
+    "choiceBackdropMobile": ""
   },
   "invitationCard": {
     "monogram": "L&D",
     "subTitle": "THE WEDDING INVITATION",
     "kinhMoiTitle": "Kính mời",
-    "defaultGuestName": "....................................................",
+    "defaultGuestName": "Quý khách và gia đình",
     "introGroom": "Gia đình nhà trai trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi",
     "introBride": "Gia đình nhà gái trân trọng kính mời quý khách<br>đến dự lễ thành hôn của hai con chúng tôi",
     "bottomMessage": "Một ngày đặc biệt, bên những người thương."
@@ -46,8 +48,8 @@
   },
   "venues": {
     "groom": {
-      "badgeCover": "❖ HÔN LỄ NHÀ TRAI",
-      "badgeMap": "❖ HÔN LỄ NHÀ TRAI • 11:00 TRƯA (28.11.2026)",
+      "badgeCover": "HÔN LỄ NHÀ TRAI",
+      "badgeMap": "HÔN LỄ NHÀ TRAI • 11:00 TRƯA (28.11.2026)",
       "nameShort": "Đại Hoàng Sơn Palace",
       "nameFull": "Trung tâm Đại Hoàng Sơn Palace",
       "cityShort": "Bắc Giang • Bắc Ninh",
@@ -60,8 +62,8 @@
       "mapEmbed": "https://maps.google.com/maps?q=45+H%C3%B9ng+V%C6%B0%C6%A1ng,+B%E1%BA%AFc+Giang&t=&z=15&ie=UTF8&iwloc=&output=embed"
     },
     "bride": {
-      "badgeCover": "❖ VU QUY NHÀ GÁI",
-      "badgeMap": "❖ VU QUY NHÀ GÁI • 11:00 TRƯA (27.11.2026)",
+      "badgeCover": "VU QUY NHÀ GÁI",
+      "badgeMap": "VU QUY NHÀ GÁI • 11:00 TRƯA (27.11.2026)",
       "nameShort": "Trống Đồng Palace",
       "nameFull": "Trung tâm Trống Đồng Palace",
       "cityShort": "Quán Sứ • Hoàn Kiếm • Hà Nội",
@@ -183,19 +185,7 @@
     "img/03-disney-cau-hon.jpg",
     "img/wedding-photo-card-right.jpg"
   ],
-  "albumPhotos": [
-    "img/wedding-photo-card-left.jpg",
-    "img/wedding-photo-card-right.jpg",
-    "img/02-disney-phao-hoa.jpg",
-    "img/03-disney-cau-hon.jpg",
-    "img/08-trang-an-hero.jpg",
-    "img/07-trang-an-b.jpg",
-    "img/01-trang-an-a.jpg",
-    "img/06-shanghai-dem.jpg",
-    "img/04-shanghai-mua.jpg",
-    "img/09-wuzhen-moi.jpg",
-    "img/05-wuzhen-ma.jpg"
-  ],
+  "albumPhotos": [],
   "music": [
     {
       "title": "River Flows in You — Yiruma",
@@ -227,5 +217,29 @@
       "backdrop": "/thiep-cuoi-khanh-linh-le-dung/assets/memory-03-piano.jpg",
       "verse": "“Từ hai người xa lạ, ta tìm thấy bình yên nơi ánh mắt,\nvà nhận ra rằng: đối phương chính là bến đỗ trọn đời.”"
     }
-  ]
+  ],
+  "interlude": {
+    "eyebrow": "AND SO, OUR FOREVER BEGINS",
+    "quote": "Và rồi chúng mình lựa chọn<br><em>trở thành một nửa của nhau.</em>"
+  },
+  "journey": {
+    "originCity": "Hà Nội",
+    "destinationCity": "Shanghai",
+    "subtitle": "Hai thành phố. Một hành trình chung.<br>Và những khoảnh khắc muốn giữ lại mãi.",
+    "arrivalTitle": "Chạm đến một nơi.<br><em>Mở ra những kỷ niệm.</em>",
+    "polaroids": [
+      {
+        "photo": "/thiep-cuoi-khanh-linh-le-dung/assets/memory-01-garden.jpg",
+        "caption": "you & me"
+      },
+      {
+        "photo": "/thiep-cuoi-khanh-linh-le-dung/assets/memory-02-castle.jpg",
+        "caption": "everywhere, together"
+      },
+      {
+        "photo": "/thiep-cuoi-khanh-linh-le-dung/assets/memory-03-piano.jpg",
+        "caption": "our next chapter"
+      }
+    ]
+  }
 }

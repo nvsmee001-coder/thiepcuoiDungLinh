@@ -240,19 +240,7 @@
       if (db.couple && db.couple.rightFramePhoto) addPhoto(db.couple.rightFramePhoto);
     }
 
-    const fallbacks = [
-      "img/08-trang-an-hero.jpg",
-      "img/06-shanghai-dem.jpg",
-      "img/03-disney-cau-hon.jpg",
-      "img/wedding-photo-card-left.jpg",
-      "img/wedding-photo-card-right.jpg",
-      "img/02-disney-phao-hoa.jpg",
-      "img/07-trang-an-b.jpg",
-      "img/01-trang-an-a.jpg",
-      "img/04-shanghai-mua.jpg",
-      "img/09-wuzhen-moi.jpg",
-      "img/05-wuzhen-ma.jpg"
-    ];
+    const fallbacks = (db && Array.isArray(db.albumPhotos)) ? db.albumPhotos : [];
     fallbacks.forEach(addPhoto);
 
     // Preload in background
@@ -504,7 +492,7 @@
       // Groom
       if (db.venues.groom) {
         const g = db.venues.groom;
-        setText("groomBadgeCover", g.badgeCover || "❖ HÔN LỄ NHÀ TRAI");
+        setText("groomBadgeCover", g.badgeCover || "HÔN LỄ NHÀ TRAI");
         setText("groomNameFull", g.nameFull || g.nameShort || "Trống Đồng Palace");
         setText("groomTimeCover", g.timeCover || "11:00 Trưa • 07.12.2026");
         setText("groomParents", g.parents ? `Trân trọng kính báo: ${g.parents}` : "");
@@ -512,16 +500,22 @@
         setText("groomHexText", "TRỐNG ĐỒNG");
 
         const groomIframe = document.getElementById("groomMapIframe");
-        if (groomIframe && g.mapEmbed) groomIframe.src = g.mapEmbed;
+        if (groomIframe) {
+          const gembed = window.cleanMapEmbedUrl ? window.cleanMapEmbedUrl(g.mapEmbed, g.address || g.nameFull) : g.mapEmbed;
+          if (gembed) groomIframe.src = gembed;
+        }
 
         const groomMapDirect = document.getElementById("groomMapDirect");
-        if (groomMapDirect && g.mapLink) groomMapDirect.href = g.mapLink;
+        if (groomMapDirect) {
+          const glink = window.cleanMapLinkUrl ? window.cleanMapLinkUrl(g.mapLink, g.address || g.nameFull) : g.mapLink;
+          if (glink) groomMapDirect.href = glink;
+        }
       }
 
       // Bride
       if (db.venues.bride) {
         const b = db.venues.bride;
-        setText("brideBadgeCover", b.badgeCover || "❖ VU QUY NHÀ GÁI");
+        setText("brideBadgeCover", b.badgeCover || "VU QUY NHÀ GÁI");
         setText("brideNameFull", b.nameFull || b.nameShort || "White Palace");
         setText("brideTimeCover", b.timeCover || "18:00 Tối • 07.12.2026");
         setText("brideParents", b.parents ? `Trân trọng kính báo: ${b.parents}` : "");
@@ -529,10 +523,16 @@
         setText("brideHexText", "WHITE PALACE");
 
         const brideIframe = document.getElementById("brideMapIframe");
-        if (brideIframe && b.mapEmbed) brideIframe.src = b.mapEmbed;
+        if (brideIframe) {
+          const bembed = window.cleanMapEmbedUrl ? window.cleanMapEmbedUrl(b.mapEmbed, b.address || b.nameFull) : b.mapEmbed;
+          if (bembed) brideIframe.src = bembed;
+        }
 
         const brideMapDirect = document.getElementById("brideMapDirect");
-        if (brideMapDirect && b.mapLink) brideMapDirect.href = b.mapLink;
+        if (brideMapDirect) {
+          const blink = window.cleanMapLinkUrl ? window.cleanMapLinkUrl(b.mapLink, b.address || b.nameFull) : b.mapLink;
+          if (blink) brideMapDirect.href = blink;
+        }
       }
     }
 
@@ -543,15 +543,7 @@
     renderMenu();
 
     // Album Photos for Modal
-    albumList = Array.isArray(db.albumPhotos) && db.albumPhotos.length > 0 ? db.albumPhotos : [
-      "img/wedding-photo-card-left.jpg",
-      "img/wedding-photo-card-right.jpg",
-      "img/02-disney-phao-hoa.jpg",
-      "img/03-disney-cau-hon.jpg",
-      "img/08-trang-an-hero.jpg",
-      "img/07-trang-an-b.jpg",
-      "img/01-trang-an-a.jpg"
-    ];
+    albumList = Array.isArray(db.albumPhotos) ? db.albumPhotos : [];
   }
 
   function setText(id, text) {
