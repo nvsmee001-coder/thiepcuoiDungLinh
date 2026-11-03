@@ -334,6 +334,85 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  // 5. API: POST /api/delete-images & DELETE /api/images (Xóa vĩnh viễn ảnh khỏi ổ cứng máy chủ VPS)
+  if ((req.method === "POST" && pathname === "/api/delete-images") ||
+      (req.method === "DELETE" && pathname === "/api/images")) {
+    try {
+      const bodyStr = await readRequestBody(req);
+      let payload = {};
+      try { payload = JSON.parse(bodyStr || "{}"); } catch (_) {}
+      const pathsToDelete = Array.isArray(payload.paths)
+        ? payload.paths
+        : (payload.path ? [payload.path] : []);
+
+      const deleted = [];
+      const failed = [];
+
+      for (const relPath of pathsToDelete) {
+        if (!relPath || typeof relPath !== "string") continue;
+        let clean = relPath.replace(/^https?:\/\/[^\/]+/i, "").replace(/^\/+/, "").replace(/\\/g, "/");
+        clean = clean.split("?")[0].split("#")[0].trim();
+
+        // Bảo mật: Chỉ cho phép xóa trong img/ và audio/
+        if (!clean.startsWith("img/") && !clean.startsWith("audio/")) {
+          failed.push({ path: relPath, reason: "Đường dẫn không hợp lệ" });
+          continue;
+        }
+
+        const fullPath = path.join(ROOT_DIR, clean);
+        const imgBase = path.join(ROOT_DIR, "img");
+        const audioBase = path.join(ROOT_DIR, "audio");
+
+        // Ngăn chặn Path Traversal
+        if (!fullPath.startsWith(imgBase) && !fullPath.startsWith(audioBase)) {
+          failed.push({ path: relPath, reason: "Phát hiện đường dẫn bất thường" });
+          continue;
+        }
+
+        if (fs.existsSync(fullPath)) {
+          try {
+            fs.unlinkSync(fullPath);
+            deleted.push(relPath);
+          } catch (err) {
+            failed.push({ path: relPath, reason: err.message });
+          }
+        } else {
+          deleted.push(relPath);
+        }
+      }
+
+      // Tự động dọn dẹp các ảnh vừa xóa khỏi DB wedding-db.custom.json và wedding-db.json
+      if (deleted.length > 0) {
+        const deletedSet = new Set();
+        deleted.forEach(p => {
+          const raw = String(p).trim();
+          deletedSet.add(raw);
+          deletedSet.add(raw.replace(/^\/+/, ""));
+          deletedSet.add("/" + raw.replace(/^\/+/, ""));
+        });
+
+        const dbPath = getEffectiveDbPath();
+        if (fs.existsSync(dbPath)) {
+          try {
+            const dbData = JSON.parse(fs.readFileSync(dbPath, "utf8"));
+            if (Array.isArray(dbData.albumPhotos)) {
+              dbData.albumPhotos = dbData.albumPhotos.filter(p => {
+                const s = typeof p === "string" ? p.trim() : (p && p.src ? p.src : "");
+                return !deletedSet.has(s);
+              });
+              fs.writeFileSync(DB_CUSTOM_PATH, JSON.stringify(dbData, null, 2), "utf8");
+              try { fs.writeFileSync(DB_JSON_PATH, JSON.stringify(dbData, null, 2), "utf8"); } catch (_) {}
+            }
+          } catch (_) {}
+        }
+      }
+
+      return sendJson(res, 200, { ok: true, deleted, failed });
+    } catch (e) {
+      return sendJson(res, 400, { ok: false, error: e.message });
+    }
+  }
+
   // 5. API: GET /api/rsvp (Lấy danh sách khách mời phản hồi)
   if (req.method === "GET" && pathname === "/api/rsvp") {
     try {

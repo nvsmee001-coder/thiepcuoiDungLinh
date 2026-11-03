@@ -187,6 +187,39 @@ class WeddingDBHandler(SimpleHTTPRequestHandler):
             except Exception as e:
                 return self._send_json(400, {"ok": False, "error": str(e)})
 
+        if parsed.path in ("/api/delete-images", "/api/images"):
+            ensure_dirs()
+            try:
+                payload = json.loads(raw_body.decode("utf-8")) if raw_body else {}
+                paths_to_delete = payload.get("paths", [])
+                if not paths_to_delete and payload.get("path"):
+                    paths_to_delete = [payload.get("path")]
+                deleted = []
+                failed = []
+                for p in paths_to_delete:
+                    if not p or not isinstance(p, str):
+                        continue
+                    clean = re.sub(r"^https?://[^/]+", "", p).lstrip("/\\").replace("\\", "/")
+                    clean = clean.split("?")[0].split("#")[0].strip()
+                    if not (clean.startswith("img/") or clean.startswith("audio/")):
+                        failed.append({"path": p, "reason": "Invalid path"})
+                        continue
+                    full_p = os.path.abspath(os.path.join(ROOT_DIR, clean))
+                    if not (full_p.startswith(os.path.abspath(IMG_DIR)) or full_p.startswith(os.path.abspath(AUDIO_UPLOAD_DIR))):
+                        failed.append({"path": p, "reason": "Path traversal"})
+                        continue
+                    if os.path.exists(full_p):
+                        try:
+                            os.remove(full_p)
+                            deleted.append(p)
+                        except Exception as e:
+                            failed.append({"path": p, "reason": str(e)})
+                    else:
+                        deleted.append(p)
+                return self._send_json(200, {"ok": True, "deleted": deleted, "failed": failed})
+            except Exception as e:
+                return self._send_json(400, {"ok": False, "error": str(e)})
+
         return self._send_json(404, {"ok": False, "error": "Unknown API endpoint"})
 
 
