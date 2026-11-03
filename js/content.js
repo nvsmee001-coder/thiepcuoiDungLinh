@@ -182,40 +182,28 @@ const DEFAULT_WEDDING_DB = {
     "heading": "Lịch Trình & Chi Tiết",
     "events": [
       {
-        "time": "07:30",
-        "title": "Lễ Ăn Hỏi & Nghi Thức Rước Dâu",
-        "desc": "Họ nhà trai trao tráp sính lễ và đón dâu trang trọng tại tư gia nhà gái.",
-        "highlight": false
-      },
-      {
-        "time": "09:30",
-        "title": "Lễ Thành Hôn Gia Tiên (Nhà Trai)",
-        "desc": "Nghi lễ dâng hương tổ tiên, trao nhẫn cưới và nhận lời chúc phúc hai họ.",
-        "highlight": false
-      },
-      {
         "time": "11:00",
-        "title": "Đón Khách & Chụp Hình (Tiệc Nhà Trai)",
-        "desc": "Chào đón quý khách tại sảnh Trống Đồng Palace — Cầu Giấy, Hà Nội.",
+        "title": "Đón Khách & Chụp Hình",
+        "desc": "Chào đón quý khách đến chung vui cùng gia đình tại Đại Hoàng Sơn Palace",
         "highlight": true
       },
       {
         "time": "11:30",
-        "title": "Khai Tiệc Mừng Hôn Lễ Nhà Trai",
-        "desc": "Nghi thức cắt bánh, rót rượu Champagne mừng hạnh phúc và dùng tiệc trưa.",
+        "title": "Lễ Thành Hôn",
+        "desc": "Nghi thức trao nhẫn cưới & nhận lời chúc phúc của hai bên gia đình",
         "highlight": true
       },
       {
-        "time": "17:30",
-        "title": "Đón Khách & Chụp Hình (Tiệc Nhà Gái)",
-        "desc": "Chào đón quý khách tại sảnh White Palace — Phú Nhuận, TP. HCM.",
-        "highlight": true
+        "time": "12:00",
+        "title": "Khai Tiệc Mừng",
+        "desc": "Nâng ly chúc phúc và cùng thưởng thức bữa tiệc thân mật",
+        "highlight": false
       },
       {
-        "time": "18:30",
-        "title": "Khai Tiệc Mừng Vu Quy Nhà Gái",
-        "desc": "Cùng nâng ly chúc phúc trăm năm và thưởng thức bữa tiệc tối ấm cúng.",
-        "highlight": true
+        "time": "13:30",
+        "title": "Tiễn Khách & Cảm Tạ",
+        "desc": "Lưu lại những tấm hình kỷ niệm đẹp cùng cô dâu & chú rể",
+        "highlight": false
       }
     ]
   },
@@ -359,7 +347,9 @@ function deepMergeDB(base, override) {
   }
   if (override.schedule) {
     Object.assign(out.schedule, override.schedule);
-    if (Array.isArray(override.schedule.events)) out.schedule.events = override.schedule.events;
+    if (Array.isArray(override.schedule.events) && override.schedule.events.length > 0) {
+      out.schedule.events = override.schedule.events;
+    }
   }
   if (Array.isArray(override.introPhotos) && override.introPhotos.length > 0) {
     out.introPhotos = override.introPhotos
@@ -488,6 +478,8 @@ async function saveWeddingDB(newDbData) {
   }
 
   // 4. Đồng bộ xuống file thật thông qua server.js / server.py
+  let serverSaved = false;
+  let serverError = null;
   try {
     const res = await fetch("/api/db", {
       method: "POST",
@@ -495,11 +487,18 @@ async function saveWeddingDB(newDbData) {
       body: JSON.stringify(merged)
     });
     if (res.ok) {
-      return { ok: true, mode: "server+idb", data: merged };
+      serverSaved = true;
+    } else {
+      serverError = "HTTP " + res.status;
     }
-  } catch (err) {}
+  } catch (err) {
+    serverError = (err && err.message) || "Network Error";
+  }
 
-  return { ok: true, mode: "idb", data: merged };
+  if (serverSaved) {
+    return { ok: true, mode: "server+idb", data: merged };
+  }
+  return { ok: false, mode: "idb_only", error: serverError, data: merged };
 }
 
 async function fetchWeddingDBFromServer() {

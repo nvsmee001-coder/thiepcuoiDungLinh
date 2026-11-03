@@ -2294,7 +2294,7 @@
           card.innerHTML =
             '<span class="album-item-badge">#' + numStr + "</span>" +
             '<div class="album-item-checkbox" title="Chọn ảnh này"></div>' +
-            '<img src="' + resolveAdminAssetUrl(src) + '" alt="" class="album-item-thumb" loading="lazy">' +
+            '<img src="' + resolveAdminAssetUrl(src) + '" alt="" class="album-item-thumb" loading="lazy" onerror="this.onerror=null; this.closest(\'.album-item-card\')?.remove();">' +
             '<div class="album-item-actions">' +
               '<button type="button" class="icon-btn" data-act="prev" title="Đẩy lên trước">←</button>' +
               '<button type="button" class="icon-btn" data-act="next" title="Đẩy ra sau">→</button>' +
@@ -2417,7 +2417,21 @@
         var box = document.getElementById("scheduleEventsContainer");
         if (!box) return;
         box.innerHTML = "";
-        var events = (state.schedule && state.schedule.events) || [];
+        if (!state.schedule) state.schedule = {};
+        var events = state.schedule.events;
+        if (!Array.isArray(events) || events.length === 0) {
+          if (window.DEFAULT_WEDDING_DB && window.DEFAULT_WEDDING_DB.schedule && Array.isArray(window.DEFAULT_WEDDING_DB.schedule.events) && window.DEFAULT_WEDDING_DB.schedule.events.length > 0) {
+            events = JSON.parse(JSON.stringify(window.DEFAULT_WEDDING_DB.schedule.events));
+          } else {
+            events = [
+              { time: "11:00", title: "Đón Khách & Chụp Hình", desc: "Chào đón quý khách đến chung vui cùng gia đình tại Đại Hoàng Sơn Palace", highlight: true },
+              { time: "11:30", title: "Lễ Thành Hôn", desc: "Nghi thức trao nhẫn cưới & nhận lời chúc phúc của hai bên gia đình", highlight: true },
+              { time: "12:00", title: "Khai Tiệc Mừng", desc: "Nâng ly chúc phúc và cùng thưởng thức bữa tiệc thân mật", highlight: false },
+              { time: "13:30", title: "Tiễn Khách & Cảm Tạ", desc: "Lưu lại những tấm hình kỷ niệm đẹp cùng cô dâu & chú rể", highlight: false }
+            ];
+          }
+          state.schedule.events = events;
+        }
 
         events.forEach(function (ev, idx) {
           var row = document.createElement("div");
@@ -3051,8 +3065,8 @@
         val("f_menu_subNote", m.subNote);
 
         var s = state.schedule || {};
-        val("f_sch_eyebrow", s.eyebrow);
-        val("f_sch_heading", s.heading);
+        val("f_sch_eyebrow", s.eyebrow || "WEDDING PROGRAM • NGÀY CHUNG ĐÔI");
+        val("f_sch_heading", s.heading || "Lịch Trình & Chi Tiết");
 
         var inv = state.invitationCard || {};
         val("f_inv_monogram", inv.monogram || "L&D");
@@ -4418,6 +4432,8 @@
         var result = await window.saveWeddingDB(state);
         if (result && result.ok) {
           showToast(customMsg || "Đã lưu toàn bộ thay đổi vào DB & Thiệp Cưới!");
+        } else {
+          showToast("⚠️ Đã lưu bộ nhớ tạm. Máy chủ: " + (result && result.error ? result.error : "Không phản hồi"));
         }
       }
 

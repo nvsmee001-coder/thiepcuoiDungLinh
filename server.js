@@ -230,6 +230,33 @@ ensureDirs();
 const DEFAULT_COVER_PHOTO = "/thiep-cuoi-khanh-linh-le-dung/assets/cover-khanh-linh-le-dung.jpg";
 const DEFAULT_INTERLUDE_PHOTO = "/thiep-cuoi-khanh-linh-le-dung/assets/hero.jpg";
 
+const DEFAULT_SCHEDULE_EVENTS = [
+  {
+    time: "11:00",
+    title: "Đón Khách & Chụp Hình",
+    desc: "Chào đón quý khách đến chung vui cùng gia đình tại Đại Hoàng Sơn Palace",
+    highlight: true
+  },
+  {
+    time: "11:30",
+    title: "Lễ Thành Hôn",
+    desc: "Nghi thức trao nhẫn cưới & nhận lời chúc phúc của hai bên gia đình",
+    highlight: true
+  },
+  {
+    time: "12:00",
+    title: "Khai Tiệc Mừng",
+    desc: "Nâng ly chúc phúc và cùng thưởng thức bữa tiệc thân mật",
+    highlight: false
+  },
+  {
+    time: "13:30",
+    title: "Tiễn Khách & Cảm Tạ",
+    desc: "Lưu lại những tấm hình kỷ niệm đẹp cùng cô dâu & chú rể",
+    highlight: false
+  }
+];
+
 function sanitizeAndHealDb(dbData) {
   if (!dbData || typeof dbData !== "object") return dbData;
   let changed = false;
@@ -239,6 +266,40 @@ function sanitizeAndHealDb(dbData) {
     if (/^(https?:|data:|blob:)/i.test(relPath)) return true;
     const clean = relPath.trim().replace(/^\/+/, "").replace(/\\/g, "/");
     return fs.existsSync(path.join(ROOT_DIR, clean));
+  }
+
+  // 1. Tự động loại bỏ ảnh chết không tồn tại trên ổ cứng để chống lỗi 404
+  if (Array.isArray(dbData.albumPhotos)) {
+    const initialCount = dbData.albumPhotos.length;
+    const validPhotos = dbData.albumPhotos.filter(p => fileExists(p));
+    if (validPhotos.length !== initialCount) {
+      console.log(`[Self-Healing] Removed ${initialCount - validPhotos.length} non-existent photos from albumPhotos`);
+      dbData.albumPhotos = validPhotos;
+      changed = true;
+    }
+  }
+
+  // 2. Tự động nạp 4 mốc lịch trình chuẩn nếu trống hoặc chưa cấu hình
+  if (!dbData.schedule || typeof dbData.schedule !== "object") {
+    dbData.schedule = {
+      eyebrow: "WEDDING PROGRAM • NGÀY CHUNG ĐÔI",
+      heading: "Lịch Trình & Chi Tiết",
+      events: DEFAULT_SCHEDULE_EVENTS
+    };
+    changed = true;
+  } else {
+    if (!dbData.schedule.eyebrow) {
+      dbData.schedule.eyebrow = "WEDDING PROGRAM • NGÀY CHUNG ĐÔI";
+      changed = true;
+    }
+    if (!dbData.schedule.heading) {
+      dbData.schedule.heading = "Lịch Trình & Chi Tiết";
+      changed = true;
+    }
+    if (!Array.isArray(dbData.schedule.events) || dbData.schedule.events.length === 0) {
+      dbData.schedule.events = DEFAULT_SCHEDULE_EVENTS;
+      changed = true;
+    }
   }
 
   if (dbData.couple) {
@@ -294,6 +355,9 @@ function sanitizeAndHealDb(dbData) {
 const server = http.createServer(async (req, res) => {
   const parsedUrl = url.parse(req.url);
   let pathname = decodeURIComponent(parsedUrl.pathname || "/");
+  if (pathname.length > 1 && pathname.endsWith("/")) {
+    pathname = pathname.slice(0, -1);
+  }
 
   if (req.method === "OPTIONS") {
     res.writeHead(200, {
@@ -333,7 +397,7 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "POST" && pathname === "/api/db") {
     try {
       const bodyStr = await readRequestBody(req);
-      const data = JSON.parse(bodyStr);
+      let data = JSON.parse(bodyStr);
       // Chuẩn hóa đường dẫn ảnh album luôn bắt đầu bằng /
       if (Array.isArray(data.albumPhotos)) {
         data.albumPhotos = data.albumPhotos.map(p => {
@@ -353,6 +417,9 @@ const server = http.createServer(async (req, res) => {
           }
         });
       }
+      // Chạy qua Self-Healing trước khi lưu
+      data = sanitizeAndHealDb(data);
+
       // Luôn ghi vào wedding-db.custom.json (được .gitignore bảo vệ khỏi git pull)
       fs.writeFileSync(DB_CUSTOM_PATH, JSON.stringify(data, null, 2), "utf8");
       try {
