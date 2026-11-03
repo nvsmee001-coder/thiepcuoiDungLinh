@@ -355,9 +355,6 @@ function sanitizeAndHealDb(dbData) {
 const server = http.createServer(async (req, res) => {
   const parsedUrl = url.parse(req.url);
   let pathname = decodeURIComponent(parsedUrl.pathname || "/");
-  if (pathname.length > 1 && pathname.endsWith("/")) {
-    pathname = pathname.slice(0, -1);
-  }
 
   if (req.method === "OPTIONS") {
     res.writeHead(200, {
@@ -369,7 +366,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 1. API: GET /api/db
-  if (req.method === "GET" && pathname === "/api/db") {
+  if (req.method === "GET" && (pathname === "/api/db" || pathname === "/api/db/")) {
     try {
       const dbPath = getEffectiveDbPath();
       const raw = fs.readFileSync(dbPath, "utf8");
@@ -381,7 +378,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 2. API: GET /api/images
-  if (req.method === "GET" && pathname === "/api/images") {
+  if (req.method === "GET" && (pathname === "/api/images" || pathname === "/api/images/")) {
     const all = listAllImages(IMG_DIR);
     all.sort((a, b) => {
       const aAlbum = a.startsWith("/img/album/") || a.startsWith("img/album/");
@@ -394,7 +391,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 3. API: POST /api/db
-  if (req.method === "POST" && pathname === "/api/db") {
+  if (req.method === "POST" && (pathname === "/api/db" || pathname === "/api/db/")) {
     try {
       const bodyStr = await readRequestBody(req);
       let data = JSON.parse(bodyStr);
