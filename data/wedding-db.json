@@ -57,7 +57,7 @@
       "timeCover": "11:00 Trưa • Thứ Bảy 28.11.2026",
       "date": "2026-11-28T11:00:00+07:00",
       "lunar": "(Tức ngày 20 tháng 10 năm Bính Ngọ)",
-      "parents": "Ông Nguyễn Văn Uy & Bà Lê Thị Hảo",
+      "parents": "Ông Nguyễn Văn Uy   Bà Lê Thị Hảo",
       "address": "45 Hùng Vương - Bắc Giang - Bắc Ninh",
       "mapLink": "https://www.google.com/maps/search/?api=1&query=Trung+t%C3%A2m+%C4%90%E1%BA%A1i+Ho%C3%A0ng+S%C6%A1n+Palace,+45+H%C3%B9ng+V%C6%B0%C6%A1ng+-+B%E1%BA%AFc+Giang",
       "mapEmbed": "https://maps.google.com/maps?q=45+H%C3%B9ng+V%C6%B0%C6%A1ng,+B%E1%BA%AFc+Giang&t=&z=15&ie=UTF8&iwloc=&output=embed",
@@ -73,7 +73,7 @@
       "timeCover": "11:00 Trưa • Thứ Sáu 27.11.2026",
       "date": "2026-11-27T11:00:00+07:00",
       "lunar": "(Tức ngày 19 tháng 10 năm Bính Ngọ)",
-      "parents": "Ông Phạm Ngọc Hùng & Bà Nguyễn Tuyết Nhung",
+      "parents": "Ông Phạm Ngọc Hùng   Bà Nguyễn Tuyết Nhung",
       "address": "65 Quán Sứ - Cửa Nam - Hà Nội",
       "mapLink": "https://www.google.com/maps/search/?api=1&query=Trung+t%C3%A2m+Tr%E1%BB%91ng+%C4%90%E1%BB%93ng+Palace,+65+Qu%C3%A1n+S%E1%BB%A9+-+C%E1%BB%ADa+Nam+-+H%C3%A0+N%E1%BB%99i",
       "mapEmbed": "https://maps.google.com/maps?q=65+Qu%C3%A1n+S%E1%BB%A9,+Ho%C3%A0n+Ki%E1%BA%BFm,+H%C3%A0+N%E1%BB%99i&t=&z=15&ie=UTF8&iwloc=&output=embed",
@@ -106,41 +106,62 @@
     "courses": [
       {
         "name": "Khai Vị Tam Hợp Hoàng Kim",
+        "category": "Khai Vị",
         "tag": "Khai Vị",
         "desc": "Súp Bào Ngư Vi Cá • Gỏi Ngó Sen Tôm Thịt • Chả Giò Hải Sản"
       },
       {
         "name": "Tôm Hùm Bỏ Lò Phô Mai Pháp",
+        "category": "Món Chính",
         "tag": "Hải Sản",
         "desc": "Tôm hùm tươi đút lò béo ngậy dùng kèm bánh mì bơ tỏi"
       },
       {
         "name": "Bò Mỹ Áp Chảo Sốt Nấm Truffle",
+        "category": "Món Chính",
         "tag": "Món Chính",
         "desc": "Thăn ngoại bò Mỹ mềm mọng dùng kèm măng tây & khoai nghiền"
       },
       {
         "name": "Cá Song Hấp Xì Dầu Hồng Kông",
+        "category": "Món Chính",
         "tag": "Món Chính",
         "desc": "Cá song biển tươi hấp gừng hành & nước tương thượng hạng"
       },
       {
         "name": "Gà Đông Tảo Hầm Hạt Sen & Táo Đỏ",
+        "category": "Món Chính",
         "tag": "Món Tần",
         "desc": "Món tần bổ dưỡng thanh ngọt hầm cùng nấm hương rừng"
       },
       {
         "name": "Lẩu Thái Hải Sản & Cơm Chiên",
+        "category": "Món Chính",
         "tag": "Món Nóng",
         "desc": "Cơm chiên Dương Châu dùng kèm lẩu hải sản & rau nấm theo mùa"
       },
       {
         "name": "Chè Hạt Sen Long Nhãn & Đồ Uống",
+        "category": "Tráng Miệng",
         "tag": "Tráng Miệng",
         "desc": "Trái cây nhiệt đới • Rượu Vang Đỏ, Bia tươi & Nước ngọt suốt tiệc"
       }
     ]
   },
+  "faq": [
+    {
+      "q": "Mình nên đến vào lúc nào?",
+      "a": "Bạn có thể đến từ 11:00 để chụp ảnh, trò chuyện cùng cô dâu chú rể và tìm chỗ ngồi trước khi buổi lễ bắt đầu lúc 11:30."
+    },
+    {
+      "q": "Mình có thể đi cùng người thân không?",
+      "a": "Vui lòng ghi rõ số người đi cùng trong phần xác nhận tham dự để chúng mình chuẩn bị chu đáo nhất nhé."
+    },
+    {
+      "q": "Nếu mình ăn chay hoặc có yêu cầu đặc biệt?",
+      "a": "Bạn hãy để lại yêu cầu trong phần lời nhắn của thiệp xác nhận. Chúng mình sẽ lưu ý để chuẩn bị thực đơn phù hợp."
+    }
+  ],
   "schedule": {
     "eyebrow": "WEDDING PROGRAM • NGÀY CHUNG ĐÔI",
     "heading": "Lịch Trình & Chi Tiết",

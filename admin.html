@@ -801,13 +801,16 @@
       align-items: center;
     }
     .list-row-menu {
-      grid-template-columns: 42px 1.2fr 0.7fr 1.8fr auto;
+      grid-template-columns: 42px 1.2fr 130px 1.8fr auto;
     }
     .list-row-schedule {
       grid-template-columns: 95px 1.2fr 1.8fr auto auto;
     }
+    .list-row-faq {
+      grid-template-columns: 42px 1.2fr 2fr auto;
+    }
     @media (max-width: 900px) {
-      .list-row-menu, .list-row-schedule {
+      .list-row-menu, .list-row-schedule, .list-row-faq {
         grid-template-columns: 1fr;
       }
     }
@@ -870,8 +873,9 @@
       <button type="button" class="tab-btn" data-tab="pane-venues">📍 4. Địa Điểm &amp; Bản Đồ 2 Nhà</button>
       <button type="button" class="tab-btn" data-tab="pane-menu">🍽️ 5. Thực Đơn Tiệc Cưới</button>
       <button type="button" class="tab-btn" data-tab="pane-schedule">🕰️ 6. Lịch Biểu Hôn Lễ</button>
-      <button type="button" class="tab-btn" data-tab="pane-music">🎵 7. Đĩa Nhạc Cưới (<span id="musicCountBadge">3</span>/5)</button>
-      <button type="button" class="tab-btn" data-tab="pane-rsvp">💌 8. Phản Hồi Khách (RSVP) (<span id="rsvpCountBadge">0</span>)</button>
+      <button type="button" class="tab-btn" data-tab="pane-faq">❓ 7. Bạn Cần Biết (Hỏi &amp; Đáp)</button>
+      <button type="button" class="tab-btn" data-tab="pane-music">🎵 8. Đĩa Nhạc Cưới (<span id="musicCountBadge">3</span>/5)</button>
+      <button type="button" class="tab-btn" data-tab="pane-rsvp">💌 9. Phản Hồi Khách (RSVP) (<span id="rsvpCountBadge">0</span>)</button>
     </nav>
 
     <!-- ====================================================================
@@ -1911,6 +1915,21 @@
     </section>
 
     <!-- ====================================================================
+         PANE 7: BẠN CẦN BIẾT (HỎI & ĐÁP FAQ)
+         ==================================================================== -->
+    <section class="tab-pane" id="pane-faq">
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>❓ Bạn Cần Biết (Hỏi &amp; Đáp / FAQ)</span>
+          <button type="button" class="btn btn-sm btn-primary" id="btnAddFaqItem">+ Thêm Câu Hỏi Mới</button>
+        </div>
+        <p class="panel-desc">Soạn các câu hỏi thường gặp và câu trả lời để hiển thị trong mục "Bạn cần biết" trên thiệp cưới.</p>
+
+        <div id="faqItemsContainer"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
          PANE 6: QUẢN LÝ ĐĨA NHẠC CƯỚI (UPLOAD MP3 & ĐẶT TÊN — TỐI ĐA 5 BÀI)
          ==================================================================== -->
     <section class="tab-pane" id="pane-music">
@@ -2362,15 +2381,27 @@
           var numStr = idx + 1 < 10 ? "0" + (idx + 1) : String(idx + 1);
           var row = document.createElement("div");
           row.className = "list-row-card list-row-menu";
+          var curCat = (c.category || c.tag || "Món Chính").trim();
+          var isKhaiVi = curCat.toLowerCase().includes("khai");
+          var isTrangMieng = curCat.toLowerCase().includes("tráng") || curCat.toLowerCase().includes("uống");
+          var isMonChinh = !isKhaiVi && !isTrangMieng;
+
           row.innerHTML =
             '<div class="row-num-pill">#' + numStr + "</div>" +
             '<input type="text" class="form-control c-name" placeholder="Tên món ăn" value="' + (c.name || "").replace(/"/g, "&quot;") + '">' +
-            '<input type="text" class="form-control c-tag" placeholder="Nhãn (VD: Khai Vị)" value="' + (c.tag || "").replace(/"/g, "&quot;") + '">' +
+            '<select class="form-control c-category" style="background:#172218; color:#e2c48e; font-weight:600; cursor:pointer;">' +
+              '<option value="Khai Vị"' + (isKhaiVi ? " selected" : "") + '>🥗 Khai Vị</option>' +
+              '<option value="Món Chính"' + (isMonChinh ? " selected" : "") + '>🍖 Món Chính</option>' +
+              '<option value="Tráng Miệng"' + (isTrangMieng ? " selected" : "") + '>🍨 Tráng Miệng</option>' +
+            '</select>' +
             '<input type="text" class="form-control c-desc" placeholder="Mô tả thành phần món" value="' + (c.desc || "").replace(/"/g, "&quot;") + '">' +
             '<button type="button" class="btn btn-sm btn-danger c-del">✕</button>';
 
           row.querySelector(".c-name").addEventListener("input", function (e) { c.name = e.target.value; });
-          row.querySelector(".c-tag").addEventListener("input", function (e) { c.tag = e.target.value; });
+          row.querySelector(".c-category").addEventListener("change", function (e) {
+            c.category = e.target.value;
+            c.tag = e.target.value;
+          });
           row.querySelector(".c-desc").addEventListener("input", function (e) { c.desc = e.target.value; });
           row.querySelector(".c-del").addEventListener("click", function () {
             courses.splice(idx, 1);
@@ -2392,7 +2423,7 @@
           var row = document.createElement("div");
           row.className = "list-row-card list-row-schedule";
           row.innerHTML =
-            '<input type="time" class="form-control picker-btn-input s-time" onkeydown="return false;" onclick="this.showPicker && this.showPicker()" value="' + (ev.time || "08:00").replace(/"/g, "&quot;") + '">' +
+            '<input type="text" class="form-control s-time" style="max-width:90px; text-align:center; font-weight:700; color:#4ade80;" placeholder="VD: 11:00" value="' + (ev.time || "11:00").replace(/"/g, "&quot;") + '">' +
             '<input type="text" class="form-control s-title" placeholder="Tên nghi lễ" value="' + (ev.title || "").replace(/"/g, "&quot;") + '">' +
             '<input type="text" class="form-control s-desc" placeholder="Chi tiết nghi lễ / địa điểm" value="' + (ev.desc || "").replace(/"/g, "&quot;") + '">' +
             '<label style="display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--gold-bright);cursor:pointer;white-space:nowrap;">' +
@@ -2400,13 +2431,45 @@
             "</label>" +
             '<button type="button" class="btn btn-sm btn-danger s-del">✕</button>';
 
-          row.querySelector(".s-time").addEventListener("change", function (e) { ev.time = e.target.value; });
+          row.querySelector(".s-time").addEventListener("input", function (e) { ev.time = e.target.value; });
           row.querySelector(".s-title").addEventListener("input", function (e) { ev.title = e.target.value; });
           row.querySelector(".s-desc").addEventListener("input", function (e) { ev.desc = e.target.value; });
           row.querySelector(".s-hl").addEventListener("change", function (e) { ev.highlight = e.target.checked; });
           row.querySelector(".s-del").addEventListener("click", function () {
             events.splice(idx, 1);
             renderScheduleEvents();
+          });
+
+          box.appendChild(row);
+        });
+      }
+
+      // 3B. RENDER FAQ ITEMS (BẠN CẦN BIẾT)
+      function renderFaqItems() {
+        var box = document.getElementById("faqItemsContainer");
+        if (!box) return;
+        box.innerHTML = "";
+        var faqList = state.faq || [];
+        if (!faqList.length && window.DEFAULT_WEDDING_DB && window.DEFAULT_WEDDING_DB.faq) {
+          faqList = JSON.parse(JSON.stringify(window.DEFAULT_WEDDING_DB.faq));
+          state.faq = faqList;
+        }
+
+        faqList.forEach(function (item, idx) {
+          var numStr = idx + 1 < 10 ? "0" + (idx + 1) : String(idx + 1);
+          var row = document.createElement("div");
+          row.className = "list-row-card list-row-faq";
+          row.innerHTML =
+            '<div class="row-num-pill">#' + numStr + "</div>" +
+            '<input type="text" class="form-control f-q" placeholder="Câu hỏi (VD: Mình nên đến lúc mấy giờ?)" value="' + (item.q || "").replace(/"/g, "&quot;") + '">' +
+            '<input type="text" class="form-control f-a" placeholder="Câu trả lời chi tiết cho khách..." value="' + (item.a || "").replace(/"/g, "&quot;") + '">' +
+            '<button type="button" class="btn btn-sm btn-danger f-del">✕</button>';
+
+          row.querySelector(".f-q").addEventListener("input", function (e) { item.q = e.target.value; });
+          row.querySelector(".f-a").addEventListener("input", function (e) { item.a = e.target.value; });
+          row.querySelector(".f-del").addEventListener("click", function () {
+            faqList.splice(idx, 1);
+            renderFaqItems();
           });
 
           box.appendChild(row);
@@ -3008,6 +3071,7 @@
         renderAlbumGrid();
         renderMenuCourses();
         renderScheduleEvents();
+        renderFaqItems();
         renderMusicTracks();
         if (typeof updateGeneratedGuestLink === "function") updateGeneratedGuestLink();
         if (typeof updateCardMockup === "function") updateCardMockup();
@@ -3073,12 +3137,12 @@
 
         var gFat = val("f_groom_father").trim();
         var gMot = val("f_groom_mother").trim();
-        var gParents = (gFat && gMot) ? (gFat + " & " + gMot) : (gFat || gMot || val("f_groom_parents"));
+        var gParents = (gFat && gMot) ? (gFat + "   " + gMot) : (gFat || gMot || val("f_groom_parents"));
         val("f_groom_parents", gParents);
 
         var bFat = val("f_bride_father").trim();
         var bMot = val("f_bride_mother").trim();
-        var bParents = (bFat && bMot) ? (bFat + " & " + bMot) : (bFat || bMot || val("f_bride_parents"));
+        var bParents = (bFat && bMot) ? (bFat + "   " + bMot) : (bFat || bMot || val("f_bride_parents"));
         val("f_bride_parents", bParents);
 
         state.venues = {
@@ -3116,8 +3180,41 @@
         state.menu.heading = val("f_menu_heading");
         state.menu.subNote = val("f_menu_subNote");
 
+        // Quét trực tiếp Menu Courses từ DOM
+        var menuRows = document.querySelectorAll("#menuCoursesContainer .list-row-menu");
+        if (menuRows.length > 0) {
+          state.menu.courses = Array.from(menuRows).map(function(row) {
+            var name = (row.querySelector(".c-name") ? row.querySelector(".c-name").value : "").trim();
+            var cat = (row.querySelector(".c-category") ? row.querySelector(".c-category").value : (row.querySelector(".c-tag") ? row.querySelector(".c-tag").value : "Món Chính")).trim();
+            var desc = (row.querySelector(".c-desc") ? row.querySelector(".c-desc").value : "").trim();
+            return { name: name, category: cat, tag: cat, desc: desc };
+          }).filter(function(item) { return item.name; });
+        }
+
         state.schedule.eyebrow = val("f_sch_eyebrow");
         state.schedule.heading = val("f_sch_heading");
+
+        // Quét trực tiếp Schedule Events từ DOM
+        var schRows = document.querySelectorAll("#scheduleEventsContainer .list-row-schedule");
+        if (schRows.length > 0) {
+          state.schedule.events = Array.from(schRows).map(function(row) {
+            var time = (row.querySelector(".s-time") ? row.querySelector(".s-time").value : "").trim();
+            var title = (row.querySelector(".s-title") ? row.querySelector(".s-title").value : "").trim();
+            var desc = (row.querySelector(".s-desc") ? row.querySelector(".s-desc").value : "").trim();
+            var hl = row.querySelector(".s-hl") ? row.querySelector(".s-hl").checked : false;
+            return { time: time, title: title, desc: desc, highlight: hl };
+          }).filter(function(item) { return item.title || item.time; });
+        }
+
+        // Quét trực tiếp FAQ từ DOM
+        var faqRows = document.querySelectorAll("#faqItemsContainer .list-row-faq");
+        if (faqRows.length > 0) {
+          state.faq = Array.from(faqRows).map(function(row) {
+            var q = (row.querySelector(".f-q") ? row.querySelector(".f-q").value : "").trim();
+            var a = (row.querySelector(".f-a") ? row.querySelector(".f-a").value : "").trim();
+            return { q: q, a: a };
+          }).filter(function(item) { return item.q; });
+        }
 
         state.invitationCard = {
           monogram: val("f_inv_monogram") || "L&D",
@@ -3994,16 +4091,29 @@
         }
       });
 
-      // THÊM MÓN ĂN & THÊM MỐC LỊCH TRÌNH
+      // THÊM MÓN ĂN, THÊM MỐC LỊCH TRÌNH & THÊM CÂU HỎI FAQ
       document.getElementById("btnAddCourse").addEventListener("click", function () {
-        state.menu.courses.push({ name: "Món Mới Thượng Hạng", tag: "Món Chính", desc: "Mô tả hương vị món ăn" });
+        state.menu = state.menu || {};
+        state.menu.courses = state.menu.courses || [];
+        state.menu.courses.push({ name: "Món Mới Thượng Hạng", category: "Món Chính", tag: "Món Chính", desc: "Mô tả nguyên liệu & hương vị món ăn" });
         renderMenuCourses();
       });
 
       document.getElementById("btnAddScheduleEvent").addEventListener("click", function () {
+        state.schedule = state.schedule || {};
+        state.schedule.events = state.schedule.events || [];
         state.schedule.events.push({ time: "12:00", title: "Nghi Thức Mới", desc: "Mô tả chi tiết nghi thức", highlight: true });
         renderScheduleEvents();
       });
+
+      var btnAddFaq = document.getElementById("btnAddFaqItem");
+      if (btnAddFaq) {
+        btnAddFaq.addEventListener("click", function () {
+          state.faq = state.faq || [];
+          state.faq.push({ q: "Câu hỏi mới cần biết?", a: "Câu trả lời hướng dẫn chi tiết cho khách dự tiệc." });
+          renderFaqItems();
+        });
+      }
 
       // ======================================================================
       // TAB 3: TỜ THIỆP MỜI GIẤY, TẠO LINK KHÁCH & MOCKUP
@@ -4018,7 +4128,7 @@
         var guestNameInput = val("gen_guestName").trim();
         var defaultGuest = (val("f_inv_defaultGuestName") && !val("f_inv_defaultGuestName").includes("...")) ? val("f_inv_defaultGuestName") : "Quý khách và gia đình";
         var intro = isBride ? val("f_inv_introBride") : val("f_inv_introGroom");
-        var bottomMsg = val("f_inv_bottomMessage") || "Một ngày đặc biệt, bên những người thương.";
+        var bottomMsg = val("f_inv_bottomMessage") || "";
         var groomName = val("f_groomName") || "Lê Dũng";
         var brideName = val("f_brideName") || "Khánh Linh";
 
@@ -4057,12 +4167,12 @@
 
         var gFat = val("f_groom_father").trim();
         var gMot = val("f_groom_mother").trim();
-        var pGroom = (gFat && gMot) ? (gFat + " & " + gMot) : (gFat || gMot || val("f_groom_parents"));
+        var pGroom = (gFat && gMot) ? (gFat + "   " + gMot) : (gFat || gMot || val("f_groom_parents"));
         val("f_groom_parents", pGroom);
 
         var bFat = val("f_bride_father").trim();
         var bMot = val("f_bride_mother").trim();
-        var pBride = (bFat && bMot) ? (bFat + " & " + bMot) : (bFat || bMot || val("f_bride_parents"));
+        var pBride = (bFat && bMot) ? (bFat + "   " + bMot) : (bFat || bMot || val("f_bride_parents"));
         val("f_bride_parents", pBride);
 
         var pGEl = document.getElementById("mock_p_groom");

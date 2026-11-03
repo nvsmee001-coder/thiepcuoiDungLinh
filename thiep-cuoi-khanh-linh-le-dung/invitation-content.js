@@ -347,22 +347,53 @@
     if (subNoteEl && m.subNote) subNoteEl.textContent = m.subNote;
 
     if (!courses.length) {
-      grid.innerHTML = '<p style="text-align:center;grid-column:1/-1;color:var(--muted);font-size:12px;">Đang cập nhật thực đơn tiệc cưới...</p>';
+      grid.innerHTML = '<p style="text-align:center;grid-column:1/-1;color:#556857;font-size:13px;padding:30px 0;">Đang cập nhật thực đơn tiệc cưới...</p>';
       return;
     }
 
-    grid.innerHTML = courses.map((item, idx) => {
-      const tag = item.tag || 'Món chính';
-      const name = item.name || '';
-      const desc = item.desc || '';
-      return `
-        <div class="menu-item-card">
-          <span class="menu-tag-badge">${tag}</span>
-          <h4 class="menu-course-title">${name}</h4>
-          <p class="menu-course-detail">${desc}</p>
+    // Phân loại thành 3 nhóm rõ ràng: Khai Vị, Món Chính, Tráng Miệng
+    const categories = [
+      { id: 'appetizer', label: 'Khai Vị', en: 'Appetizers', items: [] },
+      { id: 'main', label: 'Món Chính', en: 'Main Courses', items: [] },
+      { id: 'dessert', label: 'Tráng Miệng & Đồ Uống', en: 'Dessert & Drinks', items: [] }
+    ];
+
+    courses.forEach(c => {
+      const cat = (c.category || c.tag || '').toLowerCase();
+      const name = (c.name || '').toLowerCase();
+      if (cat.includes('khai') || name.includes('khai vị') || name.includes('súp') || name.includes('gỏi')) {
+        categories[0].items.push(c);
+      } else if (cat.includes('tráng') || cat.includes('uống') || name.includes('chè') || name.includes('trái cây') || name.includes('đồ uống') || name.includes('rượu')) {
+        categories[2].items.push(c);
+      } else {
+        categories[1].items.push(c);
+      }
+    });
+
+    // Nếu người dùng không dùng 3 nhóm chuẩn mà chỉ có danh sách thông thường, tự cân bằng
+    let finalSections = categories.filter(cat => cat.items.length > 0);
+    if (!finalSections.length) {
+      finalSections = [{ id: 'main', label: 'Thực Đơn Tiệc Cưới', en: 'Banquet Menu', items: courses }];
+    }
+
+    grid.className = 'fine-banquet-layout';
+    grid.innerHTML = finalSections.map(sec => `
+      <div class="banquet-cat-column">
+        <div class="banquet-cat-header">
+          <span class="banquet-cat-title">${sec.label}</span>
+          <span class="banquet-cat-subtitle">${sec.en}</span>
+          <div class="banquet-cat-divider" aria-hidden="true"></div>
         </div>
-      `;
-    }).join('');
+        <div class="banquet-dish-list">
+          ${sec.items.map(dish => `
+            <div class="fine-dish-item">
+              <h4 class="fine-dish-name">${dish.name || ''}</h4>
+              ${dish.desc ? `<p class="fine-dish-desc">${dish.desc}</p>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `).join('');
   }
 
   function renderTimeline(db, activeConfig) {
@@ -371,25 +402,70 @@
 
     const events = (db.schedule && Array.isArray(db.schedule.events) && db.schedule.events.length > 0)
       ? db.schedule.events
-      : null;
+      : [
+          { time: '11:00', title: 'Đón Khách & Chụp Hình', desc: `Chào đón quý khách đến chung vui cùng gia đình tại ${activeConfig.venueName}`, highlight: true },
+          { time: '11:30', title: 'Lễ Thành Hôn', desc: 'Nghi thức trao nhẫn cưới & nhận lời chúc phúc của hai bên gia đình', highlight: true },
+          { time: '12:00', title: 'Khai Tiệc Mừng', desc: 'Nâng ly chúc phúc và cùng thưởng thức bữa tiệc thân mật', highlight: false },
+          { time: '13:30', title: 'Tiễn Khách & Cảm Tạ', desc: 'Lưu lại những tấm hình kỷ niệm đẹp cùng cô dâu & chú rể', highlight: false }
+        ];
 
-    if (events) {
-      timelineEl.innerHTML = events.map((ev, i) => `
-        <div>
-          <span class="timeline-icon">${i + 1}</span>
-          <time>${ev.time || ''}</time>
-          <h4>${ev.title || ''}</h4>
-          <p>${ev.desc || ''}</p>
-        </div>
-      `).join('');
-    } else {
-      timelineEl.innerHTML = `
-        <div><span class="timeline-icon">1</span><time>11:00</time><h4>Đón khách & Chụp hình</h4><p>Chào đón quý khách đến chung vui cùng gia đình tại ${activeConfig.venueName}</p></div>
-        <div><span class="timeline-icon">2</span><time>11:30</time><h4>Lễ thành hôn</h4><p>Nghi thức trao nhẫn cưới &amp; nhận lời chúc phúc của hai bên gia đình</p></div>
-        <div><span class="timeline-icon">3</span><time>12:00</time><h4>Khai tiệc mừng</h4><p>Nâng ly chúc phúc và cùng thưởng thức bữa tiệc thân mật</p></div>
-        <div><span class="timeline-icon">4</span><time>13:30</time><h4>Tiễn khách &amp; Cảm tạ</h4><p>Lưu lại những tấm hình kỷ niệm đẹp cùng cô dâu &amp; chú rể</p></div>
-      `;
-    }
+    timelineEl.className = 'event-panel timeline wedding-timeline-v2';
+    timelineEl.innerHTML = `
+      <div class="timeline-v2-track">
+        ${events.map(ev => `
+          <div class="timeline-v2-node ${ev.highlight ? 'is-highlight' : ''}">
+            <div class="timeline-v2-time-badge">
+              <time>${ev.time || ''}</time>
+            </div>
+            <div class="timeline-v2-dot-wrap" aria-hidden="true">
+              <span class="timeline-v2-dot"></span>
+            </div>
+            <div class="timeline-v2-content">
+              <h4 class="timeline-v2-title">${ev.title || ''}</h4>
+              ${ev.desc ? `<p class="timeline-v2-desc">${ev.desc}</p>` : ''}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  function renderFAQ(db) {
+    const faqPanel = document.getElementById('event-faq');
+    if (!faqPanel) return;
+
+    const faqList = (db && Array.isArray(db.faq) && db.faq.length > 0)
+      ? db.faq
+      : [
+          {
+            q: 'Mình nên đến vào lúc nào?',
+            a: 'Bạn có thể đến từ 11:00 để chụp ảnh, trò chuyện cùng cô dâu chú rể và tìm chỗ ngồi trước khi buổi lễ bắt đầu lúc 11:30.'
+          },
+          {
+            q: 'Mình có thể đi cùng người thân không?',
+            a: 'Vui lòng ghi rõ số người đi cùng trong phần xác nhận tham dự để chúng mình chuẩn bị chu đáo nhất nhé.'
+          },
+          {
+            q: 'Nếu mình ăn chay hoặc có yêu cầu đặc biệt?',
+            a: 'Bạn hãy để lại yêu cầu trong phần lời nhắn của thiệp xác nhận. Chúng mình sẽ lưu ý để chuẩn bị thực đơn phù hợp.'
+          }
+        ];
+
+    faqPanel.innerHTML = `
+      <div class="faq-clean-wrap">
+        ${faqList.map(item => `
+          <details class="faq-clean-item">
+            <summary class="faq-clean-q">
+              <strong class="faq-clean-title">${item.q || ''}</strong>
+              <i class="faq-clean-icon" aria-hidden="true">+</i>
+            </summary>
+            <div class="faq-clean-a">
+              <p>${item.a || ''}</p>
+            </div>
+          </details>
+        `).join('')}
+      </div>
+    `;
   }
 
   function renderAlbumAndGallery(db, coupleNames) {
@@ -713,9 +789,10 @@
       }
     }
 
-    // 6. Timeline, Menu, Album & Music, Interlude & Journey
+    // 6. Timeline, Menu, FAQ, Album & Music, Interlude & Journey
     renderTimeline(configData.db, config);
     renderMenu(configData.db);
+    renderFAQ(configData.db);
     renderAlbumAndGallery(configData.db, configData.coupleNames);
     renderMusic(configData.db);
     renderIntroScenes(configData.db);

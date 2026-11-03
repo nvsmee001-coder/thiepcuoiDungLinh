@@ -358,6 +358,9 @@ const server = http.createServer(async (req, res) => {
       try {
         fs.writeFileSync(DB_JSON_PATH, JSON.stringify(data, null, 2), "utf8");
       } catch (_) {}
+      try {
+        syncContentJs(data);
+      } catch (_) {}
       return sendJson(res, 200, { ok: true, saved: "data/wedding-db.custom.json" });
     } catch (e) {
       return sendJson(res, 400, { ok: false, error: e.message });

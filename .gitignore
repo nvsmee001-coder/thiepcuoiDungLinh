@@ -8,5 +8,13 @@ ref/
 data/wedding-db.custom.json
 data/wedding-rsvps.custom.json
 
+# Symlinks tự động tạo bởi server.js trên VPS Linux
+/assets
+thiep-cuoi-khanh-linh-le-dung/audio
+thiep-cuoi-khanh-linh-le-dung/css
+thiep-cuoi-khanh-linh-le-dung/data
+thiep-cuoi-khanh-linh-le-dung/img
+thiep-cuoi-khanh-linh-le-dung/js
+
 # Local agent config
 .agents/
