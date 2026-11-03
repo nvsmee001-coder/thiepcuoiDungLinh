@@ -19,11 +19,78 @@ from urllib.parse import urlparse
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_JSON_PATH = os.path.join(ROOT_DIR, "data", "wedding-db.json")
+DB_CUSTOM_PATH = os.path.join(ROOT_DIR, "data", "wedding-db.custom.json")
 CONTENT_JS_PATH = os.path.join(ROOT_DIR, "js", "content.js")
 IMG_DIR = os.path.join(ROOT_DIR, "img")
 ALBUM_UPLOAD_DIR = os.path.join(IMG_DIR, "album")
 AUDIO_UPLOAD_DIR = os.path.join(ROOT_DIR, "audio")
 MAX_BODY_BYTES = 50 * 1024 * 1024
+
+DEFAULT_COVER_PHOTO = "/thiep-cuoi-khanh-linh-le-dung/assets/cover-khanh-linh-le-dung.jpg"
+DEFAULT_INTERLUDE_PHOTO = "/thiep-cuoi-khanh-linh-le-dung/assets/hero.jpg"
+
+
+def get_effective_db_path():
+    if os.path.exists(DB_CUSTOM_PATH):
+        return DB_CUSTOM_PATH
+    return DB_JSON_PATH
+
+
+def sanitize_and_heal_db(data):
+    if not isinstance(data, dict):
+        return data
+    changed = False
+
+    def file_exists(rel_p):
+        if not rel_p or not isinstance(rel_p, str):
+            return False
+        if re.match(r"^(https?:|data:|blob:)", rel_p, re.I):
+            return True
+        clean = rel_p.strip().lstrip("/\\").replace("\\", "/")
+        return os.path.exists(os.path.join(ROOT_DIR, clean))
+
+    couple = data.get("couple")
+    if isinstance(couple, dict):
+        cov = couple.get("coverPhoto")
+        if cov and not file_exists(cov):
+            print(f"[Self-Healing] Missing coverPhoto: {cov} -> Reset to {DEFAULT_COVER_PHOTO}")
+            couple["coverPhoto"] = DEFAULT_COVER_PHOTO
+            changed = True
+        cov_mob = couple.get("coverPhotoMobile")
+        if cov_mob and not file_exists(cov_mob):
+            couple["coverPhotoMobile"] = ""
+            changed = True
+        inter = couple.get("interludePhoto")
+        if inter and not file_exists(inter):
+            print(f"[Self-Healing] Missing interludePhoto: {inter} -> Reset to {DEFAULT_INTERLUDE_PHOTO}")
+            couple["interludePhoto"] = DEFAULT_INTERLUDE_PHOTO
+            changed = True
+        inter_mob = couple.get("interludePhotoMobile")
+        if inter_mob and not file_exists(inter_mob):
+            couple["interludePhotoMobile"] = ""
+            changed = True
+
+    venues = data.get("venues")
+    if isinstance(venues, dict):
+        for k in ("groom", "bride"):
+            v = venues.get(k)
+            if isinstance(v, dict):
+                raw_p = str(v.get("parents") or "").strip()
+                if "&" in raw_p and (not v.get("father") or not v.get("mother")):
+                    parts = raw_p.split("&")
+                    if not v.get("father"):
+                        v["father"] = parts[0].strip()
+                    if not v.get("mother"):
+                        v["mother"] = parts[1].strip()
+                    changed = True
+
+    if changed:
+        try:
+            with open(DB_CUSTOM_PATH, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+        except Exception:
+            pass
+    return data
 
 
 def ensure_dirs():
@@ -92,10 +159,12 @@ class WeddingDBHandler(SimpleHTTPRequestHandler):
         parsed = urlparse(self.path)
         if parsed.path == "/api/db":
             ensure_dirs()
-            if os.path.exists(DB_JSON_PATH):
+            db_path = get_effective_db_path()
+            if os.path.exists(db_path):
                 try:
-                    with open(DB_JSON_PATH, "r", encoding="utf-8") as f:
+                    with open(db_path, "r", encoding="utf-8") as f:
                         data = json.load(f)
+                    data = sanitize_and_heal_db(data)
                     return self._send_json(200, data)
                 except Exception as e:
                     return self._send_json(500, {"ok": False, "error": str(e)})
@@ -143,10 +212,15 @@ class WeddingDBHandler(SimpleHTTPRequestHandler):
             ensure_dirs()
             try:
                 data = json.loads(raw_body.decode("utf-8"))
-                with open(DB_JSON_PATH, "w", encoding="utf-8") as f:
+                with open(DB_CUSTOM_PATH, "w", encoding="utf-8") as f:
                     json.dump(data, f, ensure_ascii=False, indent=2)
+                try:
+                    with open(DB_JSON_PATH, "w", encoding="utf-8") as f:
+                        json.dump(data, f, ensure_ascii=False, indent=2)
+                except Exception:
+                    pass
                 sync_content_js(data)
-                return self._send_json(200, {"ok": True, "saved": "data/wedding-db.json + js/content.js"})
+                return self._send_json(200, {"ok": True, "saved": "data/wedding-db.custom.json + js/content.js"})
             except Exception as e:
                 return self._send_json(400, {"ok": False, "error": str(e)})
 
@@ -216,6 +290,45 @@ class WeddingDBHandler(SimpleHTTPRequestHandler):
                             failed.append({"path": p, "reason": str(e)})
                     else:
                         deleted.append(p)
+
+                if deleted:
+                    del_set = set()
+                    for d in deleted:
+                        raw_s = str(d).strip()
+                        del_set.add(raw_s)
+                        del_set.add(raw_s.lstrip("/\\"))
+                        del_set.add("/" + raw_s.lstrip("/\\"))
+
+                    db_p = get_effective_db_path()
+                    if os.path.exists(db_p):
+                        try:
+                            with open(db_p, "r", encoding="utf-8") as f:
+                                db_data = json.load(f)
+                            if isinstance(db_data.get("albumPhotos"), list):
+                                db_data["albumPhotos"] = [
+                                    item for item in db_data["albumPhotos"]
+                                    if (item if isinstance(item, str) else (item.get("src") if isinstance(item, dict) else "")) not in del_set
+                                ]
+                            cp = db_data.get("couple")
+                            if isinstance(cp, dict):
+                                if cp.get("coverPhoto") in del_set:
+                                    cp["coverPhoto"] = DEFAULT_COVER_PHOTO
+                                if cp.get("coverPhotoMobile") in del_set:
+                                    cp["coverPhotoMobile"] = ""
+                                if cp.get("interludePhoto") in del_set:
+                                    cp["interludePhoto"] = DEFAULT_INTERLUDE_PHOTO
+                                if cp.get("interludePhotoMobile") in del_set:
+                                    cp["interludePhotoMobile"] = ""
+                            with open(DB_CUSTOM_PATH, "w", encoding="utf-8") as f:
+                                json.dump(db_data, f, ensure_ascii=False, indent=2)
+                            try:
+                                with open(DB_JSON_PATH, "w", encoding="utf-8") as f:
+                                    json.dump(db_data, f, ensure_ascii=False, indent=2)
+                            except Exception:
+                                pass
+                        except Exception:
+                            pass
+
                 return self._send_json(200, {"ok": True, "deleted": deleted, "failed": failed})
             except Exception as e:
                 return self._send_json(400, {"ok": False, "error": str(e)})

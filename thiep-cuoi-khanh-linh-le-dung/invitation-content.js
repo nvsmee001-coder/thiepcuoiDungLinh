@@ -30,7 +30,39 @@
     return { day, month, year, dow, dowTitle, time, dotDate: `${day}.${month}.${year}` };
   }
 
-  function formatParentsHtml(parentsStr) {
+  const DEFAULT_COVER_PHOTO = '/thiep-cuoi-khanh-linh-le-dung/assets/cover-khanh-linh-le-dung.jpg';
+  const DEFAULT_INTERLUDE_PHOTO = '/thiep-cuoi-khanh-linh-le-dung/assets/hero.jpg';
+
+  function applySafeImage(img, targetSrc, fallbackSrc) {
+    if (!img) return;
+    const finalFallback = fallbackSrc || DEFAULT_COVER_PHOTO;
+    const initialSrc = targetSrc || finalFallback;
+
+    img.onerror = function () {
+      if (this.src !== finalFallback && !this.src.endsWith(finalFallback)) {
+        console.warn('[Image Fallback] 404 or load error, switching to safe fallback:', finalFallback);
+        this.src = finalFallback;
+      }
+    };
+
+    if (img.getAttribute('src') !== initialSrc) {
+      img.src = initialSrc;
+    }
+  }
+
+  function formatParentsHtml(parentsStr, venueObj) {
+    // 1. Ưu tiên lấy trực tiếp nếu đã lưu riêng father / mother
+    if (venueObj && (venueObj.father || venueObj.mother)) {
+      const f = (venueObj.father || '').trim();
+      const m = (venueObj.mother || '').trim();
+      if (f && m) {
+        return `<span class="parent-name">${f}</span><span class="parent-amp">&amp;</span><span class="parent-name">${m}</span>`;
+      }
+      if (f || m) {
+        return `<span class="parent-name">${f || m}</span>`;
+      }
+    }
+
     if (!parentsStr) return '';
     const raw = String(parentsStr).trim();
     if (raw.includes('parent-name')) return raw;
@@ -38,39 +70,63 @@
     let father = '';
     let mother = '';
 
+    // 2. Tách theo ký tự &
     if (raw.includes('&')) {
       const parts = raw.split('&');
       father = parts[0].trim();
       mother = parts.slice(1).join('&').trim();
-    } else if (/\s+v[àa]\s+/i.test(raw)) {
-      const parts = raw.split(/\s+v[àa]\s+/i);
-      father = parts[0].trim();
-      mother = parts.slice(1).join(' & ').trim();
-    } else if (raw.includes('+')) {
-      const parts = raw.split('+');
-      father = parts[0].trim();
-      mother = parts.slice(1).join('+').trim();
-    } else if (/<br\s*\/?>/i.test(raw)) {
-      const parts = raw.split(/<br\s*\/?>/i).map(s => s.trim()).filter(Boolean);
-      if (parts.length >= 2) {
-        father = parts[0];
-        mother = parts.slice(1).join(' ');
-      } else {
-        return `<span class="parent-name">${raw}</span>`;
-      }
-    } else if (raw.includes('\n')) {
+    }
+    // 3. Tách theo xuống dòng \n
+    else if (raw.includes('\n')) {
       const parts = raw.split('\n').map(s => s.trim()).filter(Boolean);
       if (parts.length >= 2) {
         father = parts[0];
         mother = parts.slice(1).join(' ');
       } else {
-        return `<span class="parent-name">${raw}</span>`;
+        father = parts[0] || raw;
       }
+    }
+    // 4. Tách theo chữ "và"
+    else if (/\s+v[àa]\s+/i.test(raw)) {
+      const parts = raw.split(/\s+v[àa]\s+/i);
+      father = parts[0].trim();
+      mother = parts.slice(1).join(' & ').trim();
+    }
+    // 5. Tách theo dấu +
+    else if (raw.includes('+')) {
+      const parts = raw.split('+');
+      father = parts[0].trim();
+      mother = parts.slice(1).join('+').trim();
+    }
+    // 6. Tách theo thẻ <br>
+    else if (/<br\s*\/?>/i.test(raw)) {
+      const parts = raw.split(/<br\s*\/?>/i).map(s => s.trim()).filter(Boolean);
+      if (parts.length >= 2) {
+        father = parts[0];
+        mother = parts.slice(1).join(' ');
+      } else {
+        father = parts[0] || raw;
+      }
+    }
+    // 7. Tách theo cụm "Ông ... Bà ..."
+    else if (/^(Ông\s+.*?)\s+(Bà\s+.*)$/i.test(raw)) {
+      const match = raw.match(/^(Ông\s+.*?)\s+(Bà\s+.*)$/i);
+      father = match[1].trim();
+      mother = match[2].trim();
+    }
+    // 8. Tách nếu có từ "Bà" hoặc "Mẹ" ở giữa chuỗi
+    else if (/\s+(Bà|Mẹ)\s+/i.test(raw)) {
+      const idx = raw.search(/\s+(Bà|Mẹ)\s+/i);
+      father = raw.slice(0, idx).trim();
+      mother = raw.slice(idx).trim();
     } else {
       return `<span class="parent-name">${raw}</span>`;
     }
 
-    return `<span class="parent-name">${father}</span><span class="parent-amp">&amp;</span><span class="parent-name">${mother}</span>`;
+    if (father && mother) {
+      return `<span class="parent-name">${father}</span><span class="parent-amp">&amp;</span><span class="parent-name">${mother}</span>`;
+    }
+    return `<span class="parent-name">${father || mother || raw}</span>`;
   }
 
   function cleanMapEmbedUrl(raw, fallbackQuery) {
@@ -225,6 +281,7 @@
         venueName: groomLocation,
         venueAddress: groomAddress,
         parents: groomParents,
+        venue: groomVenue,
         lunar: groomLunar,
         description: `Tiệc cưới nhà trai: kính mời quý khách đến chung vui mừng hạnh phúc cùng gia đình chúng tôi tại ${groomLocation}. ${groomLunar}.`
       },
@@ -241,6 +298,7 @@
         venueName: brideLocation,
         venueAddress: brideAddress,
         parents: brideParents,
+        venue: brideVenue,
         lunar: brideLunar,
         description: `Tiệc cưới nhà gái: kính mời quý khách đến chung vui mừng hạnh phúc cùng gia đình chúng tôi tại ${brideLocation}. ${brideLunar}.`
       }
@@ -578,28 +636,24 @@
       btn.setAttribute('aria-selected', String(match));
     });
 
-    // 2. Photos (Responsive Cover & Interlude)
+    // 2. Photos (Responsive Cover & Interlude, Safe Fallback chống 404)
     const isMobile = window.innerWidth <= 600;
-    const effectiveCover = (isMobile && configData.coverPhotoMobile) ? configData.coverPhotoMobile : configData.coverPhoto;
-    const effectiveInterlude = (isMobile && configData.interludePhotoMobile) ? configData.interludePhotoMobile : configData.interludePhoto;
+    const effectiveCover = (isMobile && configData.coverPhotoMobile) ? configData.coverPhotoMobile : (configData.coverPhoto || DEFAULT_COVER_PHOTO);
+    const effectiveInterlude = (isMobile && configData.interludePhotoMobile) ? configData.interludePhotoMobile : (configData.interludePhoto || DEFAULT_INTERLUDE_PHOTO);
 
     const coverImgs = document.querySelectorAll('#finalCoverImg, .cover-photo img, .invitation-photo-watermark img');
     coverImgs.forEach(img => {
-      if (effectiveCover && img.getAttribute('src') !== effectiveCover) {
-        img.src = effectiveCover;
-      }
+      applySafeImage(img, effectiveCover, DEFAULT_COVER_PHOTO);
     });
 
     const finalSourceMob = document.getElementById('finalCoverSourceMobile');
-    if (finalSourceMob && (configData.coverPhotoMobile || effectiveCover)) {
-      finalSourceMob.srcset = configData.coverPhotoMobile || effectiveCover;
+    if (finalSourceMob) {
+      finalSourceMob.srcset = configData.coverPhotoMobile || effectiveCover || DEFAULT_COVER_PHOTO;
     }
 
     const interludeImgs = document.querySelectorAll('.photo-interlude img');
     interludeImgs.forEach(img => {
-      if (effectiveInterlude && img.getAttribute('src') !== effectiveInterlude) {
-        img.src = effectiveInterlude;
-      }
+      applySafeImage(img, effectiveInterlude, DEFAULT_INTERLUDE_PHOTO);
     });
 
     // 3. Date & Time Badges
@@ -622,10 +676,10 @@
       n.innerHTML = `<strong>TẠI: ${config.venueName.toUpperCase()}</strong><br><span>${config.venueAddress}</span>`;
     });
     document.querySelectorAll('.invitation-families').forEach(n => {
-      const brideParentsHtml = formatParentsHtml(configData.details.bride.parents);
-      const groomParentsHtml = formatParentsHtml(configData.details.groom.parents);
-      const brideCard = `<div><h3>Nhà Gái</h3><p class="family-parents">${brideParentsHtml}</p><span class="family-role">Cô dâu: ${configData.brideName}</span></div>`;
-      const groomCard = `<div><h3>Nhà Trai</h3><p class="family-parents">${groomParentsHtml}</p><span class="family-role">Chú rể: ${configData.groomName}</span></div>`;
+      const brideParentsHtml = formatParentsHtml(configData.details.bride.parents, configData.details.bride.venue);
+      const groomParentsHtml = formatParentsHtml(configData.details.groom.parents, configData.details.groom.venue);
+      const brideCard = `<div><h3>Nhà Gái</h3><p class="family-parents">${brideParentsHtml}</p><span class="family-role">Cô dâu: <strong class="role-name">${configData.brideName}</strong></span></div>`;
+      const groomCard = `<div><h3>Nhà Trai</h3><p class="family-parents">${groomParentsHtml}</p><span class="family-role">Chú rể: <strong class="role-name">${configData.groomName}</strong></span></div>`;
       n.innerHTML = isBride ? brideCard + groomCard : groomCard + brideCard;
       n.hidden = false;
     });

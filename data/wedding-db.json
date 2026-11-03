@@ -59,7 +59,9 @@
       "parents": "Ông Nguyễn Văn Uy & Bà Lê Thị Hảo",
       "address": "45 Hùng Vương - Bắc Giang - Bắc Ninh",
       "mapLink": "https://www.google.com/maps/search/?api=1&query=Trung+t%C3%A2m+%C4%90%E1%BA%A1i+Ho%C3%A0ng+S%C6%A1n+Palace,+45+H%C3%B9ng+V%C6%B0%C6%A1ng+-+B%E1%BA%AFc+Giang",
-      "mapEmbed": "https://maps.google.com/maps?q=45+H%C3%B9ng+V%C6%B0%C6%A1ng,+B%E1%BA%AFc+Giang&t=&z=15&ie=UTF8&iwloc=&output=embed"
+      "mapEmbed": "https://maps.google.com/maps?q=45+H%C3%B9ng+V%C6%B0%C6%A1ng,+B%E1%BA%AFc+Giang&t=&z=15&ie=UTF8&iwloc=&output=embed",
+      "father": "Ông Nguyễn Văn Uy",
+      "mother": "Bà Lê Thị Hảo"
     },
     "bride": {
       "badgeCover": "VU QUY NHÀ GÁI",
@@ -73,7 +75,9 @@
       "parents": "Ông Phạm Ngọc Hùng & Bà Nguyễn Tuyết Nhung",
       "address": "65 Quán Sứ - Cửa Nam - Hà Nội",
       "mapLink": "https://www.google.com/maps/search/?api=1&query=Trung+t%C3%A2m+Tr%E1%BB%91ng+%C4%90%E1%BB%93ng+Palace,+65+Qu%C3%A1n+S%E1%BB%A9+-+C%E1%BB%ADa+Nam+-+H%C3%A0+N%E1%BB%99i",
-      "mapEmbed": "https://maps.google.com/maps?q=65+Qu%C3%A1n+S%E1%BB%A9,+Ho%C3%A0n+Ki%E1%BA%BFm,+H%C3%A0+N%E1%BB%99i&t=&z=15&ie=UTF8&iwloc=&output=embed"
+      "mapEmbed": "https://maps.google.com/maps?q=65+Qu%C3%A1n+S%E1%BB%A9,+Ho%C3%A0n+Ki%E1%BA%BFm,+H%C3%A0+N%E1%BB%99i&t=&z=15&ie=UTF8&iwloc=&output=embed",
+      "father": "Ông Phạm Ngọc Hùng",
+      "mother": "Bà Nguyễn Tuyết Nhung"
     }
   },
   "checklist": [

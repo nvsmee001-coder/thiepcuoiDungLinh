@@ -1727,8 +1727,21 @@
             <input type="text" class="form-control" id="f_groom_nameFull">
           </div>
           <div class="form-group">
-            <label>Song Thân Nhà Trai</label>
-            <input type="text" class="form-control" id="f_groom_parents">
+            <label style="display:flex; justify-content:space-between; align-items:center;">
+              <span>Song Thân Nhà Trai</span>
+              <span style="font-size:11px; color:var(--gold-dim); font-weight:normal;">2 Dòng Riêng Biệt &bull; Tự Động Thêm &amp;</span>
+            </label>
+            <div style="display:grid; grid-template-columns:1fr; gap:8px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="width:75px; font-size:12px; color:var(--gold); font-weight:600; flex-shrink:0;">Tên Cha:</span>
+                <input type="text" class="form-control" id="f_groom_father" placeholder="Ví dụ: Ông Nguyễn Văn Uy">
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="width:75px; font-size:12px; color:var(--gold); font-weight:600; flex-shrink:0;">Tên Mẹ:</span>
+                <input type="text" class="form-control" id="f_groom_mother" placeholder="Ví dụ: Bà Lê Thị Hảo">
+              </div>
+            </div>
+            <input type="hidden" id="f_groom_parents">
           </div>
           <div class="form-group">
             <label>Địa Chỉ Chi Tiết (Bấm "Tự Tạo Map" sau khi nhập)</label>
@@ -1798,8 +1811,21 @@
             <input type="text" class="form-control" id="f_bride_nameFull">
           </div>
           <div class="form-group">
-            <label>Song Thân Nhà Gái</label>
-            <input type="text" class="form-control" id="f_bride_parents">
+            <label style="display:flex; justify-content:space-between; align-items:center;">
+              <span>Song Thân Nhà Gái</span>
+              <span style="font-size:11px; color:var(--gold-dim); font-weight:normal;">2 Dòng Riêng Biệt &bull; Tự Động Thêm &amp;</span>
+            </label>
+            <div style="display:grid; grid-template-columns:1fr; gap:8px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="width:75px; font-size:12px; color:var(--gold); font-weight:600; flex-shrink:0;">Tên Cha:</span>
+                <input type="text" class="form-control" id="f_bride_father" placeholder="Ví dụ: Ông Phạm Ngọc Hùng">
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="width:75px; font-size:12px; color:var(--gold); font-weight:600; flex-shrink:0;">Tên Mẹ:</span>
+                <input type="text" class="form-control" id="f_bride_mother" placeholder="Ví dụ: Bà Nguyễn Tuyết Nhung">
+              </div>
+            </div>
+            <input type="hidden" id="f_bride_parents">
           </div>
           <div class="form-group">
             <label>Địa Chỉ Chi Tiết (Bấm "Tự Tạo Map" sau khi nhập)</label>
@@ -2883,6 +2909,32 @@
         val("picker_main_time", initMainTime);
         applyMainDateTimePickers(false);
 
+        function splitParents(raw, defF, defM) {
+          if (!raw || typeof raw !== "string") return { father: defF || "", mother: defM || "" };
+          var str = raw.trim();
+          if (str.includes("&")) {
+            var p = str.split("&");
+            return { father: p[0].trim(), mother: p.slice(1).join("&").trim() };
+          }
+          if (str.includes("\n")) {
+            var p = str.split("\n").map(function (s) { return s.trim(); }).filter(Boolean);
+            return { father: p[0] || "", mother: p.slice(1).join(" ") || "" };
+          }
+          if (/\s+v[àa]\s+/i.test(str)) {
+            var p = str.split(/\s+v[àa]\s+/i);
+            return { father: p[0].trim(), mother: p.slice(1).join(" & ").trim() };
+          }
+          var obMatch = str.match(/^(Ông\s+.*?)\s+(Bà\s+.*)$/i);
+          if (obMatch) {
+            return { father: obMatch[1].trim(), mother: obMatch[2].trim() };
+          }
+          var bIdx = str.search(/\s+(Bà|Mẹ)\s+/i);
+          if (bIdx !== -1) {
+            return { father: str.slice(0, bIdx).trim(), mother: str.slice(bIdx).trim() };
+          }
+          return { father: str, mother: "" };
+        }
+
         var vg = (state.venues && state.venues.groom) || {};
         val("f_groom_badgeCover", vg.badgeCover);
         val("f_groom_nameShort", vg.nameShort);
@@ -2890,7 +2942,10 @@
         val("f_groom_timeCover", vg.timeCover);
         val("f_groom_badgeMap", vg.badgeMap);
         val("f_groom_nameFull", vg.nameFull);
-        val("f_groom_parents", vg.parents);
+        var gp = splitParents(vg.parents, vg.father || "Ông Nguyễn Văn Uy", vg.mother || "Bà Lê Thị Hảo");
+        val("f_groom_father", vg.father || gp.father);
+        val("f_groom_mother", vg.mother || gp.mother);
+        val("f_groom_parents", vg.parents || ((vg.father || gp.father) + " & " + (vg.mother || gp.mother)));
         val("f_groom_address", vg.address);
         val("f_groom_mapLink", vg.mapLink);
         val("f_groom_mapEmbed", vg.mapEmbed);
@@ -2906,7 +2961,10 @@
         val("f_bride_timeCover", vb.timeCover);
         val("f_bride_badgeMap", vb.badgeMap);
         val("f_bride_nameFull", vb.nameFull);
-        val("f_bride_parents", vb.parents);
+        var bp = splitParents(vb.parents, vb.father || "Ông Phạm Ngọc Hùng", vb.mother || "Bà Nguyễn Tuyết Nhung");
+        val("f_bride_father", vb.father || bp.father);
+        val("f_bride_mother", vb.mother || bp.mother);
+        val("f_bride_parents", vb.parents || ((vb.father || bp.father) + " & " + (vb.mother || bp.mother)));
         val("f_bride_address", vb.address);
         val("f_bride_mapLink", vb.mapLink);
         val("f_bride_mapEmbed", vb.mapEmbed);
@@ -3000,6 +3058,16 @@
         var gFallback = val("f_groom_address") || val("f_groom_nameFull");
         var bFallback = val("f_bride_address") || val("f_bride_nameFull");
 
+        var gFat = val("f_groom_father").trim();
+        var gMot = val("f_groom_mother").trim();
+        var gParents = (gFat && gMot) ? (gFat + " & " + gMot) : (gFat || gMot || val("f_groom_parents"));
+        val("f_groom_parents", gParents);
+
+        var bFat = val("f_bride_father").trim();
+        var bMot = val("f_bride_mother").trim();
+        var bParents = (bFat && bMot) ? (bFat + " & " + bMot) : (bFat || bMot || val("f_bride_parents"));
+        val("f_bride_parents", bParents);
+
         state.venues = {
           groom: {
             badgeCover: val("f_groom_badgeCover"),
@@ -3008,7 +3076,9 @@
             timeCover: val("f_groom_timeCover"),
             badgeMap: val("f_groom_badgeMap"),
             nameFull: val("f_groom_nameFull"),
-            parents: val("f_groom_parents"),
+            father: gFat,
+            mother: gMot,
+            parents: gParents,
             address: val("f_groom_address"),
             mapLink: cleanMapLinkUrl(val("f_groom_mapLink"), gFallback),
             mapEmbed: cleanMapEmbedUrl(val("f_groom_mapEmbed"), gFallback)
@@ -3020,7 +3090,9 @@
             timeCover: val("f_bride_timeCover"),
             badgeMap: val("f_bride_badgeMap"),
             nameFull: val("f_bride_nameFull"),
-            parents: val("f_bride_parents"),
+            father: bFat,
+            mother: bMot,
+            parents: bParents,
             address: val("f_bride_address"),
             mapLink: cleanMapLinkUrl(val("f_bride_mapLink"), bFallback),
             mapEmbed: cleanMapEmbedUrl(val("f_bride_mapEmbed"), bFallback)
@@ -3811,9 +3883,6 @@
           if (!e.target.files || !e.target.files.length) return;
           var paths = await uploadFilesToServer(e.target.files);
           if (paths.length) {
-            // Cũng tự động thêm ảnh vừa tải lên vào danh sách Album để tái sử dụng dễ dàng
-            state.albumPhotos.push(paths[0]);
-            renderAlbumGrid();
             openCropStudio({
               src: paths[0],
               targetType: "slot",
@@ -3972,12 +4041,24 @@
         var vAddrEl = document.getElementById("mock_venue_addr");
         if (vAddrEl) vAddrEl.textContent = venueAddr || "";
 
-        var pGroom = val("f_groom_parents");
-        var pBride = val("f_bride_parents");
+        var gFat = val("f_groom_father").trim();
+        var gMot = val("f_groom_mother").trim();
+        var pGroom = (gFat && gMot) ? (gFat + " & " + gMot) : (gFat || gMot || val("f_groom_parents"));
+        val("f_groom_parents", pGroom);
+
+        var bFat = val("f_bride_father").trim();
+        var bMot = val("f_bride_mother").trim();
+        var pBride = (bFat && bMot) ? (bFat + " & " + bMot) : (bFat || bMot || val("f_bride_parents"));
+        val("f_bride_parents", pBride);
+
         var pGEl = document.getElementById("mock_p_groom");
-        if (pGEl) pGEl.textContent = pGroom || "";
+        if (pGEl) {
+          pGEl.innerHTML = (gFat && gMot) ? (gFat + " &amp; " + gMot) : (pGroom || "");
+        }
         var pBEl = document.getElementById("mock_p_bride");
-        if (pBEl) pBEl.textContent = pBride || "";
+        if (pBEl) {
+          pBEl.innerHTML = (bFat && bMot) ? (bFat + " &amp; " + bMot) : (pBride || "");
+        }
 
         var msgEl = document.getElementById("mock_message");
         if (msgEl) msgEl.textContent = "“" + bottomMsg + "”";
@@ -4183,7 +4264,9 @@
         "f_inv_monogram", "f_inv_subTitle", "f_inv_kinhMoiTitle",
         "f_inv_defaultGuestName", "f_inv_introGroom", "f_inv_introBride",
         "f_inv_bottomMessage", "f_groomName", "f_brideName",
-        "f_groom_nameFull", "f_bride_nameFull", "f_groom_parents", "f_bride_parents",
+        "f_groom_nameFull", "f_bride_nameFull",
+        "f_groom_father", "f_groom_mother", "f_bride_father", "f_bride_mother",
+        "f_groom_parents", "f_bride_parents",
         "f_groom_address", "f_bride_address"
       ].forEach(function (id) {
         var el = document.getElementById(id);

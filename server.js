@@ -227,6 +227,70 @@ function cleanMapLinkUrl(raw, fallbackQuery) {
 
 ensureDirs();
 
+const DEFAULT_COVER_PHOTO = "/thiep-cuoi-khanh-linh-le-dung/assets/cover-khanh-linh-le-dung.jpg";
+const DEFAULT_INTERLUDE_PHOTO = "/thiep-cuoi-khanh-linh-le-dung/assets/hero.jpg";
+
+function sanitizeAndHealDb(dbData) {
+  if (!dbData || typeof dbData !== "object") return dbData;
+  let changed = false;
+
+  function fileExists(relPath) {
+    if (!relPath || typeof relPath !== "string") return false;
+    if (/^(https?:|data:|blob:)/i.test(relPath)) return true;
+    const clean = relPath.trim().replace(/^\/+/, "").replace(/\\/g, "/");
+    return fs.existsSync(path.join(ROOT_DIR, clean));
+  }
+
+  if (dbData.couple) {
+    if (dbData.couple.coverPhoto && !fileExists(dbData.couple.coverPhoto)) {
+      console.log(`[Self-Healing] Missing coverPhoto: ${dbData.couple.coverPhoto} -> Reset to ${DEFAULT_COVER_PHOTO}`);
+      dbData.couple.coverPhoto = DEFAULT_COVER_PHOTO;
+      changed = true;
+    }
+    if (dbData.couple.coverPhotoMobile && !fileExists(dbData.couple.coverPhotoMobile)) {
+      dbData.couple.coverPhotoMobile = "";
+      changed = true;
+    }
+    if (dbData.couple.interludePhoto && !fileExists(dbData.couple.interludePhoto)) {
+      console.log(`[Self-Healing] Missing interludePhoto: ${dbData.couple.interludePhoto} -> Reset to ${DEFAULT_INTERLUDE_PHOTO}`);
+      dbData.couple.interludePhoto = DEFAULT_INTERLUDE_PHOTO;
+      changed = true;
+    }
+    if (dbData.couple.interludePhotoMobile && !fileExists(dbData.couple.interludePhotoMobile)) {
+      dbData.couple.interludePhotoMobile = "";
+      changed = true;
+    }
+    if (dbData.couple.heroBackdrop && !fileExists(dbData.couple.heroBackdrop)) {
+      dbData.couple.heroBackdrop = "img/08-trang-an-hero.jpg";
+      changed = true;
+    }
+  }
+
+  if (dbData.venues) {
+    ["groom", "bride"].forEach(k => {
+      const v = dbData.venues[k];
+      if (v) {
+        if (!v.father || !v.mother) {
+          const rawP = String(v.parents || "").trim();
+          if (rawP.includes("&")) {
+            const parts = rawP.split("&");
+            if (!v.father) v.father = parts[0].trim();
+            if (!v.mother) v.mother = parts.slice(1).join("&").trim();
+            changed = true;
+          }
+        }
+      }
+    });
+  }
+
+  if (changed) {
+    try {
+      fs.writeFileSync(DB_CUSTOM_PATH, JSON.stringify(dbData, null, 2), "utf8");
+    } catch (_) {}
+  }
+  return dbData;
+}
+
 const server = http.createServer(async (req, res) => {
   const parsedUrl = url.parse(req.url);
   let pathname = decodeURIComponent(parsedUrl.pathname || "/");
@@ -245,7 +309,8 @@ const server = http.createServer(async (req, res) => {
     try {
       const dbPath = getEffectiveDbPath();
       const raw = fs.readFileSync(dbPath, "utf8");
-      return sendJson(res, 200, JSON.parse(raw));
+      const dbData = sanitizeAndHealDb(JSON.parse(raw));
+      return sendJson(res, 200, dbData);
     } catch (e) {
       return sendJson(res, 404, { ok: false, error: e.message });
     }
@@ -400,9 +465,15 @@ const server = http.createServer(async (req, res) => {
                 const s = typeof p === "string" ? p.trim() : (p && p.src ? p.src : "");
                 return !deletedSet.has(s);
               });
-              fs.writeFileSync(DB_CUSTOM_PATH, JSON.stringify(dbData, null, 2), "utf8");
-              try { fs.writeFileSync(DB_JSON_PATH, JSON.stringify(dbData, null, 2), "utf8"); } catch (_) {}
             }
+            if (dbData.couple) {
+              if (deletedSet.has(dbData.couple.coverPhoto)) dbData.couple.coverPhoto = DEFAULT_COVER_PHOTO;
+              if (deletedSet.has(dbData.couple.coverPhotoMobile)) dbData.couple.coverPhotoMobile = "";
+              if (deletedSet.has(dbData.couple.interludePhoto)) dbData.couple.interludePhoto = DEFAULT_INTERLUDE_PHOTO;
+              if (deletedSet.has(dbData.couple.interludePhotoMobile)) dbData.couple.interludePhotoMobile = "";
+            }
+            fs.writeFileSync(DB_CUSTOM_PATH, JSON.stringify(dbData, null, 2), "utf8");
+            try { fs.writeFileSync(DB_JSON_PATH, JSON.stringify(dbData, null, 2), "utf8"); } catch (_) {}
           } catch (_) {}
         }
       }
