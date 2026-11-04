@@ -1,4 +1,5 @@
 import CrayonTitle from "../components/CrayonTitle";
+import PhotoMemoryCutout from "../components/PhotoMemoryCutout";
 import { useGLTF } from "../utils/gltfLoader";
 import { useKTX2Texture } from "../utils/ktxLoader";
 import { NotebookWall, PaperCutout, PaperStage } from "../components/PaperScenery";
@@ -15,9 +16,15 @@ export default function Model(props) {
       <PaperCutout asset="bacninh-thuy-dinh" position={[18.55, 3.25, -2.38]} size={[3.6, 3.04]} />
       <PaperCutout asset="bacninh-lien-anh" position={[16.5, 3.45, -2.02]} size={[1.66, 2.51]} tilt={-0.018} float floatAmplitude={0.025} phase={1.5} />
       <PaperCutout asset="bacninh-lien-chi" position={[20.45, 3.45, -1.98]} size={[1.68, 2.57]} tilt={0.018} float floatAmplitude={0.025} phase={3.5} />
-      <PaperCutout asset="bacninh-banh-da" position={[16.0, 5.3, -2.05]} size={[1.65, 1.53]} tilt={-0.10} float floatAmplitude={0.09} phase={0.5} />
+      <PhotoMemoryCutout asset="bacninh-banh-da" position={[16.0, 5.3, -2.05]} size={[1.65, 1.53]} tilt={-0.10} float floatAmplitude={0.09} phase={0.5}
+        photo="/media/bacninh-banh-da-memory.png"
+        label="Ảnh kỷ niệm mở từ bánh đa"
+        alt="Hai bát bún vịt trong bữa ăn của chúng mình" />
       <PaperCutout asset="bacninh-my-chu" position={[18.4, 5.45, -2.05]} size={[1.4, 1.30]} tilt={0.09} float floatAmplitude={0.10} phase={2.5} />
-      <PaperCutout asset="bacninh-vai-thieu" position={[20.8, 5.3, -2.05]} size={[1.65, 1.53]} tilt={-0.08} float floatAmplitude={0.09} phase={4.5} />
+      <PhotoMemoryCutout asset="bacninh-vai-thieu" position={[20.8, 5.3, -2.05]} size={[1.65, 1.53]} tilt={-0.08} float floatAmplitude={0.09} phase={4.5}
+        photo="/media/bacninh-vai-thieu-memory.png"
+        label="Ảnh kỷ niệm mở từ chùm vải"
+        alt="Bánh mì và các món ăn trong bữa ăn của chúng mình" />
     </group>
   );
 }

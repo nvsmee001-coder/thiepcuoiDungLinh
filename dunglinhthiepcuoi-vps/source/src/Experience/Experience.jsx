@@ -1,25 +1,29 @@
-import React, { useRef, useEffect, useMemo } from "react";
-import { Canvas, extend, useThree } from "@react-three/fiber";
-import { PerspectiveCamera, OrbitControls } from "@react-three/drei";
+import React, { useRef, useEffect } from "react";
+import { Canvas, extend } from "@react-three/fiber";
+import { PerspectiveCamera } from "@react-three/drei";
 import Scene from "./Scene";
 import * as THREE from "three/webgpu";
 import normalizeWheel from "normalize-wheel";
-import { isPhoneViewport, touchScrollDelta } from "./utils/mobileCharacterLayout";
+import { isPhoneViewport, touchNavigationDelta } from "./utils/mobileCharacterLayout";
+import PerformanceProbe from "./components/PerformanceProbe";
+import RenderQuality from "./components/RenderQuality";
+import AnimationClock from "./components/AnimationClock";
 
-const Experience = () => {
+const Experience = ({ enabled = true, onReady }) => {
   const camera = useRef();
   const cameraGroup = useRef();
   const scrollProgress = useRef(0);
   const targetScrollProgress = useRef(0);
   const baseScrollSpeed = 0.0085;
   const scrollSpeedMultiplier = useRef(1);
-  const lerpFactor = 0.1;
   const isSwiping = useRef(false);
   const mousePositionOffset = useRef(new THREE.Vector3());
   const mouseRotationOffset = useRef(new THREE.Euler());
-  const lastTouchY = useRef(null);
+  const lastTouch = useRef(null);
+  const touchAxis = useRef(null);
 
   useEffect(() => {
+    if (!enabled) { isSwiping.current = false; lastTouch.current = null; return; }
     const handleWheel = (e) => {
       const normalized = normalizeWheel(e);
 
@@ -53,33 +57,38 @@ const Experience = () => {
     };
 
     const handleTouchStart = (e) => {
+      if (e.target.closest?.("button, a, input, [data-no-navigation]")) return;
       if (e.touches.length !== 1) {
         isSwiping.current = false;
-        lastTouchY.current = null;
+        lastTouch.current = null;
         return;
       }
       isSwiping.current = true;
-      lastTouchY.current = e.touches[0].clientY;
+      lastTouch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      touchAxis.current = null;
     };
 
     const handleTouchMove = (e) => {
       if (!isSwiping.current || e.touches.length !== 1) return;
       if (e.cancelable) e.preventDefault();
 
-      if (lastTouchY.current !== null) {
-        targetScrollProgress.current +=
-          touchScrollDelta(lastTouchY.current, e.touches[0].clientY, window.innerHeight) *
-          scrollSpeedMultiplier.current;
+      const next = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      if (lastTouch.current !== null) {
+        const dx = next.x - lastTouch.current.x, dy = next.y - lastTouch.current.y;
+        touchAxis.current ??= Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+        targetScrollProgress.current += touchNavigationDelta(lastTouch.current, next,
+          { width: window.innerWidth, height: window.innerHeight }, touchAxis.current) * scrollSpeedMultiplier.current;
       }
-      lastTouchY.current = e.touches[0].clientY;
+      lastTouch.current = next;
     };
 
     const handleTouchEnd = (e) => {
       isSwiping.current = false;
-      lastTouchY.current = null;
+      lastTouch.current = null;
     };
 
     const handleMouseDown = (e) => {
+      if (e.target.closest?.("button, a, input, [data-no-navigation]")) return;
       if (e.pointerType === "touch") return;
       isSwiping.current = true;
     };
@@ -96,11 +105,20 @@ const Experience = () => {
       isSwiping.current = false;
     };
 
+    const handleKeyDown = (event) => {
+      if (event.target.closest?.("input, textarea, select")) return;
+      const direction = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[event.key];
+      if (!direction) return;
+      event.preventDefault();
+      targetScrollProgress.current += direction * 0.025 * scrollSpeedMultiplier.current;
+    };
+
     window.addEventListener("wheel", handleWheel, { passive: false });
     window.addEventListener("mousedown", handleMouseDown);
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mousemove", handleMouseDrag);
     window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("touchstart", handleTouchStart, { passive: false });
     window.addEventListener("touchmove", handleTouchMove, { passive: false });
     window.addEventListener("touchend", handleTouchEnd);
@@ -112,30 +130,36 @@ const Experience = () => {
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mousemove", handleMouseDrag);
       window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchmove", handleTouchMove);
       window.removeEventListener("touchend", handleTouchEnd);
       window.removeEventListener("touchcancel", handleTouchEnd);
     };
-  }, []);
+  }, [enabled]);
 
   return (
     <Canvas
-      shadows
+      dpr={[1, 2]}
+      frameloop={enabled ? "always" : "demand"}
       flat={true}
       gl={(props) => {
         extend(THREE);
-        const renderer = new THREE.WebGPURenderer(props);
+        const renderer = new THREE.WebGPURenderer({ ...props, powerPreference: "high-performance" });
         return renderer.init().then(() => renderer);
       }}
       style={{ width: "100%", height: "100%" }}
     >
+      <color attach="background" args={["#e6e3d9"]} />
+      <AnimationClock />
+      {import.meta.env.VITE_PERFORMANCE_PROBE === "1" && <PerformanceProbe />}
+      <RenderQuality />
       <Scene
         cameraGroup={cameraGroup}
         camera={camera}
         scrollProgress={scrollProgress}
         targetScrollProgress={targetScrollProgress}
-        lerpFactor={lerpFactor}
+        onReady={onReady}
         mousePositionOffset={mousePositionOffset}
         mouseRotationOffset={mouseRotationOffset}
         scrollSpeedMultiplier={scrollSpeedMultiplier}

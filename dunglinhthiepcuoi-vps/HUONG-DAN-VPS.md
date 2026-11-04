@@ -2,6 +2,14 @@
 
 Gói này chứa bản website mới nhất, gồm ảnh cưới hai người thay vị trí cô gái, các cảnh thành phố, trang phục và chú thích mở ảnh.
 
+Bản cập nhật 02/11/2026 bổ sung bốn popup ảnh theo các cặp đã gửi: bát phở Hà Nội → ảnh phở; cốc cà phê → ảnh đồ uống; bánh đa Bắc Ninh → ảnh bún vịt; chùm vải → ảnh món ăn với bánh mì. Các vật thể có mũi tên gợi ý mở ảnh; toàn bộ chữ gợi ý mở ảnh đã được bỏ trong bản 03/11/2026.
+
+Đoạn cuối có hai khung địa điểm: nhà trai tại Đại Hoàng Sơn Palace với lịch 28/11 lúc 11h00; nhà gái tại Trống Đồng Palace, 65 Quán Sứ, Trần Hưng Đạo, Hoàn Kiếm, thủ đô Hà Nội với lịch 27/11 lúc 11h00. Hai khung có nhãn crayon và mũi tên ở góc trái/phải tương ứng.
+
+Bản 03/11/2026 có màn hình mở đầu với ảnh hai bạn, lời nhắc xoay ngang điện thoại và nút “Mở thiệp cưới”. Nhạc nền Hoa sữa rơi (đoạn 3 phút do bạn cung cấp) bắt đầu sau thao tác bấm nút; có nút bật/tắt nhạc ở góc phải. File nhạc nằm tại `dist/audio/hoa-sua-roi.mp3`, cần upload cùng website.
+
+Trên điện thoại, nhân vật và phương tiện dùng cùng không gian 3D, bám yên xe đạp/boong du thuyền. Camera giữ nhân vật phía trái khi nằm ngang; xoay dọc sẽ hiện nhắc xoay lại và tạm ngừng thao tác dẫn đường. Có thể vuốt ngang hoặc dọc; trên máy tính có thêm phím mũi tên. Chạm/bấm vật thể để giữ ảnh mở, bấm dấu × để đóng.
+
 ## Các thư mục
 
 - `dist/`: bản đã build, có thể chạy ngay bằng Nginx hoặc Apache. Giữ đầy đủ mọi tệp và thư mục con.

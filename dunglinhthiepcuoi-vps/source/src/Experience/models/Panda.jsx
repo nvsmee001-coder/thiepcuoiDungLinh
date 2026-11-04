@@ -1,31 +1,33 @@
+import { BIKE_BOARD_END, getFlightStage } from "../utils/flightLanding";
+import { animationDelta, frameAlpha } from "../utils/frameTiming";
 import React, { useRef, useState, useMemo } from "react";
 import { useGLTF } from "../utils/gltfLoader";
 import { useScrollCurve } from "../hooks/useScrollCurve";
 import * as THREE from "three";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
+import { attachRider, getRiderMode, RIDER_SCALE } from "../utils/riderAttachment";
 import CharacterWardrobe from "../components/CharacterWardrobe";
-import { isPhoneViewport } from "../utils/mobileCharacterLayout";
-import { updateMobileOutfit } from "../utils/mobileCharacterStore";
-import { getCharacterOutfit } from "../utils/characterWardrobe";
 import {
   initialPandaPoints,
   PANDA_SHIFT_X_AMOUNT,
   pandaCurve,
 } from "../components/curve";
 
-export default function Model({ scrollProgress, cameraScrollCurve, ...props }) {
+export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors, riderRef, ...props }) {
   const { scene } = useGLTF("/models/thu_mo_vit_xanh_2d.glb");
-  const pandaRef = useRef();
-  const size = useThree((state) => state.size);
-  const mobile = isPhoneViewport(size.width, size.height, window.matchMedia("(pointer: coarse)").matches);
+  const localRef = useRef();
+  const pandaRef = riderRef ?? localRef;
+  const previousMode = useRef(null);
   const character = useMemo(() => {
     const clone = scene.clone(true);
     clone.traverse((object) => {
+      if (/stick/i.test(object.name)) object.userData.riderSupport = true;
       if (!object.isMesh) return;
       // Keep the supplied unlit colors; paper remains visible from either side.
       const prepare = (material) => {
         const copy = material.clone();
         copy.side = THREE.DoubleSide;
+        copy.forceSinglePass = true;
         return copy;
       };
       object.material = Array.isArray(object.material)
@@ -34,6 +36,12 @@ export default function Model({ scrollProgress, cameraScrollCurve, ...props }) {
     });
     return clone;
   }, [scene]);
+
+  const supportMeshes = useMemo(() => {
+    const supports = [];
+    character.traverse((object) => { if (object.userData.riderSupport) supports.push(object); });
+    return supports;
+  }, [character]);
 
   const [randomOffset] = useState(() => ({
     position: new THREE.Vector3(),
@@ -50,6 +58,14 @@ export default function Model({ scrollProgress, cameraScrollCurve, ...props }) {
   useFrame((state, delta) => {
     if (scrollProgress && cameraScrollCurve) {
       let currentProgress = scrollProgress.current;
+      const progressLabel = currentProgress.toFixed(3);
+      const phase = cameraScrollCurve.transitionCurveActive.current ? "flight" : "route";
+      const stage = phase === "flight" ? getFlightStage(currentProgress) : "route";
+      if (state.gl.domElement.dataset.flightStage !== stage) state.gl.domElement.dataset.flightStage = stage;
+      if (state.gl.domElement.dataset.journeyPhase !== phase) state.gl.domElement.dataset.journeyPhase = phase;
+      if (state.gl.domElement.dataset.journeyProgress !== progressLabel) {
+        state.gl.domElement.dataset.journeyProgress = progressLabel;
+      }
       if (
         cameraScrollCurve.transitionCurveActive.current !==
         pandaScrollCurve.transitionCurveActive.current
@@ -74,14 +90,28 @@ export default function Model({ scrollProgress, cameraScrollCurve, ...props }) {
         }
       }
 
-      if (mobile) updateMobileOutfit(getCharacterOutfit(currentProgress, cameraScrollCurve.transitionCurveActive.current));
-
-      // Keep the route synchronized while the phone uses a fixed screen
-      // presentation, so rotating/resizing back to desktop stays continuous.
+      // The rider is a scene object on every viewport; there is no detached screen sticker.
       if (!pandaRef.current) return;
+      const mode = getRiderMode(currentProgress, cameraScrollCurve.transitionCurveActive.current);
+      const introWalk = !cameraScrollCurve.transitionCurveActive.current && currentProgress >= 0 && currentProgress < BIKE_BOARD_END;
+      if (mode !== previousMode.current) {
+        supportMeshes.forEach((object) => { object.visible = mode === "walk" && !introWalk; });
+        state.gl.domElement.dataset.transport = mode;
+        previousMode.current = mode;
+      }
+      if (introWalk && riderAnchors?.current.walkStart) {
+        attachRider(pandaRef.current, riderAnchors.current.walkStart, "bike");
+        return;
+      }
+      // Seat, deck and plane attachments have one authoritative transform.
+      if (mode !== "walk") {
+        const anchor = riderAnchors?.current[mode];
+        if (anchor) { attachRider(pandaRef.current, anchor, mode); return; }
+      }
       const pandaPoint = pandaScrollCurve.getCurrentPoint(currentProgress);
 
-      randomOffset.time += delta;
+      randomOffset.time += animationDelta(delta);
+      const alpha = frameAlpha(.1, delta);
 
       const positionAmplitude = 0.05;
       const rotationAmplitude = 0.02;
@@ -103,36 +133,30 @@ export default function Model({ scrollProgress, cameraScrollCurve, ...props }) {
       pandaRef.current.position.x = THREE.MathUtils.lerp(
         pandaRef.current.position.x,
         pandaPoint.x + randomOffset.position.x,
-        0.1
+        alpha
       );
       pandaRef.current.position.y = THREE.MathUtils.lerp(
         pandaRef.current.position.y,
-        pandaPoint.y + randomOffset.position.y,
-        0.1
+        pandaPoint.y + 6.55845 + randomOffset.position.y,
+        alpha
       );
       pandaRef.current.position.z = THREE.MathUtils.lerp(
         pandaRef.current.position.z,
         pandaPoint.z + randomOffset.position.z,
-        0.1
+        alpha
       );
 
       pandaRef.current.rotation.x = randomOffset.rotation.x;
       pandaRef.current.rotation.y = 0 + randomOffset.rotation.y;
       pandaRef.current.rotation.z = randomOffset.rotation.z;
     }
-  });
-
-  if (mobile) {
-    return null;
-  }
+  }, -2);
 
   return (
     <group {...props} dispose={null}>
-      <group ref={pandaRef} position={[-20.664, -5.242, -1.466]}>
-        {/* Both assets use +Y up. The supplied character faces +Z already.
-            Match the original head height (7.173), while retaining the path's
-            bottom-of-stick anchor and the supplied model's own geometry. */}
-        <group position={[0, 6.55845, 0.04]} scale={0.28}>
+      <group ref={pandaRef} position={[-20.664, 1.5, -1.466]}>
+        {/* +Y up, +Z facing: model scale and contact offsets are shared with the rigs. */}
+        <group scale={RIDER_SCALE}>
           <primitive object={character} />
           <CharacterWardrobe scrollProgress={scrollProgress} cameraScrollCurve={cameraScrollCurve} />
         </group>

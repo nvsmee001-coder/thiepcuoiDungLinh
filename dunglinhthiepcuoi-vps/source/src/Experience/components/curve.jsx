@@ -1,11 +1,13 @@
+import { expandWorldX } from "../utils/cityLayout";
 import * as THREE from "three";
 
 const depthZValue = 5;
 const heightYValueAdjustment = 2;
 
-const LAST_X = 36.005978;
+// Continue through both venue cards before looping back to the welcome scene.
+const LAST_X = 39.1;
 const FIRST_X = -20.202141;
-export const SHIFT_X_AMOUNT = LAST_X - FIRST_X + 6.62;
+export const SHIFT_X_AMOUNT = expandWorldX(LAST_X) - expandWorldX(FIRST_X) + 6.62;
 const test = 0;
 
 export const initialCameraPoints = [
@@ -35,11 +37,11 @@ export const initialCameraPoints = [
     depthZValue + test,
   ),
   new THREE.Vector3(
-    36.005978,
+    LAST_X,
     3.91222 + heightYValueAdjustment,
     depthZValue + test,
   ),
-];
+].map((point) => point.setX(expandWorldX(point.x)));
 
 export const cameraCurve = new THREE.CatmullRomCurve3(initialCameraPoints);
 cameraCurve.curveType = "centripetal";
@@ -145,9 +147,8 @@ export const rotationTargets = [
 ];
 
 // Extra curves
-const PANDA_LAST_X = 36.005978;
-const PANDA_FIRST_X = -20.650911;
-export const PANDA_SHIFT_X_AMOUNT = PANDA_LAST_X - PANDA_FIRST_X + 6.17;
+const PANDA_LAST_X = LAST_X;
+export const PANDA_SHIFT_X_AMOUNT = SHIFT_X_AMOUNT;
 const pandaCurveHeightAdjustment = -5.5;
 
 export const initialPandaPoints = [
@@ -190,10 +191,10 @@ export const initialPandaPoints = [
     -1.473646,
   ),
   new THREE.Vector3(
-    36.005978,
+    PANDA_LAST_X,
     4.092358 + pandaCurveHeightAdjustment + 1,
     -1.473646,
   ),
-];
+].map((point) => point.setX(expandWorldX(point.x)));
 
 export const pandaCurve = new THREE.CatmullRomCurve3(initialPandaPoints);

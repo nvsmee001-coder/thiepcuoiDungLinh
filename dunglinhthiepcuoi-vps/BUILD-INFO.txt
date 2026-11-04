@@ -1,10 +1,13 @@
 Thiệp cưới Dũng & Linh — VPS package
-Source commit: d2e2f521cf2edb59536719364d601a7dc489a042
-Build command: npm run build
-Node.js: v22.22.1
-Package date: 2026-10-31 (Asia/Ho_Chi_Minh)
-Production files: 120
-Source files: 171
+Source commit: 4505f9f549fa8b5eff751726494f88635d7183f2
+Build command: npm run build (Vite build via Sites helper)
+Package date: 2026-11-03 (Asia/Ho_Chi_Minh)
+Production files: 126
+Source files: 194
+Includes four new food-photo popups in Hanoi and Bac Ninh.
+Includes groom and bride venue cards with crayon corner labels.
+Photo popup arrows remain; the small interaction labels have been removed.
+Includes landscape phone camera, attached bike/boat rider, opening cover and local background music.
+Groom schedule: 28/11 at 11h00. Bride schedule: 27/11 at 11h00.
 No Node.js server process is needed to serve dist/.
-Runtime assets, fonts, Draco and KTX2 decoders are served locally.
 Hosting credentials, .git, .openai, node_modules and Blender authoring files are excluded.

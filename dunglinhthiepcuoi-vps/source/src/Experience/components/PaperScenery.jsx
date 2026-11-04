@@ -1,3 +1,4 @@
+import { useCityLayoutScale } from "./CityLayout";
 import { useMemo, useRef } from "react";
 import { useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
@@ -6,23 +7,28 @@ import * as THREE from "three";
 export function PaperCutout({ asset, position, size, tilt = 0, float = false, floatAmplitude = 0.045, phase = 0, ...interactionProps }) {
   const map = useTexture(`/scenery/${asset}.svg`);
   const group = useRef();
+  const art = useRef();
+  const cityScale = useCityLayoutScale();
   useMemo(() => { map.colorSpace = THREE.SRGBColorSpace; }, [map]);
-  useFrame(({ clock }) => {
+  useFrame(({ scene }) => {
+    const time = scene.userData.animationTime || 0;
     if (float && group.current) {
-      group.current.position.y = position[1] + Math.sin(clock.elapsedTime * 0.7 + phase) * floatAmplitude;
-      group.current.rotation.z = tilt + Math.sin(clock.elapsedTime * 0.5 + phase) * 0.035;
+      group.current.position.y = position[1] + Math.sin(time * 0.7 + phase) * floatAmplitude;
+      art.current.rotation.z = tilt + Math.sin(time * 0.5 + phase) * 0.035;
     }
   });
   return (
-    <group ref={group} position={position} rotation={[0, 0, tilt]}>
+    <group ref={group} position={position} scale={[1 / cityScale, 1, 1]}>
+      <group ref={art} rotation={[0, 0, tilt]}>
       <mesh position={[0.07, -0.05, -0.04]} renderOrder={1}>
         <planeGeometry args={size} />
         <meshBasicMaterial map={map} color="#606b78" transparent opacity={0.17} depthWrite={false} toneMapped={false} />
       </mesh>
       <mesh renderOrder={2} {...interactionProps}>
         <planeGeometry args={size} />
-        <meshBasicMaterial map={map} transparent alphaTest={0.06} side={THREE.DoubleSide} toneMapped={false} />
+        <meshBasicMaterial map={map} transparent alphaTest={0.06} side={THREE.DoubleSide} forceSinglePass toneMapped={false} />
       </mesh>
+      </group>
     </group>
   );
 }

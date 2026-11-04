@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useGLTF } from "../utils/gltfLoader";
 import { useKTX2Texture } from "../utils/ktxLoader";
 import { useFrame } from "@react-three/fiber";
@@ -20,9 +20,9 @@ export default function Model({ scrollProgress, transitioning, ...props }) {
   const grass9 = useRef();
   const grass10 = useRef();
   const grass11 = useRef();
-  useFrame(({ clock }) => {
-    const t = clock.elapsedTime;
-    const grass = [grass1,grass2,grass3,grass4,grass5,grass6,grass7,grass8,grass9,grass10,grass11];
+  const grass = useMemo(() => [grass1,grass2,grass3,grass4,grass5,grass6,grass7,grass8,grass9,grass10,grass11], []);
+  useFrame(({ scene }) => {
+    const t = scene.userData.animationTime || 0;
     grass.forEach((ref, i) => {
       if (ref.current) ref.current.scale.z = 0.9 + 0.1 * Math.sin(t * (2.9 + i * 0.017));
     });

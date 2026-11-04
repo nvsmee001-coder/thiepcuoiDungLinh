@@ -1,8 +1,10 @@
+import { useCityLayoutScale } from "./CityLayout";
 import { useEffect, useState } from "react";
 import * as THREE from "three";
 
 let fontReady;
 export default function CrayonTitle({ text, size = [3.8, .89], ...props }) {
+  const cityScale = useCityLayoutScale();
   const [map, setMap] = useState(null);
   useEffect(() => {
     let cancelled = false;
@@ -50,8 +52,9 @@ export default function CrayonTitle({ text, size = [3.8, .89], ...props }) {
     });
     return () => { cancelled = true; texture?.dispose(); };
   }, [text]);
-  return map && <mesh {...props} renderOrder={2}>
+  const { position, ...artProps } = props;
+  return map && <group position={position} scale={[1 / cityScale, 1, 1]}><mesh {...artProps} renderOrder={2}>
     <planeGeometry args={size} />
-    <meshBasicMaterial map={map} transparent alphaTest={.04} depthWrite side={THREE.DoubleSide} toneMapped={false} />
-  </mesh>;
+    <meshBasicMaterial map={map} transparent alphaTest={.04} depthWrite side={THREE.DoubleSide} forceSinglePass toneMapped={false} />
+  </mesh></group>;
 }

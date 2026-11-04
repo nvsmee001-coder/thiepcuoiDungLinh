@@ -1,40 +1,32 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useProgress } from "@react-three/drei";
-import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import styles from "./IntroScreen.module.scss";
 
-const IntroScreen = () => {
+const IntroScreen = ({ sceneReady = true }) => {
   const { progress } = useProgress();
   const [shouldRender, setShouldRender] = useState(true);
   const introRef = useRef(null);
 
-  useGSAP(() => {
-    if (progress === 100) {
-      const tl = gsap.timeline({
-        onComplete: () => {
-          setShouldRender(false);
-        },
-      });
-
-      tl.to(introRef.current, {
-        opacity: 0,
-        duration: 1,
-        ease: "power2.out",
-        delay: 1.5,
-      });
-    }
-  }, [progress]);
+  useEffect(() => {
+    if (!sceneReady) return;
+    const fade = gsap.to(introRef.current, {
+      opacity: 0, duration: .45, delay: .15, ease: "power2.out",
+      onComplete: () => setShouldRender(false),
+    });
+    return () => fade.kill();
+  }, [sceneReady]);
 
   if (!shouldRender) return null;
 
   return (
     <>
-      <div ref={introRef} className={styles.introScreen}>
+      <div ref={introRef} className={styles.introScreen} data-scene-ready={sceneReady}>
         <div className={styles.introScreenContent}>
           <div className={styles.loadingText}>loading Thiệp cưới mới nhất 2026</div>
 
-          <div className={styles.progressBarContainer}>
+          <div className={styles.progressBarContainer} role="progressbar" aria-label="Đang tải thiệp cưới"
+            aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress)}>
             <div
               className={styles.progressBar}
               style={{ width: `${progress}%` }}

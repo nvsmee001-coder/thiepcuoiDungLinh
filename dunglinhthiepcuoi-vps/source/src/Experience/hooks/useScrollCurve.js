@@ -1,8 +1,10 @@
-import { useRef, useState } from "react";
+import { useRef, useMemo } from "react";
 import * as THREE from "three";
 
 export const useScrollCurve = (initialCurve, initialPoints, shiftAmount) => {
-  const curveRef = useRef(initialCurve);
+  const ownedCurve = useMemo(() => initialCurve.clone(), [initialCurve]);
+  const curveRef = useRef(ownedCurve);
+  const point = useMemo(() => new THREE.Vector3(), []);
   const curvePointsRef = useRef([...initialPoints]);
   const initialCurvePointsRef = useRef(initialPoints.map((v) => v.clone()));
 
@@ -59,6 +61,6 @@ export const useScrollCurve = (initialCurve, initialPoints, shiftAmount) => {
     transitionCurveActive,
     initiateTransitionCurve,
     shiftCurvePoints,
-    getCurrentPoint: (progress) => curveRef.current.getPoint(progress),
+    getCurrentPoint: (progress) => curveRef.current.getPoint(progress, point),
   };
 };

@@ -41,7 +41,7 @@ export default function CharacterWardrobe({ scrollProgress, cameraScrollCurve })
       position={[0, 0.3, [0.065, 0.125, 0.235][index]]}>
       <planeGeometry args={[4.4, 5.4]} />
       <meshBasicMaterial map={maps[layer]} transparent alphaTest={0.1}
-        side={THREE.DoubleSide} toneMapped={false} />
+        side={THREE.DoubleSide} forceSinglePass toneMapped={false} />
     </mesh>)}
   </group>);
 }

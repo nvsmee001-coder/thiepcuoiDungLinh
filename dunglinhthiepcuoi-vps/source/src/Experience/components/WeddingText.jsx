@@ -1,3 +1,4 @@
+import { useCityLayoutScale } from "./CityLayout";
 import { useEffect, useState } from "react";
 import * as THREE from "three";
 
@@ -23,6 +24,7 @@ export const STORY_LINES = ["Câu chiện tình iu", "của chúng tui"];
 // Use a canvas texture so Vietnamese text works with the WebGPU renderer
 // without a shader-based text material or a remote font service.
 export default function WeddingText({ kind }) {
+  const cityScale = useCityLayoutScale();
   const [texture, setTexture] = useState(null);
   const welcome = kind === "welcome";
 
@@ -88,9 +90,9 @@ export default function WeddingText({ kind }) {
 
   if (!texture) return null;
   return (
-    <mesh renderOrder={2}>
+    <mesh renderOrder={2} scale={[1 / cityScale, 1, 1]}>
       <planeGeometry args={welcome ? [2.32156, 1.59343] : [1.97021, 1.94587]} />
-      <meshBasicMaterial map={texture} transparent alphaTest={0.05} depthWrite side={THREE.DoubleSide} toneMapped={false} />
+      <meshBasicMaterial map={texture} transparent alphaTest={0.05} depthWrite side={THREE.DoubleSide} forceSinglePass toneMapped={false} />
     </mesh>
   );
 }

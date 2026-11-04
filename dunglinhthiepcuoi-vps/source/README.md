@@ -37,6 +37,16 @@ This repo contains code of Mr. Panda's Portfolio for a Codrops article!! It's a 
 
 ## Clone setup
 
+### Wedding experience update (2026-11-03)
+
+The opening cover asks phone visitors to rotate to landscape before starting. The supplied local audio (`public/audio/hoa-sua-roi.mp3`) starts from the explicit opening-button gesture and has a mute/play control. Portrait rotation pauses navigation behind an orientation notice. Phone landscape views use the same 3D rider as desktop, with one authoritative vehicle seat/deck anchor and a left-framed camera; the former detached DOM avatar is removed. Horizontal/vertical swipes and arrow keys navigate the route. Photo popups support click/tap pinning and an accessible close button.
+
+Focused contact, camera projection, swipe and wardrobe checks:
+
+```sh
+node --test src/Experience/utils/riderAttachment.test.js src/Experience/utils/mobileCharacterLayout.test.js src/Experience/utils/characterWardrobe.test.js
+```
+
 This deployment retains the original MIT-licensed source and supplied models, textures, fonts, and credits. Mouse dragging is repaired, and Draco decoding is served locally.
 
 ```sh

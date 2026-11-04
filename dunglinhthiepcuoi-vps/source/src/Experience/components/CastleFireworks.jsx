@@ -1,3 +1,4 @@
+import { useCityLayoutScale } from "./CityLayout";
 import { useMemo, useRef, useLayoutEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
@@ -5,6 +6,7 @@ import { createCastleFireworks, stepCastleFireworks, FIREWORKS_CAPACITY, FIREWOR
 
 export default function CastleFireworks({ scrollProgress, transitioning }) {
   const mesh = useRef();
+  const cityScale = useCityLayoutScale();
   const state = useMemo(() => createCastleFireworks(), []);
   const transform = useMemo(() => new THREE.Object3D(), []);
   const colors = useMemo(() => FIREWORKS_COLORS.map((hex) => new THREE.Color(hex)), []);
@@ -50,9 +52,9 @@ export default function CastleFireworks({ scrollProgress, transitioning }) {
   });
 
   return (
-    <instancedMesh ref={mesh} args={[null, null, FIREWORKS_CAPACITY]} position={[-12.35, 0, -2.12]} frustumCulled={false} visible={false} renderOrder={3}>
+    <instancedMesh ref={mesh} args={[null, null, FIREWORKS_CAPACITY]} position={[-12.35, 0, -2.12]} scale={[1 / cityScale, 1, 1]} frustumCulled={false} visible={false} renderOrder={3}>
       <planeGeometry args={[1, 1]} />
-      <meshBasicMaterial vertexColors transparent opacity={0.95} depthWrite={false} toneMapped={false} side={THREE.DoubleSide} />
+      <meshBasicMaterial vertexColors transparent opacity={0.95} depthWrite={false} toneMapped={false} side={THREE.DoubleSide} forceSinglePass />
     </instancedMesh>
   );
 }
