@@ -20,7 +20,7 @@
 .wedding-welcome__instruction { max-width: 390px; font-size: 13px; line-height: 1.6; }
 .wedding-welcome__start { cursor: pointer; border: 1.5px solid #777e65; border-radius: 16px 12px 17px 10px; padding: 12px 24px; font: 700 17px "WeddingCover", cursive; color: #46584b; background: #d5dfca; box-shadow: 3px 4px 0 #66755e22; margin-top: 12px; }
 .wedding-welcome__start:hover { background: #c5d7bd; }
-.wedding-welcome__start:focus-visible, .music-toggle:focus-visible { outline: 3px solid #bc8676; outline-offset: 5px; }
+.wedding-welcome__start:focus-visible, .music-toggle:focus-visible, .auto-scroll-toggle:focus-visible { outline: 3px solid #bc8676; outline-offset: 5px; }
 .wedding-welcome__art { height: 100%; position: relative; min-height: 0; overflow: hidden; }
 .wedding-welcome__couple { position: absolute; width: 88%; height: 95%; object-fit: contain; right: 0; bottom: 0; filter: drop-shadow(5px 7px 3px #73705d20); }
 .wedding-welcome__castle { position: absolute; height: 68%; width: 65%; object-fit: contain; left: -8%; top: 8%; opacity: .42; transform: rotate(6deg); }
@@ -31,7 +31,57 @@
 .rotate-notice p { font-size: 12px; line-height: 1.6; margin-top: 8px; }
 .orientation-cover { display: grid; place-items: center; text-align: center; }
 .orientation-cover svg { margin: 0 auto 18px; width: 95px; }
-.music-toggle { position: fixed; z-index: 250; top: max(12px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right)); border: 1px solid #7e897366; background: #fff9e8e8; color: #596153; border-radius: 20px; padding: 8px 13px; min-height: 36px; font-size: 11px; cursor: pointer; }
+.auto-scroll-toggle {
+  position: fixed;
+  z-index: 250;
+  top: max(12px, env(safe-area-inset-top));
+  left: max(14px, env(safe-area-inset-left));
+  border: 1px solid #7e897366;
+  background: #fff9e8e8;
+  color: #596153;
+  border-radius: 20px;
+  padding: 8px 14px;
+  min-height: 36px;
+  font-size: 11px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.auto-scroll-toggle--active {
+  background: #d5dfca;
+  color: #3b4e38;
+  border-color: #647a5f;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(70, 88, 75, 0.15);
+}
+
+.music-toggle {
+  position: fixed;
+  z-index: 250;
+  top: max(12px, env(safe-area-inset-top));
+  right: max(14px, env(safe-area-inset-right));
+  border: 1px solid #7e897366;
+  background: #fff9e8e8;
+  color: #596153;
+  border-radius: 20px;
+  padding: 8px 14px;
+  min-height: 36px;
+  font-size: 11px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
 
 @media (max-height: 500px) and (orientation: landscape) {
   .wedding-welcome { padding: max(12px, env(safe-area-inset-top)) max(28px, env(safe-area-inset-left)); }

@@ -38,6 +38,8 @@ const Scene = ({
   mousePositionOffset,
   mouseRotationOffset,
   scrollSpeedMultiplier,
+  autoScroll = false,
+  pauseScrollUntilRef,
 }) => {
   const cameraScrollCurve = useScrollCurve(
     initialCameraCurve,
@@ -48,6 +50,8 @@ const Scene = ({
   const sceneGroupRef = useRef();
   const riderAnchors = useRef({ bike: null, boat: null, plane: null, jump: null, walkStart: null });
   const automaticLanding = useRef({ active: false });
+  const venue1SlowTriggered = useRef(false);
+  const venue2SlowTriggered = useRef(false);
   const riderRef = useRef();
   const size = useThree((state) => state.size);
   const singleSheetRef = useRef();
@@ -77,6 +81,38 @@ const Scene = ({
       newProgress = automaticProgress;
       targetScrollProgress.current = automaticProgress;
     } else {
+      // Tự động kích hoạt cơ chế slow/pause khi lướt tới 2 tấm thiệp cưới:
+      if (!flying) {
+        if (scrollProgress.current < 0.85) {
+          venue1SlowTriggered.current = false;
+        }
+        if (scrollProgress.current < 0.94) {
+          venue2SlowTriggered.current = false;
+        }
+
+        // Tấm thiệp 1 (Nhà Trai - hiển thị trọn vẹn như ảnh chụp):
+        if (!venue1SlowTriggered.current && scrollProgress.current >= 0.885 && scrollProgress.current <= 0.92) {
+          venue1SlowTriggered.current = true;
+          window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "venue-card-1", duration: 1600 } }));
+          targetScrollProgress.current = 0.895;
+        }
+
+        // Tấm thiệp 2 (Nhà Gái - chính giữa tấm thiệp thứ 2):
+        if (!venue2SlowTriggered.current && scrollProgress.current >= 0.965 && scrollProgress.current <= 0.992) {
+          venue2SlowTriggered.current = true;
+          window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "venue-card-2", duration: 1600 } }));
+          targetScrollProgress.current = 0.975;
+        }
+      }
+
+      const now = performance.now();
+      const isDampened = pauseScrollUntilRef && now < pauseScrollUntilRef.current;
+      if (autoScroll && !isDampened) {
+        // Tốc độ trôi nhẹ nhàng, êm dịu giúp người xem dễ dàng thưởng ngoạn
+        const AUTO_SCROLL_SPEED = 0.025;
+        targetScrollProgress.current += delta * AUTO_SCROLL_SPEED;
+      }
+
       targetScrollProgress.current = constrainJourneyTarget(
         targetScrollProgress.current, flying, cameraScrollCurve.loopCounter.current,
       );
@@ -96,6 +132,8 @@ const Scene = ({
       } else {
         cameraScrollCurve.transitionCurveActive.current = true;
         cameraScrollCurve.initiateTransitionCurve();
+        venue1SlowTriggered.current = false;
+        venue2SlowTriggered.current = false;
         newProgress = Math.min(FLIGHT_STOP, newProgress - 1);
         targetScrollProgress.current = Math.min(FLIGHT_STOP, targetScrollProgress.current - 1);
       }
@@ -107,6 +145,8 @@ const Scene = ({
         cameraScrollCurve.loopCounter.current--;
         cameraScrollCurve.transitionCurveActive.current = true;
         cameraScrollCurve.initiateTransitionCurve();
+        venue1SlowTriggered.current = false;
+        venue2SlowTriggered.current = false;
       }
       scrollProgress.current += 1;
       targetScrollProgress.current += 1;

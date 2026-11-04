@@ -145,7 +145,7 @@ export default function Model({ scrollProgress, ...props }) {
 
     if (kpopRumiGroupRef.current) {
       kpopRumiGroupRef.current.position.set(
-        expandWorldX(26.255) -
+        expandWorldX(28.35) -
           SHIFT_X_AMOUNT +
           randomOffsets.kpopRumi.basePosition.x +
           randomOffsets.kpopRumi.position.x,

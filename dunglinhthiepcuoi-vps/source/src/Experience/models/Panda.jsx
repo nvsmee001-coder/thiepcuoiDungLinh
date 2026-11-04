@@ -48,6 +48,7 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
     rotation: new THREE.Euler(),
     time: 0,
   }));
+  const duckOffsetRef = useRef(0);
 
   const pandaScrollCurve = useScrollCurve(
     pandaCurve,
@@ -130,9 +131,12 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
       randomOffset.rotation.z =
         Math.sin(randomOffset.time * 0.6 + 2.3) * rotationAmplitude * 0;
 
+      const duckOffsetTarget = (currentProgress >= 0.78 && currentProgress <= 0.95 && !cameraScrollCurve.transitionCurveActive.current) ? -2.3 : 0;
+      duckOffsetRef.current = THREE.MathUtils.lerp(duckOffsetRef.current, duckOffsetTarget, alpha);
+
       pandaRef.current.position.x = THREE.MathUtils.lerp(
         pandaRef.current.position.x,
-        pandaPoint.x + randomOffset.position.x,
+        pandaPoint.x + randomOffset.position.x + duckOffsetRef.current,
         alpha
       );
       pandaRef.current.position.y = THREE.MathUtils.lerp(
