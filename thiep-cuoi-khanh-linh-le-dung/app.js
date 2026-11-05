@@ -4,6 +4,7 @@
 const invitationDetails = () => window.WeddingInvitation.get();
 let weddingDate = new Date(invitationDetails().date);
 window.addEventListener('wedding:sidechange', () => { weddingDate = new Date(invitationDetails().date); updateCountdown(); });
+window.addEventListener('wedding:db-synced', () => { weddingDate = new Date(invitationDetails().date); updateCountdown(); });
 const eventTabs = [...document.querySelectorAll('[data-event]')];
 function selectEvent(index, focus = false) {
   eventTabs.forEach((tab,i) => {

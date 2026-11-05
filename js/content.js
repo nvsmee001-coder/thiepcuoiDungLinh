@@ -310,68 +310,69 @@ if (typeof window !== "undefined") {
 function deepMergeDB(base, override) {
   if (!override || typeof override !== "object") return JSON.parse(JSON.stringify(base));
   const out = JSON.parse(JSON.stringify(base));
-  if (override.couple) {
-    Object.assign(out.couple, override.couple);
-    if (Array.isArray(override.couple.heroBackdrops) && override.couple.heroBackdrops.length > 0) {
-      out.couple.heroBackdrops = override.couple.heroBackdrops.filter(Boolean);
+
+  for (const key of Object.keys(override)) {
+    const val = override[key];
+    if (val === undefined || val === null) continue;
+
+    if (Array.isArray(val)) {
+      out[key] = val.slice();
+    } else if (typeof val === "object") {
+      out[key] = (out[key] && typeof out[key] === "object" && !Array.isArray(out[key]))
+        ? deepMergeDB(out[key], val)
+        : JSON.parse(JSON.stringify(val));
+    } else {
+      out[key] = val;
+    }
+  }
+
+  // Backdrops fallback
+  if (out.couple) {
+    if (Array.isArray(out.couple.heroBackdrops) && out.couple.heroBackdrops.length > 0) {
+      out.couple.heroBackdrops = out.couple.heroBackdrops.filter(Boolean);
       out.couple.heroBackdrop = out.couple.heroBackdrops[0];
     } else if (out.couple.heroBackdrop) {
       out.couple.heroBackdrops = [out.couple.heroBackdrop];
     }
-    if (Array.isArray(override.couple.detailsBackdrops) && override.couple.detailsBackdrops.length > 0) {
-      out.couple.detailsBackdrops = override.couple.detailsBackdrops.filter(Boolean);
+    if (Array.isArray(out.couple.detailsBackdrops) && out.couple.detailsBackdrops.length > 0) {
+      out.couple.detailsBackdrops = out.couple.detailsBackdrops.filter(Boolean);
       out.couple.detailsBackdrop = out.couple.detailsBackdrops[0];
     } else if (out.couple.detailsBackdrop) {
       out.couple.detailsBackdrops = [out.couple.detailsBackdrop];
     }
   }
-  if (override.date) Object.assign(out.date, override.date);
-  if (override.venues) {
-    if (override.venues.groom) {
-      Object.assign(out.venues.groom, override.venues.groom);
+
+  // Venues map URLs cleaning
+  if (out.venues) {
+    if (out.venues.groom) {
       const fg = out.venues.groom.address || out.venues.groom.nameFull || "";
       if (out.venues.groom.mapEmbed) out.venues.groom.mapEmbed = cleanMapEmbedUrl(out.venues.groom.mapEmbed, fg);
       if (out.venues.groom.mapLink) out.venues.groom.mapLink = cleanMapLinkUrl(out.venues.groom.mapLink, fg);
     }
-    if (override.venues.bride) {
-      Object.assign(out.venues.bride, override.venues.bride);
+    if (out.venues.bride) {
       const fb = out.venues.bride.address || out.venues.bride.nameFull || "";
       if (out.venues.bride.mapEmbed) out.venues.bride.mapEmbed = cleanMapEmbedUrl(out.venues.bride.mapEmbed, fb);
       if (out.venues.bride.mapLink) out.venues.bride.mapLink = cleanMapLinkUrl(out.venues.bride.mapLink, fb);
     }
   }
-  if (Array.isArray(override.checklist)) out.checklist = override.checklist;
-  if (override.menu) {
-    Object.assign(out.menu, override.menu);
-    if (Array.isArray(override.menu.courses)) out.menu.courses = override.menu.courses;
-  }
-  if (override.schedule) {
-    Object.assign(out.schedule, override.schedule);
-    if (Array.isArray(override.schedule.events) && override.schedule.events.length > 0) {
-      out.schedule.events = override.schedule.events;
-    }
-  }
-  if (Array.isArray(override.introPhotos) && override.introPhotos.length > 0) {
-    out.introPhotos = override.introPhotos
-      .map(function (item) {
-        return typeof item === "string" ? item : (item && item.src ? item.src : "");
-      })
-      .filter(Boolean);
-  }
-  if (Array.isArray(override.albumPhotos)) {
-    out.albumPhotos = override.albumPhotos
+
+  // Album photos cleaning
+  if (Array.isArray(out.albumPhotos)) {
+    out.albumPhotos = out.albumPhotos
       .map(function (item) {
         var s = typeof item === "string" ? item : (item && item.src ? item.src : "");
         if (!s) return "";
-        if (/^(https?:|data:|blob:)/.test(s)) return s;
+        if (/^(https?:|data:|blob:|\/)/.test(s)) return s;
         return "/" + s.trim().replace(/\\/g, "/").replace(/^\/+/, "");
       })
       .filter(Boolean);
   }
-  if (Array.isArray(override.music) && override.music.length > 0) {
-    out.music = override.music
+
+  // Music tracks
+  if (Array.isArray(out.music) && out.music.length > 0) {
+    out.music = out.music
       .filter(function (m) { return m && m.src; })
-      .slice(0, 5)
+      .slice(0, 10)
       .map(function (m, i) {
         return {
           title: m.title || ("Bài nhạc cưới #" + (i + 1)),
@@ -379,19 +380,7 @@ function deepMergeDB(base, override) {
         };
       });
   }
-  if (Array.isArray(override.faq)) {
-    out.faq = override.faq
-      .filter(function (item) { return item && (item.q || item.a); })
-      .map(function (item) {
-        return {
-          q: item.q || "",
-          a: item.a || ""
-        };
-      });
-  }
-  if (override.invitationCard) {
-    out.invitationCard = Object.assign(out.invitationCard || {}, override.invitationCard);
-  }
+
   return out;
 }
 
@@ -525,6 +514,9 @@ async function fetchWeddingDBFromServer() {
         const merged = deepMergeDB(DEFAULT_WEDDING_DB, fileData);
         window.WEDDING_DB = merged;
         await idbSet(merged);
+        try {
+          localStorage.setItem(WEDDING_DB_STORAGE_KEY, JSON.stringify(merged));
+        } catch (_) {}
         return merged;
       }
     } catch (e) {}

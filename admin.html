@@ -3037,6 +3037,11 @@
         val("f_groom_mapEmbed", vg.mapEmbed);
 
         var groomParsed = parseVenueDateAndTime(vg.timeCover, initMainDate, "11:00");
+        if (vg.date) {
+          var gdParts = String(vg.date).split("T");
+          if (gdParts[0]) groomParsed.date = gdParts[0];
+          if (gdParts[1]) groomParsed.time = gdParts[1].substring(0, 5);
+        }
         val("picker_groom_date", groomParsed.date);
         val("picker_groom_time", groomParsed.time);
 
@@ -3056,6 +3061,11 @@
         val("f_bride_mapEmbed", vb.mapEmbed);
 
         var brideParsed = parseVenueDateAndTime(vb.timeCover, initMainDate, "18:00");
+        if (vb.date) {
+          var bdParts = String(vb.date).split("T");
+          if (bdParts[0]) brideParsed.date = bdParts[0];
+          if (bdParts[1]) brideParsed.time = bdParts[1].substring(0, 5);
+        }
         val("picker_bride_date", brideParsed.date);
         val("picker_bride_time", brideParsed.time);
 
@@ -3100,7 +3110,8 @@
         var choiceBgVal = val("f_choiceBackdrop") || "";
         var choiceBgMobVal = val("f_choiceBackdropMobile") || "";
 
-        state.couple = {
+        var prevCouple = state.couple || {};
+        state.couple = Object.assign({}, prevCouple, {
           groomName: val("f_groomName"),
           brideName: val("f_brideName"),
           eyebrow: val("f_eyebrow"),
@@ -3109,12 +3120,14 @@
           coverPhoto: coverVal,
           coverPhotoMobile: coverMobVal,
           heroBackdrop: coverVal,
+          heroBackdrops: (prevCouple.heroBackdrops && prevCouple.heroBackdrops.length) ? prevCouple.heroBackdrops : [coverVal],
           interludePhoto: interludeVal,
           interludePhotoMobile: interludeMobVal,
           detailsBackdrop: interludeVal,
+          detailsBackdrops: (prevCouple.detailsBackdrops && prevCouple.detailsBackdrops.length) ? prevCouple.detailsBackdrops : [interludeVal],
           choiceBackdrop: choiceBgVal,
           choiceBackdropMobile: choiceBgMobVal
-        };
+        });
 
         state.introScenes = [
           {
@@ -3159,8 +3172,30 @@
         var bParents = (bFat && bMot) ? (bFat + "   " + bMot) : (bFat || bMot || val("f_bride_parents"));
         val("f_bride_parents", bParents);
 
+        var gDateStr = val("picker_groom_date") || val("picker_main_date") || "2026-11-28";
+        var gTimeStr = val("picker_groom_time") || "11:00";
+        var gIso = gDateStr + "T" + (gTimeStr.length === 5 ? gTimeStr + ":00" : gTimeStr) + "+07:00";
+        var gParts = gDateStr.split("-");
+        var gLunarText = "";
+        if (gParts.length === 3) {
+          var gl = convertSolar2Lunar(parseInt(gParts[2], 10), parseInt(gParts[1], 10), parseInt(gParts[0], 10));
+          if (gl) gLunarText = "(Tức ngày " + (gl.day < 10 ? "0" + gl.day : gl.day) + " tháng " + (gl.month < 10 ? "0" + gl.month : gl.month) + (gl.leap ? " nhuận" : "") + " năm " + gl.canChi + ")";
+        }
+
+        var bDateStr = val("picker_bride_date") || val("picker_main_date") || "2026-11-27";
+        var bTimeStr = val("picker_bride_time") || "11:00";
+        var bIso = bDateStr + "T" + (bTimeStr.length === 5 ? bTimeStr + ":00" : bTimeStr) + "+07:00";
+        var bParts = bDateStr.split("-");
+        var bLunarText = "";
+        if (bParts.length === 3) {
+          var bl = convertSolar2Lunar(parseInt(bParts[2], 10), parseInt(bParts[1], 10), parseInt(bParts[0], 10));
+          if (bl) bLunarText = "(Tức ngày " + (bl.day < 10 ? "0" + bl.day : bl.day) + " tháng " + (bl.month < 10 ? "0" + bl.month : bl.month) + (bl.leap ? " nhuận" : "") + " năm " + bl.canChi + ")";
+        }
+
         state.venues = {
           groom: {
+            date: gIso,
+            lunar: gLunarText || (state.venues && state.venues.groom && state.venues.groom.lunar) || "(Tức ngày 20 tháng 10 năm Bính Ngọ)",
             badgeCover: val("f_groom_badgeCover"),
             nameShort: val("f_groom_nameShort"),
             cityShort: val("f_groom_cityShort"),
@@ -3175,6 +3210,8 @@
             mapEmbed: cleanMapEmbedUrl(val("f_groom_mapEmbed"), gFallback)
           },
           bride: {
+            date: bIso,
+            lunar: bLunarText || (state.venues && state.venues.bride && state.venues.bride.lunar) || "(Tức ngày 19 tháng 10 năm Bính Ngọ)",
             badgeCover: val("f_bride_badgeCover"),
             nameShort: val("f_bride_nameShort"),
             cityShort: val("f_bride_cityShort"),
@@ -3196,39 +3233,33 @@
 
         // Quét trực tiếp Menu Courses từ DOM
         var menuRows = document.querySelectorAll("#menuCoursesContainer .list-row-menu");
-        if (menuRows.length > 0) {
-          state.menu.courses = Array.from(menuRows).map(function(row) {
-            var name = (row.querySelector(".c-name") ? row.querySelector(".c-name").value : "").trim();
-            var cat = (row.querySelector(".c-category") ? row.querySelector(".c-category").value : (row.querySelector(".c-tag") ? row.querySelector(".c-tag").value : "Món Chính")).trim();
-            var desc = (row.querySelector(".c-desc") ? row.querySelector(".c-desc").value : "").trim();
-            return { name: name, category: cat, tag: cat, desc: desc };
-          }).filter(function(item) { return item.name; });
-        }
+        state.menu.courses = Array.from(menuRows).map(function(row) {
+          var name = (row.querySelector(".c-name") ? row.querySelector(".c-name").value : "").trim();
+          var cat = (row.querySelector(".c-category") ? row.querySelector(".c-category").value : (row.querySelector(".c-tag") ? row.querySelector(".c-tag").value : "Món Chính")).trim();
+          var desc = (row.querySelector(".c-desc") ? row.querySelector(".c-desc").value : "").trim();
+          return { name: name, category: cat, tag: cat, desc: desc };
+        }).filter(function(item) { return item.name; });
 
         state.schedule.eyebrow = val("f_sch_eyebrow");
         state.schedule.heading = val("f_sch_heading");
 
         // Quét trực tiếp Schedule Events từ DOM
         var schRows = document.querySelectorAll("#scheduleEventsContainer .list-row-schedule");
-        if (schRows.length > 0) {
-          state.schedule.events = Array.from(schRows).map(function(row) {
-            var time = (row.querySelector(".s-time") ? row.querySelector(".s-time").value : "").trim();
-            var title = (row.querySelector(".s-title") ? row.querySelector(".s-title").value : "").trim();
-            var desc = (row.querySelector(".s-desc") ? row.querySelector(".s-desc").value : "").trim();
-            var hl = row.querySelector(".s-hl") ? row.querySelector(".s-hl").checked : false;
-            return { time: time, title: title, desc: desc, highlight: hl };
-          }).filter(function(item) { return item.title || item.time; });
-        }
+        state.schedule.events = Array.from(schRows).map(function(row) {
+          var time = (row.querySelector(".s-time") ? row.querySelector(".s-time").value : "").trim();
+          var title = (row.querySelector(".s-title") ? row.querySelector(".s-title").value : "").trim();
+          var desc = (row.querySelector(".s-desc") ? row.querySelector(".s-desc").value : "").trim();
+          var hl = row.querySelector(".s-hl") ? row.querySelector(".s-hl").checked : false;
+          return { time: time, title: title, desc: desc, highlight: hl };
+        }).filter(function(item) { return item.title || item.time; });
 
         // Quét trực tiếp FAQ từ DOM
         var faqRows = document.querySelectorAll("#faqItemsContainer .list-row-faq");
-        if (faqRows.length > 0) {
-          state.faq = Array.from(faqRows).map(function(row) {
-            var q = (row.querySelector(".f-q") ? row.querySelector(".f-q").value : "").trim();
-            var a = (row.querySelector(".f-a") ? row.querySelector(".f-a").value : "").trim();
-            return { q: q, a: a };
-          }).filter(function(item) { return item.q || item.a; });
-        }
+        state.faq = Array.from(faqRows).map(function(row) {
+          var q = (row.querySelector(".f-q") ? row.querySelector(".f-q").value : "").trim();
+          var a = (row.querySelector(".f-a") ? row.querySelector(".f-a").value : "").trim();
+          return { q: q, a: a };
+        }).filter(function(item) { return item.q || item.a; });
 
         state.invitationCard = {
           monogram: val("f_inv_monogram") || "L&D",

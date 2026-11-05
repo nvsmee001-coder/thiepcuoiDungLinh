@@ -534,11 +534,28 @@
         const fresh = await window.fetchWeddingDBFromServer();
         if (fresh) {
           window.WEDDING_DB = fresh;
+          updateResponsiveCover();
+          updateResponsiveChoiceBackdrop();
+          updateChoicePersonalization();
         }
       } catch (_) {}
     }
     startIntro();
   }
+
+  // Listen for DB sync events
+  window.addEventListener('wedding:db-synced', ev => {
+    const fresh = (ev && ev.detail) || window.WEDDING_DB;
+    if (fresh) {
+      window.WEDDING_DB = fresh;
+      updateResponsiveCover();
+      updateResponsiveChoiceBackdrop();
+      updateChoicePersonalization();
+      if (currentIdx >= 0 && !introFinished) {
+        renderSlide(currentIdx);
+      }
+    }
+  });
 
   // Listen for live DB updates from Admin Studio
   if (window.WEDDING_LIVE_CHANNEL) {

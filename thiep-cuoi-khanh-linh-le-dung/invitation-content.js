@@ -238,15 +238,38 @@
     const bottomMessage = invCard.bottomMessage || '';
 
     // Venues
+    function resolveVenueDate(venue, fallbackIso) {
+      if (venue && venue.date) return venue.date;
+      if (venue && venue.timeCover) {
+        const dMatch = String(venue.timeCover).match(/(\d{2})\.(\d{2})\.(\d{4})/);
+        const tMatch = String(venue.timeCover).match(/(\d{1,2}:\d{2})/);
+        if (dMatch) {
+          const t = tMatch ? (tMatch[1].padStart(5, '0') + ':00') : '11:00:00';
+          return `${dMatch[3]}-${dMatch[2]}-${dMatch[1]}T${t}+07:00`;
+        }
+      }
+      return fallbackIso;
+    }
+
+    function toUtcStamp(isoStr, fallback) {
+      try {
+        const d = new Date(isoStr);
+        if (!isNaN(d.getTime())) {
+          return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z');
+        }
+      } catch (_) {}
+      return fallback;
+    }
+
     const brideVenue = (db.venues && db.venues.bride) || {};
     const groomVenue = (db.venues && db.venues.groom) || {};
 
     const brideLocation = brideVenue.nameFull || brideVenue.nameShort || 'Trung tâm Trống Đồng Palace';
     const brideAddress = brideVenue.address || '65 Quán Sứ - Cửa Nam - Hà Nội';
     const brideParents = brideVenue.parents || 'Ông Phạm Ngọc Hùng & Bà Nguyễn Tuyết Nhung';
-    const brideDateIso = brideVenue.date || (db.date && db.date.isoTarget) || '2026-11-27T11:00:00+07:00';
-    const brideParsed = parseDateParts(brideDateIso, '11:00');
-    const brideLunar = brideVenue.lunar || '(Tức ngày 19 tháng 10 năm Bính Ngọ)';
+    const brideDateIso = resolveVenueDate(brideVenue, (db.date && db.date.isoTarget) || '2026-11-27T11:00:00+07:00');
+    const brideParsed = parseDateParts(brideDateIso);
+    const brideLunar = brideVenue.lunar || (db.date && db.date.lunarDate) || '(Tức ngày 19 tháng 10 năm Bính Ngọ)';
     const brideFallbackQuery = `${brideLocation}, ${brideAddress}`;
     const brideMap = cleanMapLinkUrl(brideVenue.mapLink, brideFallbackQuery);
     const brideMapEmbed = cleanMapEmbedUrl(brideVenue.mapEmbed, brideFallbackQuery);
@@ -254,8 +277,8 @@
     const groomLocation = groomVenue.nameFull || groomVenue.nameShort || 'Trung tâm Đại Hoàng Sơn Palace';
     const groomAddress = groomVenue.address || '45 Hùng Vương - Bắc Giang - Bắc Ninh';
     const groomParents = groomVenue.parents || 'Ông Nguyễn Văn Uy & Bà Lê Thị Hảo';
-    const groomDateIso = groomVenue.date || '2026-11-28T11:00:00+07:00';
-    const groomParsed = parseDateParts(groomDateIso, '11:00');
+    const groomDateIso = resolveVenueDate(groomVenue, '2026-11-28T11:00:00+07:00');
+    const groomParsed = parseDateParts(groomDateIso);
     const groomLunar = groomVenue.lunar || '(Tức ngày 20 tháng 10 năm Bính Ngọ)';
     const groomFallbackQuery = `${groomLocation}, ${groomAddress}`;
     const groomMap = cleanMapLinkUrl(groomVenue.mapLink, groomFallbackQuery);
@@ -274,7 +297,7 @@
         date: groomDateIso,
         dateLabel: groomParsed.dotDate,
         dateParts: groomParsed,
-        utc: '20261128T040000Z',
+        utc: toUtcStamp(groomDateIso, '20261128T040000Z'),
         location: `${groomLocation}, ${groomAddress}`,
         mapLink: groomMap,
         mapEmbed: groomMapEmbed,
@@ -291,7 +314,7 @@
         date: brideDateIso,
         dateLabel: brideParsed.dotDate,
         dateParts: brideParsed,
-        utc: '20261127T040000Z',
+        utc: toUtcStamp(brideDateIso, '20261127T040000Z'),
         location: `${brideLocation}, ${brideAddress}`,
         mapLink: brideMap,
         mapEmbed: brideMapEmbed,
@@ -846,6 +869,7 @@
     window.fetchWeddingDBFromServer().then(db => {
       window.WEDDING_DB = db;
       initUI();
+      window.dispatchEvent(new CustomEvent('wedding:db-synced', { detail: db }));
     }).catch(() => {
       initUI();
     });
@@ -861,6 +885,7 @@
           window.fetchWeddingDBFromServer().then(updated => {
             window.WEDDING_DB = updated;
             initUI();
+            window.dispatchEvent(new CustomEvent('wedding:db-synced', { detail: updated }));
           });
         }
       }
