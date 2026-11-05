@@ -16,7 +16,32 @@
 .wedding-welcome h1 { font-size: clamp(40px, 7.8vw, 92px); line-height: 1.16; color: #ad7368; margin: 20px 0 12px; transform: rotate(-2deg); white-space: nowrap; }
 .wedding-welcome h1 span { color: #849d8e; font-size: .65em; }
 .wedding-welcome__names { font-size: clamp(11px, 1.4vw, 16px); margin: 0 0 14px; }
-.wedding-welcome__date { letter-spacing: .08em; font-size: clamp(24px, 3vw, 32px); line-height: 1.35; color: #a38151; margin: 12px 0 20px; }
+.wedding-welcome__date { letter-spacing: .08em; font-size: clamp(24px, 3vw, 32px); line-height: 1.35; color: #a38151; margin: 12px 0 14px; }
+.wedding-welcome__greeting {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1.5px dashed #9ca68f;
+  border-radius: 14px;
+  padding: 6px 16px;
+  margin: 0 0 16px;
+  box-shadow: 2px 3px 0 rgba(102, 117, 94, 0.12);
+  transform: rotate(-0.5deg);
+}
+.wedding-welcome__greeting-label {
+  font-family: "WeddingCover", cursive;
+  font-size: clamp(13px, 1.6vw, 17px);
+  color: #727c66;
+  font-weight: 500;
+}
+.wedding-welcome__greeting-name {
+  font-family: "WeddingCover", cursive;
+  font-size: clamp(15px, 2vw, 21px);
+  color: #ad7368;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
 .wedding-welcome__instruction { max-width: 390px; font-size: 13px; line-height: 1.6; }
 .wedding-welcome__start { cursor: pointer; border: 1.5px solid #777e65; border-radius: 16px 12px 17px 10px; padding: 12px 24px; font: 700 17px "WeddingCover", cursive; color: #46584b; background: #d5dfca; box-shadow: 3px 4px 0 #66755e22; margin-top: 12px; }
 .wedding-welcome__start:hover { background: #c5d7bd; }
@@ -86,10 +111,11 @@
 @media (max-height: 500px) and (orientation: landscape) {
   .wedding-welcome { padding: max(12px, env(safe-area-inset-top)) max(28px, env(safe-area-inset-left)); }
   .wedding-welcome__copy { padding: 5px 12px; }
-  .wedding-welcome h1 { font-size: clamp(36px, 7.4vw, 65px); margin: 10px 0; }
-  .wedding-welcome__date { margin: 10px 0; font-size: clamp(20px, 3.2vw, 28px); }
+  .wedding-welcome h1 { font-size: clamp(36px, 7.4vw, 65px); margin: 6px 0; }
+  .wedding-welcome__date { margin: 6px 0; font-size: clamp(18px, 2.8vw, 24px); }
+  .wedding-welcome__greeting { padding: 4px 12px; margin: 0 0 8px; border-radius: 10px; }
   .wedding-welcome__instruction { font-size: 11px; max-width: 320px; }
-  .wedding-welcome__start { padding: 10px 21px; margin-top: 4px; font-size: 15px; }
+  .wedding-welcome__start { padding: 8px 18px; margin-top: 4px; font-size: 14px; }
 }
 @media (max-width: 767px) and (orientation: portrait) {
   .wedding-welcome__paper { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); text-align: center; }

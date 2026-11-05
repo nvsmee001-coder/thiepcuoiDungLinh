@@ -172,7 +172,7 @@ export default function Model({ scrollProgress, ...props }) {
           SHIFT_X_AMOUNT +
           randomOffsets.kpopSign.basePosition.x +
           randomOffsets.kpopSign.position.x,
-        5.5 +
+        5.05 +
           randomOffsets.kpopSign.basePosition.y +
           randomOffsets.kpopSign.position.y,
         -2.493 +
@@ -254,10 +254,10 @@ export default function Model({ scrollProgress, ...props }) {
         </group>
       </group>
 
-      <group ref={kpopSignGroupRef}>
+      <group ref={kpopSignGroupRef} scale={0.82}>
         <group ref={kpopSignRef} rotation={[0, Math.PI / 2, 0]}>
           <VenueInvitation />
-          <group position={[6, 0, 0]}>
+          <group position={[5.8, 0, 0]}>
             <VenueInvitation side="bride" />
           </group>
         </group>

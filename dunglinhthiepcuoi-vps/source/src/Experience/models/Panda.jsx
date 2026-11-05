@@ -48,7 +48,7 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
     rotation: new THREE.Euler(),
     time: 0,
   }));
-  const duckOffsetRef = useRef(0);
+  const duckYOffsetRef = useRef(0);
 
   const pandaScrollCurve = useScrollCurve(
     pandaCurve,
@@ -131,17 +131,28 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
       randomOffset.rotation.z =
         Math.sin(randomOffset.time * 0.6 + 2.3) * rotationAmplitude * 0;
 
-      const duckOffsetTarget = (currentProgress >= 0.78 && currentProgress <= 0.95 && !cameraScrollCurve.transitionCurveActive.current) ? -2.3 : 0;
-      duckOffsetRef.current = THREE.MathUtils.lerp(duckOffsetRef.current, duckOffsetTarget, alpha);
+      // Hạ vị trí thú mỏ vịt xuống sát chân trang khi qua khu vực ảnh dâu rể và thiệp cưới (0.76 -> 0.94)
+      // để không che khuất ảnh dâu rể và nội dung thiệp.
+      // Sau đó từ 0.94 -> 1.0 mượt mà bước dần lên độ cao xuất phát của máy bay.
+      let duckYOffsetTarget = 0;
+      if (!cameraScrollCurve.transitionCurveActive.current && currentProgress >= 0.76) {
+        if (currentProgress <= 0.94) {
+          duckYOffsetTarget = -1.95;
+        } else if (currentProgress < 1.0) {
+          const climbT = Math.min(1, Math.max(0, (currentProgress - 0.94) / 0.06));
+          duckYOffsetTarget = THREE.MathUtils.lerp(-1.95, 0, climbT);
+        }
+      }
+      duckYOffsetRef.current = THREE.MathUtils.lerp(duckYOffsetRef.current, duckYOffsetTarget, alpha);
 
       pandaRef.current.position.x = THREE.MathUtils.lerp(
         pandaRef.current.position.x,
-        pandaPoint.x + randomOffset.position.x + duckOffsetRef.current,
+        pandaPoint.x + randomOffset.position.x,
         alpha
       );
       pandaRef.current.position.y = THREE.MathUtils.lerp(
         pandaRef.current.position.y,
-        pandaPoint.y + 6.55845 + randomOffset.position.y,
+        pandaPoint.y + 6.55845 + randomOffset.position.y + duckYOffsetRef.current,
         alpha
       );
       pandaRef.current.position.z = THREE.MathUtils.lerp(

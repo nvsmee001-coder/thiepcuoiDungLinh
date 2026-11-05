@@ -1587,6 +1587,61 @@
         </div>
       </div>
 
+      <!-- CÔNG CỤ TẠO LINK THIỆP 3D HÀNH TRÌNH (love.dunglinhthiepcuoi.online) -->
+      <div class="panel-card" style="border: 1px solid #7be895; box-shadow: 0 8px 32px rgba(123, 232, 149, 0.12);">
+        <div class="panel-title">
+          <span>Tạo Link Thiệp 3D Kể Chuyện Tình Yêu (love.dunglinhthiepcuoi.online)</span>
+          <span style="font-size:0.75rem; color:#7be895; font-weight:600;">Thiệp 3D Sổ Tay Kỷ Niệm</span>
+        </div>
+        <p class="panel-desc">
+          Tạo đường link riêng gửi khách xem câu chuyện tình yêu 3D tương tác. Khi khách mở link, trang bìa sẽ tự động hiển thị trang trọng: <strong>"Kính mời: [Tên khách]"</strong> (nếu không nhập tên thì mặc định là <strong>"Kính mời: Quý khách và gia đình"</strong>).
+        </p>
+
+        <div class="form-grid-2" style="background: rgba(0,0,0,0.22); padding: 18px; border-radius: 12px; border: 1px solid rgba(123, 232, 149, 0.2);">
+          <div>
+            <div class="form-group">
+              <label>1. Nhập Tên Khách Mời (Thiệp 3D)</label>
+              <input type="text" class="form-control" id="gen_love_guestName" placeholder="VD: Anh Nam &amp; Chị Lan, hoặc Gia đình Bác Hùng..." style="font-size: 1rem; color: #ffe4ab;">
+              <small style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; display:block;">
+                Tự động đồng bộ với ô tên khách ở trên, hoặc bạn có thể gõ chỉnh sửa riêng tại đây.
+              </small>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>2. Xem Trước Dòng Chữ Kính Mời Trên Trang Bìa 3D</label>
+              <div style="background:rgba(255,255,255,0.06); border:1px dashed #7be895; border-radius:8px; padding:10px 14px; font-size:0.95rem; color:#e1ded2;">
+                Kính mời: <strong id="gen_love_previewName" style="color:#7be895;">Quý khách và gia đình</strong>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="form-group" style="margin-bottom:8px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; flex-wrap:wrap; gap:6px;">
+                <label style="margin:0;">Đường Link Thiệp 3D Cá Nhân Hóa</label>
+                <div style="display:inline-flex; gap:12px; font-size:0.75rem;">
+                  <label style="cursor:pointer; color:#7be895; display:inline-flex; align-items:center; gap:4px;">
+                    <input type="radio" name="gen_love_domain_mode" value="online" checked> Online (love.dunglinhthiepcuoi.online)
+                  </label>
+                  <label style="cursor:pointer; color:#e2c48e; display:inline-flex; align-items:center; gap:4px;">
+                    <input type="radio" name="gen_love_domain_mode" value="local"> Localhost:8080
+                  </label>
+                </div>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <input type="text" class="form-control" id="gen_love_generatedLink" readonly style="opacity:0.95; font-size:0.82rem; font-family:monospace; background:rgba(0,0,0,0.35);">
+                <button type="button" class="btn btn-primary" id="btnCopyLoveGuestLink" style="white-space:nowrap; background:#2e7d32; border-color:#388e3c;">Sao Chép Link 3D</button>
+              </div>
+              <small style="font-size:0.72rem; color:#7be895; margin-top:4px; display:block;" id="gen_love_link_hint">
+                Link chuẩn: <strong>https://love.dunglinhthiepcuoi.online</strong> sẵn sàng gửi khách qua Zalo/Facebook!
+              </small>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:6px;">
+              <button type="button" class="btn btn-sm" id="btnTestOpenLoveLink" style="flex:1;">Mở Xem Thử Link 3D Này</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- CHỈNH SỬA CÂU CHỮ TRÊN TỜ THIỆP & BẢN XEM TRƯỚC TRỰC QUAN -->
       <div class="form-grid-2">
         
@@ -3098,6 +3153,7 @@
         renderFaqItems();
         renderMusicTracks();
         if (typeof updateGeneratedGuestLink === "function") updateGeneratedGuestLink();
+        if (typeof updateGeneratedLoveLink === "function") updateGeneratedLoveLink();
         if (typeof updateCardMockup === "function") updateCardMockup();
       }
 
@@ -4302,11 +4358,93 @@
         updateCardMockup();
       }
 
+      function updateGeneratedLoveLink() {
+        var name = (val("gen_love_guestName") || "").trim();
+        var domainModeRadio = document.querySelector('input[name="gen_love_domain_mode"]:checked');
+        var mode = domainModeRadio ? domainModeRadio.value : "online";
+
+        var origin = "https://love.dunglinhthiepcuoi.online";
+        if (mode === "local") {
+          var host = window.location.hostname || "localhost";
+          origin = window.location.protocol + "//" + host + ":8080";
+        }
+
+        var url = new URL("/", origin);
+        if (name) {
+          url.searchParams.set("to", name);
+        }
+        var finalLink = url.toString();
+        var linkInput = document.getElementById("gen_love_generatedLink");
+        if (linkInput) linkInput.value = finalLink;
+
+        var previewEl = document.getElementById("gen_love_previewName");
+        if (previewEl) {
+          previewEl.textContent = name || "Quý khách và gia đình";
+        }
+
+        var hintEl = document.getElementById("gen_love_link_hint");
+        if (hintEl) {
+          if (origin.includes("localhost") || origin.includes("127.0.0.1")) {
+            hintEl.innerHTML = "⚠️ Đang dùng link <strong>localhost:8080</strong> (chỉ máy bạn xem được, không gửi link này cho khách).";
+            hintEl.style.color = "#ffb37c";
+          } else {
+            hintEl.innerHTML = "Link chuẩn: <strong>https://love.dunglinhthiepcuoi.online</strong> sẵn sàng gửi khách qua Zalo/Facebook!";
+            hintEl.style.color = "#7be895";
+          }
+        }
+      }
+
       // Guest Link Generator Listeners
       var guestInputEl = document.getElementById("gen_guestName");
+      var loveGuestInputEl = document.getElementById("gen_love_guestName");
       if (guestInputEl) {
-        guestInputEl.addEventListener("input", updateGeneratedGuestLink);
+        guestInputEl.addEventListener("input", function () {
+          if (loveGuestInputEl) {
+            loveGuestInputEl.value = guestInputEl.value;
+            updateGeneratedLoveLink();
+          }
+          updateGeneratedGuestLink();
+        });
       }
+      if (loveGuestInputEl) {
+        loveGuestInputEl.addEventListener("input", updateGeneratedLoveLink);
+      }
+      document.querySelectorAll('input[name="gen_love_domain_mode"]').forEach(function (r) {
+        r.addEventListener("change", updateGeneratedLoveLink);
+      });
+
+      var btnCopyLove = document.getElementById("btnCopyLoveGuestLink");
+      if (btnCopyLove) {
+        btnCopyLove.addEventListener("click", async function () {
+          var link = val("gen_love_generatedLink");
+          if (!link) return;
+          try {
+            await navigator.clipboard.writeText(link);
+            showToast("Đã sao chép link thiệp 3D vào bộ nhớ tạm!");
+          } catch (e) {
+            var temp = document.getElementById("gen_love_generatedLink");
+            if (temp) {
+              temp.select();
+              document.execCommand("copy");
+              showToast("Đã sao chép link thiệp 3D!");
+            }
+          }
+        });
+      }
+
+      var btnTestLove = document.getElementById("btnTestOpenLoveLink");
+      if (btnTestLove) {
+        btnTestLove.addEventListener("click", function () {
+          var link = val("gen_love_generatedLink");
+          if (!link) {
+            updateGeneratedLoveLink();
+            link = val("gen_love_generatedLink");
+          }
+          if (link) window.open(link, "_blank");
+        });
+      }
+
+      updateGeneratedLoveLink();
       document.querySelectorAll('input[name="gen_side"]').forEach(function (r) {
         r.addEventListener("change", function () {
           currentMockupSide = r.value;

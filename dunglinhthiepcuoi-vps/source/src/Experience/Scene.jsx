@@ -83,33 +83,33 @@ const Scene = ({
     } else {
       // Tự động kích hoạt cơ chế slow/pause khi lướt tới 2 tấm thiệp cưới:
       if (!flying) {
-        if (scrollProgress.current < 0.85) {
+        if (scrollProgress.current < 0.86) {
           venue1SlowTriggered.current = false;
         }
-        if (scrollProgress.current < 0.94) {
+        if (scrollProgress.current < 0.92) {
           venue2SlowTriggered.current = false;
         }
 
         // Tấm thiệp 1 (Nhà Trai - hiển thị trọn vẹn như ảnh chụp):
-        if (!venue1SlowTriggered.current && scrollProgress.current >= 0.885 && scrollProgress.current <= 0.92) {
+        if (!venue1SlowTriggered.current && scrollProgress.current >= 0.885 && scrollProgress.current <= 0.915) {
           venue1SlowTriggered.current = true;
-          window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "venue-card-1", duration: 1600 } }));
+          window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "venue-card-1", duration: 1500 } }));
           targetScrollProgress.current = 0.895;
         }
 
         // Tấm thiệp 2 (Nhà Gái - chính giữa tấm thiệp thứ 2):
-        if (!venue2SlowTriggered.current && scrollProgress.current >= 0.965 && scrollProgress.current <= 0.992) {
+        if (!venue2SlowTriggered.current && scrollProgress.current >= 0.935 && scrollProgress.current <= 0.955) {
           venue2SlowTriggered.current = true;
-          window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "venue-card-2", duration: 1600 } }));
-          targetScrollProgress.current = 0.975;
+          window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "venue-card-2", duration: 1500 } }));
+          targetScrollProgress.current = 0.945;
         }
       }
 
       const now = performance.now();
       const isDampened = pauseScrollUntilRef && now < pauseScrollUntilRef.current;
       if (autoScroll && !isDampened) {
-        // Tốc độ trôi nhẹ nhàng, êm dịu giúp người xem dễ dàng thưởng ngoạn
-        const AUTO_SCROLL_SPEED = 0.025;
+        // Tốc độ trôi tự động mượt mà, tươi vui (0.052)
+        const AUTO_SCROLL_SPEED = 0.052;
         targetScrollProgress.current += delta * AUTO_SCROLL_SPEED;
       }
 

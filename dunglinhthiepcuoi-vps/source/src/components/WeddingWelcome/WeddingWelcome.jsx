@@ -12,6 +12,9 @@ export function RotateNotice() {
 }
 
 export default function WeddingWelcome({ onStart, rotateRequired, phone }) {
+  const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+  const guestName = (searchParams?.get("to") || searchParams?.get("guest") || searchParams?.get("k") || "").trim();
+
   return <main className="wedding-welcome">
     <div className="wedding-welcome__paper">
       <div className="wedding-welcome__copy">
@@ -19,9 +22,13 @@ export default function WeddingWelcome({ onStart, rotateRequired, phone }) {
         <h1>Dũng <span>&</span> Linh</h1>
         <p className="wedding-welcome__names">Nguyễn Lê Dũng & Phạm Khánh Linh</p>
         <p className="wedding-welcome__date">27 · 28 / 11 / 2026</p>
+        <div className="wedding-welcome__greeting">
+          <span className="wedding-welcome__greeting-label">Kính mời</span>
+          <strong className="wedding-welcome__greeting-name">{guestName || "Quý khách và gia đình"}</strong>
+        </div>
         {rotateRequired ? <RotateNotice /> : <>
           <p className="wedding-welcome__instruction">{phone ? "Vuốt ngang để cùng tụi mình đi qua những kỷ niệm." : "Cuộn hoặc kéo để cùng tụi mình đi qua những kỷ niệm."}</p>
-          <button onClick={onStart} className="wedding-welcome__start">Mở thiệp cưới <span aria-hidden="true">↗</span></button>
+          <button onClick={onStart} className="wedding-welcome__start">Mở thiệp cưới</button>
         </>}
       </div>
       <div className="wedding-welcome__art" aria-hidden="true">
