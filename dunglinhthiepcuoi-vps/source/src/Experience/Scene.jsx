@@ -50,6 +50,7 @@ const Scene = ({
   const sceneGroupRef = useRef();
   const riderAnchors = useRef({ bike: null, boat: null, plane: null, jump: null, walkStart: null });
   const automaticLanding = useRef({ active: false });
+  const coupleSlowTriggered = useRef(false);
   const venue1SlowTriggered = useRef(false);
   const venue2SlowTriggered = useRef(false);
   const riderRef = useRef();
@@ -81,13 +82,22 @@ const Scene = ({
       newProgress = automaticProgress;
       targetScrollProgress.current = automaticProgress;
     } else {
-      // Tự động kích hoạt cơ chế slow/pause khi lướt tới 2 tấm thiệp cưới:
+      // Tự động kích hoạt cơ chế slow/pause khi lướt tới ảnh dâu rể và 2 tấm thiệp cưới:
       if (!flying) {
+        if (scrollProgress.current < 0.75) {
+          coupleSlowTriggered.current = false;
+        }
         if (scrollProgress.current < 0.86) {
           venue1SlowTriggered.current = false;
         }
         if (scrollProgress.current < 0.92) {
           venue2SlowTriggered.current = false;
+        }
+
+        // Khựng 1 nhịp trước mặt cô dâu chú rể (ảnh 1):
+        if (!coupleSlowTriggered.current && scrollProgress.current >= 0.775 && scrollProgress.current <= 0.798) {
+          coupleSlowTriggered.current = true;
+          window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "couple-stand", duration: 1600 } }));
         }
 
         // Tấm thiệp 1 (Nhà Trai - hiển thị trọn vẹn như ảnh chụp):
@@ -131,6 +141,7 @@ const Scene = ({
       } else {
         cameraScrollCurve.transitionCurveActive.current = true;
         cameraScrollCurve.initiateTransitionCurve();
+        coupleSlowTriggered.current = false;
         venue1SlowTriggered.current = false;
         venue2SlowTriggered.current = false;
         newProgress = Math.min(FLIGHT_STOP, newProgress - 1);
@@ -144,6 +155,7 @@ const Scene = ({
         cameraScrollCurve.loopCounter.current--;
         cameraScrollCurve.transitionCurveActive.current = true;
         cameraScrollCurve.initiateTransitionCurve();
+        coupleSlowTriggered.current = false;
         venue1SlowTriggered.current = false;
         venue2SlowTriggered.current = false;
       }

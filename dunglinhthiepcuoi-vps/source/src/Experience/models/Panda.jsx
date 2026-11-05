@@ -95,6 +95,18 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
       if (!pandaRef.current) return;
       const mode = getRiderMode(currentProgress, cameraScrollCurve.transitionCurveActive.current);
       const introWalk = !cameraScrollCurve.transitionCurveActive.current && currentProgress >= 0 && currentProgress < BIKE_BOARD_END;
+
+      // Cú nhảy Parabol qua đầu cô dâu chú rể (ảnh 2): từ 0.805 đến 0.865
+      const jumpStart = 0.805;
+      const jumpEnd = 0.865;
+      let jumpY = 0;
+      let jumpRotZ = 0;
+      if (!cameraScrollCurve.transitionCurveActive.current && currentProgress >= jumpStart && currentProgress <= jumpEnd) {
+        const t = (currentProgress - jumpStart) / (jumpEnd - jumpStart);
+        jumpY = Math.sin(Math.PI * t) * 3.8;
+        jumpRotZ = Math.sin(Math.PI * 2 * t) * -0.28;
+      }
+
       if (mode !== previousMode.current) {
         supportMeshes.forEach((object) => { object.visible = mode === "walk" && !introWalk; });
         state.gl.domElement.dataset.transport = mode;
@@ -152,7 +164,7 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
       );
       pandaRef.current.position.y = THREE.MathUtils.lerp(
         pandaRef.current.position.y,
-        pandaPoint.y + 6.55845 + randomOffset.position.y + duckYOffsetRef.current,
+        pandaPoint.y + 6.55845 + randomOffset.position.y + duckYOffsetRef.current + jumpY,
         alpha
       );
       pandaRef.current.position.z = THREE.MathUtils.lerp(
@@ -163,7 +175,7 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
 
       pandaRef.current.rotation.x = randomOffset.rotation.x;
       pandaRef.current.rotation.y = 0 + randomOffset.rotation.y;
-      pandaRef.current.rotation.z = randomOffset.rotation.z;
+      pandaRef.current.rotation.z = randomOffset.rotation.z + jumpRotZ;
     }
   }, -2);
 
