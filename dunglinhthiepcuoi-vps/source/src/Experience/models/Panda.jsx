@@ -96,14 +96,14 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
       const mode = getRiderMode(currentProgress, cameraScrollCurve.transitionCurveActive.current);
       const introWalk = !cameraScrollCurve.transitionCurveActive.current && currentProgress >= 0 && currentProgress < BIKE_BOARD_END;
 
-      // Cú nhảy Parabol qua đầu cô dâu chú rể (ảnh 2): từ 0.805 đến 0.865
-      const jumpStart = 0.805;
-      const jumpEnd = 0.865;
+      // Cú nhảy Parabol bay qua đầu cô dâu chú rể (ảnh 2): bắt đầu sau nhịp khựng (từ 0.84 đến 0.902)
+      const jumpStart = 0.84;
+      const jumpEnd = 0.902;
       let jumpY = 0;
       let jumpRotZ = 0;
       if (!cameraScrollCurve.transitionCurveActive.current && currentProgress >= jumpStart && currentProgress <= jumpEnd) {
         const t = (currentProgress - jumpStart) / (jumpEnd - jumpStart);
-        jumpY = Math.sin(Math.PI * t) * 3.8;
+        jumpY = Math.sin(Math.PI * t) * 4.3;
         jumpRotZ = Math.sin(Math.PI * 2 * t) * -0.28;
       }
 

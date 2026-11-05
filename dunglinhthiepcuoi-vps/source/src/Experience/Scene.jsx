@@ -84,30 +84,30 @@ const Scene = ({
     } else {
       // Tự động kích hoạt cơ chế slow/pause khi lướt tới ảnh dâu rể và 2 tấm thiệp cưới:
       if (!flying) {
-        if (scrollProgress.current < 0.75) {
+        if (scrollProgress.current < 0.78) {
           coupleSlowTriggered.current = false;
         }
-        if (scrollProgress.current < 0.86) {
+        if (scrollProgress.current < 0.89) {
           venue1SlowTriggered.current = false;
         }
-        if (scrollProgress.current < 0.92) {
+        if (scrollProgress.current < 0.935) {
           venue2SlowTriggered.current = false;
         }
 
-        // Khựng 1 nhịp trước mặt cô dâu chú rể (ảnh 1):
-        if (!coupleSlowTriggered.current && scrollProgress.current >= 0.775 && scrollProgress.current <= 0.798) {
+        // Khựng 1 nhịp khi ảnh cô dâu chú rể đã hiện lên hoàn chỉnh (ảnh 1):
+        if (!coupleSlowTriggered.current && scrollProgress.current >= 0.815 && scrollProgress.current <= 0.835) {
           coupleSlowTriggered.current = true;
-          window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "couple-stand", duration: 1600 } }));
+          window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "couple-stand", duration: 1800 } }));
         }
 
-        // Tấm thiệp 1 (Nhà Trai - hiển thị trọn vẹn như ảnh chụp):
-        if (!venue1SlowTriggered.current && scrollProgress.current >= 0.885 && scrollProgress.current <= 0.915) {
+        // Tấm thiệp 1 (Nhà Trai - hiển thị trọn vẹn sau khi nhảy tiếp đất):
+        if (!venue1SlowTriggered.current && scrollProgress.current >= 0.908 && scrollProgress.current <= 0.928) {
           venue1SlowTriggered.current = true;
           window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "venue-card-1", duration: 1500 } }));
         }
 
         // Tấm thiệp 2 (Nhà Gái - chính giữa tấm thiệp thứ 2):
-        if (!venue2SlowTriggered.current && scrollProgress.current >= 0.935 && scrollProgress.current <= 0.955) {
+        if (!venue2SlowTriggered.current && scrollProgress.current >= 0.945 && scrollProgress.current <= 0.965) {
           venue2SlowTriggered.current = true;
           window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "venue-card-2", duration: 1500 } }));
         }
