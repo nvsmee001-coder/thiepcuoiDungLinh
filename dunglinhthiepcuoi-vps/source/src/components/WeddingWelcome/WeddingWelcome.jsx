@@ -18,14 +18,14 @@ export default function WeddingWelcome({ onStart, rotateRequired, phone }) {
   return <main className="wedding-welcome">
     <div className="wedding-welcome__paper">
       <div className="wedding-welcome__copy">
-        <span className="wedding-welcome__eyebrow">THIỆP CƯỚI CỦA CHÚNG MÌNH</span>
+        <div className="wedding-welcome__greeting">
+          <span className="wedding-welcome__greeting-label">Kính mời</span>
+          <span className="wedding-welcome__greeting-name">{guestName || "Quý khách và gia đình"}</span>
+        </div>
+        <span className="wedding-welcome__eyebrow">XEM THIỆP CƯỚI CỦA CHÚNG MÌNH</span>
         <h1>Dũng <span>&</span> Linh</h1>
         <p className="wedding-welcome__names">Nguyễn Lê Dũng & Phạm Khánh Linh</p>
         <p className="wedding-welcome__date">27 · 28 / 11 / 2026</p>
-        <div className="wedding-welcome__greeting">
-          <span className="wedding-welcome__greeting-label">Kính mời</span>
-          <strong className="wedding-welcome__greeting-name">{guestName || "Quý khách và gia đình"}</strong>
-        </div>
         {rotateRequired ? <RotateNotice /> : <>
           <p className="wedding-welcome__instruction">{phone ? "Vuốt ngang để cùng tụi mình đi qua những kỷ niệm." : "Cuộn hoặc kéo để cùng tụi mình đi qua những kỷ niệm."}</p>
           <button onClick={onStart} className="wedding-welcome__start">Mở thiệp cưới</button>

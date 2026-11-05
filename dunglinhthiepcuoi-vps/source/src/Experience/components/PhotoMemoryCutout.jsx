@@ -19,7 +19,6 @@ export default function PhotoMemoryCutout({
   hintPlacement = "above",
   ...props
 }) {
-  const [hovered, setHovered] = useState(false);
   const [pinned, setPinned] = useState(false);
   const [autoOpened, setAutoOpened] = useState(false);
   const dismissedRef = useRef(false);
@@ -29,7 +28,7 @@ export default function PhotoMemoryCutout({
   const worldPosRef = useRef(new THREE.Vector3());
   const screenPosRef = useRef(new THREE.Vector3());
 
-  // Tự động kích hoạt khi user di chuyển (cuộn / lướt) đến gần vật thể
+  // Tự động kích hoạt khi vật thể thực sự tiến vào chính giữa khung hình
   useFrame(({ camera }) => {
     if (!enabled || !anchorRef.current) return;
 
@@ -39,15 +38,15 @@ export default function PhotoMemoryCutout({
     const sp = screenPosRef.current;
     const isFront = sp.z > 0 && sp.z < 1;
 
-    // Vùng trung tâm: vật thể nằm trong tầm nhìn chính giữa màn hình (32% từ tâm)
-    const isCenter = isFront && Math.abs(sp.x) <= 0.32 && Math.abs(sp.y) <= 0.85;
-    // Vùng thoát: vật thể trôi ra xa ngoài mép màn hình (hoặc ra sau lưng)
-    const isFar = !isFront || Math.abs(sp.x) > 0.68 || Math.abs(sp.y) > 1.0;
+    // Vùng trung tâm: vật thể nằm trong tầm nhìn chính giữa màn hình (25% từ tâm)
+    const isCenter = isFront && Math.abs(sp.x) <= 0.25 && Math.abs(sp.y) <= 0.8;
+    // Vùng thoát: vật thể trôi ra ngoài mép màn hình (hoặc ra sau lưng)
+    const isFar = !isFront || Math.abs(sp.x) > 0.65 || Math.abs(sp.y) > 0.95;
 
     if (isCenter) {
       if (!dismissedRef.current && !autoOpened) {
         setAutoOpened(true);
-        // Báo hiệu ảnh popup vừa hiện lên để làm chậm/khóa cuộn 1-1.5s và đóng các popup cũ
+        // Báo hiệu ảnh popup vừa hiện lên để làm chậm cuộn 1.3s và đóng các popup cũ
         window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: asset, duration: 1300 } }));
       }
     } else if (isFar) {
@@ -59,17 +58,16 @@ export default function PhotoMemoryCutout({
     }
   });
 
-  const active = enabled && (autoOpened || hovered || pinned);
+  const active = enabled && (autoOpened || pinned);
 
   useEffect(() => {
     if (!enabled) {
-      setHovered(false);
       setPinned(false);
       setAutoOpened(false);
     }
   }, [enabled]);
 
-  useCursor(hovered || pinned);
+  useCursor(pinned);
 
   useEffect(() => {
     // Decode ảnh trước để khi bật lên ảnh hiển thị ngay không bị nhấp nháy
@@ -83,7 +81,6 @@ export default function PhotoMemoryCutout({
     const handleOtherOpened = (e) => {
       if (e.detail?.id && e.detail.id !== asset) {
         setAutoOpened(false);
-        setHovered(false);
         setPinned(false);
       }
     };
@@ -91,11 +88,10 @@ export default function PhotoMemoryCutout({
     return () => window.removeEventListener("photo-memory-opened", handleOtherOpened);
   }, [asset]);
 
-  // Đóng bằng phím Escape hoặc khi chuyển tab (KHÔNG đóng khi lăn chuột wheel)
+  // Đóng bằng phím Escape hoặc khi chuyển tab
   useEffect(() => {
     if (!active) return;
     const close = () => {
-      setHovered(false);
       setPinned(false);
       setAutoOpened(false);
       dismissedRef.current = true;
@@ -110,7 +106,6 @@ export default function PhotoMemoryCutout({
   }, [active]);
 
   const handleClose = () => {
-    setHovered(false);
     setPinned(false);
     setAutoOpened(false);
     dismissedRef.current = true;
@@ -118,22 +113,13 @@ export default function PhotoMemoryCutout({
 
   return (
     <>
-      <group ref={anchorRef} position={props.position} />
       <PaperCutout
+        ref={anchorRef}
         {...props}
         asset={asset}
         float={float}
-        onPointerOver={(event) => {
-          event.stopPropagation();
-          if (event.pointerType !== "touch") {
-            setHovered(true);
-            window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: asset, duration: 1300 } }));
-          }
-        }}
-        onPointerOut={() => setHovered(false)}
         onClick={(event) => {
           event.stopPropagation();
-          setHovered(false);
           setPinned((value) => {
             const next = !value;
             if (next) {

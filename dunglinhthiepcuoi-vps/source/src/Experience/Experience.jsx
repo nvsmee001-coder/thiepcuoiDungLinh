@@ -29,12 +29,6 @@ const Experience = ({ enabled = true, autoScroll = false, onReady }) => {
       const now = performance.now();
       // Khóa/hãm cuộn trong khoảng thời gian duration (1.3s)
       pauseScrollUntilRef.current = Math.max(pauseScrollUntilRef.current, now + duration);
-
-      // Triệt tiêu một phần quán tính cuộn cũ để dừng/hãm nhẹ nhàng ngay bức ảnh
-      const delta = targetScrollProgress.current - scrollProgress.current;
-      if (Math.abs(delta) > 0.012) {
-        targetScrollProgress.current = scrollProgress.current + Math.sign(delta) * 0.012;
-      }
     };
 
     window.addEventListener("photo-memory-opened", handlePhotoOpened);

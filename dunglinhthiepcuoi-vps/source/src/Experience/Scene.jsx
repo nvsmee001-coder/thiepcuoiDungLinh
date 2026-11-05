@@ -94,27 +94,26 @@ const Scene = ({
         if (!venue1SlowTriggered.current && scrollProgress.current >= 0.885 && scrollProgress.current <= 0.915) {
           venue1SlowTriggered.current = true;
           window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "venue-card-1", duration: 1500 } }));
-          targetScrollProgress.current = 0.895;
         }
 
         // Tấm thiệp 2 (Nhà Gái - chính giữa tấm thiệp thứ 2):
         if (!venue2SlowTriggered.current && scrollProgress.current >= 0.935 && scrollProgress.current <= 0.955) {
           venue2SlowTriggered.current = true;
           window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "venue-card-2", duration: 1500 } }));
-          targetScrollProgress.current = 0.945;
         }
       }
 
       const now = performance.now();
       const isDampened = pauseScrollUntilRef && now < pauseScrollUntilRef.current;
-      if (autoScroll && !isDampened) {
-        // Tốc độ trôi tự động mượt mà, tươi vui (0.052)
-        const AUTO_SCROLL_SPEED = 0.052;
-        targetScrollProgress.current += delta * AUTO_SCROLL_SPEED;
+      if (autoScroll) {
+        // Tốc độ bình thường 0.052; khi có ảnh mở hoặc thiệp thì trôi chậm (0.015) để người xem kịp ngắm,
+        // sau đó tự động tăng tốc trở lại, không bao giờ dừng hẳn làm đơ màn hình
+        const speed = isDampened ? 0.015 : 0.052;
+        targetScrollProgress.current += delta * speed;
       }
 
       targetScrollProgress.current = constrainJourneyTarget(
-        targetScrollProgress.current, flying, cameraScrollCurve.loopCounter.current,
+        targetScrollProgress.current, flying, cameraScrollCurve.loopCounter.current, autoScroll,
       );
       newProgress = THREE.MathUtils.lerp(scrollProgress.current, targetScrollProgress.current, frameAlpha(.1, delta));
     }

@@ -104,6 +104,15 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
         attachRider(pandaRef.current, riderAnchors.current.walkStart, "bike");
         return;
       }
+      // Gần cuối trang (0.975 -> 1.0): máy bay đã đậu chờ sẵn trên đường băng,
+      // cho thú mỏ vịt bước thẳng lên ghế máy bay để người xem thấy rõ cảnh lên máy bay trước khi cất cánh
+      if (!cameraScrollCurve.transitionCurveActive.current && currentProgress >= 0.975) {
+        const planeAnchor = riderAnchors?.current.plane;
+        if (planeAnchor) {
+          attachRider(pandaRef.current, planeAnchor, "plane");
+          return;
+        }
+      }
       // Seat, deck and plane attachments have one authoritative transform.
       if (mode !== "walk") {
         const anchor = riderAnchors?.current[mode];
@@ -131,16 +140,16 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
       randomOffset.rotation.z =
         Math.sin(randomOffset.time * 0.6 + 2.3) * rotationAmplitude * 0;
 
-      // Hạ vị trí thú mỏ vịt xuống sát chân trang khi qua khu vực ảnh dâu rể và thiệp cưới (0.76 -> 0.94)
-      // để không che khuất ảnh dâu rể và nội dung thiệp.
-      // Sau đó từ 0.94 -> 1.0 mượt mà bước dần lên độ cao xuất phát của máy bay.
+      // Hạ vị trí thú mỏ vịt đứng vừa vặn trên đường kẻ chân trang notebook (0.76 -> 0.94)
+      // không bị chìm xuống dưới mép màn hình, không che dâu rể hay thiệp.
+      // Sau đó từ 0.94 -> 0.98 mượt mà bước dần lên độ cao xuất phát của máy bay.
       let duckYOffsetTarget = 0;
       if (!cameraScrollCurve.transitionCurveActive.current && currentProgress >= 0.76) {
         if (currentProgress <= 0.94) {
-          duckYOffsetTarget = -1.95;
+          duckYOffsetTarget = -0.82;
         } else if (currentProgress < 1.0) {
-          const climbT = Math.min(1, Math.max(0, (currentProgress - 0.94) / 0.06));
-          duckYOffsetTarget = THREE.MathUtils.lerp(-1.95, 0, climbT);
+          const climbT = Math.min(1, Math.max(0, (currentProgress - 0.94) / 0.035));
+          duckYOffsetTarget = THREE.MathUtils.lerp(-0.82, 0, climbT);
         }
       }
       duckYOffsetRef.current = THREE.MathUtils.lerp(duckYOffsetRef.current, duckYOffsetTarget, alpha);

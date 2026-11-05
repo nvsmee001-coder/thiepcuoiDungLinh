@@ -5,12 +5,13 @@ export const BIKE_BOARD_END = .065;
 export const FLIGHT_STOP = .84;
 export const TOUCHDOWN = .93;
 export const JUMP_END = .99;
-export const constrainJourneyTarget = (target, flying, loop = 1) => flying ? Math.min(FLIGHT_STOP, target) : loop > 1 ? target : Math.max(0, target);
+export const constrainJourneyTarget = (target, flying, loop = 1, autoScroll = false) =>
+  flying ? (autoScroll ? target : Math.min(FLIGHT_STOP, target)) : loop > 1 ? target : Math.max(0, target);
 export const getFlightStage = (progress) => progress < FLIGHT_STOP ? "plane" : progress < TOUCHDOWN ? "landing" : progress < JUMP_END ? "jump" : "bike";
 
 // The marker starts a short automatic sequence; the visitor can still reverse.
 export function stepAutomaticLanding(state, progress, target, delta) {
-  if (target < progress - .002) state.active = false;
+  if (target < progress - .05) state.active = false;
   else if (progress >= FLIGHT_STOP - .005) state.active = true;
   return state.active ? progress + animationDelta(delta) * .09 : null;
 }
