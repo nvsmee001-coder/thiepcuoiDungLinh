@@ -14,6 +14,7 @@ export default function PhotoMemoryCutout({
   label,
   alt,
   enabled = true,
+  forceOpen = false,
   float = false,
   popupSide = "left",
   hintPlacement = "above",
@@ -58,7 +59,7 @@ export default function PhotoMemoryCutout({
     }
   });
 
-  const active = enabled && (autoOpened || pinned);
+  const active = enabled && (forceOpen || autoOpened || pinned);
 
   useEffect(() => {
     if (!enabled) {

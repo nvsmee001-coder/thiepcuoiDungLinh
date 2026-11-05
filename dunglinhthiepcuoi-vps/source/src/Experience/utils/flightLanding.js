@@ -11,7 +11,7 @@ export const getFlightStage = (progress) => progress < FLIGHT_STOP ? "plane" : p
 
 // The marker starts a short automatic sequence; the visitor can still reverse.
 export function stepAutomaticLanding(state, progress, target, delta) {
-  if (target < progress - .05) state.active = false;
+  if (target < progress - .002) state.active = false;
   else if (progress >= FLIGHT_STOP - .005) state.active = true;
   return state.active ? progress + animationDelta(delta) * .09 : null;
 }

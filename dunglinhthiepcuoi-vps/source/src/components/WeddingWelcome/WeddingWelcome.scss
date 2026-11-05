@@ -13,32 +13,35 @@
 .wedding-welcome__paper { width: min(1080px, 100%); height: min(660px, 100%); display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; position: relative; }
 .wedding-welcome__copy { z-index: 2; padding: 20px; }
 .wedding-welcome__greeting {
-  display: block;
-  margin: 0 0 8px;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin: 0 0 10px;
   line-height: 1.25;
 }
 .wedding-welcome__greeting-label {
   font-family: "WeddingCover", cursive;
-  font-size: clamp(20px, 2.6vw, 34px);
+  font-size: clamp(24px, 3.2vw, 40px);
   color: #ad7368;
   font-weight: 700;
-  margin-right: 8px;
 }
 .wedding-welcome__greeting-name {
   font-family: "WeddingCover", cursive;
-  font-size: clamp(22px, 3.0vw, 38px);
-  color: #3f4e3c;
+  font-size: clamp(26px, 3.6vw, 44px);
+  color: #31422e;
   font-weight: 700;
   letter-spacing: 0.02em;
 }
 .wedding-welcome__eyebrow {
   display: inline-block;
   font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: clamp(10px, 1.1vw, 13px);
+  font-size: clamp(11px, 1.2vw, 14px);
   font-weight: 800;
   letter-spacing: .22em;
-  color: #7b8e7e;
-  margin: 0 0 4px;
+  color: #708473;
+  margin: 0 0 8px;
+  text-transform: uppercase;
 }
 .wedding-welcome h1 { font-size: clamp(38px, 7.2vw, 86px); line-height: 1.14; color: #ad7368; margin: 10px 0 10px; transform: rotate(-2deg); white-space: nowrap; }
 .wedding-welcome h1 span { color: #849d8e; font-size: .65em; }

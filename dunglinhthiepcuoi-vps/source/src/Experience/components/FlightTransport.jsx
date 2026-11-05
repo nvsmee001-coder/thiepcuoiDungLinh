@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { PaperCutout } from "./PaperScenery";
+import PhotoMemoryCutout from "./PhotoMemoryCutout";
 import { initialPandaPoints, SHIFT_X_AMOUNT } from "./curve";
 import { RIDER_SCALE, RIDER_CONTACT_Y } from "../utils/riderAttachment";
 import { FLIGHT_STOP, JUMP_END, flightDestinationX, sampleLoopFlight, sampleTouchdown, sampleBikeJump, smoothFlight } from "../utils/flightLanding";
@@ -9,6 +9,9 @@ import { FLIGHT_STOP, JUMP_END, flightDestinationX, sampleLoopFlight, sampleTouc
 export default function FlightTransport({ scrollProgress, cameraScrollCurve, riderAnchors, sceneGroupRef }) {
   const rig = useRef(), seat = useRef(), jumpAnchor = useRef(), gear = useRef();
   const wasVisible = useRef(false), parkedLoop = useRef(null);
+  const [enabled, setEnabled] = useState(false);
+  const [flightPhotoOpen, setFlightPhotoOpen] = useState(false);
+  const flightPhotoOpenRef = useRef(false);
   const scratch = useMemo(() => ({
     start: new THREE.Vector3(), cruiseEnd: new THREE.Vector3(),
     landEnd: new THREE.Vector3(), bike: new THREE.Vector3(),
@@ -19,26 +22,20 @@ export default function FlightTransport({ scrollProgress, cameraScrollCurve, rid
   useFrame(() => {
     const flying = cameraScrollCurve.transitionCurveActive.current;
     const progress = scrollProgress.current, loop = cameraScrollCurve.loopCounter.current;
-    const last = initialPandaPoints.at(-1);
-    scratch.start.set(last.x + SHIFT_X_AMOUNT * (loop - 1), last.y + 6.15845 + RIDER_CONTACT_Y.plane * RIDER_SCALE, last.z);
-
-    // Máy bay đỗ chờ sẵn trên đường băng từ 0.88 -> 1.0 để thấy rõ cảnh thú mỏ vịt bước lên máy bay
-    const waiting = !flying && progress >= 0.88;
+    // Leave the landed aircraft beside the bicycle until it is behind the
+    // camera. It never appears in the first visit's walking introduction.
     const parked = !flying && parkedLoop.current === loop - 1 && progress <= .13;
-    const visible = flying || parked || waiting;
-    if (visible !== wasVisible.current) { wasVisible.current = visible; }
+    const visible = flying || parked;
+    if (visible !== wasVisible.current) { wasVisible.current = visible; setEnabled(visible); }
     rig.current.visible = visible;
     riderAnchors.current.plane = seat.current;
     riderAnchors.current.jump = jumpAnchor.current;
 
-    if (waiting) {
-      rig.current.position.copy(scratch.start);
-      rig.current.quaternion.identity();
-      if (gear.current) {
-        gear.current.visible = true;
-        gear.current.scale.y = 1;
-      }
-      return;
+    // Tự động mở ảnh cưới máy bay khi đang bay trên trời (0.10 -> 0.78), tự đóng khi hạ cánh
+    const shouldShowPhoto = flying && progress >= 0.10 && progress <= 0.78;
+    if (shouldShowPhoto !== flightPhotoOpenRef.current) {
+      flightPhotoOpenRef.current = shouldShowPhoto;
+      setFlightPhotoOpen(shouldShowPhoto);
     }
 
     if (!flying || !riderAnchors.current.walkStart || !riderAnchors.current.bike) return;
@@ -55,6 +52,8 @@ export default function FlightTransport({ scrollProgress, cameraScrollCurve, rid
     scratch.landEnd.copy(scratch.bike);
     scratch.landEnd.x -= 2.8;
     scratch.landEnd.y += .05;
+    const last = initialPandaPoints.at(-1);
+    scratch.start.set(last.x + SHIFT_X_AMOUNT * (loop - 1), last.y + 6.15845 + RIDER_CONTACT_Y.plane * RIDER_SCALE, last.z);
 
     if (progress < FLIGHT_STOP) {
       const t = progress / FLIGHT_STOP;
@@ -97,7 +96,10 @@ export default function FlightTransport({ scrollProgress, cameraScrollCurve, rid
         </mesh>
       </group>)}
     </group>
-    <PaperCutout asset="crayon-airplane" position={[.05, -.025, -.045]} size={[2.75, 1.27]} />
+    <PhotoMemoryCutout enabled={enabled} forceOpen={flightPhotoOpen} asset="crayon-airplane" position={[.05, -.025, -.045]}
+      size={[2.75, 1.27]} popupSide="right" hintPlacement="below"
+      photo="/media/airline-wedding.jpg" label="Ảnh cưới của chúng mình"
+      alt="Ảnh cưới của chúng mình dưới mái vòm lúc hoàng hôn" />
     </group>
   </group>;
 }

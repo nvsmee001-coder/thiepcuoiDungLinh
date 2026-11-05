@@ -104,11 +104,11 @@ const Scene = ({
       }
 
       const now = performance.now();
-      const isDampened = pauseScrollUntilRef && now < pauseScrollUntilRef.current;
+      const isDampened = !flying && pauseScrollUntilRef && now < pauseScrollUntilRef.current;
       if (autoScroll) {
-        // Tốc độ bình thường 0.052; khi có ảnh mở hoặc thiệp thì trôi chậm (0.015) để người xem kịp ngắm,
-        // sau đó tự động tăng tốc trở lại, không bao giờ dừng hẳn làm đơ màn hình
-        const speed = isDampened ? 0.015 : 0.052;
+        // Tốc độ lúc bay là 0.28 (~3.0s cả chặng bay, hào hứng và bay nhanh);
+        // Trên mặt đất: bình thường 0.052, khi có ảnh mở hoặc thiệp thì trôi chậm (0.015)
+        const speed = flying ? 0.28 : (isDampened ? 0.015 : 0.052);
         targetScrollProgress.current += delta * speed;
       }
 
@@ -151,6 +151,9 @@ const Scene = ({
       targetScrollProgress.current += 1;
       newProgress += 1;
       automaticLanding.current.active = false;
+      if (cameraScrollCurve.transitionCurveActive.current && targetScrollProgress.current >= scrollProgress.current) {
+        targetScrollProgress.current = scrollProgress.current - 0.005;
+      }
     }
 
     scrollProgress.current = newProgress;
