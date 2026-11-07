@@ -214,10 +214,10 @@
     const bName = couple.brideName || 'Khánh Linh';
     const gName = couple.groomName || 'Lê Dũng';
 
-    // Update couple names on Choice Stage
+    // Update couple names on Choice Stage (chú rể bên trên cô dâu bên dưới)
     const entryNamesEl = document.querySelector('.entry-names');
     if (entryNamesEl) {
-      entryNamesEl.innerHTML = `<span>${bName}</span><em>&amp;</em><span>${gName}</span>`;
+      entryNamesEl.innerHTML = `<span>${gName}</span><em>&amp;</em><span>${bName}</span>`;
     }
 
     // Personalized Guest Greeting Box

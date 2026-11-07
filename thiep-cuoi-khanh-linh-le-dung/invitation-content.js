@@ -220,8 +220,12 @@
     const db = getDB();
     const groomName = (db.couple && db.couple.groomName) || 'Lê Dũng';
     const brideName = (db.couple && db.couple.brideName) || 'Khánh Linh';
-    const coupleNames = `${brideName} & ${groomName}`;
-    const coupleNamesHtml = `<span>${brideName}</span><em>&amp;</em><span>${groomName}</span>`;
+    const coupleNamesGroom = `${groomName} & ${brideName}`;
+    const coupleNamesBride = `${brideName} & ${groomName}`;
+    const coupleNamesGroomHtml = `<span>${groomName}</span><em>&amp;</em><span>${brideName}</span>`;
+    const coupleNamesBrideHtml = `<span>${brideName}</span><em>&amp;</em><span>${groomName}</span>`;
+    const coupleNames = coupleNamesGroom;
+    const coupleNamesHtml = coupleNamesGroomHtml;
 
     // Monogram (e.g. L & D)
     const invCard = (db && db.invitationCard) || {};
@@ -292,7 +296,8 @@
 
     const details = {
       groom: {
-        names: coupleNames,
+        names: coupleNamesGroom,
+        namesHtml: coupleNamesGroomHtml,
         side: 'Nhà trai',
         date: groomDateIso,
         dateLabel: groomParsed.dotDate,
@@ -309,7 +314,8 @@
         description: `Tiệc cưới nhà trai: kính mời quý khách đến chung vui mừng hạnh phúc cùng gia đình chúng tôi tại ${groomLocation}. ${groomLunar}.`
       },
       bride: {
-        names: coupleNames,
+        names: coupleNamesBride,
+        namesHtml: coupleNamesBrideHtml,
         side: 'Nhà gái',
         date: brideDateIso,
         dateLabel: brideParsed.dotDate,
@@ -333,7 +339,12 @@
       groomName,
       brideName,
       coupleNames,
+      coupleNamesGroom,
+      coupleNamesBride,
+      coupleNamesGroomHtml,
+      coupleNamesBrideHtml,
       coupleNamesHtml,
+      entryNamesHtml: coupleNamesGroomHtml,
       monogramText,
       subTitle,
       kinhMoiTitle,
@@ -676,9 +687,9 @@
     const p = config.dateParts;
 
     // 1. Text & Monogram updates
-    document.querySelectorAll('.entry-names').forEach(n => n.innerHTML = configData.coupleNamesHtml);
-    document.querySelectorAll('#hero-title').forEach(n => n.innerHTML = configData.coupleNamesHtml);
-    document.querySelectorAll('.footer-names').forEach(n => n.innerHTML = configData.coupleNamesHtml);
+    document.querySelectorAll('.entry-names').forEach(n => n.innerHTML = configData.entryNamesHtml);
+    document.querySelectorAll('#hero-title').forEach(n => n.innerHTML = config.namesHtml);
+    document.querySelectorAll('.footer-names').forEach(n => n.innerHTML = config.namesHtml);
     document.querySelectorAll('.entry-photo-date').forEach(n => n.textContent = `${p.day} . ${p.month} . ${p.year}`);
     document.querySelectorAll('.monogram').forEach(n => {
       n.innerHTML = `${configData.monogramText}<i>${p.day}.${p.month}.${p.year.slice(2)}</i>`;
@@ -823,15 +834,15 @@
     renderJourney(configData.db);
 
     // 7. Page title & meta
-    document.title = `${configData.coupleNames} — Thiệp Mời ${config.side} · ${config.dateLabel}`;
+    document.title = `${config.names} — Thiệp Mời ${config.side} · ${config.dateLabel}`;
     const descMeta = document.querySelector('meta[name="description"]');
     if (descMeta) {
-      descMeta.content = `Trân trọng kính mời dự tiệc cưới ${configData.coupleNames}, lúc ${p.time} ngày ${config.dateLabel} tại ${config.location}.`;
+      descMeta.content = `Trân trọng kính mời dự tiệc cưới ${config.names}, lúc ${p.time} ngày ${config.dateLabel} tại ${config.location}.`;
     }
 
-    document.querySelectorAll('.interlude-copy>span').forEach(n => n.textContent = `${configData.coupleNames} · ${config.dateLabel}`);
-    document.querySelectorAll('.footer-demo').forEach(n => n.textContent = `THIỆP ${config.side.toUpperCase()} · ${configData.coupleNames.toUpperCase()} · ${config.dateLabel}`);
-    document.querySelectorAll('.entry-demo').forEach(n => n.textContent = `${configData.coupleNames.toUpperCase()} · THIỆP ${config.side.toUpperCase()}`);
+    document.querySelectorAll('.interlude-copy>span').forEach(n => n.textContent = `${config.names} · ${config.dateLabel}`);
+    document.querySelectorAll('.footer-demo').forEach(n => n.textContent = `THIỆP ${config.side.toUpperCase()} · ${config.names.toUpperCase()} · ${config.dateLabel}`);
+    document.querySelectorAll('.entry-demo').forEach(n => n.textContent = `${configData.coupleNamesGroom.toUpperCase()} · THIỆP ${config.side.toUpperCase()}`);
 
     document.body.classList.add('formal-invitation');
   }
