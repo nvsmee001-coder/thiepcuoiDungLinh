@@ -1,14 +1,43 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useGLTF } from "../utils/gltfLoader";
 import { useKTX2Texture } from "../utils/ktxLoader";
 import { useFrame } from "@react-three/fiber";
 import WeddingText from "../components/WeddingText";
 import ShanghaiScenery from "../components/ShanghaiScenery";
+import { LANDING_REVEAL_START } from "../utils/flightLanding";
+
+// Preserve the landing floor while the invitation's existing paper stays
+// behind the aircraft. The next world's tall wall would introduce a seam.
+function createLandingFloor(geometry) {
+  const floor = geometry.clone();
+  const positions = geometry.getAttribute("position");
+  const source = geometry.getIndex();
+  const count = source ? source.count : positions.count;
+  const indices = [];
+  for (let i = 0; i < count; i += 3) {
+    const a = source ? source.getX(i) : i;
+    const b = source ? source.getX(i + 1) : i + 1;
+    const c = source ? source.getX(i + 2) : i + 2;
+    if (Math.max(positions.getY(a), positions.getY(b), positions.getY(c)) + .605 <= 1.5) {
+      indices.push(a, b, c);
+    }
+  }
+  floor.setIndex(indices);
+  floor.clearGroups();
+  return floor;
+}
 
 export default function Model({ scrollProgress, transitioning, ...props }) {
   const { nodes } = useGLTF("/models/scene_1.glb");
   const scene_1 = useKTX2Texture("/textures/scene_1.ktx2");
   const background = useKTX2Texture("/textures/scene_1_bg.ktx2");
+  const backgroundMeshes = [useRef(), useRef()];
+  const backgroundGeometry = useMemo(() => [
+    nodes["First_Scene_-_Bg"].geometry,
+    nodes["First_Scene_-_Bg001"].geometry,
+  ], [nodes]);
+  const landingFloors = useMemo(() => backgroundGeometry.map(createLandingFloor), [backgroundGeometry]);
+  useEffect(() => () => landingFloors.forEach((geometry) => geometry.dispose()), [landingFloors]);
   const grass1 = useRef();
   const grass2 = useRef();
   const grass3 = useRef();
@@ -22,6 +51,12 @@ export default function Model({ scrollProgress, transitioning, ...props }) {
   const grass11 = useRef();
   const grass = useMemo(() => [grass1,grass2,grass3,grass4,grass5,grass6,grass7,grass8,grass9,grass10,grass11], []);
   useFrame(({ scene }) => {
+    const paperOnly = transitioning?.current && scrollProgress.current < LANDING_REVEAL_START;
+    for (let i = 0; i < backgroundMeshes.length; i++) {
+      if (backgroundMeshes[i].current) {
+        backgroundMeshes[i].current.geometry = paperOnly ? landingFloors[i] : backgroundGeometry[i];
+      }
+    }
     const t = scene.userData.animationTime || 0;
     grass.forEach((ref, i) => {
       if (ref.current) ref.current.scale.z = 0.9 + 0.1 * Math.sin(t * (2.9 + i * 0.017));
@@ -29,8 +64,8 @@ export default function Model({ scrollProgress, transitioning, ...props }) {
   });
   return (
     <group {...props} dispose={null}>
-      <mesh geometry={nodes["First_Scene_-_Bg"].geometry} material={background} position={[-21.188, 0.605, -0.262]} />
-      <mesh geometry={nodes["First_Scene_-_Bg001"].geometry} material={background} position={[-21.188, 0.605, -0.262]} />
+      <mesh ref={backgroundMeshes[0]} geometry={backgroundGeometry[0]} material={background} position={[-21.188, 0.605, -0.262]} />
+      <mesh ref={backgroundMeshes[1]} geometry={backgroundGeometry[1]} material={background} position={[-21.188, 0.605, -0.262]} />
       <ShanghaiScenery scrollProgress={scrollProgress} transitioning={transitioning} />
       <mesh
         ref={grass11}

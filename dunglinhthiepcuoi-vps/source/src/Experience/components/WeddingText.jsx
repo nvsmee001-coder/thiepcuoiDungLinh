@@ -1,6 +1,7 @@
 import { useCityLayoutScale } from "./CityLayout";
 import { useEffect, useState } from "react";
 import * as THREE from "three";
+import StoryArrow from "./StoryArrow";
 
 let fontsReady;
 function loadFonts() {
@@ -90,9 +91,12 @@ export default function WeddingText({ kind }) {
 
   if (!texture) return null;
   return (
-    <mesh renderOrder={2} scale={[1 / cityScale, 1, 1]}>
+    <group scale={[1 / cityScale, 1, 1]}>
+    <mesh renderOrder={2}>
       <planeGeometry args={welcome ? [2.32156, 1.59343] : [1.97021, 1.94587]} />
       <meshBasicMaterial map={texture} transparent alphaTest={0.05} depthWrite side={THREE.DoubleSide} forceSinglePass toneMapped={false} />
     </mesh>
+    {!welcome && <StoryArrow />}
+    </group>
   );
 }

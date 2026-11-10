@@ -27,7 +27,6 @@ const Experience = ({ enabled = true, autoScroll = false, onReady }) => {
     const handlePhotoOpened = (e) => {
       const duration = e?.detail?.duration || 1300;
       const now = performance.now();
-      // Khóa/hãm cuộn trong khoảng thời gian duration (1.3s)
       pauseScrollUntilRef.current = Math.max(pauseScrollUntilRef.current, now + duration);
     };
 
@@ -39,7 +38,6 @@ const Experience = ({ enabled = true, autoScroll = false, onReady }) => {
     if (!enabled) { isSwiping.current = false; lastTouch.current = null; return; }
 
     const getDampening = () => {
-      // Khi đang trong thời gian hãm (ảnh hiện lên): giảm 92% lực lăn chuột
       if (performance.now() < pauseScrollUntilRef.current) {
         return 0.08;
       }

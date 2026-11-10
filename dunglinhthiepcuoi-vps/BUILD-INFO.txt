@@ -1,10 +1,12 @@
 Thiệp cưới Dũng & Linh — VPS package
-Source commit: 4505f9f549fa8b5eff751726494f88635d7183f2
+Source commit: 6e37bcc1acc1058f2f569cd8d38ce4bec880f93c
 Build command: npm run build (Vite build via Sites helper)
-Package date: 2026-11-03 (Asia/Ho_Chi_Minh)
-Production files: 126
-Source files: 194
-Includes four new food-photo popups in Hanoi and Bac Ninh.
+Package date: 2026-11-09 (Asia/Ho_Chi_Minh)
+Production files: 129
+Source files: 215
+All seven photo popups open automatically on approach, one at a time.
+Photos use optimized WebP files; original full-size images are excluded.
+Includes a wooden canoe and an attached rowing paddle in Ha Long Bay.
 Includes groom and bride venue cards with crayon corner labels.
 Photo popup arrows remain; the small interaction labels have been removed.
 Includes landscape phone camera, attached bike/boat rider, opening cover and local background music.

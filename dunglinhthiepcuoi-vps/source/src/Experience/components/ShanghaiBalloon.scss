@@ -41,8 +41,9 @@
   img {
     display: block;
     width: auto;
-    height: min(70vh, 620px);
-    max-width: 43vw;
+    height: auto;
+    max-height: min(70vh, 620px);
+    max-width: 30vw;
     object-fit: contain;
   }
 }

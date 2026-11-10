@@ -1,4 +1,5 @@
 import "./WeddingWelcome.scss";
+import { optimizedPhoto } from "../../Experience/utils/photoAssets";
 
 export function RotateNotice() {
   return <div className="rotate-notice" role="status">
@@ -11,29 +12,30 @@ export function RotateNotice() {
   </div>;
 }
 
-export default function WeddingWelcome({ onStart, rotateRequired, phone }) {
+export default function WeddingWelcome({ onStart, rotateRequired }) {
   const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
   const guestName = (searchParams?.get("to") || searchParams?.get("guest") || searchParams?.get("k") || "").trim();
 
   return <main className="wedding-welcome">
     <div className="wedding-welcome__paper">
       <div className="wedding-welcome__copy">
-        <div className="wedding-welcome__greeting">
-          <span className="wedding-welcome__greeting-label">Kính mời</span>
-          <span className="wedding-welcome__greeting-name">{guestName || "Quý khách và gia đình"}</span>
-        </div>
-        <span className="wedding-welcome__eyebrow">XEM THIỆP CƯỚI CỦA CHÚNG MÌNH</span>
-        <h1>Dũng <span>&</span> Linh</h1>
-        <p className="wedding-welcome__names">Nguyễn Lê Dũng & Phạm Khánh Linh</p>
-        <p className="wedding-welcome__date">27 · 28 / 11 / 2026</p>
+        <p className="wedding-welcome__invitation">Kính mời</p>
+        <p className="wedding-welcome__guests">{guestName || "Quý khách và gia đình"}</p>
+        <span className="wedding-welcome__eyebrow">ĐẾN DỰ ĐÁM CƯỚI CỦA CHÚNG MÌNH</span>
+        <h1><span className="wedding-welcome__name">Lê Dũng</span>{" "}<span className="wedding-welcome__name"><span className="wedding-welcome__ampersand">&</span> Khánh Linh</span></h1>
+        <p className="wedding-welcome__date"><time dateTime="2026-11-28T10:00:00+07:00">28/11/2026</time>{" "}<span>lúc <strong>10h00</strong></span></p>
+        <p className="wedding-welcome__venue">
+          <span>tại trung tâm Đại Hoàng Sơn Palace</span>{" "}
+          <span>54 Hùng Vương, Bắc Giang, TP Bắc Ninh</span>
+        </p>
         {rotateRequired ? <RotateNotice /> : <>
-          <p className="wedding-welcome__instruction">{phone ? "Vuốt ngang để cùng tụi mình đi qua những kỷ niệm." : "Cuộn hoặc kéo để cùng tụi mình đi qua những kỷ niệm."}</p>
+          <p className="wedding-welcome__instruction">Vui lòng cuộn và kéo để xem thiệp</p>
           <button onClick={onStart} className="wedding-welcome__start">Mở thiệp cưới</button>
         </>}
       </div>
       <div className="wedding-welcome__art" aria-hidden="true">
         <img className="wedding-welcome__castle" src="/scenery/enchanted-castle.svg" alt="" />
-        <img className="wedding-welcome__couple" src="/media/wedding-couple-portrait.png" alt="" />
+        <img className="wedding-welcome__couple" src={optimizedPhoto("/media/wedding-couple-portrait.png")} alt="" />
         <span className="wedding-welcome__heart">♡</span>
       </div>
     </div>

@@ -1,8 +1,10 @@
 import { frameAlpha } from "./utils/frameTiming";
+import { advanceInvitationLift, INVITATION_CLOSE_TRIGGER } from "./utils/invitationTransition";
 import { createRotationSampler } from "./utils/cameraRotation";
 import RendererWarmup from "./components/RendererWarmup";
 import FlightTransport from "./components/FlightTransport";
-import { sceneryLoopIndex, constrainJourneyTarget, stepAutomaticLanding, BIKE_BOARD_END, FLIGHT_STOP } from "./utils/flightLanding";
+import PhotoMemoryProvider from "./components/PhotoMemoryProvider";
+import { sceneryLoopIndex, constrainJourneyTarget, stepAutomaticTakeoff, stepAutomaticLanding, BIKE_BOARD_END, FLIGHT_STOP, TAKEOFF_END } from "./utils/flightLanding";
 import CityLayout from "./components/CityLayout";
 import { cityTravelSpeed } from "./utils/cityLayout";
 import { React, Suspense, useMemo, useRef } from "react";
@@ -50,10 +52,16 @@ const Scene = ({
   const sceneGroupRef = useRef();
   const riderAnchors = useRef({ bike: null, boat: null, plane: null, jump: null, walkStart: null });
   const automaticLanding = useRef({ active: false });
+  const automaticTakeoff = useRef({ cancelled: false });
+  const invitationTransition = useRef({ lifting: false, lift: 0, elapsed: 0, phase: "idle", reopening: false });
   const coupleSlowTriggered = useRef(false);
-  const venue1SlowTriggered = useRef(false);
-  const venue2SlowTriggered = useRef(false);
+  const venueSlowTriggered = useRef(false);
+  const invitationCamera = useMemo(() => ({
+    position: new THREE.Vector3(), rotation: new THREE.Quaternion(),
+    localPosition: new THREE.Vector3(), localRotation: new THREE.Quaternion(),
+  }), []);
   const riderRef = useRef();
+  const framingTarget = useMemo(() => new THREE.Object3D(), []);
   const size = useThree((state) => state.size);
   const singleSheetRef = useRef();
 
@@ -70,46 +78,42 @@ const Scene = ({
   const targetRotation = useMemo(() => new THREE.Quaternion(), []);
   const phone = useMemo(() => isPhoneViewport(size.width, size.height, window.matchMedia("(pointer: coarse)").matches), [size.width, size.height]);
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
     const flying = cameraScrollCurve.transitionCurveActive.current;
-    if (!flying) automaticLanding.current.active = false;
-    const automaticProgress = flying ? stepAutomaticLanding(
-      automaticLanding.current, scrollProgress.current, targetScrollProgress.current, delta,
+    if (!flying) {
+      automaticLanding.current.active = false;
+      automaticTakeoff.current.cancelled = false;
+    }
+    const takeoffProgress = flying ? stepAutomaticTakeoff(
+      automaticTakeoff.current, scrollProgress.current, targetScrollProgress.current, delta,
     ) : null;
+    const automaticProgress = takeoffProgress ?? (flying ? stepAutomaticLanding(
+      automaticLanding.current, scrollProgress.current, targetScrollProgress.current, delta,
+    ) : null);
     let newProgress;
     if (automaticProgress !== null) {
       // One clock owns touchdown and the jump, even after scrolling stops.
       newProgress = automaticProgress;
       targetScrollProgress.current = automaticProgress;
     } else {
-      // Tự động kích hoạt cơ chế slow/pause khi lướt tới ảnh dâu rể và 2 tấm thiệp cưới:
       if (!flying) {
-        if (scrollProgress.current < 0.78) {
+        if (scrollProgress.current < 0.75) {
           coupleSlowTriggered.current = false;
         }
-        if (scrollProgress.current < 0.89) {
-          venue1SlowTriggered.current = false;
-        }
-        if (scrollProgress.current < 0.935) {
-          venue2SlowTriggered.current = false;
+        if (scrollProgress.current < 0.88) {
+          venueSlowTriggered.current = false;
         }
 
-        // Khựng 1 nhịp khi ảnh cô dâu chú rể đã hiện lên hoàn chỉnh (ảnh 1):
-        if (!coupleSlowTriggered.current && scrollProgress.current >= 0.815 && scrollProgress.current <= 0.835) {
+        // Khựng 1 nhịp khi ảnh cô dâu chú rể đã hiện lên hoàn chỉnh (dừng trước mặt dâu rể):
+        if (!coupleSlowTriggered.current && scrollProgress.current >= 0.782 && scrollProgress.current <= 0.804) {
           coupleSlowTriggered.current = true;
           window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "couple-stand", duration: 1800 } }));
         }
 
-        // Tấm thiệp 1 (Nhà Trai - hiển thị trọn vẹn sau khi nhảy tiếp đất):
-        if (!venue1SlowTriggered.current && scrollProgress.current >= 0.908 && scrollProgress.current <= 0.928) {
-          venue1SlowTriggered.current = true;
-          window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "venue-card-1", duration: 1500 } }));
-        }
-
-        // Tấm thiệp 2 (Nhà Gái - chính giữa tấm thiệp thứ 2):
-        if (!venue2SlowTriggered.current && scrollProgress.current >= 0.945 && scrollProgress.current <= 0.965) {
-          venue2SlowTriggered.current = true;
-          window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "venue-card-2", duration: 1500 } }));
+        // Tấm thiệp cưới (dừng lại/chậm lại cho khách đọc thiệp trước khi thiệp nâng lên):
+        if (!venueSlowTriggered.current && scrollProgress.current >= 0.93 && scrollProgress.current <= 0.955) {
+          venueSlowTriggered.current = true;
+          window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "venue-card", duration: 1800 } }));
         }
       }
 
@@ -128,6 +132,37 @@ const Scene = ({
       newProgress = THREE.MathUtils.lerp(scrollProgress.current, targetScrollProgress.current, frameAlpha(.1, delta));
     }
 
+    const closing = invitationTransition.current;
+    if (!flying && closing.phase === "flight") {
+      closing.phase = "idle"; closing.lift = 0;
+    }
+    if (!flying && !closing.lifting && newProgress >= INVITATION_CLOSE_TRIGGER && targetScrollProgress.current >= 1) {
+      closing.lifting = true; closing.phase = "lifting"; closing.elapsed = 0;
+      closing.reopening = false; closing.lift = 0;
+      invitationCamera.position.copy(cameraGroup.current.position);
+      invitationCamera.rotation.copy(cameraGroup.current.quaternion);
+      invitationCamera.localPosition.copy(camera.current.position);
+      invitationCamera.localRotation.copy(camera.current.quaternion);
+      targetScrollProgress.current = INVITATION_CLOSE_TRIGGER;
+    }
+    if (closing.lifting) {
+      const reverse = targetScrollProgress.current < INVITATION_CLOSE_TRIGGER - .002;
+      if (reverse) closing.resumeTarget = targetScrollProgress.current;
+      advanceInvitationLift(closing, delta, reverse);
+      newProgress = INVITATION_CLOSE_TRIGGER;
+      targetScrollProgress.current = INVITATION_CLOSE_TRIGGER;
+      if (closing.complete) {
+        closing.lifting = false; closing.phase = "flight";
+        cameraScrollCurve.transitionCurveActive.current = true;
+        cameraScrollCurve.initiateTransitionCurve();
+        automaticTakeoff.current.cancelled = false;
+        newProgress = 0; targetScrollProgress.current = 0;
+      } else if (closing.cancelled) {
+        closing.lifting = false; closing.phase = "idle";
+        targetScrollProgress.current = closing.resumeTarget ?? INVITATION_CLOSE_TRIGGER;
+      }
+    }
+
     if (newProgress >= 1) {
       if (cameraScrollCurve.transitionCurveActive.current) {
         cameraScrollCurve.transitionCurveActive.current = false;
@@ -142,8 +177,7 @@ const Scene = ({
         cameraScrollCurve.transitionCurveActive.current = true;
         cameraScrollCurve.initiateTransitionCurve();
         coupleSlowTriggered.current = false;
-        venue1SlowTriggered.current = false;
-        venue2SlowTriggered.current = false;
+        venueSlowTriggered.current = false;
         newProgress = Math.min(FLIGHT_STOP, newProgress - 1);
         targetScrollProgress.current = Math.min(FLIGHT_STOP, targetScrollProgress.current - 1);
       }
@@ -156,32 +190,31 @@ const Scene = ({
         cameraScrollCurve.transitionCurveActive.current = true;
         cameraScrollCurve.initiateTransitionCurve();
         coupleSlowTriggered.current = false;
-        venue1SlowTriggered.current = false;
-        venue2SlowTriggered.current = false;
+        venueSlowTriggered.current = false;
       }
       scrollProgress.current += 1;
       targetScrollProgress.current += 1;
       newProgress += 1;
       automaticLanding.current.active = false;
-      if (cameraScrollCurve.transitionCurveActive.current && targetScrollProgress.current >= scrollProgress.current) {
-        targetScrollProgress.current = scrollProgress.current - 0.005;
-      }
     }
 
     scrollProgress.current = newProgress;
 
     if (cameraScrollCurve.transitionCurveActive.current) {
-      scrollSpeedMultiplier.current = newProgress <= 0.95 ? 6 : 1;
+      scrollSpeedMultiplier.current = newProgress < TAKEOFF_END ? 1.5 : newProgress <= 0.95 ? 6 : 1;
     } else {
       const localX = cameraScrollCurve.getCurrentPoint(newProgress).x - SHIFT_X_AMOUNT * (cameraScrollCurve.loopCounter.current - 1);
       scrollSpeedMultiplier.current = cityTravelSpeed(localX);
     }
 
-    // Keep the next notebook wall away from both final invitations. Swap the
-    // scenery only once the plane is over the gap; reversing uses the same edge.
+    // Keep the same notebook backdrop while the card lifts and the plane rises.
     if (sceneGroupRef.current) sceneGroupRef.current.position.x = SHIFT_X_AMOUNT * sceneryLoopIndex(
       cameraScrollCurve.loopCounter.current, cameraScrollCurve.transitionCurveActive.current, newProgress,
     );
+    const cardStage = closing.lifting ? "lifting" : cameraScrollCurve.transitionCurveActive.current ? "flight" : "idle";
+    if (state.gl.domElement.dataset.cardTransition !== cardStage) state.gl.domElement.dataset.cardTransition = cardStage;
+    const cardLift = closing.lift.toFixed(3);
+    if (state.gl.domElement.dataset.cardLift !== cardLift) state.gl.domElement.dataset.cardLift = cardLift;
     if (
       newProgress >= SINGLE_FORWARD_TRIGGER &&
       !cameraScrollCurve.transitionCurveActive.current
@@ -201,6 +234,18 @@ const Scene = ({
     const alpha = frameAlpha(.1, delta);
     const newProgress = scrollProgress.current;
     const basePoint = cameraScrollCurve.getCurrentPoint(newProgress);
+
+    const closing = invitationTransition.current;
+    if (closing.lifting) {
+      // Pull straight up in the visitor's current view; no zoom or camera pan.
+      cameraGroup.current.position.copy(invitationCamera.position);
+      cameraGroup.current.quaternion.copy(invitationCamera.rotation);
+      camera.current.position.copy(invitationCamera.localPosition);
+      camera.current.quaternion.copy(invitationCamera.localRotation);
+      cameraGroup.current.updateMatrixWorld(true);
+      camera.current.updateMatrixWorld();
+      return;
+    }
 
 
     cameraGroup.current.position.x = THREE.MathUtils.lerp(
@@ -250,14 +295,14 @@ const Scene = ({
       camera.current.fov = fov;
       camera.current.updateProjectionMatrix();
     }
-    if (phone && riderRef.current) framePhoneRider(cameraGroup.current, camera.current, riderRef.current);
+    if (phone && riderRef.current) framePhoneRider(cameraGroup.current, camera.current, framingTarget);
     else if (cameraScrollCurve.transitionCurveActive.current && riderRef.current) {
-      frameRiderOnScreen(cameraGroup.current, camera.current, riderRef.current, 0, .1);
+      frameRiderOnScreen(cameraGroup.current, camera.current, framingTarget, 0, .1);
     }
   }, -1);
 
   return (
-    <>
+    <PhotoMemoryProvider riderRef={riderRef}>
       <Suspense fallback={null}>
         <RendererWarmup onReady={onReady} />
         <group ref={sceneGroupRef}>
@@ -277,12 +322,14 @@ const Scene = ({
           cameraScrollCurve={cameraScrollCurve}
           riderAnchors={riderAnchors}
           riderRef={riderRef}
+          framingTarget={framingTarget}
         />
         <group ref={singleSheetRef}>
-          <SingleSheet scrollProgress={scrollProgress} />
+          <SingleSheet scrollProgress={scrollProgress} transitioning={cameraScrollCurve.transitionCurveActive}
+            transitionRef={invitationTransition} />
         </group>
       </Suspense>
-    </>
+    </PhotoMemoryProvider>
   );
 };
 

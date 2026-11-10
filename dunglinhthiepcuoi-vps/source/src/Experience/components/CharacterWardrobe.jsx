@@ -13,9 +13,9 @@ const OUTFITS = [
 ];
 const FILES = OUTFITS.flatMap(({ layers }) => layers);
 
-export default function CharacterWardrobe({ scrollProgress, cameraScrollCurve }) {
+export default function CharacterWardrobe({ scrollProgress, cameraScrollCurve, swimPose }) {
   const groups = useRef({});
-  const selected = useRef(null);
+  const selected = useRef({ outfit: null, swimming: false });
   // Decode every layer up front, so changing scenes never waits for a fetch.
   const textures = useTexture(FILES.map((name) => `/wardrobe/${name}.svg`));
   const maps = useMemo(() => Object.fromEntries(FILES.map((name, i) => {
@@ -28,10 +28,16 @@ export default function CharacterWardrobe({ scrollProgress, cameraScrollCurve })
       scrollProgress.current,
       cameraScrollCurve.transitionCurveActive.current,
     );
-    if (outfit === selected.current) return;
-    selected.current = outfit;
-    for (const { name } of OUTFITS) {
-      if (groups.current[name]) groups.current[name].visible = name === outfit;
+    const swimming = (swimPose?.current.swimWeight || 0) > .02;
+    if (outfit === selected.current.outfit && swimming === selected.current.swimming) return;
+    selected.current.outfit = outfit;
+    selected.current.swimming = swimming;
+    for (const { name, layers } of OUTFITS) {
+      const group = groups.current[name];
+      if (!group) continue;
+      group.visible = name === outfit;
+      // The moving blue flippers remain free while the torso keeps its outfit.
+      for (let i = 0; i < layers.length; i++) group.children[i].visible = !swimming || !layers[i].endsWith("-sleeves");
     }
   });
 

@@ -14,13 +14,18 @@ import { useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { portraitShouldStand } from "../utils/portraitReveal";
 import VenueInvitation from "../components/VenueInvitation";
+import { optimizedPhoto } from "../utils/photoAssets";
+import { FLIGHT_STOP, LANDING_REVEAL_START, smoothFlight } from "../utils/flightLanding";
 
-export default function Model({ scrollProgress, ...props }) {
+export default function Model({ scrollProgress, transitioning, transitionRef, ...props }) {
   const { nodes, materials } = useGLTF("/models/single_sheet.glb");
 
-  const singlesheet = useKTX2Texture("/textures/single_sheet.ktx2");
+  const singlesheet = useKTX2Texture("/textures/single_sheet.ktx2", true, 0);
+  // A background must not write depth over the next page's handwriting.
+  useMemo(() => { singlesheet.depthWrite = false; }, [singlesheet]);
+  const backdrop = useRef();
 
-  const portrait = useTexture("/media/wedding-couple-portrait.png");
+  const portrait = useTexture(optimizedPhoto("/media/wedding-couple-portrait.png"));
   useMemo(() => { portrait.colorSpace = THREE.SRGBColorSpace; }, [portrait]);
 
   const kpopRumiRef = useRef();
@@ -53,6 +58,14 @@ export default function Model({ scrollProgress, ...props }) {
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
     const currentProgress = scrollProgress.current;
+    const flight = Boolean(transitioning?.current);
+    const lifting = Boolean(transitionRef?.current.lifting);
+    const paperOpacity = flight
+      ? 1 - smoothFlight((currentProgress - LANDING_REVEAL_START) / (FLIGHT_STOP - LANDING_REVEAL_START))
+      : currentProgress >= .5 ? 1 : 0;
+    if (backdrop.current) backdrop.current.visible = paperOpacity > .001;
+    singlesheet.opacity = paperOpacity;
+    if (kpopSignGroupRef.current) kpopSignGroupRef.current.visible = !flight;
 
     const shouldStand = portraitShouldStand(currentProgress, lastScrollStateRumi.current === true);
     if (kpopRumiRef.current && lastScrollStateRumi.current !== shouldStand) {
@@ -90,7 +103,10 @@ export default function Model({ scrollProgress, ...props }) {
     lastScrollStateRumi.current = shouldStand;
 
     const isAbove093 = currentProgress >= 0.85;
-    if (
+    if (flight || lifting) {
+      gsap.killTweensOf(kpopSignRef.current.rotation);
+      kpopSignRef.current.rotation.y = 0;
+    } else if (
       lastScrollStateSign.current !== null &&
       lastScrollStateSign.current !== isAbove093
     ) {
@@ -130,8 +146,8 @@ export default function Model({ scrollProgress, ...props }) {
     randomOffsets.kpopRumi.rotation.z =
       Math.sin(randomOffsets.kpopRumi.time * 0.8 + 2.2) * rumiRotAmp * 0.2;
 
-    const signPosAmp = 0.025;
-    const signRotAmp = 0.2;
+    const signPosAmp = lifting ? 0 : 0.025;
+    const signRotAmp = lifting ? 0 : 0.2;
     randomOffsets.kpopSign.position.x =
       Math.sin(randomOffsets.kpopSign.time * 0.7 + 1.1) * signPosAmp * 0.4;
     randomOffsets.kpopSign.position.y =
@@ -144,8 +160,9 @@ export default function Model({ scrollProgress, ...props }) {
       Math.sin(randomOffsets.kpopSign.time * 0.7 + 2.6) * signRotAmp * 0.2;
 
     if (kpopRumiGroupRef.current) {
+      if (flight) kpopRumiGroupRef.current.visible = false;
       kpopRumiGroupRef.current.position.set(
-        expandWorldX(28.35) -
+        expandWorldX(26.255) -
           SHIFT_X_AMOUNT +
           randomOffsets.kpopRumi.basePosition.x +
           randomOffsets.kpopRumi.position.x,
@@ -172,7 +189,7 @@ export default function Model({ scrollProgress, ...props }) {
           SHIFT_X_AMOUNT +
           randomOffsets.kpopSign.basePosition.x +
           randomOffsets.kpopSign.position.x,
-        5.05 +
+        5.5 +
           randomOffsets.kpopSign.basePosition.y +
           randomOffsets.kpopSign.position.y,
         -2.493 +
@@ -192,6 +209,14 @@ export default function Model({ scrollProgress, ...props }) {
 
   return (
     <group {...props} dispose={null}>
+      {/* Carry the same paper behind the plane, in front of the next wall. */}
+      <group ref={backdrop} position={[0, 0, .35]}>
+      {/* Landscape phones reveal more above the aircraft during ascent. */}
+      {[28.345, 35.245, 42.145].map((x) => <mesh key={x}
+        geometry={nodes.Single_Sheet_Baked.geometry}
+        material={singlesheet}
+        position={[expandWorldX(x) - SHIFT_X_AMOUNT, 12.692856, -2.755]}
+        rotation={[Math.PI / 2, 0, 0]} />)}
       <mesh
         geometry={nodes.Single_Sheet_Baked.geometry}
         material={singlesheet}
@@ -235,6 +260,8 @@ export default function Model({ scrollProgress, ...props }) {
         rotation={[Math.PI / 2, 0, 0]}
       />
 
+      </group>
+
       <group ref={kpopRumiGroupRef} visible={false}>
         <mesh position={[0, -2, -0.035]}>
           <boxGeometry args={[0.035, 4, 0.035]} />
@@ -254,12 +281,9 @@ export default function Model({ scrollProgress, ...props }) {
         </group>
       </group>
 
-      <group ref={kpopSignGroupRef} scale={0.82}>
+      <group ref={kpopSignGroupRef}>
         <group ref={kpopSignRef} rotation={[0, Math.PI / 2, 0]}>
-          <VenueInvitation />
-          <group position={[5.8, 0, 0]}>
-            <VenueInvitation side="bride" />
-          </group>
+          <VenueInvitation transitionRef={transitionRef} />
         </group>
       </group>
     </group>

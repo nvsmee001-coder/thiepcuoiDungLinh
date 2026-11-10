@@ -33,6 +33,18 @@ test("phone camera keeps the attached rider inside the left third for both lands
   }
 });
 
+test("framing the surface lets the diver leave the bottom of a landscape phone", () => {
+  const rig = new THREE.Group(), camera = new THREE.PerspectiveCamera(42, 844 / 390, .1, 100);
+  const surface = new THREE.Object3D(), diver = new THREE.Object3D();
+  rig.add(camera); rig.position.set(5, 4, 10);
+  surface.position.set(2, 3, -1.4);
+  diver.position.copy(surface.position); diver.position.y -= 8;
+  surface.updateMatrixWorld(); diver.updateMatrixWorld();
+  framePhoneRider(rig, camera, surface);
+  assert.ok(Math.abs(surface.position.clone().project(camera).y + .4) < 1e-9);
+  assert.ok(diver.position.clone().project(camera).y < -1.5);
+});
+
 test("opening walks first, then cycles; the plane is confined to the loop", () => {
   assert.equal(getRiderMode(0), "walk");
   assert.equal(getRiderMode(.04), "walk");

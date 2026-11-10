@@ -4,8 +4,8 @@ import * as THREE from "three";
 const depthZValue = 5;
 const heightYValueAdjustment = 2;
 
-// Continue through both venue cards before looping back to the welcome scene.
-const LAST_X = 39.1;
+// Finish at the venue card, then lift it straight into the flight.
+const LAST_X = 33.1;
 const FIRST_X = -20.202141;
 export const SHIFT_X_AMOUNT = expandWorldX(LAST_X) - expandWorldX(FIRST_X) + 6.62;
 const test = 0;

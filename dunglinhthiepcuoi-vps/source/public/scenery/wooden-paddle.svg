@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="900" viewBox="0 0 180 900">
+  <defs>
+    <path id="paddle" d="M80 28q11-8 21 0l-1 504c0 48 14 82 31 123 20 46 30 97 17 145-8 30-27 61-58 72-31-12-50-41-58-72-13-49-2-101 18-147 17-40 30-75 31-121Z"/>
+    <clipPath id="paddle-clip"><use href="#paddle"/></clipPath>
+    <pattern id="grain" width="43" height="91" patternUnits="userSpaceOnUse">
+      <path d="m5 2 2 33m-1 11 1 39M18 9l-1 28m1 12-1 33M30 2l1 42m1 10-2 34M40 13l-1 50" fill="none" stroke="#e7bf82" stroke-width="1.8" stroke-linecap="round" opacity=".35"/>
+      <path d="m12 11 1 28m11 12 1 32M35 4l-1 26m-30 31 1 23" fill="none" stroke="#805335" stroke-width="1.2" stroke-linecap="round" opacity=".22"/>
+    </pattern>
+  </defs>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <use href="#paddle" fill="#ba8450" stroke="#785236" stroke-width="4.5"/>
+    <g clip-path="url(#paddle-clip)">
+      <path d="M80 25h7l-1 513c-1 65-31 114-40 179-7 57 5 100 41 145-43-25-63-67-60-115 1-45 21-98 41-149 13-32 12-69 12-100Z" fill="#e2b878" opacity=".55"/>
+      <path d="M103 27h7l-4 518c1 69 50 124 48 192 4 56-20 103-60 131 21-31 36-63 37-103 3-72-42-140-40-215Z" fill="#94613d" opacity=".3"/>
+      <use href="#paddle" fill="url(#grain)"/>
+      <path d="M90 595c-3 76-18 158-2 250m10-200c13 53 22 110 6 166M69 686c-13 44-14 90 0 128" fill="none" stroke="#805333" stroke-width="2" opacity=".55"/>
+      <path d="m84 63-1 138m0 28-1 148m-1 30-1 116M56 728c-7 41 1 77 21 108m17-163c6 57 9 105 0 155" fill="none" stroke="#efcc95" stroke-width="2.5" opacity=".7"/>
+    </g>
+    <path d="M82 30q8-4 16 0m-17 8 16-1M44 799c8 25 23 46 44 57" fill="none" stroke="#e8c18a" stroke-width="2.5" opacity=".8"/>
+  </g>
+</svg>

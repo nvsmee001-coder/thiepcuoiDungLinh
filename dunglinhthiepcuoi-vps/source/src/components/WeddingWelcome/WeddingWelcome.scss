@@ -10,47 +10,26 @@
   font-family: "WeddingCover", cursive;
 }
 .wedding-welcome { padding: max(18px, env(safe-area-inset-top)) max(28px, env(safe-area-inset-right)); box-sizing: border-box; display: grid; place-items: center; }
-.wedding-welcome__paper { width: min(1080px, 100%); height: min(660px, 100%); display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; position: relative; }
-.wedding-welcome__copy { z-index: 2; padding: 20px; }
-.wedding-welcome__greeting {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 8px 12px;
-  margin: 0 0 10px;
-  line-height: 1.25;
-}
-.wedding-welcome__greeting-label {
-  font-family: "WeddingCover", cursive;
-  font-size: clamp(24px, 3.2vw, 40px);
-  color: #ad7368;
-  font-weight: 700;
-}
-.wedding-welcome__greeting-name {
-  font-family: "WeddingCover", cursive;
-  font-size: clamp(26px, 3.6vw, 44px);
-  color: #31422e;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-.wedding-welcome__eyebrow {
-  display: inline-block;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: clamp(11px, 1.2vw, 14px);
-  font-weight: 800;
-  letter-spacing: .22em;
-  color: #708473;
-  margin: 0 0 8px;
-  text-transform: uppercase;
-}
-.wedding-welcome h1 { font-size: clamp(38px, 7.2vw, 86px); line-height: 1.14; color: #ad7368; margin: 10px 0 10px; transform: rotate(-2deg); white-space: nowrap; }
-.wedding-welcome h1 span { color: #849d8e; font-size: .65em; }
-.wedding-welcome__names { font-size: clamp(11px, 1.4vw, 16px); margin: 0 0 12px; }
-.wedding-welcome__date { letter-spacing: .08em; font-size: clamp(22px, 2.8vw, 30px); line-height: 1.35; color: #a38151; margin: 8px 0 14px; }
+.wedding-welcome__paper { width: min(1080px, 100%); height: min(660px, 100%); display: grid; grid-template-columns: 1.3fr .9fr; align-items: center; position: relative; }
+.wedding-welcome__copy { z-index: 2; padding: 20px; min-width: 0; }
+.wedding-welcome__invitation { color: #ad7368; font-size: clamp(23px, 3vw, 36px); font-weight: 700; margin: 0 0 6px; }
+.wedding-welcome__guests { color: #30432e; font-size: clamp(24px, 3.3vw, 40px); font-weight: 700; line-height: 1.3; margin: 0 0 12px; }
+.wedding-welcome__eyebrow { display: block; font-family: "Plus Jakarta Sans", sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .18em; line-height: 1.6; color: #708574; }
+.wedding-welcome h1 { font-size: clamp(38px, 5vw, 64px); line-height: 1.18; color: #ad7368; margin: 22px 0 18px; transform: rotate(-2deg); font-weight: 400; }
+.wedding-welcome__name { display: block; white-space: nowrap; }
+.wedding-welcome h1 .wedding-welcome__ampersand { color: #849d8e; font-size: .65em; }
+.wedding-welcome__date { display: flex; flex-wrap: wrap; column-gap: .45em; row-gap: .08em; font-size: clamp(30px, 4.2vw, 46px); line-height: 1.35; color: #a38151; margin: 16px 0 20px; }
+.wedding-welcome__date time, .wedding-welcome__date > span { white-space: nowrap; }
+.wedding-welcome__date strong { font-weight: 700; }
+.wedding-welcome__venue { max-width: 500px; margin: -8px 0 18px; font: 700 clamp(15px, 1.5vw, 18px)/1.55 "WeddingCover", cursive; color: #a57860; letter-spacing: .015em; text-shadow: .3px .4px 0 #b6947d55; transform-origin: 35% center; animation: wedding-venue-sway 3.8s ease-in-out infinite; }
+.wedding-welcome__venue span { display: block; }
+.wedding-welcome__venue span + span { color: #6f8976; }
+@keyframes wedding-venue-sway { 0%, 100% { transform: translateY(0) rotate(-.55deg); } 50% { transform: translateY(-1px) rotate(.55deg); } }
+@media (prefers-reduced-motion: reduce) { .wedding-welcome__venue { animation: none; } }
 .wedding-welcome__instruction { max-width: 390px; font-size: 13px; line-height: 1.6; }
 .wedding-welcome__start { cursor: pointer; border: 1.5px solid #777e65; border-radius: 16px 12px 17px 10px; padding: 12px 24px; font: 700 17px "WeddingCover", cursive; color: #46584b; background: #d5dfca; box-shadow: 3px 4px 0 #66755e22; margin-top: 12px; }
 .wedding-welcome__start:hover { background: #c5d7bd; }
-.wedding-welcome__start:focus-visible, .music-toggle:focus-visible, .auto-scroll-toggle:focus-visible { outline: 3px solid #bc8676; outline-offset: 5px; }
+.wedding-welcome__start:focus-visible, .music-toggle:focus-visible { outline: 3px solid #bc8676; outline-offset: 5px; }
 .wedding-welcome__art { height: 100%; position: relative; min-height: 0; overflow: hidden; }
 .wedding-welcome__couple { position: absolute; width: 88%; height: 95%; object-fit: contain; right: 0; bottom: 0; filter: drop-shadow(5px 7px 3px #73705d20); }
 .wedding-welcome__castle { position: absolute; height: 68%; width: 65%; object-fit: contain; left: -8%; top: 8%; opacity: .42; transform: rotate(6deg); }
@@ -61,75 +40,39 @@
 .rotate-notice p { font-size: 12px; line-height: 1.6; margin-top: 8px; }
 .orientation-cover { display: grid; place-items: center; text-align: center; }
 .orientation-cover svg { margin: 0 auto 18px; width: 95px; }
-.auto-scroll-toggle {
-  position: fixed;
-  z-index: 250;
-  top: max(12px, env(safe-area-inset-top));
-  left: max(14px, env(safe-area-inset-left));
-  border: 1px solid #7e897366;
-  background: #fff9e8e8;
-  color: #596153;
-  border-radius: 20px;
-  padding: 8px 14px;
-  min-height: 36px;
-  font-size: 11px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-  backdrop-filter: blur(4px);
-  transition: all 0.2s ease;
-  font-family: inherit;
-}
-
-.auto-scroll-toggle--active {
-  background: #d5dfca;
-  color: #3b4e38;
-  border-color: #647a5f;
-  font-weight: 600;
-  box-shadow: 0 2px 6px rgba(70, 88, 75, 0.15);
-}
-
-.music-toggle {
-  position: fixed;
-  z-index: 250;
-  top: max(12px, env(safe-area-inset-top));
-  right: max(14px, env(safe-area-inset-right));
-  border: 1px solid #7e897366;
-  background: #fff9e8e8;
-  color: #596153;
-  border-radius: 20px;
-  padding: 8px 14px;
-  min-height: 36px;
-  font-size: 11px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-  backdrop-filter: blur(4px);
-  transition: all 0.2s ease;
-  font-family: inherit;
-}
+.music-toggle { position: fixed; z-index: 250; top: max(12px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right)); border: 1px solid #7e897366; background: #fff9e8e8; color: #596153; border-radius: 20px; padding: 8px 13px; min-height: 36px; font-size: 11px; cursor: pointer; }
 
 @media (max-height: 500px) and (orientation: landscape) {
   .wedding-welcome { padding: max(12px, env(safe-area-inset-top)) max(28px, env(safe-area-inset-left)); }
   .wedding-welcome__copy { padding: 5px 12px; }
-  .wedding-welcome h1 { font-size: clamp(36px, 7.4vw, 65px); margin: 6px 0; }
-  .wedding-welcome__date { margin: 6px 0; font-size: clamp(18px, 2.8vw, 24px); }
-  .wedding-welcome__greeting { margin: 0 0 4px; }
-  .wedding-welcome__greeting-label { font-size: clamp(16px, 2.2vw, 24px); }
-  .wedding-welcome__greeting-name { font-size: clamp(18px, 2.5vw, 28px); }
-  .wedding-welcome__instruction { font-size: 11px; max-width: 320px; }
-  .wedding-welcome__start { padding: 8px 18px; margin-top: 4px; font-size: 14px; }
+  .wedding-welcome__invitation { font-size: 17px; line-height: 1.2; margin-bottom: 2px; }
+  .wedding-welcome__guests { font-size: clamp(18px, 2.8vw, 24px); line-height: 1.2; margin-bottom: 4px; }
+  .wedding-welcome__eyebrow { font-size: 8px; line-height: 1.4; letter-spacing: .13em; }
+  .wedding-welcome h1 { font-size: clamp(30px, 4.1vw, 39px); line-height: 1.08; margin: 6px 0; }
+  .wedding-welcome__date { margin: 7px 0 5px; font-size: clamp(27px, 3.6vw, 34px); line-height: 1.18; }
+  .wedding-welcome__venue { margin: 0 0 6px; font-size: clamp(12px, 1.7vw, 14px); line-height: 1.42; }
+  .wedding-welcome__instruction { margin: 5px 0 0; font-size: 11px; line-height: 1.45; max-width: 320px; }
+  .wedding-welcome__start { padding: 8px 20px; margin-top: 7px; font-size: 15px; }
 }
 @media (max-width: 767px) and (orientation: portrait) {
   .wedding-welcome__paper { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); text-align: center; }
   .wedding-welcome__copy { padding: 18px 0 0; }
-  .wedding-welcome h1 { font-size: clamp(38px, 12vw, 50px); margin-top: 12px; }
-  .wedding-welcome__date { margin: 12px 0; }
+  .wedding-welcome h1 { font-size: clamp(34px, 10vw, 44px); margin-top: 16px; }
+  .wedding-welcome__date { justify-content: center; margin: 12px 0; }
+  .wedding-welcome__venue { margin: 0 auto 12px; font-size: clamp(13px, 3.65vw, 16px); transform-origin: center; }
   .wedding-welcome .rotate-notice svg { margin: 0 auto; width: 54px; }
   .wedding-welcome__art { min-height: 180px; width: 100%; }
   .wedding-welcome__couple { width: 80%; right: 0; }
+}
+@media (max-width: 767px) and (max-height: 740px) and (orientation: portrait) {
+  .wedding-welcome__invitation { font-size: 20px; margin-bottom: 3px; }
+  .wedding-welcome__guests { font-size: 21px; margin-bottom: 7px; }
+  .wedding-welcome__eyebrow { font-size: 8px; }
+  .wedding-welcome h1 { font-size: 33px; margin: 10px 0 12px; }
+  .wedding-welcome__date { font-size: 28px; margin: 8px 0; }
+  .wedding-welcome__venue { font-size: 12.5px; line-height: 1.45; margin-bottom: 7px; }
+  .wedding-welcome .rotate-notice svg { width: 44px; }
+  .wedding-welcome .rotate-notice strong { font-size: 14px; }
+  .wedding-welcome .rotate-notice p { font-size: 11px; margin-top: 5px; }
+  .wedding-welcome__art { min-height: 120px; }
 }

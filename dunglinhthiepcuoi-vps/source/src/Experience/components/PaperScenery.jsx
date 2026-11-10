@@ -1,16 +1,12 @@
 import { useCityLayoutScale } from "./CityLayout";
-import React, { useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-export const PaperCutout = React.forwardRef(function PaperCutout(
-  { asset, position, size, tilt = 0, float = false, floatAmplitude = 0.045, phase = 0, ...interactionProps },
-  forwardedRef
-) {
+export function PaperCutout({ asset, position, size, tilt = 0, float = false, floatAmplitude = 0.045, phase = 0, ...interactionProps }) {
   const map = useTexture(`/scenery/${asset}.svg`);
-  const internalRef = useRef();
-  const group = forwardedRef || internalRef;
+  const group = useRef();
   const art = useRef();
   const cityScale = useCityLayoutScale();
   useMemo(() => { map.colorSpace = THREE.SRGBColorSpace; }, [map]);
@@ -35,7 +31,7 @@ export const PaperCutout = React.forwardRef(function PaperCutout(
       </group>
     </group>
   );
-});
+}
 
 export function NotebookWall({ position = [-13.6, 4.635, -2.72], size = [21, 8.06], repeat = 2.6 }) {
   const map = useMemo(() => {

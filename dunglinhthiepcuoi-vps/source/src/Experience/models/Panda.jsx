@@ -1,4 +1,4 @@
-import { BIKE_BOARD_END, getFlightStage } from "../utils/flightLanding";
+import { BIKE_BOARD_END, TAKEOFF_END, getFlightStage } from "../utils/flightLanding";
 import { animationDelta, frameAlpha } from "../utils/frameTiming";
 import React, { useRef, useState, useMemo } from "react";
 import { useGLTF } from "../utils/gltfLoader";
@@ -7,13 +7,17 @@ import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { attachRider, getRiderMode, RIDER_SCALE } from "../utils/riderAttachment";
 import CharacterWardrobe from "../components/CharacterWardrobe";
+import { DIVE_START, getSwimStage, sampleSwimJourney } from "../utils/swimJourney";
+import { createSwimRig } from "../utils/swimRig";
+import RowingPaddle from "../components/RowingPaddle";
+import DiveWaterDroplets from "../components/DiveWaterDroplets";
 import {
   initialPandaPoints,
   PANDA_SHIFT_X_AMOUNT,
   pandaCurve,
 } from "../components/curve";
 
-export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors, riderRef, ...props }) {
+export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors, riderRef, framingTarget, ...props }) {
   const { scene } = useGLTF("/models/thu_mo_vit_xanh_2d.glb");
   const localRef = useRef();
   const pandaRef = riderRef ?? localRef;
@@ -36,6 +40,13 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
     });
     return clone;
   }, [scene]);
+  const swimRig = useMemo(() => createSwimRig(character), [character]);
+  const swimPose = useRef({ swimWeight: 0 });
+  const rowing = useRef(false);
+  const scratch = useMemo(() => ({
+    baseline: new THREE.Vector3(-20.664, 1.5, -1.466),
+    swimBase: new THREE.Vector3(),
+  }), []);
 
   const supportMeshes = useMemo(() => {
     const supports = [];
@@ -48,7 +59,6 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
     rotation: new THREE.Euler(),
     time: 0,
   }));
-  const duckYOffsetRef = useRef(0);
 
   const pandaScrollCurve = useScrollCurve(
     pandaCurve,
@@ -95,31 +105,50 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
       if (!pandaRef.current) return;
       const mode = getRiderMode(currentProgress, cameraScrollCurve.transitionCurveActive.current);
       const introWalk = !cameraScrollCurve.transitionCurveActive.current && currentProgress >= 0 && currentProgress < BIKE_BOARD_END;
-
-      // Cú nhảy Parabol bay qua đầu cô dâu chú rể (ảnh 2): bắt đầu sau nhịp khựng (từ 0.84 đến 0.902)
-      const jumpStart = 0.84;
-      const jumpEnd = 0.902;
-      let jumpY = 0;
-      let jumpRotZ = 0;
-      if (!cameraScrollCurve.transitionCurveActive.current && currentProgress >= jumpStart && currentProgress <= jumpEnd) {
-        const t = (currentProgress - jumpStart) / (jumpEnd - jumpStart);
-        jumpY = Math.sin(Math.PI * t) * 4.3;
-        jumpRotZ = Math.sin(Math.PI * 2 * t) * -0.28;
+      const swimStage = getSwimStage(currentProgress, cameraScrollCurve.transitionCurveActive.current);
+      const pose = sampleSwimJourney(currentProgress, cameraScrollCurve.transitionCurveActive.current,
+        state.scene.userData.animationTime || 0, swimPose.current);
+      rowing.current = mode === "boat" && !swimStage;
+      if (rowing.current) swimRig.row(state.scene.userData.animationTime || 0);
+      else swimRig.update(state.scene.userData.animationTime || 0, swimStage ? pose.swimWeight : 0);
+      pandaRef.current.visible = !pose.hidden;
+      pandaRef.current.userData.allowMemory = !swimStage
+        && (!cameraScrollCurve.transitionCurveActive.current || currentProgress >= TAKEOFF_END);
+      for (const support of supportMeshes) support.visible = mode === "walk" && !introWalk && !swimStage;
+      const transport = swimStage || mode;
+      if (transport !== previousMode.current) {
+        state.gl.domElement.dataset.transport = transport;
+        previousMode.current = transport;
       }
+      if (state.gl.domElement.dataset.swimStage !== (swimStage || "none")) state.gl.domElement.dataset.swimStage = swimStage || "none";
+      if (state.gl.domElement.dataset.riderHidden !== String(pose.hidden)) state.gl.domElement.dataset.riderHidden = String(pose.hidden);
 
-      if (mode !== previousMode.current) {
-        supportMeshes.forEach((object) => { object.visible = mode === "walk" && !introWalk; });
-        state.gl.domElement.dataset.transport = mode;
-        previousMode.current = mode;
+      if (cameraScrollCurve.transitionCurveActive.current && mode === "plane" && riderAnchors.current.plane) {
+        const anchor = riderAnchors.current.plane;
+        attachRider(pandaRef.current, anchor, "plane");
+        scratch.baseline.copy(pandaRef.current.position);
+        // Follow the unlowered surface: the seated aircraft rises into view
+        // instead of the camera following it below the viewport.
+        framingTarget.position.copy(pandaRef.current.position);
+        framingTarget.position.y -= anchor.userData.takeoffOffset || 0;
+        framingTarget.position.x += anchor.userData.frameOffsetX || 0;
+        return;
       }
       if (introWalk && riderAnchors?.current.walkStart) {
         attachRider(pandaRef.current, riderAnchors.current.walkStart, "bike");
+        scratch.baseline.copy(pandaRef.current.position);
+        framingTarget.position.copy(pandaRef.current.position);
         return;
       }
       // Seat, deck and plane attachments have one authoritative transform.
       if (mode !== "walk") {
         const anchor = riderAnchors?.current[mode];
-        if (anchor) { attachRider(pandaRef.current, anchor, mode); return; }
+        if (anchor) {
+          attachRider(pandaRef.current, anchor, mode);
+          scratch.baseline.copy(pandaRef.current.position);
+          framingTarget.position.copy(pandaRef.current.position);
+          return;
+        }
       }
       const pandaPoint = pandaScrollCurve.getCurrentPoint(currentProgress);
 
@@ -143,39 +172,37 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
       randomOffset.rotation.z =
         Math.sin(randomOffset.time * 0.6 + 2.3) * rotationAmplitude * 0;
 
-      // Hạ vị trí thú mỏ vịt đứng vừa vặn trên đường kẻ chân trang notebook (0.76 -> 0.94),
-      // không bị chìm xuống chân màn hình, không che dâu rể hay thiệp.
-      // Sau đó từ 0.94 -> 1.0 mượt mà bước dần lên độ cao xuất phát chuẩn của máy bay.
-      let duckYOffsetTarget = 0;
-      if (!cameraScrollCurve.transitionCurveActive.current && currentProgress >= 0.76) {
-        if (currentProgress <= 0.94) {
-          duckYOffsetTarget = -0.38;
-        } else if (currentProgress < 1.0) {
-          const climbT = Math.min(1, Math.max(0, (currentProgress - 0.94) / 0.05));
-          duckYOffsetTarget = THREE.MathUtils.lerp(-0.38, 0, climbT);
-        }
-      }
-      duckYOffsetRef.current = THREE.MathUtils.lerp(duckYOffsetRef.current, duckYOffsetTarget, alpha);
-
-      pandaRef.current.position.x = THREE.MathUtils.lerp(
-        pandaRef.current.position.x,
+      scratch.baseline.x = THREE.MathUtils.lerp(
+        scratch.baseline.x,
         pandaPoint.x + randomOffset.position.x,
         alpha
       );
-      pandaRef.current.position.y = THREE.MathUtils.lerp(
-        pandaRef.current.position.y,
-        pandaPoint.y + 6.55845 + randomOffset.position.y + duckYOffsetRef.current + jumpY,
+      scratch.baseline.y = THREE.MathUtils.lerp(
+        scratch.baseline.y,
+        pandaPoint.y + 6.55845 + randomOffset.position.y,
         alpha
       );
-      pandaRef.current.position.z = THREE.MathUtils.lerp(
-        pandaRef.current.position.z,
+      scratch.baseline.z = THREE.MathUtils.lerp(
+        scratch.baseline.z,
         pandaPoint.z + randomOffset.position.z,
         alpha
       );
 
-      pandaRef.current.rotation.x = randomOffset.rotation.x;
-      pandaRef.current.rotation.y = 0 + randomOffset.rotation.y;
-      pandaRef.current.rotation.z = randomOffset.rotation.z + jumpRotZ;
+      pandaRef.current.position.copy(scratch.baseline);
+      if (swimStage) {
+        if (swimStage === "dive" || swimStage === "submerged") {
+          scratch.swimBase.copy(pandaScrollCurve.getCurrentPoint(Math.min(currentProgress, DIVE_START)));
+          scratch.swimBase.y += 6.15845;
+          pandaRef.current.position.lerp(scratch.swimBase, pose.swimWeight);
+        }
+      }
+      pandaRef.current.position.y += pose.yOffset;
+      pandaRef.current.rotation.set(
+        randomOffset.rotation.x,
+        randomOffset.rotation.y,
+        (swimStage ? pose.bank : randomOffset.rotation.z) + (pose.rotZ || 0)
+      );
+      framingTarget.position.copy(scratch.baseline);
     }
   }, -2);
 
@@ -185,9 +212,12 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
         {/* +Y up, +Z facing: model scale and contact offsets are shared with the rigs. */}
         <group scale={RIDER_SCALE}>
           <primitive object={character} />
-          <CharacterWardrobe scrollProgress={scrollProgress} cameraScrollCurve={cameraScrollCurve} />
+          <RowingPaddle joint={swimRig.paddleJoint} rowing={rowing} />
+          <CharacterWardrobe scrollProgress={scrollProgress} cameraScrollCurve={cameraScrollCurve} swimPose={swimPose} />
         </group>
       </group>
+      <DiveWaterDroplets riderRef={pandaRef} swimPose={swimPose}
+        scrollProgress={scrollProgress} cameraScrollCurve={cameraScrollCurve} />
     </group>
   );
 }

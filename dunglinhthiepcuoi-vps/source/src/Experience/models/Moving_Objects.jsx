@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "../utils/gltfLoader";
 import { useKTX2Texture } from "../utils/ktxLoader";
-import { PaperCutout } from "../components/PaperScenery";
+import Canoe from "../components/Canoe";
 import { expandedVehicleOffset } from "../utils/cityLayout";
 import { animationDelta, frameAlpha } from "../utils/frameTiming";
 
@@ -121,7 +121,7 @@ export default function Model({ scrollProgress, riderAnchors, transitioning, ...
 
       <group position={[-0.2, 0, 0.2]} ref={shipGroupRef}>
         <object3D ref={boatDeckRef} position={[-2.45, 1.60, -1.40]} />
-        <PaperCutout asset="lanha-cruise" position={[-2.45, 1.1, -1.57]} size={[3.5, 1.615]} />
+        <Canoe />
       </group>
   </group>;
 }

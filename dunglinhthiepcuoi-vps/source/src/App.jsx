@@ -45,13 +45,9 @@ function App() {
         >
           {autoScroll ? "Tự chạy: Bật" : "Tự chạy: Tắt"}
         </button>
-        <button
-          className="music-toggle"
-          data-no-navigation
-          aria-label={playing ? "Tắt nhạc nền" : "Bật nhạc nền"}
-          aria-pressed={playing}
-          onClick={() => playing ? audio.current.pause() : play()}
-        >
+        <button className="music-toggle" data-no-navigation
+          aria-label={playing ? "Tắt nhạc nền" : "Bật nhạc nền"} aria-pressed={playing}
+          onClick={() => playing ? audio.current.pause() : play()}>
           {playing ? "♫ Nhạc: Bật" : "♫ Nhạc: Tắt"}
         </button>
         {rotateRequired && <div className="orientation-cover"><RotateNotice /></div>}
