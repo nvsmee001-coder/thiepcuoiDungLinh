@@ -1,9 +1,9 @@
 Thiệp cưới Dũng & Linh — VPS package
-Source commit: 6e37bcc1acc1058f2f569cd8d38ce4bec880f93c
-Build command: npm run build (Vite build via Sites helper)
-Package date: 2026-11-09 (Asia/Ho_Chi_Minh)
-Production files: 129
-Source files: 215
+Base source commit (before Porsche edit): 6e37bcc1acc1058f2f569cd8d38ce4bec880f93c
+Build command: npm run build -- --configLoader native (Node.js v26.3.0)
+Package date: 2026-11-10 (UTC+07:00)
+Production files: 131
+Source files: 221
 All seven photo popups open automatically on approach, one at a time.
 Photos use optimized WebP files; original full-size images are excluded.
 Includes a wooden canoe and an attached rowing paddle in Ha Long Bay.
@@ -13,3 +13,13 @@ Includes landscape phone camera, attached bike/boat rider, opening cover and loc
 Groom schedule: 28/11 at 11h00. Bride schedule: 27/11 at 11h00.
 No Node.js server process is needed to serve dist/.
 Hosting credentials, .git, .openai, node_modules and Blender authoring files are excluded.
+
+Porsche edit: replaces the bicycle with a coral crayon Porsche 911 Cabriolet.
+New two-layer body/wheel SVG artwork; wheels turn in either travel direction.
+Driver anchor lowered into the open cabin; existing flight/boat route retained.
+Validation: production build passed; 22 focused tests passed.
+
+Hanoi edit: restored the supplied basket bicycle at the dry bank beside The Huc bridge.
+Canoe docks smoothly; rider transfers continuously to bicycle, cycles through Hanoi,
+then dismounts to the original walking route. Reverse scrolling retraces the transition.
+Validation for Hanoi edit: production build and 36 focused tests passed.

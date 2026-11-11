@@ -9,7 +9,7 @@ import PerformanceProbe from "./components/PerformanceProbe";
 import RenderQuality from "./components/RenderQuality";
 import AnimationClock from "./components/AnimationClock";
 
-const Experience = ({ enabled = true, autoScroll = false, onReady }) => {
+const Experience = ({ enabled = true, onReady }) => {
   const camera = useRef();
   const cameraGroup = useRef();
   const scrollProgress = useRef(0);
@@ -21,38 +21,16 @@ const Experience = ({ enabled = true, autoScroll = false, onReady }) => {
   const mouseRotationOffset = useRef(new THREE.Euler());
   const lastTouch = useRef(null);
   const touchAxis = useRef(null);
-  const pauseScrollUntilRef = useRef(0);
-
-  useEffect(() => {
-    const handlePhotoOpened = (e) => {
-      const duration = e?.detail?.duration || 1300;
-      const now = performance.now();
-      pauseScrollUntilRef.current = Math.max(pauseScrollUntilRef.current, now + duration);
-    };
-
-    window.addEventListener("photo-memory-opened", handlePhotoOpened);
-    return () => window.removeEventListener("photo-memory-opened", handlePhotoOpened);
-  }, []);
 
   useEffect(() => {
     if (!enabled) { isSwiping.current = false; lastTouch.current = null; return; }
-
-    const getDampening = () => {
-      if (performance.now() < pauseScrollUntilRef.current) {
-        return 0.08;
-      }
-      return 1.0;
-    };
-
     const handleWheel = (e) => {
       const normalized = normalizeWheel(e);
-      const dampening = getDampening();
 
       targetScrollProgress.current +=
         Math.sign(normalized.pixelY) *
         baseScrollSpeed *
         scrollSpeedMultiplier.current *
-        dampening *
         Math.min(Math.abs(normalized.pixelY) / 100, 1);
     };
 
@@ -98,9 +76,8 @@ const Experience = ({ enabled = true, autoScroll = false, onReady }) => {
       if (lastTouch.current !== null) {
         const dx = next.x - lastTouch.current.x, dy = next.y - lastTouch.current.y;
         touchAxis.current ??= Math.abs(dx) > Math.abs(dy) ? "x" : "y";
-        const dampening = getDampening();
         targetScrollProgress.current += touchNavigationDelta(lastTouch.current, next,
-          { width: window.innerWidth, height: window.innerHeight }, touchAxis.current) * scrollSpeedMultiplier.current * dampening;
+          { width: window.innerWidth, height: window.innerHeight }, touchAxis.current) * scrollSpeedMultiplier.current;
       }
       lastTouch.current = next;
     };
@@ -119,10 +96,9 @@ const Experience = ({ enabled = true, autoScroll = false, onReady }) => {
     const handleMouseDrag = (e) => {
       if (!isSwiping.current || e.pointerType === "touch") return;
       const mouseMultiplier = 0.2;
-      const dampening = getDampening();
       targetScrollProgress.current +=
         Math.sign(e.movementY) * baseScrollSpeed * mouseMultiplier *
-        scrollSpeedMultiplier.current * dampening;
+        scrollSpeedMultiplier.current;
     };
 
     const handleMouseUp = () => {
@@ -134,8 +110,7 @@ const Experience = ({ enabled = true, autoScroll = false, onReady }) => {
       const direction = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[event.key];
       if (!direction) return;
       event.preventDefault();
-      const dampening = getDampening();
-      targetScrollProgress.current += direction * 0.025 * scrollSpeedMultiplier.current * dampening;
+      targetScrollProgress.current += direction * 0.025 * scrollSpeedMultiplier.current;
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
@@ -188,8 +163,6 @@ const Experience = ({ enabled = true, autoScroll = false, onReady }) => {
         mousePositionOffset={mousePositionOffset}
         mouseRotationOffset={mouseRotationOffset}
         scrollSpeedMultiplier={scrollSpeedMultiplier}
-        autoScroll={autoScroll}
-        pauseScrollUntilRef={pauseScrollUntilRef}
       />
 
       <group ref={cameraGroup}>

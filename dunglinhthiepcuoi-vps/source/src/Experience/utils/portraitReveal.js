@@ -2,5 +2,5 @@
 // A small return margin prevents repeated folding at the approach threshold.
 export function portraitShouldStand(progress, wasStanding = false) {
   if (!Number.isFinite(progress) || progress > 0.94) return false;
-  return progress >= (wasStanding ? 0.72 : 0.74);
+  return progress >= (wasStanding ? 0.795 : 0.81);
 }

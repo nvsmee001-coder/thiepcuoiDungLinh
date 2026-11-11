@@ -1,0 +1,22 @@
+THAY XE PORSCHE 911 MUI TRẦN — 10/11/2026
+
+Bản cập nhật 10/11/2026: thay xe đạp bằng Porsche 911 Cabriolet mui trần màu đỏ san hô, nét vẽ sáp nguệch ngoạc. Bánh xe quay theo hành trình; nhân vật ngồi trong khoang xe và tiếp tục dùng điểm gắn phương tiện chung cho các vòng lặp.
+
+Gói này có dist/ mới đã build và source/ đã cập nhật.
+Triển khai bằng cách dùng toàn bộ nội dung dist/ thay cho bản cũ.
+
+Các tệp mã nguồn thay đổi:
+- src/Experience/models/Moving_Objects.jsx
+- src/Experience/components/PorscheConvertible.jsx (mới)
+- public/scenery/porsche-911-crayon.svg (mới)
+- public/scenery/porsche-crayon-wheel.svg (mới)
+
+Kiểm tra: build Vite thành công; 22 kiểm tra về điểm ngồi, di chuyển, camera và chuyển cảnh đạt.
+Xem thử bằng trình duyệt ở 844×390 và 1280×800.
+
+Mã nội bộ vẫn dùng tên điểm gắn 'bike' để tương thích với hành trình và điểm đáp máy bay. Hình xe đạp cũ đã được thay trong cảnh.
+
+Build thông thường: npm ci rồi npm run build.
+Trong môi trường Windows của lần kiểm tra này, đã dùng:
+npm run build -- --configLoader native
+(với Node.js v26.3.0; chỉ khác cơ chế nạp vite.config.js).

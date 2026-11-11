@@ -1,5 +1,9 @@
 # Thiệp cưới Dũng & Linh — triển khai VPS
 
+Bản cập nhật Hà Nội 10/11/2026: xe đạp có giỏ nguyên bản chờ trên bờ cạnh cầu Thê Húc. Thuyền giảm tốc cập bến; nhân vật rời thuyền và lên yên bằng chuyển động liên tục. Xe đi qua Hà Nội rồi dừng, nhân vật trở lại đi bộ ở đoạn Bắc Ninh. Cuộn ngược sẽ đảo chiều hành trình. Xe Porsche ở đoạn đầu giữ nguyên.
+
+Bản cập nhật 10/11/2026: thay xe đạp bằng Porsche 911 Cabriolet mui trần màu đỏ san hô, nét vẽ sáp nguệch ngoạc. Bánh xe quay theo hành trình; nhân vật ngồi trong khoang xe và tiếp tục dùng điểm gắn phương tiện chung cho các vòng lặp.
+
 Gói này chứa bản website mới nhất, gồm ảnh cưới hai người thay vị trí cô gái, các cảnh thành phố, trang phục và chú thích mở ảnh.
 
 Bản cập nhật 02/11/2026 bổ sung bốn popup ảnh theo các cặp đã gửi: bát phở Hà Nội → ảnh phở; cốc cà phê → ảnh đồ uống; bánh đa Bắc Ninh → ảnh bún vịt; chùm vải → ảnh món ăn với bánh mì. Các vật thể có mũi tên gợi ý mở ảnh; toàn bộ chữ gợi ý mở ảnh đã được bỏ trong bản 03/11/2026.
@@ -8,7 +12,7 @@ Bản cập nhật 02/11/2026 bổ sung bốn popup ảnh theo các cặp đã g
 
 Bản 03/11/2026 có màn hình mở đầu với ảnh hai bạn, lời nhắc xoay ngang điện thoại và nút “Mở thiệp cưới”. Nhạc nền Hoa sữa rơi (đoạn 3 phút do bạn cung cấp) bắt đầu sau thao tác bấm nút; có nút bật/tắt nhạc ở góc phải. File nhạc nằm tại `dist/audio/hoa-sua-roi.mp3`, cần upload cùng website.
 
-Trên điện thoại, nhân vật và phương tiện dùng cùng không gian 3D, bám yên xe đạp/boong du thuyền. Camera giữ nhân vật phía trái khi nằm ngang; xoay dọc sẽ hiện nhắc xoay lại và tạm ngừng thao tác dẫn đường. Có thể vuốt ngang hoặc dọc; trên máy tính có thêm phím mũi tên. Chạm/bấm vật thể để giữ ảnh mở, bấm dấu × để đóng.
+Trên điện thoại, nhân vật và phương tiện dùng cùng không gian 3D, bám ghế xe Porsche/boong du thuyền. Camera giữ nhân vật phía trái khi nằm ngang; xoay dọc sẽ hiện nhắc xoay lại và tạm ngừng thao tác dẫn đường. Có thể vuốt ngang hoặc dọc; trên máy tính có thêm phím mũi tên. Chạm/bấm vật thể để giữ ảnh mở, bấm dấu × để đóng.
 
 ## Các thư mục
 

@@ -40,8 +40,6 @@ const Scene = ({
   mousePositionOffset,
   mouseRotationOffset,
   scrollSpeedMultiplier,
-  autoScroll = false,
-  pauseScrollUntilRef,
 }) => {
   const cameraScrollCurve = useScrollCurve(
     initialCameraCurve,
@@ -50,12 +48,10 @@ const Scene = ({
   );
 
   const sceneGroupRef = useRef();
-  const riderAnchors = useRef({ bike: null, boat: null, plane: null, jump: null, walkStart: null });
+  const riderAnchors = useRef({ bike: null, hanoiBike: null, boat: null, plane: null, jump: null, walkStart: null });
   const automaticLanding = useRef({ active: false });
   const automaticTakeoff = useRef({ cancelled: false });
   const invitationTransition = useRef({ lifting: false, lift: 0, elapsed: 0, phase: "idle", reopening: false });
-  const coupleSlowTriggered = useRef(false);
-  const venueSlowTriggered = useRef(false);
   const invitationCamera = useMemo(() => ({
     position: new THREE.Vector3(), rotation: new THREE.Quaternion(),
     localPosition: new THREE.Vector3(), localRotation: new THREE.Quaternion(),
@@ -96,38 +92,8 @@ const Scene = ({
       newProgress = automaticProgress;
       targetScrollProgress.current = automaticProgress;
     } else {
-      if (!flying) {
-        if (scrollProgress.current < 0.75) {
-          coupleSlowTriggered.current = false;
-        }
-        if (scrollProgress.current < 0.88) {
-          venueSlowTriggered.current = false;
-        }
-
-        // Khựng 1 nhịp khi ảnh cô dâu chú rể đã hiện lên hoàn chỉnh (dừng trước mặt dâu rể):
-        if (!coupleSlowTriggered.current && scrollProgress.current >= 0.782 && scrollProgress.current <= 0.804) {
-          coupleSlowTriggered.current = true;
-          window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "couple-stand", duration: 1800 } }));
-        }
-
-        // Tấm thiệp cưới (dừng lại/chậm lại cho khách đọc thiệp trước khi thiệp nâng lên):
-        if (!venueSlowTriggered.current && scrollProgress.current >= 0.93 && scrollProgress.current <= 0.955) {
-          venueSlowTriggered.current = true;
-          window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: "venue-card", duration: 1800 } }));
-        }
-      }
-
-      const now = performance.now();
-      const isDampened = !flying && pauseScrollUntilRef && now < pauseScrollUntilRef.current;
-      if (autoScroll) {
-        // Tốc độ lúc bay là 0.28 (~3.0s cả chặng bay, hào hứng và bay nhanh);
-        // Trên mặt đất: bình thường 0.052, khi có ảnh mở hoặc thiệp thì trôi chậm (0.015)
-        const speed = flying ? 0.28 : (isDampened ? 0.015 : 0.052);
-        targetScrollProgress.current += delta * speed;
-      }
-
       targetScrollProgress.current = constrainJourneyTarget(
-        targetScrollProgress.current, flying, cameraScrollCurve.loopCounter.current, autoScroll,
+        targetScrollProgress.current, flying, cameraScrollCurve.loopCounter.current,
       );
       newProgress = THREE.MathUtils.lerp(scrollProgress.current, targetScrollProgress.current, frameAlpha(.1, delta));
     }
@@ -176,8 +142,6 @@ const Scene = ({
       } else {
         cameraScrollCurve.transitionCurveActive.current = true;
         cameraScrollCurve.initiateTransitionCurve();
-        coupleSlowTriggered.current = false;
-        venueSlowTriggered.current = false;
         newProgress = Math.min(FLIGHT_STOP, newProgress - 1);
         targetScrollProgress.current = Math.min(FLIGHT_STOP, targetScrollProgress.current - 1);
       }
@@ -189,8 +153,6 @@ const Scene = ({
         cameraScrollCurve.loopCounter.current--;
         cameraScrollCurve.transitionCurveActive.current = true;
         cameraScrollCurve.initiateTransitionCurve();
-        coupleSlowTriggered.current = false;
-        venueSlowTriggered.current = false;
       }
       scrollProgress.current += 1;
       targetScrollProgress.current += 1;

@@ -10,7 +10,9 @@ export default function RowingPaddle({ joint, rowing }) {
 
   useFrame(({ scene }) => {
     if (!grip.current) return;
-    grip.current.visible = Boolean(rowing?.current);
+    const strength = Number(rowing?.current) || 0;
+    grip.current.visible = strength > .01;
+    grip.current.scale.setScalar(strength);
     const time = scene.userData.animationTime || 0;
     grip.current.rotation.z = 0.4 + Math.sin(time * 1.8) * 0.1;
   });

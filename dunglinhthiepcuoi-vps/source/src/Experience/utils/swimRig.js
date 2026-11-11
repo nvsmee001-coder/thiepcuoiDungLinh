@@ -36,13 +36,13 @@ export function createSwimRig(character) {
 
   return {
     paddleJoint: rightArm,
-    row(time) {
+    row(time, weight = 1) {
       const phase = (Number.isFinite(time) ? time : 0) * 1.8;
       const stroke = Math.sin(phase);
       // The raised right flipper carries the paddle; the other flipper follows
       // with a small counter-motion while the seated lower body stays at rest.
-      rightArm.rotation.set(0, 0, 0.02 + stroke * 0.05);
-      leftArm.rotation.set(0, 0, -0.32 - stroke * 0.1);
+      rightArm.rotation.set(0, 0, (0.02 + stroke * 0.05) * weight);
+      leftArm.rotation.set(0, 0, (-0.32 - stroke * 0.1) * weight);
       leftFoot.rotation.set(0, 0, 0);
       rightFoot.rotation.set(0, 0, 0);
       tail.rotation.set(0, 0, 0);

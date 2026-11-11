@@ -5,6 +5,7 @@ thiep-cuoi-khanh-linh-le-dung/assets/_originals/
 ref/
 dunglinhthiepcuoi-vps-v1/
 dunglinhthiepcuoi-vps-v2/
+dunglinhthiepcuoi-porsche-hanoi-bike-vps/
 
 # Dữ liệu khách hàng tùy chỉnh (không bị git pull ghi đè)
 data/wedding-db.custom.json

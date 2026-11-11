@@ -1,0 +1,13 @@
+XE ĐẠP HÀ NỘI — 10/11/2026
+
+Bản cập nhật Hà Nội 10/11/2026: xe đạp có giỏ nguyên bản chờ trên bờ cạnh cầu Thê Húc. Thuyền giảm tốc cập bến; nhân vật rời thuyền và lên yên bằng chuyển động liên tục. Xe đi qua Hà Nội rồi dừng, nhân vật trở lại đi bộ ở đoạn Bắc Ninh. Cuộn ngược sẽ đảo chiều hành trình. Xe Porsche ở đoạn đầu giữ nguyên.
+
+Điểm chờ: đầu bờ Hà Nội cạnh cầu Thê Húc, theo ảnh tham chiếu.
+Tái sử dụng mô hình xe đạp và texture gốc từ Moving_Extras.glb / Moving_extras.ktx2.
+Bánh xe và bàn đạp quay theo quãng đường; nhân vật và xe dùng cùng điểm gắn yên.
+Các chuyển động lên/xuống xe được tính theo tiến độ cuộn, có thể cuộn ngược.
+
+Triển khai: dùng toàn bộ nội dung dist/ trong ZIP này. source/ là mã nguồn tương ứng.
+Build: npm run build (trên máy Windows kiểm tra: thêm -- --configLoader native).
+Kiểm tra: build thành công; 36 kiểm tra tự động đạt, bao gồm các điểm nối, camera, điểm ngồi, cuộn ngược và luồng bay/lặn cũ.
+Kiểm tra giao diện: máy tính 1280×800 và điện thoại ngang 844×390.

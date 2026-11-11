@@ -1,16 +1,13 @@
 import { smoothFlight } from "./flightLanding.js";
 
-export const JUMP_START = .802;
-export const JUMP_END = .852;
-export const DIVE_START = JUMP_END;
-export const DIVE_HIDDEN = .882;
-
-export const SWIM_START = JUMP_START;
-export const SWIM_FULL = DIVE_START;
+export const SWIM_START = .85;
+export const SWIM_FULL = .860;
+export const DIVE_START = SWIM_FULL;
+export const DIVE_HIDDEN = .890;
 
 export function getSwimStage(progress, transitioning) {
   if (transitioning) return null;
-  if (progress < JUMP_START) return null;
+  if (progress < SWIM_START) return null;
   if (progress < DIVE_START) return "swim";
   return progress < DIVE_HIDDEN ? "dive" : "submerged";
 }
@@ -21,7 +18,6 @@ export function sampleSwimJourney(progress, transitioning, time = 0, out = {}) {
   out.swimWeight = 0;
   out.bank = 0;
   out.yOffset = 0;
-  out.rotZ = 0;
   out.hidden = false;
   out.board = 0;
 
@@ -38,23 +34,18 @@ export function sampleSwimJourney(progress, transitioning, time = 0, out = {}) {
 
   if (progress >= DIVE_START) {
     const t = (progress - DIVE_START) / (DIVE_HIDDEN - DIVE_START);
-    const eased = smoothFlight(t);
+    // Dive as soon as the swimmer turns: no upward leap or extra swim lap.
     out.swimWeight = 1;
-    out.bank = -Math.PI / 2 * (1 + smoothFlight(t * 1.5));
-    out.yOffset = -8 * eased;
-    out.rotZ = -0.15 * (1 - eased);
+    out.bank = -Math.PI / 2 * (1 + smoothFlight(t * 2.2));
+    out.yOffset = -8 * smoothFlight(t);
     return out;
   }
 
-  if (progress >= JUMP_START) {
-    const t = (progress - JUMP_START) / (DIVE_START - JUMP_START);
-    // Cú nhảy Parabol bay qua đầu cô dâu chú rể:
-    out.yOffset = Math.sin(Math.PI * t) * 4.3;
-    out.bank = -Math.PI / 2 * smoothFlight(Math.max(0, (t - 0.5) / 0.5));
-    out.rotZ = Math.sin(Math.PI * 2 * t) * -0.28;
-    out.swimWeight = smoothFlight(Math.max(0, (t - 0.4) / 0.6));
-    return out;
+  if (progress > SWIM_START) {
+    const weight = smoothFlight((progress - SWIM_START) / (SWIM_FULL - SWIM_START));
+    out.swimWeight = weight;
+    out.bank = -Math.PI / 2 * weight;
+    out.yOffset = .06 * Math.sin(time * 3) * weight * (1 - weight);
   }
-
   return out;
 }

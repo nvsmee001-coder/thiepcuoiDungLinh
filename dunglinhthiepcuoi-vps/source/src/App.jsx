@@ -8,7 +8,6 @@ import useDeviceViewport from "./hooks/useDeviceViewport";
 function App() {
   const [started, setStarted] = useState(false);
   const [playing, setPlaying] = useState(false);
-  const [autoScroll, setAutoScroll] = useState(false);
   const [sceneReady, setSceneReady] = useState(false);
   const [visible, setVisible] = useState(() => !document.hidden);
   const markReady = useCallback(() => setSceneReady(true), []);
@@ -35,16 +34,7 @@ function App() {
         onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} />
       {!started ? <WeddingWelcome onStart={start} rotateRequired={rotateRequired} phone={viewport.phone} /> : <>
         <IntroScreen sceneReady={sceneReady} />
-        <Experience enabled={sceneReady && !rotateRequired && visible} autoScroll={autoScroll} onReady={markReady} />
-        <button
-          className={`auto-scroll-toggle ${autoScroll ? "auto-scroll-toggle--active" : ""}`}
-          data-no-navigation
-          aria-label={autoScroll ? "Tắt tự động cuộn hành trình" : "Bật tự động cuộn hành trình"}
-          aria-pressed={autoScroll}
-          onClick={() => setAutoScroll((v) => !v)}
-        >
-          {autoScroll ? "Tự chạy: Bật" : "Tự chạy: Tắt"}
-        </button>
+        <Experience enabled={sceneReady && !rotateRequired && visible} onReady={markReady} />
         <button className="music-toggle" data-no-navigation
           aria-label={playing ? "Tắt nhạc nền" : "Bật nhạc nền"} aria-pressed={playing}
           onClick={() => playing ? audio.current.pause() : play()}>

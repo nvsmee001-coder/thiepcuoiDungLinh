@@ -43,13 +43,7 @@ export default function PhotoMemoryProvider({ riderRef, children }) {
       }
     }
     const next = chooseNearbyPhoto(entries.current.values(), riderX, selected.current);
-    if (next !== selected.current) {
-      selected.current = next;
-      setActiveId(next);
-      if (next !== null) {
-        window.dispatchEvent(new CustomEvent("photo-memory-opened", { detail: { id: next, duration: 1500 } }));
-      }
-    }
+    if (next !== selected.current) { selected.current = next; setActiveId(next); }
   }, -1.75);
 
   const close = () => {

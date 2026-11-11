@@ -5,7 +5,8 @@ import { useGLTF } from "../utils/gltfLoader";
 import { useScrollCurve } from "../hooks/useScrollCurve";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
-import { attachRider, getRiderMode, RIDER_SCALE } from "../utils/riderAttachment";
+import { attachRider, boardHanoiBicycle, dismountHanoiBicycle, getRiderMode, RIDER_SCALE } from "../utils/riderAttachment";
+import { hanoiBoardWeight, hanoiDismountWeight } from "../utils/hanoiCycling";
 import CharacterWardrobe from "../components/CharacterWardrobe";
 import { DIVE_START, getSwimStage, sampleSwimJourney } from "../utils/swimJourney";
 import { createSwimRig } from "../utils/swimRig";
@@ -46,6 +47,7 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
   const scratch = useMemo(() => ({
     baseline: new THREE.Vector3(-20.664, 1.5, -1.466),
     swimBase: new THREE.Vector3(),
+    hanoiWalk: new THREE.Vector3(),
   }), []);
 
   const supportMeshes = useMemo(() => {
@@ -108,8 +110,8 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
       const swimStage = getSwimStage(currentProgress, cameraScrollCurve.transitionCurveActive.current);
       const pose = sampleSwimJourney(currentProgress, cameraScrollCurve.transitionCurveActive.current,
         state.scene.userData.animationTime || 0, swimPose.current);
-      rowing.current = mode === "boat" && !swimStage;
-      if (rowing.current) swimRig.row(state.scene.userData.animationTime || 0);
+      rowing.current = !swimStage ? (mode === "boat" ? 1 : mode === "hanoiBoard" ? 1 - hanoiBoardWeight(currentProgress) : 0) : 0;
+      if (rowing.current) swimRig.row(state.scene.userData.animationTime || 0, rowing.current);
       else swimRig.update(state.scene.userData.animationTime || 0, swimStage ? pose.swimWeight : 0);
       pandaRef.current.visible = !pose.hidden;
       pandaRef.current.userData.allowMemory = !swimStage
@@ -136,6 +138,22 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
       }
       if (introWalk && riderAnchors?.current.walkStart) {
         attachRider(pandaRef.current, riderAnchors.current.walkStart, "bike");
+        scratch.baseline.copy(pandaRef.current.position);
+        framingTarget.position.copy(pandaRef.current.position);
+        return;
+      }
+      if (mode === "hanoiBoard" && riderAnchors.current.boat && riderAnchors.current.hanoiBike) {
+        boardHanoiBicycle(pandaRef.current, riderAnchors.current.boat,
+          riderAnchors.current.hanoiBike, hanoiBoardWeight(currentProgress));
+        scratch.baseline.copy(pandaRef.current.position);
+        framingTarget.position.copy(pandaRef.current.position);
+        return;
+      }
+      if (mode === "hanoiDismount" && riderAnchors.current.hanoiBike) {
+        scratch.hanoiWalk.copy(pandaScrollCurve.getCurrentPoint(currentProgress));
+        scratch.hanoiWalk.y += 6.15845;
+        dismountHanoiBicycle(pandaRef.current, riderAnchors.current.hanoiBike,
+          scratch.hanoiWalk, hanoiDismountWeight(currentProgress));
         scratch.baseline.copy(pandaRef.current.position);
         framingTarget.position.copy(pandaRef.current.position);
         return;
@@ -190,18 +208,15 @@ export default function Model({ scrollProgress, cameraScrollCurve, riderAnchors,
 
       pandaRef.current.position.copy(scratch.baseline);
       if (swimStage) {
-        if (swimStage === "dive" || swimStage === "submerged") {
-          scratch.swimBase.copy(pandaScrollCurve.getCurrentPoint(Math.min(currentProgress, DIVE_START)));
-          scratch.swimBase.y += 6.15845;
-          pandaRef.current.position.lerp(scratch.swimBase, pose.swimWeight);
-        }
+        // Arrive at one fixed surface point, then descend vertically. Keep the
+        // camera's baseline on its route so the invitations can scroll past.
+        scratch.swimBase.copy(pandaScrollCurve.getCurrentPoint(Math.min(currentProgress, DIVE_START)));
+        scratch.swimBase.y += 6.15845;
+        pandaRef.current.position.lerp(scratch.swimBase, pose.swimWeight);
       }
       pandaRef.current.position.y += pose.yOffset;
-      pandaRef.current.rotation.set(
-        randomOffset.rotation.x,
-        randomOffset.rotation.y,
-        (swimStage ? pose.bank : randomOffset.rotation.z) + (pose.rotZ || 0)
-      );
+      pandaRef.current.rotation.set(randomOffset.rotation.x, randomOffset.rotation.y,
+        swimStage ? pose.bank : randomOffset.rotation.z);
       framingTarget.position.copy(scratch.baseline);
     }
   }, -2);

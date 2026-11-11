@@ -5,7 +5,7 @@ import { attachRider, framePhoneRider, frameRiderOnScreen, getRiderMode, RIDER_S
 import { touchNavigationDelta, isPhoneViewport } from "./mobileCharacterLayout.js";
 
 test("seat and deck contacts stay attached under vehicle tilt, bob and loop shifts", () => {
-  for (const [mode, contactY] of [["bike", -1.58], ["boat", -1.745897889137268], ["plane", -1.58], ["jump", -1.58]]) {
+  for (const [mode, contactY] of [["bike", -1.58], ["hanoiBike", -1.02], ["boat", -1.745897889137268], ["plane", -1.58], ["jump", -1.58]]) {
     const vehicle = new THREE.Group(), anchor = new THREE.Object3D(), rider = new THREE.Object3D();
     anchor.position.set(-2.45, 1.6, -.2);
     vehicle.add(anchor);
@@ -51,7 +51,7 @@ test("opening walks first, then cycles; the plane is confined to the loop", () =
   assert.equal(getRiderMode(.065), "bike");
   assert.equal(getRiderMode(.15), "bike");
   assert.equal(getRiderMode(.4), "boat");
-  assert.equal(getRiderMode(.55), "walk");
+  assert.equal(getRiderMode(.55), "hanoiBike");
   assert.equal(getRiderMode(.15, true), "plane");
   assert.equal(getRiderMode(.90, true), "plane");
   assert.equal(getRiderMode(.93, true), "jump");

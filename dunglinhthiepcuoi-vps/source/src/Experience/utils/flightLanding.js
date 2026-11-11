@@ -10,7 +10,7 @@ export const LANDING_REVEAL_START = .72;
 export const FLIGHT_STOP = .84;
 export const TOUCHDOWN = .93;
 export const JUMP_END = .99;
-export const constrainJourneyTarget = (target, flying, loop = 1, autoScroll = false) => flying ? Math.min(FLIGHT_STOP, target) : loop > 1 || autoScroll ? target : Math.max(0, target);
+export const constrainJourneyTarget = (target, flying, loop = 1) => flying ? Math.min(FLIGHT_STOP, target) : loop > 1 ? target : Math.max(0, target);
 export const getFlightStage = (progress) => progress < TAKEOFF_END ? "takeoff" : progress < FLIGHT_STOP ? "plane" : progress < TOUCHDOWN ? "landing" : progress < JUMP_END ? "jump" : "bike";
 
 // Finish the gentle rise without requiring another gesture. Reversing hands
